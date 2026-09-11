@@ -8,9 +8,9 @@
 
 | 文件 | 操作 | 说明 |
 |------|------|------|
-| src/views/ChatPage.vue | 修改 | 发送按钮 disabled、300 字符截断提示、spinner 加载态、空状态与底部引导文案、回复一键复制 |
-| src/api/index.ts（api.ts） | 修改 | getErrorMessage 按状态码映射统一 message；GET /api/health 启动检测 |
-| src/composables/useChat.ts | 修改 | 封装「输入校验 → 请求 → 加载/错误状态」流转，供聊天页调用 |
+| src/views/WeatherView.vue | 修改 | 发送按钮 disabled、300 字符截断提示、spinner 加载态、空状态与底部引导文案、回复一键复制 |
+| src/api/client.ts | 修改 | API 客户端按 `{ code, data, message }` 响应格式处理；getErrorMessage 按状态码映射统一 message；GET /api/health 启动检测 |
+| src/stores/chat.ts | 修改 | 封装「输入校验 → 请求 → 加载/错误状态」流转，供聊天页调用 |
 
 ## 核心流程
 
@@ -29,7 +29,7 @@
 - 空状态文案：删除「左侧」提法，改为与页面实际布局一致的内容（如「输入英文城市名查询天气」）
 - 页面底部：常驻引导「请输入英文城市名，如 new york」
 - 回复复制：navigator.clipboard.writeText 成功后 message.success 反馈，失败降级 textarea 兜底
-- 错误映射（后端按状态码统一返回 { message }，前端直接展示）：
+- 错误映射（后端按统一响应格式返回 { code, data, message }，失败时 data 为 null，前端直接展示 message）：
   - 401 → 「模型接口认证失败，请检查 API_KEY 配置」
   - 408 → 「请求超时，请稍后重试」
   - 500 及其他 → 展示后端 message，缺失时用通用兜底文案
