@@ -28,7 +28,7 @@
 - 不做会话持久化（内存会话，重启即清）
 - 不做通用多库管理（v1 固定单知识库：JSON 文件 + 进程内存索引）
 - 随机一题的出题与判题不经过 LLM；知识问答的答案取自题库原文，LLM 仅理解问法、不生成答案内容
-- 不做离线 embedding / 向量检索 / Top3 候选兜底（v1 不引入 embedding 方案，知识问答交给 LLM 理解）
+- v1 不引入 embedding / 向量检索：知识问答用「本地 bigram 召回 Top-K 候选 + LLM 语义判定」分层，题库规模上千时按需替换召回实现
 - 不做「题干+答案」一条消息判定，随机一题分两步（先出题、再作答）
 - 前端不做选择题按钮，保持纯文本对话
 - 不做按内容自动路由，模式 / 子模块由用户显式选择
@@ -47,6 +47,7 @@
 10. [ ] 天气模式（`scenario: "weather"`）行为与现状一致，MCP 未连接返回 503
 11. [ ] 题库某行缺字段或答案不在选项中 → 启动时跳过并告警，服务正常启动
 12. [ ] 非法 `scenario` / `service` 值 → 400；其余错误码与 `{code,data,message}` 信封沿用现有约定
+13. [ ] 知识问答：同一题的不同问法（如「乐不思蜀说的是谁」）也命中题库原题并返回同一答案
 
 ## 接口影响
 
@@ -58,9 +59,9 @@
 
 ## 技术要点
 
-- orchestrator 新增 `src/sango.ts`：题库加载（环境变量 `SANGO_QUESTION_FILE`，默认 `data/sango-questions.json`）、启动校验、归一化匹配、判题、随机出题
-- `server.ts` 按 scenario + service 分发：general → Agent（无工具）；weather → Agent（MCP 工具）；sango+knowledge → Agent + sango 查询工具；sango+random → SangoService 本地规则
-- 知识问答：Agent 提供 sango 查询工具（输入问法 → 返回命中题目与答案），LLM 负责理解问法并组织回复，答案内容由题库规则提供、不生成；未命中 → 未收录提示
+- orchestrator 新增 `src/sango.ts`：题库加载（环境变量 `SANGO_QUESTION_FILE`，默认 `data/sango-questions.json`）、启动校验、归一化、bigram 候选召回（`candidates(text, limit=8)`）、判题、随机出题
+- `server.ts` 按 scenario + service 分发：general → Agent（无工具）；weather → Agent（MCP 工具）；sango+knowledge → Agent + sango 召回工具；sango+random → SangoService 本地规则
+- 知识问答：Agent 提供 sango 召回工具（输入用户问法 → 返回 Top-K 候选，每条含题干与答案），LLM 负责理解问法并判定候选中的对应题，答案取自题库原文、不生成；无对应候选 → 未收录提示
 - 随机一题：纯本地规则（随机出题 / 判题 / 查答案），不经 LLM
 - 判题归一化：全角→半角、去空白与标点、小写；接受选项字母（A-D）或选项文本
 - 会话：内存 `Map<sessionId, 当前题>`，TTL 30 分钟，仅随机一题使用，单实例可接受
@@ -69,7 +70,7 @@
 ## 风险 & 开放问题
 
 - 会话状态为单实例内存实现，重启 / 多实例部署会丢（v1 可接受）
-- 知识问答依赖 LLM 理解问法，题库未覆盖或问法歧义时可能未收录或误匹配 → 未收录提示兜底，后续可按需补充同义词表
+- 知识问答的召回层（bigram Top-K）可能漏招或召入干扰题：漏招 → 未收录提示兜底；干扰 → LLM 语义判定兜底。题库规模上千后按需把召回换成 embedding
 - 题库固定选项顺序（与游戏内一致）；若后续需要乱序，判题按文本、展示需映射
 - 已定：切换模式即清空聊天记录并重置 sessionId（防止上一题“幽灵状态”）；常见服务模块 X 关闭仅收起快捷入口，不影响已选子模式
 
