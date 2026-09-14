@@ -79,4 +79,4 @@
 |------|--------|----------|----------|
 | 小叶 | ye/feat-A002_sango-quiz | — | — |
 | 老陈 | chen/feat-A002_sango-quiz | — | — |
-| 小胡 | hu/feat-A002_sango-quiz | — | — |
+| 小胡 | hu/feat-A002_sango-quiz | ✅ | — |
