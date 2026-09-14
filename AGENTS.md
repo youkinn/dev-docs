@@ -97,9 +97,10 @@
 - **每个 feat / bug 新建分支**，不允许直接在 main 上修改
 - **禁止直接向 main 提交或 push 代码。** main 只接受 Pull Request 合入，所有合并由负责人执行
 - 说明（2026-09-12 决策）：GitHub Free 私有仓库不支持分支保护 / Rulesets，此条为硬性文档规则，靠流程纪律执行；若日后升级 Pro，再启用平台级强制
+- **新需求先拉 main（2026-09-14 决策）。** 每个新需求的分支必须基于 `origin/main`（先 fetch 最新再拉）新建；禁止基于其他未合并分支继续开发，避免把旧需求或旧分支的改动带进新需求
 - 分支命名：`{owner}/feat-A001_{简短描述}` 或 `{owner}/bug-00042_{简短描述}`
-- owner：`ye`（小叶）/ `hu`（小胡）/ `chen`（老陈）
-- 示例：`ye/feat-A001_weather-chat`、`chen/bug-00042_char-limit`
+- owner：`ye`（小叶）/ `hu`（小胡）/ `chen`（老陈）/ `coco`（Coco）
+- 示例：`ye/feat-A001_weather-chat`、`chen/bug-00042_char-limit`、`coco/feat-A002_sango-quiz`
 
 ## 交付清单（每个任务）
 
