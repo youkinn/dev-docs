@@ -99,6 +99,15 @@ feat-A002 用 `POST /api/chat` 的 `scenario` / `service` 字段做场景分发�
 
 | 成员 | 分支名 | 审查结果 | 合并日期 |
 |------|--------|----------|----------|
-| 小叶 | — | — | — |
-| 老陈 | — | — | — |
-| 小胡 | — | — | — |
+| 小叶 | ye/feat-A003_model-tool-routing | ✅ | — |
+| 老陈 | chen/feat-A003_model-tool-routing | ✅ | — |
+| 小胡 | hu/feat-A003_model-tool-routing | ✅ | — |
+
+## 交付说明（Coco）
+
+- 2026-09-15 集成：mcp-orchestrator 集成分支 `coco/feat-A003_model-tool-routing` = 老陈（`server.ts` 严格白名单 + `ToolExecutionError` 判 503、`index.ts` 单 Agent 装配、`types.ts`）+ 小胡（`agent.ts` 统一路由提示词与工具同源上报、`sango.ts` 清理孤儿提示词、接线）+ Coco 端到端集成用例。`npm run build` 通过；`node --test "build/test/feat-A002/*.test.js" "build/test/feat-A003/*.test.js"` 66/66 通过（A002 回归 18 + A003 server 19 + A003 agent 16 + 集成 13）。
+- 集成用例（`src/test/feat-A003/integration.test.ts`）用真实 `server.ts` + 真实 `Agent` + 真实 `SangoService` 起 HTTP 服务，只把 MCP transport 与 LLM 换成替身，按验收 ①–⑩ 断言实际调用的工具名与信封；与老陈的 StubAgent 契约用例、小胡的 Agent 直调用例互补，不重复。
+- mcp-web：`ye/feat-A003_model-tool-routing` 的 `npm run build` 与 `npm run lint` 全绿（该项目无测试设施，沿用 A002 的待决策项）。mcp-server：只改 `get-forecast` / `get-alerts` 两处 description（声明数据源 NWS、仅覆盖美国境内、非美国地区不要调用），`inputSchema` 与实现未动。
+- 发布硬约束：mcp-orchestrator 与 mcp-web 必须同一次发布上线（旧字段 `scenario` / `service` 一律 400，无灰度）；mcp-server 的描述改动可独立发布，但建议同批，避免模型看不到覆盖范围声明。
+- 例外记录：mcp-web `origin/main` 仍带 A002 遗留的编译失败（WeatherView.vue TS2345），`ye/feat-A002_build-fix`(4a62ab6) 未合入 main；A003 前端改动（标签关闭改 `setMode(null)`、UX 类型迁到 store）已顺带消除该错误，A003 PR 合入后 main 恢复可编译，build-fix 分支可作废。
+- 遗留（不阻塞本期，建议单独立号）：① CLI（`cli.ts`）不注入 tools，工具集只有 MCP 天气工具，而默认提示词已含题库域与 `sango_query` 规则——接口文档已明确 CLI 走默认提示词且非验收路径，但 CLI 下模型可能按题库话术作答或试图调用不存在的工具；② mcp-web `WeatherView.vue` 输入区标签文案「随便一题」与后端指令词「随机一题 / 来一题」不一致（纯展示，不影响功能）；③ 请求体非法 JSON 或超过 32kb 时由 express 默认错误处理返回 HTML，不走 `{ code, data, message }` 信封（A001/A002 起即如此，非本期引入）；④ 分域路由的真实模型命中率只能靠固定问题集实测，本期用例全 mock，只验「调了某工具走什么格式」，建议发布前按需求文档「验证方式」跑一轮真实 LLM 统计。
