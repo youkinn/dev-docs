@@ -30,7 +30,7 @@
 
 | scenario + service | 处理方式 |
 |----------|----------|
-| general | Agent 通用 LLM 对话，不传 tools |
+| general | 通用对话：Agent 走通用对话 system prompt（GENERAL_SYSTEM_PROMPT，普通问答，不套天气播报格式），不调任何工具、不涉及题库 |
 | weather | Agent 连接天气 MCP 工具（现状）；MCP 未连接返回 503 |
 | sango + knowledge | Agent + sango 召回工具：本地召回 Top-K 候选 → LLM 判定对应题 → 返回题库原文答案；不经 MCP |
 | sango + random | 本地 SangoService 规则（出题 / 判题 / 查答案）；不经 LLM |
@@ -122,7 +122,7 @@ data 结构不变（前端 ChatData 可复用）：
 ## 技术要点（老陈技术方案合并在此）
 
 - server.ts：createServer(agents, sangoService, options)（agents = general / weather / sangoKnowledge 三个独立 Agent 实例），/api/chat 按 scenario + service 分发
-- Agent 支持空工具列表：general 场景不传 tools、使用通用 system prompt
+- Agent 支持空工具列表：general 场景不传 tools，并注入通用对话 system prompt（src/agent.ts 的 GENERAL_SYSTEM_PROMPT）；不注入时保持 A001 的地铁天气默认提示词（weather 场景行为不变）
 - 知识问答复用 Agent：新增 sango 召回工具（sangoService.candidates → Top-K 候选题目 + 答案），LLM 先理解问法含义、再判定候选中对应的题目，答案取自题库原文、不生成；无对应候选返回未收录
 - 新增 src/sango.ts（SangoService）：
   - load()：读 SANGO_QUESTION_FILE（默认 data/sango-questions.json），启动校验（question 非空、options A-D 齐全、answer ∈ options），坏行跳过 + 告警
