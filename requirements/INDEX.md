@@ -5,4 +5,4 @@
 | 特性号 | 标题 | 涉及项目 | 状态 | 定稿日期 |
 |--------|------|----------|------|----------|
 | feat-A001 | 天气助手页面 | mcp-web, mcp-orchestrator, mcp-server | 草稿 | — |
-| feat-A002 | 风云三国知识问答 | mcp-web, mcp-orchestrator | 草稿 | — |
+| feat-A002 | 风云三国知识问答 | mcp-web, mcp-orchestrator | 已定稿 | 2026-09-14 |
