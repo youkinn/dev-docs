@@ -78,6 +78,16 @@
 
 | 成员 | 分支名 | 审查结果 | 合并日期 |
 |------|--------|----------|----------|
-| 小叶 | ye/feat-A002_sango-quiz | — | — |
-| 老陈 | chen/feat-A002_sango-quiz | — | — |
+| 小叶 | ye/feat-A002_sango-quiz | ✅ | — |
+| 小叶 | ye/feat-A002_build-fix | ✅ | — |
+| 老陈 | chen/feat-A002_sango-quiz | ✅ | — |
+| 老陈 | chen/feat-A002_general-prompt | ✅ | — |
 | 小胡 | hu/feat-A002_sango-quiz | ✅ | — |
+
+## 交付说明（Coco）
+
+- 2026-09-14 集成：orchestrator 集成分支含小胡（PR #2）+ 老陈两次直接合入集成分支的产出；build 通过、`node --test "build/test/feat-A002/*.test.js"` 31/31 通过、真实 HTTP 端到端（general / weather / sango+knowledge / sango+random / 400 用例）通过。
+- 例外记录 1：前端改动此前在无 PR 情况下进入 mcp-web main，且 main 编译失败（WeatherView.vue TS2345）；已由 ye/feat-A002_build-fix 修复并补走 PR（youkinn/mcp-web#2）。
+- 例外记录 2：general 场景实测 6 次有 5 次空 answer（复用天气 system prompt，内容落到 reasoning_content）；老陈已修（GENERAL_SYSTEM_PROMPT），集成分支回归通过。接口文档此前已写“general 使用通用 system prompt”但代码未实现，审查时需逐条核对文档与代码。
+- 待负责人决策：mcp-web 无组件测试设施（无 vitest 依赖、无 test 脚本，A001 亦未写组件测试），本需求前端未交付组件测试；补测试设施，或收窄交付清单「测试代码已写」对 mcp-web 的适用范围。
+- 已知小问题（不阻塞）：general 回复可能带 Markdown（前端纯文本 pre-wrap 渲染会显示原文）；deepseek-v4-flash 仍小概率把答案只放 reasoning_content；建议后续单独立 bug 决定兜底策略。
