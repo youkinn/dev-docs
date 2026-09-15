@@ -40,8 +40,8 @@ weather.gov NWS API（外部数据源）
 - dev-docs 是唯一契约中心：`requirements/`（需求）、`mcp-orchestrator/api/`（接口）、`design/`（技术方案）。
 - 顺序：老陈接口文档先出 → 小叶前端才开工（小叶依赖老陈）。
 - 强制统一响应信封：`{ code, data, message }`（详见 `mcp-orchestrator/api/response-convention.md`）。
-- 集成测试全链路：请求 → orchestrator → server → 响应。
 
-## Git 协作边界（2026-09-15）
+## Git 协作边界（2026-09-16）
 
-- 多人同项目：Coco 拉需求集成分支 → 成员基于它拉个人分支 → 成员自合入集成分支 → Coco 统一执行往 main 的 PR 与合并。
+- 多人同项目：Coco 拉需求分支 → 成员基于它拉个人分支 → 成员自合入需求分支 → Coco 发起往 main 的 PR → 负责人验收并合并。
+- 端到端验收由负责人在需求分支上执行：先验收、通过后才由 Coco 发起 PR。Coco 不再跑集成测试（2026-09-16 决策，控 token）。
