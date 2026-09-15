@@ -6,3 +6,4 @@
 |--------|------|----------|------|----------|
 | feat-A001 | 天气助手页面 | mcp-web, mcp-orchestrator, mcp-server | 草稿 | — |
 | feat-A002 | 风云三国知识问答 | mcp-web, mcp-orchestrator | 已定稿 | 2026-09-14 |
+| feat-A003 | 模型自主工具路由（统一对话入口） | mcp-orchestrator, mcp-server, mcp-web | 已定稿 | 2026-09-15 |
