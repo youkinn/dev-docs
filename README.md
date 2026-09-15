@@ -1,4 +1,4 @@
-﻿# dev-docs
+# dev-docs
 
 跨项目的开发文档仓库，服务于 mcp-web、mcp-orchestrator、mcp-server 及未来所有项目。
 
@@ -12,6 +12,7 @@ dev-docs/
 ├── AGENTS.md                    团队约定（Coco 的永久记忆）
 ├── requirements/                每个需求一份，跨项目共享
 │   ├── INDEX.md                 需求登记表
+│   ├── BACKLOG.md               未立项的迭代想法池（不占编号）
 │   └── FEAT-NNN-title.md
 ├── templates/
 │   ├── requirement.md           需求文档模板
@@ -37,6 +38,8 @@ dev-docs/
 每个需求分配唯一编号 `FEAT-NNN`，自增不可重用。所有文档通过特性号关联。
 
 需求索引表：[requirements/INDEX.md](requirements/INDEX.md)
+
+迭代想法池：[requirements/BACKLOG.md](requirements/BACKLOG.md)（候选方向，未立项，不占编号）
 
 ## 工作流
 
