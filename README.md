@@ -52,11 +52,12 @@ dev-docs/
 
 3. 开发 + 测试
    三人并行开发，各自写测试代码（命名清晰，覆盖验收标准）
-   Coco 写集成测试（端到端关键路径）
+   需求分支合齐 → Coco 审查通过 → 提测
+   负责人在需求分支上端到端验收（人工）
 
-4. 集成审查
-   编译通过 → 测试跑通 → Coco 审查
-   → 成员发起 PR → 负责人二次审核并合并
+4. 验收通过后
+   Coco 发起 PR（目标 main）
+   → 负责人合并 PR
 ```
 
 ## 交付清单
@@ -75,4 +76,4 @@ dev-docs/
 | 前端组件 | 小叶 | UI 交互、状态变更 |
 | Agent 逻辑 | 小胡 | LLM 调用、tool-use 循环（mock transport） |
 | Transport / Server | 老陈 | 连接生命周期、HTTP 路由、队列行为 |
-| 集成测试 | Coco | 端到端：请求 → orchestrator → server → 响应 |
+| 端到端验收 | 你（负责人） | 提测后在需求分支上人工验收：请求 → orchestrator → server → 响应 |
