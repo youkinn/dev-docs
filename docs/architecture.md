@@ -5,12 +5,12 @@
 
 ## 项目总览
 
-| 项目 | 本地路径 | 负责人 | 技术栈 | 职责 |
+| 项目 | 别名 | 本地路径 | 负责人 | 技术栈 | 职责 |
 |---|---|---|---|---|
-| dev-docs | `D:\workplace\dev-docs` | Coco + 负责人 | Markdown | 需求 / 接口 / 设计文档唯一仓库（契约中心） |
-| mcp-web | `D:\workplace\mcp-web` | 小叶 | Vue 3 + Ant Design Vue + Less + Pinia + Vite | 前端 UI（API 客户端、Pinia store、页面组件） |
-| mcp-orchestrator | `D:\workplace\mcp-orchestrator` | 小胡 + 老陈 | TypeScript + Express | LLM 编排（agent.ts）+ MCP 传输（transport.ts）+ HTTP 层（server.ts） |
-| mcp-server | `D:\workplace\mcp-server` | 老陈 | Node + @modelcontextprotocol/sdk | MCP 服务端（Stdio），工具 get-alerts / get-forecast（数据源 weather.gov NWS） |
+| dev-docs | 兰台 | `D:\workplace\dev-docs` | Coco + 负责人 | Markdown | 需求 / 接口 / 设计文档唯一仓库（契约中心） |
+| mcp-web | 前厅 | `D:\workplace\mcp-web` | 小叶 | Vue 3 + Ant Design Vue + Less + Pinia + Vite | 前端 UI（API 客户端、Pinia store、页面组件） |
+| mcp-orchestrator | 总台 | `D:\workplace\mcp-orchestrator` | 小胡 + 老陈 | TypeScript + Express | LLM 编排（agent.ts）+ MCP 传输（transport.ts）+ HTTP 层（server.ts） |
+| mcp-server | 器坊 | `D:\workplace\mcp-server` | 老陈 | Node + @modelcontextprotocol/sdk | MCP 服务端（Stdio），工具 get-alerts / get-forecast（数据源 weather.gov NWS） |
 
 ## 调用链路
 
