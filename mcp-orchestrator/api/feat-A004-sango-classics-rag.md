@@ -2,12 +2,12 @@
 
 > 作者：老陈
 > 对应特性号：feat-A004
-> 涉及项目：mcp-orchestrator（transport 多 server 注册表 / server.ts / index.ts）、mcp-server（新增独立 server「sango」：src/sango/ + 数据构建）、mcp-web（小叶对接，本期无 HTTP 字段变更）
+> 涉及项目：mcp-orchestrator（transport 多 server 注册表 / server.ts / index.ts）、mcp-server（新增独立 server「sango」：sango/src/ TypeScript + 数据构建 sango/data/，构建产物 sango/dist/index.js）、mcp-web（小叶对接，本期无 HTTP 字段变更）
 > 日期：2026-09-16
 
 ## 概述
 
-新增独立 MCP server「sango」（入口 `mcp-server/src/sango/index.js`，服务名 `sango`），提供《三国演义》原著 RAG 检索工具 `sango_novel_search`：大模型按语义调度，先检索原文段落、再基于召回原文归纳作答，禁止编造原文外内容。`sango` 与现有 weather server 完全隔离、互不改。
+新增独立 MCP server「sango」（入口 `mcp-server/sango/dist/index.js`——TypeScript 构建产物，服务名 `sango`），提供《三国演义》原著 RAG 检索工具 `sango_novel_search`：大模型按语义调度，先检索原文段落、再基于召回原文归纳作答，禁止编造原文外内容。`sango` 与现有 weather server 完全隔离、互不改。
 
 orchestrator 的 transport 由单 MCP server 重构为**多 server 注册表**：weather 与 sango 各为一个 stdio 子进程，工具名 → 归属 server 显式映射；`GET /api/tools` 合并上报两个 server 的工具与本地工具。HTTP 层 `POST /api/chat` **不新增任何字段**（请求体仍只接受 `message`，响应 `data` 仍为 `{ answer }`），工具调度完全由模型按语义决定。
 
@@ -19,19 +19,19 @@ orchestrator 的 transport 由单 MCP server 重构为**多 server 注册表**�
 
 | 属性 | 值 |
 |------|-----|
-| 入口文件 | `mcp-server/src/sango/index.js` |
+| 入口文件 | `mcp-server/sango/dist/index.js`（TS 构建产物；sango 目录内 `npm run build` → `dist/`） |
 | 服务名（MCP server name） | `sango` |
 | 传输方式 | stdio 子进程（与 weather 一致） |
 | 工具 | `sango_novel_search`（唯一） |
 
-- 与 weather server **隔离互不改**：`mcp-server/src/weather/index.js` 及现有天气工具不动；sango 是新增独立目录，不 import、不修改 weather 任何代码。
+- 与 weather server **隔离互不改**：`mcp-server/weather/src/index.js`（迁移后目录，内容零改动、行为不变）及现有天气工具不动；sango 是新增独立目录，不 import、不修改 weather 任何代码。
 - orchestrator 注册表中 weather 与 sango 是两个独立 stdio 子进程，互不依赖、独立启动、独立失败。
 - 各 server 注册各自工具：weather 注册 `get-forecast` / `get-alerts`；sango 注册 `sango_novel_search`。
 
-### 数据位置 mcp-server/data/sango/
+### 数据位置 mcp-server/sango/data/
 
 ```
-mcp-server/data/sango/
+mcp-server/sango/data/
 ├── corpus/
 │   └── sanguo-yanyi/        # 分回语料（按 source 分子目录）
 │       ├── 001.json         # 第 1 回
@@ -63,7 +63,7 @@ mcp-server/data/sango/
 
 - 语料源：`dev-docs/docs/三国演义.txt`（120 回，含站点杂质）。**只清洗不改内容**；底本 / 点校版权在正式上线前确认（上线阻塞项，不影响本期开发与验收）。
 - 管线：清洗（去除站点杂质）→ 段级切分 + 类型标注（narration/verse/comment）→ 输出 `corpus/` JSON → 生成 `vectors/` 离线向量。
-- 向量：D2 本地 embedding，BGE-M3；下载先设 `HF_ENDPOINT=https://hf-mirror.com`；若镜像下载不可行 → 用确定性哈希降级（保证管线可跑），并在 TODO 登记恢复 BGE-M3（见「未解决问题」）。
+- 向量：D2 本地 embedding，BGE-M3；下载先设 `HF_ENDPOINT=https://hf-mirror.com`；若镜像下载不可行 → 用确定性哈希降级（保证管线可跑），恢复 BGE-M3 作为后续优化项。
 - 检索：BM25 + 向量 hybrid（或内存余弦 / sqlite-vec），数据规模为千级 chunk；**明确不做** query 改写 / rerank / 专用向量库。
 
 ## 工具契约 sango_novel_search
@@ -137,7 +137,7 @@ mcp-server/data/sango/
 
 - v1 **只校验人名**：地名、事件名不校验，留待后续版本。
 - **兜底输出格式**（校验不过或无召回时）：`原文片段 + 出处（第N回 · 段X）+ 结论句`。
-- 数据依赖：校验读取 `mcp-server/data/sango/alias.json`（老陈构建期产出）；校验执行在 agent 作答路径（小胡落位，见「与小胡的接口边界」）。
+- 数据依赖：校验读取 `mcp-server/sango/data/alias.json`（老陈构建期产出）；校验执行在 agent 作答路径（小胡落位，见「与小胡的接口边界」）。
 
 ## prompt 限定 5 条
 
@@ -169,7 +169,7 @@ sango RAG 域统一提示词（`UNIFIED_SYSTEM_PROMPT` 内，小胡编排措辞�
 ### GET /api/tools
 
 - 合并上报：weather 工具 + sango 工具 + 本地工具（`sango_query`）。返回结构不变（`data.tools`，元素 `name` / `description` / `inputSchema`）。
-- 任一个 MCP server 未连接 → 该 server 的工具不可见；`Agent.listTools()` 抛错 → 503「MCP Server 未连接」（沿用 A003）。
+- 缺配 / 启动失败的 server 不进入注册表 → 该 server 的工具不可见（`listTools()` 正常返回其余 server 工具）；全部 server 均不可用时 `Agent.listTools()` 抛错 → 503「MCP Server 未连接」（沿用 A003）。
 
 ```json
 {
@@ -193,9 +193,17 @@ sango RAG 域统一提示词（`UNIFIED_SYSTEM_PROMPT` 内，小胡编排措辞�
 - 工具调度完全由模型按语义决定：sango 域命中 → 调 `sango_novel_search`；天气 → 天气工具；题库 → `sango_query` / `/api/sango/random`。
 - 错误语义同 A003：`ToolExecutionError` → 503；其余 → 500；本地工具失败不包装 → 500。
 
-### 技术要点（老陈实现侧）
+### 注册表配置（环境变量）
 
-- 注册表配置：weather 与 sango 的启动命令在启动配置 / 环境变量中声明；缺配 sango → 该 server 不可用（`/api/tools` 不含其工具、调用报错 → 503）。
+| 环境变量 | 必填 | 说明 |
+|----------|------|------|
+| `MCP_WEATHER_SCRIPT` | 是 | weather server 入口脚本绝对路径（子进程命令 `node <script>`）；旧配置 `MCP_SERVER_SCRIPT` / CLI 第 2 参 `process.argv[2]` 兼容兜底 |
+| `MCP_SANGO_SCRIPT` | 否 | sango server 入口脚本绝对路径；缺配 → sango 不可用 |
+
+- weather 与 sango 各为一个独立 stdio 子进程（`node <script>`），各自独立 MCP Client、独立启动、独立失败；weather 必需（未配置 → 启动报错退出），sango 可缺配。
+- 缺配 `MCP_SANGO_SCRIPT`（或 sango 启动失败）→ 该 server 不可用：`GET /api/tools` 不含 `sango_novel_search`；模型调用 `sango_novel_search` → transport 按工具名查不到归属 → 报错 → agent 包装为 `ToolExecutionError` → `/api/chat` 503（错误语义不变，不按工具名分支、不解析 error.message）。
+
+### 技术要点（老陈实现侧）
 - transport 侧 `callTool(toolName, args)` 改为按归属表先定位 server 再转发；`listTools()` 合并各 server 结果。
 - 保持 A003 的 `Agent.listTools()` 同源约束（上报的能力 = 模型可见的能力）。
 - 错误判定不变：MCP 工具失败（含 `sango_novel_search` 非法 source）→ `ToolExecutionError` → 503；不按工具名分支、不解析 error.message。
@@ -206,7 +214,7 @@ sango RAG 域统一提示词（`UNIFIED_SYSTEM_PROMPT` 内，小胡编排措辞�
 |------|----------|------|----------------|
 | prompt 限定 5 条（sango RAG 域） | `UNIFIED_SYSTEM_PROMPT` 内 | 小胡编排措辞，本文档「prompt 限定 5 条」为不变量 | 老陈不复制提示词文本，只读不变量 |
 | 引用硬校验（答案人物 ⊆ 召回人物，三级识别链） | agent 作答路径 | 小胡 | 校验读取老陈产出的 `alias.json` |
-| `alias.json`（人名 → ID，P001 起按规范名去重，关羽 → P002） | `mcp-server/data/sango/alias.json` | 老陈（构建期产出） | 小胡按「数据位置」格式读取 |
+| `alias.json`（人名 → ID，P001 起按规范名去重，关羽 → P002） | `mcp-server/sango/data/alias.json` | 老陈（构建期产出） | 小胡按「数据位置」格式读取 |
 
 ## 路由归属（模型自主决定，不由请求字段决定）
 
