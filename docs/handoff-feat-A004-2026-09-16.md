@@ -1,4 +1,4 @@
-﻿# 上下文交接：feat-A004 三国演义解读（2026-09-16 第九轮，待负责人验收，含 Bug1 快路径 / Bug2 固定格式修复）
+﻿# 上下文交接：feat-A004 三国演义解读（2026-09-16 第十轮，已压缩，新会话从本文件起步）
 
 **1. 起点文件**
 - 本交接（新会话第一件事读它）：`D:\workplace\dev-docs\docs\handoff-feat-A004-2026-09-16.md`
@@ -9,7 +9,7 @@
 - `dev-docs\mcp-orchestrator\api\feat-A004-sango-classics-rag.md` —— 接口文档定稿（注册表 env：MCP_WEATHER_SCRIPT / MCP_SANGO_SCRIPT）
 - `dev-docs\docs\sango-classics-rag-design.md` —— 技术方案定稿
 - `dev-docs\docs\sango-mcp-routing-design.md` —— 路由方案（确定性优先 + LLM 兜底；风云三国=本地 sango_query）
-- `dev-docs\bugs\feat-A0004-bugs.md` —— bug 票（2 条：响应慢 10s / 固定格式）
+- `dev-docs\bugs\feat-A0004-bugs.md` —— bug 票（2 条均已修复：响应慢→快路径+注入收窄+命中只出最符合一段；固定格式→prompt 第 6 条+服务端强制；bug1 剩余耗时依赖火山缓存）
 - `dev-docs\requirements\feat-A004-sango-classics-rag.md` —— 需求定稿
 - `dev-docs\docs\三国演义.txt` —— 语料源（120 回）
 - `mcp-server\sango\` —— TS 子项目：src/index.ts、src/types.ts、src/search/sango-index.ts、src/tools/sango-novel-search.ts、src/utils/；data/corpus/sanguo-yanyi/（001~120.json）、data/alias.json、data/vectors/sanguo-yanyi.bin；dist/index.js（构建产物）
@@ -34,12 +34,13 @@
 **4. git 状态**（本地=origin，均已推送，无未推送提交）
 - mcp-orchestrator：`coco/feat-A004_sango-classics-rag`=`9da8f0a`（第九轮：Bug1 快路径 + Bug2 固定格式 + 引用校验本地化去 NER + 命中只输出最符合一段，**已推送**；前序 `6105cc3`）
 - mcp-web：`ye/feat-A004_sango-classics-rag`=`165b4dd`（第七轮：三国演义标签 + domain=sango-novel，**已推送**）
-- dev-docs：`chen/feat-A004_sango-classics-rag`=以 origin 实际 HEAD 为准（本交接提交后不回填 hash，避免循环；第八轮已推送 `0fbfdbb`）
+- dev-docs：`chen/feat-A004_sango-classics-rag`=以 origin 实际 HEAD 为准（本交接提交后不回填 hash，避免循环；最近已推送 `0a8f334`，含 `8888da2`）
 - mcp-server：`chen/feat-A004_sango-classics-rag`=`815cd42`（本轮未改动）
 - 测试：orchestrator 全量 102/102 绿（`node --test "build/test/*/*.test.js"`；删 3 个孤儿 NER 测试后 99，补命中收窄 3 测试后 102）
 
 **5. 待办任务**（下一步）
-- **负责人端到端验收（进行中，2026-09-16 17:3x 已通知）**：按 §3 验收路径 5 条在需求分支验收；发现问题 → 打回 → 成员修正 → Coco 复审 → 重新提测
+- **负责人端到端验收（进行中）**：按 §3 验收路径 5 条在需求分支验收；发现问题 → 打回 → 成员修正 → Coco 复审 → 重新提测
+- **orchestrator 运行中**：`npm run dev`（session 82520，端口 3000，已加载 9da8f0a 新代码；需重启时：停 PID → `npm run dev`）
 - 验收通过 → Coco 发起 main PR（mcp-server / mcp-orchestrator / dev-docs）→ 负责人合并 → Coco 更新需求文档「合并记录」表
 - 上线前阻塞项：底本/点校版权确认；BGE-M3 恢复（可选优化）
 - 探针 B（H1 召回质量）补跑
