@@ -25,11 +25,11 @@
 - 子代理 spawn：prompt 参数直传、`-s danger-full-access`、模型 `deepseek-v4-flash`、子代理只产出文件不做 git、阻塞式长超时
 
 **4. git 状态**
-- dev-docs：`chen/feat-A004_sango-classics-rag`，HEAD=`b4d6cb7ebe7b3e61f9bf37b8ea4869ff7942f117`（第六轮交接，待推送）；origin=`8d54139`
+- dev-docs：`chen/feat-A004_sango-classics-rag`，HEAD=`4152d1e`（第六轮交接，待推送）；origin=`8d54139`
 - mcp-server：`chen/feat-A004_sango-classics-rag`，HEAD=`815cd42`（异常捕获+registerTool 拆分+Chapter 注释+AGENTS 规范，**已提交未推送**）；origin=`13bc08d`
 - mcp-orchestrator：需求分支 `coco/feat-A004_sango-classics-rag`=`6aac258`（已推）
 - mcp-web：`ye/feat-A004_sango-classics-rag`（基于 origin/main，无提交未推送；小叶确认无需改动）
-- **⚠️ 443 网络问题**：mcp-server `815cd42` 与 dev-docs 第五轮 `b4d6cb7` 均因 github.com:443 连接超时未推送；本地提交已就位，网络恢复后重试 push（一次成功即可，勿反复打）
+- **⚠️ 443 网络问题**：mcp-server `815cd42` 与 dev-docs `4152d1e`（含 b4d6cb7）均因 github.com:443 连接超时未推送；本地提交已就位，网络恢复后重试 push（一次成功即可，勿反复打）
 
 **5. 待办任务**（下一步）
 - **重试推送**：mcp-server `815cd42` → origin；dev-docs 第六轮交接 → origin（443 恢复后）
