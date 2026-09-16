@@ -27,7 +27,7 @@
 - 子代理 spawn：prompt 参数直传、`-s danger-full-access`、模型 `deepseek-v4-flash`、子代理只产出文件不做 git、阻塞式长超时
 
 **4. git 状态**（第七轮已推送）
-- dev-docs：`chen/feat-A004_sango-classics-rag`，本地=origin=`7d45598`（第七轮 docs：接口文档 domain=sango-novel + 需求任务状态 + AGENTS 提测摘要 + 交接，**已推送**）
+- dev-docs：`chen/feat-A004_sango-classics-rag`，本地=origin（第七轮 docs 已推送，以 origin 实际 HEAD 为准；交接文档自身提交不再回填 hash，避免 hash 循环）
 - mcp-server：`chen/feat-A004_sango-classics-rag`，本地=origin=`815cd42`（异常捕获+registerTool 拆分+Chapter 注释+AGENTS 规范，**已推送**，第七轮未改动）
 - mcp-orchestrator：需求分支 `coco/feat-A004_sango-classics-rag`=`884c611`（第七轮：domain=sango-novel 白名单 + agent 软性域提示 + 测试，**已推送**）
 - mcp-web：`ye/feat-A004_sango-classics-rag`=`165b4dd`（第七轮：新增「三国演义」标签 + domain=sango-novel，**已推送**）
