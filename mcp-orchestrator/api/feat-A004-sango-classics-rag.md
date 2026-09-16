@@ -2,18 +2,18 @@
 
 > 作者：老陈
 > 对应特性号：feat-A004
-> 涉及项目：mcp-orchestrator（transport 多 server 注册表 / server.ts / index.ts）、mcp-server（新增独立 server「sango」：sango/src/ TypeScript + 数据构建 sango/data/，构建产物 sango/dist/index.js）、mcp-web（小叶对接，本期无 HTTP 字段变更）
+> 涉及项目：mcp-orchestrator（transport 多 server 注册表 / server.ts / index.ts）、mcp-server（新增独立 server「sango」：sango/src/ TypeScript + 数据构建 sango/data/，构建产物 sango/dist/index.js）、mcp-web（小叶对接：新增「三国演义」标签，请求携带 domain=sango-novel）
 > 日期：2026-09-16
 
 ## 概述
 
 新增独立 MCP server「sango」（入口 `mcp-server/sango/dist/index.js`——TypeScript 构建产物，服务名 `sango`），提供《三国演义》原著 RAG 检索工具 `sango_novel_search`：大模型按语义调度，先检索原文段落、再基于召回原文归纳作答，禁止编造原文外内容。`sango` 与现有 weather server 完全隔离、互不改。
 
-orchestrator 的 transport 由单 MCP server 重构为**多 server 注册表**：weather 与 sango 各为一个 stdio 子进程，工具名 → 归属 server 显式映射；`GET /api/tools` 合并上报两个 server 的工具与本地工具。HTTP 层 `POST /api/chat` **不新增任何字段**（请求体仍只接受 `message`，响应 `data` 仍为 `{ answer }`），工具调度完全由模型按语义决定。
+orchestrator 的 transport 由单 MCP server 重构为**多 server 注册表**：weather 与 sango 各为一个 stdio 子进程，工具名 → 归属 server 显式映射；`GET /api/tools` 合并上报两个 server 的工具与本地工具。HTTP 层 `POST /api/chat` **不新增字段**（沿用既有 `message` / `domain` 白名单，本期为 `domain` 新增取值 `sango-novel`；响应 `data` 仍为 `{ answer }`），工具调度完全由模型按语义决定。
 
 全部接口沿用 `{ code, data, message }` 信封（见 `mcp-orchestrator/api/response-convention.md`）。
 
-**破坏性变更**：orchestrator transport 注册表化（后端内部重构 + 部署配置变化：需同时拉起 weather 与 sango 两个 MCP 子进程）；HTTP 前端无字段破坏，但 `/api/tools` 返回的工具列表新增 `sango_novel_search`。
+**破坏性变更**：orchestrator transport 注册表化（后端内部重构 + 部署配置变化：需同时拉起 weather 与 sango 两个 MCP 子进程）；HTTP 前端字段无破坏，但 `domain` 新增取值 `sango-novel`（语义新增，非破坏）；`/api/tools` 返回的工具列表新增 `sango_novel_search`。
 
 ## 独立 MCP server「sango」
 
@@ -186,13 +186,12 @@ sango RAG 域统一提示词（`UNIFIED_SYSTEM_PROMPT` 内，小胡编排措辞�
 }
 ```
 
-### POST /api/chat（无新增字段）
+### POST /api/chat（不新增字段）
 
-- 请求体**仍只接受 `message`**（白名单 `{ message }`，新增 / 旧字段一律 400，规则同 A003）。
+- 请求体沿用既有白名单 `{ message, domain }`（字段集不变，本期不新增字段）；`domain` 取值扩展为 `sango`（风云三国题库，硬锁题库域）/ `sango-novel`（三国演义原著解读，软性域提示）/ 缺省（模型语义自主路由），其余值 400。
 - 响应 `data` 仍为 `{ answer }`，不新增字段。
-- 工具调度完全由模型按语义决定：sango 域命中 → 调 `sango_novel_search`；天气 → 天气工具；题库 → `sango_query` / `/api/sango/random`。
+- 工具调度由模型按语义决定：sango 域命中 → 调 `sango_novel_search`；天气 → 天气工具；题库 → `sango_query` / `/api/sango/random`。`domain=sango-novel` 时追加「三国演义原著解读」域提示（软性：问候 / 天气等非原著问句仍按自由对话处理，不硬锁）。
 - 错误语义同 A003：`ToolExecutionError` → 503；其余 → 500；本地工具失败不包装 → 500。
-
 ### 注册表配置（环境变量）
 
 | 环境变量 | 必填 | 说明 |
@@ -230,11 +229,11 @@ sango RAG 域统一提示词（`UNIFIED_SYSTEM_PROMPT` 内，小胡编排措辞�
 
 ## mcp-web 对接说明（小叶）
 
-- **本期无 HTTP 请求 / 响应变更**：`/api/chat` 仍只发 `{ message }`，`res.code === 200` 用 `res.data.answer`，否则展示 `res.message`——现有处理不变，无需改动。
+- **本期前端需改动**：聊天页模式标签「天气 / 风云三国」旁新增「三国演义」；选中后请求 `POST /api/chat` 携带 `domain: "sango-novel"`，输入区显示「三国演义」标识（`res.code === 200` 用 `res.data.answer`，否则展示 `res.message`，信封处理不变）。
+- 「风云三国」标签行为不变：问题查询 → `domain: "sango"`；随机一题 → `/api/sango/random`。
 - `/api/tools` 返回的工具列表新增 `sango_novel_search`；如前端展示工具列表，按 `name` 自行过滤或原样展示（顺序不保证）。
-- 无新增端点；「随机一题」标签行为不变（`/api/sango/random`）。
-- 上线顺序：orchestrator transport 重构属后端部署变更，需确认 weather + sango 两进程均已配置后发布；HTTP 前端无破坏，可同时或先后发布。
-
+- 无新增端点。
+- 上线顺序：orchestrator transport 重构属后端部署变更，需确认 weather + sango 两进程均已配置后发布；HTTP 前端改动可与后端同时或先后发布。
 ## 破坏性变更说明
 
 | 层 | 变更 | 影响 |
@@ -243,7 +242,7 @@ sango RAG 域统一提示词（`UNIFIED_SYSTEM_PROMPT` 内，小胡编排措辞�
 | mcp-server | 新增独立 server「sango」 | weather 不动，无破坏 |
 | HTTP /api/chat | 无新增字段 | 无破坏（请求 / 响应结构不变） |
 | HTTP /api/tools | 工具列表新增 `sango_novel_search` | 语义新增，非破坏；前端按需适配展示 |
-| mcp-web | 无 HTTP 变更 | 前端默认无需改动 |
+| mcp-web | 新增「三国演义」标签；`/api/chat` 请求携带 `domain=sango-novel` | 语义新增，非破坏；需前端发版 |
 
 ## 验收标准对照
 
@@ -254,9 +253,9 @@ sango RAG 域统一提示词（`UNIFIED_SYSTEM_PROMPT` 内，小胡编排措辞�
 | ③ | 无命中 → 「未召回任何原文段落」，模型走兜底（原文片段 + 出处 + 结论句） | 「无命中」+ 「引用硬校验」兜底 |
 | ④ | 非法 source → 工具报错 → /api/chat 503 | 「非法 source 报错」+ 错误语义 |
 | ⑤ | /api/tools 合并 weather + sango + 本地工具 | 「GET /api/tools」示例 |
-| ⑥ | /api/chat 无新增字段、data 仍 { answer } | 「POST /api/chat（无新增字段）」 |
+| ⑥ | /api/chat 不新增字段、data 仍 { answer }；`domain` 支持 sango / sango-novel | 「POST /api/chat（不新增字段）」 |
 | ⑦ | 答案人物集合 ⊆ 召回人物集合（v1 人名，三级识别链） | 「引用硬校验」+ alias.json 规则 |
 | ⑧ | prompt 限定 5 条（第 1、2 条为硬性） | 「prompt 限定 5 条」 |
 | ⑨ | 统一信封 | 全部成功 / 错误示例均为 `{ code, data, message }`，失败 `data` 为 `null` |
 | ⑩ | 数据管线可跑：corpus / vectors / alias.json 齐全，线上只读 | 「数据位置」+「语料与向量构建管线」 |
-| ⑪ | 小叶可仅据此文档开发前端 | 全部 HTTP 契约集中于本文档，`/api/chat` 无变更 |
+| ⑪ | 小叶可仅据此文档开发前端 | 全部 HTTP 契约集中于本文档；`domain` 取值与「三国演义」标签行为见「mcp-web 对接说明」 |
