@@ -1,4 +1,4 @@
-﻿# 《三国演义》原著检索（sango_novel_search）+ orchestrator 多 server 注册表
+# 《三国演义》原著检索（sango_novel_search）+ orchestrator 多 server 注册表
 
 > 作者：老陈
 > 对应特性号：feat-A004
@@ -13,7 +13,7 @@ orchestrator 的 transport 由单 MCP server 重构为**多 server 注册表**�
 
 全部接口沿用 `{ code, data, message }` 信封（见 `mcp-orchestrator/api/response-convention.md`）。
 
-**破坏性变更**：orchestrator transport 注册表化（后端内部重构 + 部署配置变化：需同时拉起 weather 与 sango 两个 MCP 子进程）；HTTP 前端字段无破坏，但 `domain` 新增取值 `sango-novel`（语义新增，非破坏）；`/api/tools` 返回的工具列表新增 `sango_novel_search`。
+**破坏性变更**：orchestrator transport 注册表化（后端内部重构 + 部署配置变化：需在 orchestrator 根 `.env` 注册表配置 `MCP_WEATHER_SCRIPT` / `MCP_SANGO_SCRIPT` 两个 MCP 子进程入口，`npm run dev` 无参启动）；HTTP 前端字段无破坏，但 `domain` 新增取值 `sango-novel`（语义新增，非破坏）；`/api/tools` 返回的工具列表新增 `sango_novel_search`。
 
 ## 独立 MCP server「sango」
 
@@ -196,9 +196,10 @@ sango RAG 域统一提示词（`UNIFIED_SYSTEM_PROMPT` 内，小胡编排措辞�
 
 | 环境变量 | 必填 | 说明 |
 |----------|------|------|
-| `MCP_WEATHER_SCRIPT` | 是 | weather server 入口脚本绝对路径（子进程命令 `node <script>`）；旧配置 `MCP_SERVER_SCRIPT` / CLI 第 2 参 `process.argv[2]` 兼容兜底 |
+| `MCP_WEATHER_SCRIPT` | 是 | weather server 入口脚本绝对路径（子进程命令 `node <script>`）；唯一来源，不再支持 `MCP_SERVER_SCRIPT` / CLI 参数 |
 | `MCP_SANGO_SCRIPT` | 否 | sango server 入口脚本绝对路径；缺配 → sango 不可用 |
 
+- orchestrator 启动：根目录 `npm run dev`（先 build 后起 Web 服务，监听 3000），无参数；CLI 交互用 `npm start`。
 - weather 与 sango 各为一个独立 stdio 子进程（`node <script>`），各自独立 MCP Client、独立启动、独立失败；weather 必需（未配置 → 启动报错退出），sango 可缺配。
 - 缺配 `MCP_SANGO_SCRIPT`（或 sango 启动失败）→ 该 server 不可用：`GET /api/tools` 不含 `sango_novel_search`；模型调用 `sango_novel_search` → transport 按工具名查不到归属 → 报错 → agent 包装为 `ToolExecutionError` → `/api/chat` 503（错误语义不变，不按工具名分支、不解析 error.message）。
 
@@ -238,7 +239,7 @@ sango RAG 域统一提示词（`UNIFIED_SYSTEM_PROMPT` 内，小胡编排措辞�
 
 | 层 | 变更 | 影响 |
 |----|------|------|
-| mcp-orchestrator（transport） | 单 server → 多 server 注册表 | 后端内部重构；部署需同时配置 weather + sango 两个 MCP 子进程 |
+| mcp-orchestrator（transport） | 单 server → 多 server 注册表 | 后端内部重构；部署需同时配置 weather + sango 两个 MCP 子进程（.env 注册表 MCP_WEATHER_SCRIPT / MCP_SANGO_SCRIPT），orchestrator 以 `npm run dev` 无参启动 |
 | mcp-server | 新增独立 server「sango」 | weather 不动，无破坏 |
 | HTTP /api/chat | 无新增字段 | 无破坏（请求 / 响应结构不变） |
 | HTTP /api/tools | 工具列表新增 `sango_novel_search` | 语义新增，非破坏；前端按需适配展示 |

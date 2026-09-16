@@ -1,4 +1,4 @@
-﻿# 上下文交接：feat-A004 三国演义解读（2026-09-16 第七轮）
+# 上下文交接：feat-A004 三国演义解读（2026-09-16 第七轮）
 
 **1. 起点文件**
 - 本交接（新会话第一件事读它）：`D:\workplace\dev-docs\docs\handoff-feat-A004-2026-09-16.md`
@@ -17,7 +17,7 @@
 - 工具契约：sango_novel_search（source sanguo-yanyi/sanguozhi、query、limit 默认 5 max 20）；输出【出处】第N回 <回目> · 段X（类型）+ 原文；无命中「未召回任何原文段落」；非法 source → 工具报错 → 503
 - 检索：MCP 工具（D1）、本地 embedding（D2）、独立 sango_query（D3）、source 保留（D4）、Python 侧车构建期向量线上只读（D5）；BM25+向量 hybrid（内存余弦）；不做 query 改写/rerank/专用向量库
 - 生成约束三件套：prompt 5 条 + 引用硬校验（别名表 ID 优先 关羽→P002、未命中 NER、退化字符串包含；v1 只校验人名）+ 兜底（原文片段+出处+结论句）
-- 注册表：MCP_WEATHER_SCRIPT（必填，兼容旧 MCP_SERVER_SCRIPT/argv[2]）+ MCP_SANGO_SCRIPT（可选，缺配→503）；构造器保留单字符串重载
+- 注册表：MCP_WEATHER_SCRIPT（必填）+ MCP_SANGO_SCRIPT（可选，缺配→503）；已移除旧 MCP_SERVER_SCRIPT / argv[2] 兼容（2026-09-16 负责人决策：orchestrator 用 `npm run dev` 无参启动，MCP 清单一律 .env 注册表 env）；MCPTransport 构造器保留单字符串重载（测试 / 单 server 场景用）；新增 MCP 通用流程见 orchestrator README「新增一个 MCP server」
 - 向量：BGE-M3 未下载 → 确定性哈希降级（FNV-1a 32 位，Python/TS 两侧一致），TODO 恢复；依赖 = 根 npm workspaces
 - **负责人代码审查意见（2026-09-16 全部落实并沉淀 AGENTS.md）**：① 代码组织拆分 ② registerTool ③ JSDoc 业务注释 ④ version 读 package.json ⑤ 入口 main().catch ⑥ **数据加载异常捕获（corpus 致命/向量降级 BM25）⑦ Chapter 字段注释 ⑧ registerTool 处理函数拆独立文件、registerTool 作入参传入**
 - **底本/点校版权** = 语料版本来源（毛本/嘉靖本等）与现代点校整理者著作权确认；上线前阻塞项，开发不阻塞
@@ -27,16 +27,16 @@
 - 子代理 spawn：prompt 参数直传、`-s danger-full-access`、模型 `deepseek-v4-flash`、子代理只产出文件不做 git、阻塞式长超时
 
 **4. git 状态**（第七轮已推送）
-- dev-docs：`chen/feat-A004_sango-classics-rag`，本地=origin（第七轮 docs 已推送，以 origin 实际 HEAD 为准；交接文档自身提交不再回填 hash，避免 hash 循环）
+- dev-docs：`chen/feat-A004_sango-classics-rag`，本地=origin（第八轮 docs 已推送；交接文档自身提交不再回填 hash，避免 hash 循环）
 - mcp-server：`chen/feat-A004_sango-classics-rag`，本地=origin=`815cd42`（异常捕获+registerTool 拆分+Chapter 注释+AGENTS 规范，**已推送**，第七轮未改动）
-- mcp-orchestrator：需求分支 `coco/feat-A004_sango-classics-rag`=`884c611`（第七轮：domain=sango-novel 白名单 + agent 软性域提示 + 测试，**已推送**）
+- mcp-orchestrator：需求分支 `coco/feat-A004_sango-classics-rag`=`718264a`（第八轮：移除 MCP_SERVER_SCRIPT / argv[2] 兼容、npm run dev 无参启动、README 新增 MCP 通用流程，**已推送**）
 - mcp-web：`ye/feat-A004_sango-classics-rag`=`165b4dd`（第七轮：新增「三国演义」标签 + domain=sango-novel，**已推送**）
 - 本地=origin 均已同步；无待推送
 
 **5. 待办任务**（下一步）
 - ~~重试推送~~（已完成，两仓已推）
-- **第七轮打回（15:47 已修正，待复审）**：负责人提出前端需有「三国演义」标签 + 聊天带三国演义标识 + 提示词带三国演义上下文 → 三仓已改（orchestrator domain=sango-novel + agent 域提示；mcp-web 标签 + 请求标识；docs 接口文档/需求/AGENTS 同步）→ Coco 复审后重新提测
-- **提测（15:13 已通知负责人，负责人开始验收）**：负责人按需求分支端到端验收；变更清单/文件改动已按负责人要求不再提供（已记入 AGENTS.md）
+- **第八轮（16:37 已推送，待复审）**：负责人要求总台 `npm run dev` 无参启动（移除 MCP_SERVER_SCRIPT / argv[2] 兼容）、.env 配 MCP_WEATHER_SCRIPT / MCP_SANGO_SCRIPT、README 写「新增 MCP server 通用流程」→ orchestrator 已改并推 718264a、dev-docs 接口/架构/交接同步 → Coco 复审后重新提测
+- **提测（16:37 已重新通知负责人）**：负责人按需求分支端到端验收（重点：npm run dev 无参启动 + /api/tools 三工具 + 三国演义标签链路）；变更清单/文件改动已按负责人要求不再提供（已记入 AGENTS.md）
 - 验收通过 → Coco 发起 main PR（mcp-server / mcp-orchestrator / dev-docs 三个，或按负责人要求合并）→ 负责人合并
 - 上线前阻塞项：底本/点校版权确认；BGE-M3 恢复（可选优化）
 - 探针 B（H1 召回质量）补跑
