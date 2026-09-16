@@ -24,16 +24,16 @@
 - 流程（负责人确认）：等小叶结束（已结束）→ 一起提测（负责人端到端验收）→ 验收通过 → Coco 发起 main PR → 负责人合并；**验收通过前不发起 PR**
 - 子代理 spawn：prompt 参数直传、`-s danger-full-access`、模型 `deepseek-v4-flash`、子代理只产出文件不做 git、阻塞式长超时
 
-**4. git 状态**
-- dev-docs：`chen/feat-A004_sango-classics-rag`，HEAD=`d61959c`（第六轮交接+HEAD 同步，待推送，ahead 4）；origin=`8d54139`（**git 状态一律以新会话 `git status -sb` / `git rev-parse HEAD` 实测为准**）
-- mcp-server：`chen/feat-A004_sango-classics-rag`，HEAD=`815cd42`（异常捕获+registerTool 拆分+Chapter 注释+AGENTS 规范，**已提交未推送**）；origin=`13bc08d`
+**4. git 状态**（均已推送）
+- dev-docs：`chen/feat-A004_sango-classics-rag`，本地=origin=`bbbbd1e`（第六轮交接定稿，**已推送**）
+- mcp-server：`chen/feat-A004_sango-classics-rag`，本地=origin=`815cd42`（异常捕获+registerTool 拆分+Chapter 注释+AGENTS 规范，**已推送**）
 - mcp-orchestrator：需求分支 `coco/feat-A004_sango-classics-rag`=`6aac258`（已推）
 - mcp-web：`ye/feat-A004_sango-classics-rag`（基于 origin/main，无提交未推送；小叶确认无需改动）
-- **⚠️ 443 网络问题**：mcp-server `815cd42` 与 dev-docs `d61959c`（含 22fecbe/4152d1e/b4d6cb7）均因 github.com:443 连接超时未推送；本地提交已就位，网络恢复后重试 push（一次成功即可，勿反复打）
+- **443 已恢复（15:13）**：mcp-server `815cd42` 与 dev-docs `bbbbd1e` 均已推送成功
 
 **5. 待办任务**（下一步）
-- **重试推送**：mcp-server `815cd42` → origin；dev-docs 第六轮交接 → origin（443 恢复后）
-- **提测（等小叶结束，已结束）**：Coco 准备提测摘要——三仓变更文件清单 / 每文件改动点 / 建议验证关键路径（端到端：配 env 拉起 weather+sango → 真实 LLM 跑「温酒斩华雄」→ 检索/归纳/校验/兜底全链路；/api/tools 合并 4 工具；非法 source 503；题库/天气不回归）→ 负责人在需求分支验收
+- ~~重试推送~~（已完成，两仓已推）
+- **提测（15:13 已通知负责人，负责人开始验收）**：负责人按需求分支端到端验收；变更清单/文件改动已按负责人要求不再提供
 - 验收通过 → Coco 发起 main PR（mcp-server / mcp-orchestrator / dev-docs 三个，或按负责人要求合并）→ 负责人合并
 - 上线前阻塞项：底本/点校版权确认；BGE-M3 恢复（可选优化）
 - 探针 B（H1 召回质量）补跑
