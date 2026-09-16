@@ -7,5 +7,7 @@
 | feat-A001 | 天气助手页面 | mcp-web, mcp-orchestrator, mcp-server | 草稿 | — |
 | feat-A002 | 风云三国知识问答 | mcp-web, mcp-orchestrator | 已定稿 | 2026-09-14 |
 | feat-A003 | 模型自主工具路由（统一对话入口） | mcp-orchestrator, mcp-server, mcp-web | 已定稿 | 2026-09-15 |
+| feat-A004 | 三国演义解读（只解读不评论） | mcp-orchestrator, mcp-server, mcp-web | 已定稿 | 2026-09-16 |
+
 
 > 未立项的迭代想法、候选方向见 [BACKLOG.md](BACKLOG.md)。那不是需求、不占编号，立项才发 feat 号。
