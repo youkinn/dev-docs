@@ -126,8 +126,8 @@ mcp-server/sango/data/
     "segTo": 5,
     "quoteBalanced": true,
     "quotes": [
-      { "qid": "Q1", "text": "特来求结两家之好……请君侯思之。", "offset": 3, "speaker": "瑾" },
-      { "qid": "Q2", "text": "吾虎女安肯嫁犬子乎！……", "offset": 33, "speaker": "云长" }
+      { "qid": "Q1", "text": "特来求结两家之好……请君侯思之。", "offset": 4, "speaker": "瑾" },
+      { "qid": "Q2", "text": "吾虎女安肯嫁犬子乎！……", "offset": 30, "speaker": "云长" }
     ]
   }
 ]

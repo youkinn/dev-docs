@@ -264,8 +264,8 @@
       "segTo": 5,                         // 结束段号；跨段 chunk 时 segFrom != segTo
       "quoteBalanced": true,              // 该 chunk 内引号是否配平（构建期自检产物）
       "quotes": [                         // ★ 本次新增：引语冗余表（§3 步骤 6 产物）
-        { "qid": "Q1", "text": "特来求结两家之好……请君侯思之。", "offset": 3,  "speaker": "瑾" },
-        { "qid": "Q2", "text": "吾虎女安肯嫁犬子乎！……",           "offset": 33, "speaker": "云长" }
+        { "qid": "Q1", "text": "特来求结两家之好……请君侯思之。", "offset": 4,  "speaker": "瑾" },
+        { "qid": "Q2", "text": "吾虎女安肯嫁犬子乎！……",           "offset": 30, "speaker": "云长" }
       ]
     }
   ]
