@@ -231,7 +231,7 @@ query 归一化后: 仲谋遣人向云长求亲，云长是怎么回复使者的
 | `huggingface.co` | ❌ 超时 | 官方源不通，必须走镜像 |
 | `pypi.org` | ✅ HTTP 200 | 构建期依赖可装 |
 | `registry.npmjs.org` / `npmmirror.com` | ✅ HTTP 200 | Node 侧依赖（方案 A）可装 |
-| 本机 Python | ❌ 仅 WindowsApps 0 字节别名，无真实解释器 | 需安装（负责人 2026-09-18：可再装环境） |
+| 本机 Python | ❌ 仅 WindowsApps 0 字节别名，无真实解释器 | **负责人 2026-09-18 13:08：马上安装**，Step 0 即可开工 |
 
 **BGE-M3 产物体积（决定运行期编码方案）**：
 
@@ -254,17 +254,30 @@ query 归一化后: 仲谋遣人向云长求亲，云长是怎么回复使者的
 | Step 3 | 融合策略从加权改 **RRF**（`research §4 L4`） | Step 2 | 探针 B：@k 不劣于纯 BM25 |
 | Step 4 | `MIN_COSINE` 按真向量分布重定（现 0.3 是哈希向量时代的死路值） | Step 2 | 负样本拒答率不倒退 |
 
-**运行期 query 编码三方案（Step 0 必须先定）**：
+**运行期 query 编码三方案（Step 0，2026-09-18 13:08 拍板）**：
 
 | 方案 | 做法 | 代价 |
 |---|---|---|
-| **A. onnxruntime-node 内嵌**（Coco 建议） | Node 侧直接跑 `model.onnx` + `onnx_data` | 需分发 ~2.1GB 权重；**无额外进程**，与 D2/D5「本地、无 key、离线可跑」最一致 |
+| **A. onnxruntime-node 内嵌**（Coco 建议）**← 负责人 2026-09-18 拍板采用** | Node 侧直接跑 `model.onnx` + `onnx_data` | 需分发 ~2.1GB 权重；**无额外进程**，与 D2/D5「本地、无 key、离线可跑」最一致 |
 | B. 独立向量服务（Python 常驻 / TEI） | query 编码走 HTTP | **违反 D5「Python 不进运行时」**，需负责人放宽；多一个常驻进程与端口 |
 | C. 云端 embedding API | 最省事 | 违反 D2「本地模型」；引入 key 与按次成本 |
 
 > **阻塞点明确**：`build_vectors.py` 的 `TODO(向量升级)` 原文即「恢复 BGE-M3 后需保证运行期（TS 侧）能用同一模型对 query 编码（如内嵌 onnxruntime 推理或独立向量服务），否则向量语义空间与 query 不一致；`scheme=1` 时 TS 侧会退化为 BM25-only 并在 stderr 告警」。**这条不解决，Step 1 重建出的真向量在线上等于没接**（`sango-index.ts:269-270` 的 `useVectors` 会因 `embedHashQuery` 返回 `null` 而恒为假）。
 
-**待负责人确认**：Step 0 的运行期编码方案选 **A / B / C**（Coco 建议 A；若部署环境不接受 2.1GB 权重，则需放宽 D5 选 B）。
+**拍板结果（负责人 2026-09-18 13:08）**：运行期 query 编码采用 **方案 A（onnxruntime-node 内嵌）**；本机 Python **马上安装**。**D5「Python 不进运行时」无需放宽**——Python 只用于构建期离线产物，运行期零 Python 进程。
+
+**方案 A 落地要点（Step 0 工作项，供实现方对齐）**：
+
+| # | 工作项 | 说明 |
+|---|---|---|
+| A1 | 依赖：`onnxruntime-node` + 分词器 | `registry.npmjs.org` 实测 ✅ 200，可装。BGE-M3 走 XLM-RoBERTa 系 SentencePiece，**不能直接用 tiktoken 类 BPE**；需 Node 侧可跑的分词器（`@huggingface/tokenizers` 的 Node 绑定，或自实现 SentencePiece 读取 `sentencepiece.bpe.model` 4.8MB） |
+| A2 | 权重分发 ~2.1GB | `model.onnx`（0.7MB 图）+ `model.onnx_data`（2161.8MB 外置权重）；镜像上 fp16 / quantized 版 **404**，暂无可减小体积的替代。需确认仓库/部署是否接受该体积（**本期唯一需要运维确认项**） |
+| A3 | 编码一致性 | 运行期必须复刻离线侧同一套：`max_length`、归一化、是否取 CLS / mean-pooling、是否 L2 归一化。**离线侧以 `build_vectors.py` 为准，运行期对齐它，不得反向改离线口径** |
+| A4 | 自检 | 用同一条 query 分别在离线（Python）与运行期（Node）编码，**余弦 ≈ 1.0**（建议阈值 ≥0.999）才算打通；不等则 A3 有偏差 |
+| A5 | 冷启动与内存 | 首次加载 ~2.1GB 权重，需评估启动耗时与常驻内存；必要时进程内单例 + 懒加载 |
+| A6 | 降级保持 | 保留现有「向量不可用 → 退 BM25-only + stderr 告警」路径（`sango-index.ts:269-270`），权重缺失时不得崩 |
+
+> A2 的 2.1GB 是本方案唯一硬代价；若部署侧否决，退回方案 B（需放宽 D5）。**其余 A1/A3/A4/A5/A6 均为实现细节，不阻塞拍板。**
 
 ---
 
@@ -306,9 +319,9 @@ query 归一化后: 仲谋遣人向云长求亲，云长是怎么回复使者的
 | # | 事项 | 负责人决策 | 落地 |
 |---|---|---|---|
 | 1 | chunk 粒度是否改段内窗口（§4.4） | **改** | 参数见 `sango-corpus-spec.md` §0（250 字 / 400 上限 / 0 重叠 / 软下限 100 / 跨段），派单老陈 |
-| 2 | 哈希向量是关掉还是补真向量（§4.2/4.6） | **本期补真向量，分步走、先把准备做好** | 见 §4.6 分步计划；**Step 0 运行期编码方案待定（A/B/C）** |
+| 2 | 哈希向量是关掉还是补真向量（§4.2/4.6） | **本期补真向量，分步走、先把准备做好** | 见 §4.6 分步计划；**Step 0 运行期编码方案已定：方案 A（onnxruntime-node 内嵌）** |
 | 3 | 探针 B 是否随 bug-00003 落地（§5） | **落实** | 随本次落地（探针 B 脚本） |
-| 4 | 是否恢复 BGE-M3（需配 `HF_ENDPOINT`） | **恢复**；动手前先解决运行期 query 编码 | **HF_ENDPOINT 已实测可用**（hf-mirror 200），无阻塞；本机 Python 需安装 |
+| 4 | 是否恢复 BGE-M3（需配 `HF_ENDPOINT`） | **恢复**；运行期 query 编码走 **方案 A** | **HF_ENDPOINT 已实测可用**（hf-mirror 200）；本机 Python 负责人 **2026-09-18 13:08 起安装** |
 | 5 | 语料重建次数（负责人补充） | **尽量只做一次**；二期会触发重建的项提前到本期 | 4 个重建触发项已收拢本期同批，见 `sango-corpus-spec.md` §9 第 7 项 |
 
 ## 8. 分工（2026-09-18 拍板后）
@@ -320,7 +333,7 @@ query 归一化后: 仲谋遣人向云长求亲，云长是怎么回复使者的
 | P1-4 chunk 切窗 | 老陈 | **已拍板**：参数见 `sango-corpus-spec.md` §0；与 `classify()` 诗句级切分、`quotes[]` 引语表、离线向量**同批重建**（只重建一次） |
 | P1-5 注入窗口锚点 + `.slice(0,5)` 口径 | 小胡 | `mcp-orchestrator/src/citation.ts`、`src/agent.ts` |
 | 探针 B 评测脚本落地 | 老陈 / 小胡 | **已拍板「落实」**；检索侧脚本归老陈，编排侧指标归小胡 |
-| Step 0 真向量前置（装 Python + 固化 `HF_ENDPOINT` + 定运行期 query 编码方案 A/B/C） | 老陈 | **待负责人定方案**；不阻塞 chunk 切分改造 |
+| Step 0 真向量前置（装 Python + 固化 `HF_ENDPOINT` + 运行期编码**方案 A**） | 老陈 | **方案已定（A）**，Python 负责人安装中；A1~A6 见 §4.6；不阻塞 chunk 切分改造 |
 | `classify()` 诗句级切分（§4.6 选项 ①） | 老陈 | **提前本期**，与语料重建同批 |
 | 孤儿代码清理（`src/index.ts` 调试 `setTimeout`） | 老陈 | 审查项 |
 

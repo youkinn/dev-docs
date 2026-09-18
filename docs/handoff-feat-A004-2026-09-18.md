@@ -23,15 +23,15 @@
 - **指针粒度（拍板「按推荐」）**：引语级 `[Q2]`；**不展示段号**
 - **父子分块**：本期不做（top3 增益 0，注入字数 809→1911，+136%）
 - **探针 B**：拍板「落实」
-- **真向量（拍板「本期补、分步走」）**：Step 0 前置（装 Python + 固化 `HF_ENDPOINT` + **定运行期 query 编码方案 A/B/C**）→ Step 1 离线重建 → Step 2 运行期编码打通 → Step 3 RRF → Step 4 阈值重定
+- **真向量（拍板「本期补、分步走」）**：Step 0 前置（装 Python〔负责人安装中〕+ 固化 `HF_ENDPOINT` + 运行期编码 **方案 A：onnxruntime-node 内嵌**，2026-09-18 13:08 拍板；**D5 无需放宽**，Python 只在构建期）→ Step 1 离线重建 → Step 2 运行期编码打通 → Step 3 RRF → Step 4 阈值重定。**方案 A 落地要点 A1~A6 见 `sango-recall-quality.md` §4.6**（含 2.1GB 权重分发为唯一待运维确认项、Node 侧 SentencePiece 分词器、离线/运行期编码一致性自检 ≥0.999）
 - **语料只重建一次（拍板硬约束）**：**4 个重建触发项**已全部收拢本期同批——① chunk 切分、② `classify()` 诗句级切分、③ `quotes[]`、④ 离线向量。**不触发重建**（可留二期）：别名表、query 改写、RRF、回目邻接、rerank
 - **环境实测（2026-09-18）**：`hf-mirror.com` ✅ 200、`pypi.org` ✅ 200、`npm`/`npmmirror` ✅ 200、`huggingface.co` ❌ 超时；**`HF_ENDPOINT` 可用，无阻塞**。BGE-M3 权重 **~2.1GB**（`model.onnx` 0.7MB + 外置 `model.onnx_data` 2161.8MB）；镜像上 `model_fp16.onnx` / `model_quantized.onnx` **均 404**（无量化小体积版）。**本机无真实 Python**（仅 WindowsApps 0 字节别名）
 - **本轮修正的 4 个原稿错误**：① I3「2 处越界」实为源段边界（0 违规，与 I7 不矛盾）；② 残余未配平归因「超 400 字」错（实测 0 个超 400，真实成因：继承语料 124 / 卡 CAP 余量 163 / 流末尾 24）；③ §4.7 父子分块原 top5 读数不可复现；④ §4.3 跨段原 `@1/top5` 读数为旧口径
 - **已知缺陷登记**：`verse` 标注失真——173 个 verse 段中 **153 个（88%）是「叙述+诗」融合段**（标记在段长 30% 之后）；根因 `build_corpus.py` 的 `classify()` 是行级判定。已升级为本期修复（C3）
 - **验收基线（不得低于）**：`@1 17/24`、`@3 20/24`、`@5 21/24`、覆盖 13/24 与 15/24；主案例不劣于 #2
 
-**4. git 状态**（2026-09-18 13:05，以 `git status -sb` 为准）
-- dev-docs：`chen/feat-A004_sango-classics-rag`，远端 `ed0079a`（本轮 3 提交：`af73d4b` 拍板登记 / `a8f66a0` 去派单与人员分工+交接文档 / `ed0079a` 删除变更记录）；**本地领先 origin 若干提交未推送**（交接文档的若干次修订，最新为 `cef0815`；以 `git status -sb` 读数为准）——推送时 `github.com:443` 连续失败 5 次，负责人判定「晚点再推，不影响」，**新会话接手第一件事先补推**：`cd D:\workplace\dev-docs; git push origin chen/feat-A004_sango-classics-rag`（需提权；抖动时重试即可）
+**4. git 状态**（2026-09-18 13:08，以 `git status -sb` 为准）
+- dev-docs：`chen/feat-A004_sango-classics-rag`，远端 `ed0079a`（本轮 3 提交：`af73d4b` 拍板登记 / `a8f66a0` 去派单与人员分工+交接文档 / `ed0079a` 删除变更记录）；远端已推到 `7b02c25`（`github.com` 13:08 恢复后补推成功）；本批（方案 A 登记）提交后同样需推送：`cd D:\workplace\dev-docs; git push origin chen/feat-A004_sango-classics-rag`（需提权；抖动时重试即可）
 - mcp-server：`chen/feat-A004_sango-classics-rag`，远端 `7799880` ✅ 已推送（别名归一化 + 向量权重）
 - mcp-orchestrator：`coco/feat-A004_sango-classics-rag`，远端 `823b6eb` ✅ 已推送（注入收窄至 top3 + 注入窗口锚最稀有 key）
 - mcp-web：`ye/feat-A004_sango-classics-rag`，远端 `165b4dd` ✅ 已推送（domain=sango-novel 标签）
@@ -46,7 +46,7 @@
 - **小胡**：H1 注入改纯原文+指针 → H2 指针校验替换 → H3 服务端渲染引用 → H4 长引语安全网 → H5 删死代码 → H6 探针 B 编排侧 + tokenizer 复核
 - **小叶**：Y1 前端展示适配（**观感不变**，待 C1 后确认字段）
 - **Coco**：K1 规范维护与审查；K2 探针 B 脚本固化到 `mcp-orchestrator/scripts/probe/`
-- **待负责人定**：真向量 Step 0 运行期 query 编码方案 **A（onnxruntime-node 内嵌，Coco 建议）/ B（独立向量服务，需放宽 D5）/ C（云端 API）**
+- ~~待负责人定：运行期 query 编码方案~~ → **已定：方案 A（onnxruntime-node 内嵌）**，2026-09-18 13:08；Python 负责人安装中。**无待拍板事项**
 - **验收标准**：见 `sango-corpus-spec.md` §7（构建期 I1~I9 全 PASS；检索层不得低于基线；编排层指针校验 + 负样本拒答率不倒退）
 - **产出格式**：子代理交付结构化摘要（产出 / 关键决策 / 未解决问题 / 变更文件清单+每文件行数），不返回原始文件内容
 
