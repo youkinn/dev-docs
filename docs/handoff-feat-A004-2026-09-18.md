@@ -30,8 +30,8 @@
 - **已知缺陷登记**：`verse` 标注失真——173 个 verse 段中 **153 个（88%）是「叙述+诗」融合段**（标记在段长 30% 之后）；根因 `build_corpus.py` 的 `classify()` 是行级判定。已升级为本期修复（C3）
 - **验收基线（不得低于）**：`@1 17/24`、`@3 20/24`、`@5 21/24`、覆盖 13/24 与 15/24；主案例不劣于 #2
 
-**4. git 状态**（2026-09-18 13:04）
-- dev-docs：`chen/feat-A004_sango-classics-rag`，远端 `ed0079a`（本轮 3 提交：`af73d4b` 拍板登记 / `a8f66a0` 去派单与人员分工+交接文档 / `ed0079a` 删除变更记录）；**本地领先 1 个未推送**（`8d86725` 交接文档登记推送结果）——推送时 `github.com:443` 连续失败，负责人判定「晚点再推，不影响」，**新会话接手第一件事先补推**
+**4. git 状态**（2026-09-18 13:05）
+- dev-docs：`chen/feat-A004_sango-classics-rag`，远端 `ed0079a`（本轮 3 提交：`af73d4b` 拍板登记 / `a8f66a0` 去派单与人员分工+交接文档 / `ed0079a` 删除变更记录）；**本地领先 2 个未推送**（`8d86725` 登记推送结果 / `b3ff232` 补派单执行说明）——推送时 `github.com:443` 连续失败 5 次，负责人判定「晚点再推，不影响」，**新会话接手第一件事先补推**：`cd D:\workplace\dev-docs; git push origin chen/feat-A004_sango-classics-rag`（需提权；抖动时重试即可）
 - mcp-server：`chen/feat-A004_sango-classics-rag`，远端 `7799880` ✅ 已推送（别名归一化 + 向量权重）
 - mcp-orchestrator：`coco/feat-A004_sango-classics-rag`，远端 `823b6eb` ✅ 已推送（注入收窄至 top3 + 注入窗口锚最稀有 key）
 - mcp-web：`ye/feat-A004_sango-classics-rag`，远端 `165b4dd` ✅ 已推送（domain=sango-novel 标签）
