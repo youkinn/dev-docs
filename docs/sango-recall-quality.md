@@ -35,7 +35,7 @@ index.search('孙权遣人向关羽求亲，关羽是怎么回复使者的', 5)
 → 正确答案段（第73回段5）排名 #12（不在召回内）
 ```
 
-评测基建口径（脚本：`docs/sango-recall-bench.mjs`，见 §6）：
+评测基建口径（脚本：`mcp-orchestrator/scripts/probe/recall-bench.mjs`，见 §6）：
 
 - **24 例白话问句**，覆盖称谓鸿沟、成语典故、情节事件三类；
 - **答案判定**：人工核对后给每例一个原文正则（如 `/虎女安肯嫁犬子/`），命中该正则的段即「正确答案段」；
@@ -158,7 +158,7 @@ magic=SNGV  dim=256  count=1377  scheme=0
 
 ## 4. 提升方案（分层，含实测收益）
 
-所有数字来自 §6 的评测脚本 `docs/sango-recall-bench.mjs`，24 例基准。
+所有数字来自 §6 的评测脚本 `mcp-orchestrator/scripts/probe/recall-bench.mjs`，24 例基准。
 
 | 方案 | @1 | @3 | @5 | 主案例排名 | 改动量 | 新依赖 |
 |---|---|---|---|---|---|---|
@@ -300,17 +300,17 @@ query 归一化后: 仲谋遣人向云长求亲，云长是怎么回复使者的
 - 每例附原文判定正则 + 有效性校验（至少命中 1 段，命中 0 段即剔除）；
 - **负样本集**：演义中确无、但影视 / 游戏 / 正史里有的桥段（沿用探针 A 的 A3a/A3b 设计），确保提升召回的同时拒答率不倒退；
 - 指标：`@1` / `@3` / `@5` 召回命中率 + 负样本拒答率；
-- 脚本落点：`mcp-orchestrator/scripts/probe/recall-bench.mjs`（复用 `h2-faithfulness.mjs` 的固定问题集 + 统计脚本思路）；
+- 脚本落点：`mcp-orchestrator/scripts/probe/recall-bench.mjs`（**已完成**，2026-09-18；复用 `h2-faithfulness.mjs` 的固定问题集 + 统计脚本思路）；
 - 回归门槛：修复后各项不得低于本文件 §4 表内基线。
 
 ## 6. 附录：评测脚本
 
-评测脚本已独立成文件，本文不再内联代码：**`docs/sango-recall-bench.mjs`**（同目录）。
+评测脚本已独立成文件，本文不再内联代码：**`mcp-orchestrator/scripts/probe/recall-bench.mjs`**（探针 B，2026-09-18 固化）。
 
-- 运行：`node --experimental-strip-types docs/sango-recall-bench.mjs`
+- 运行：`node --experimental-strip-types scripts/probe/recall-bench.mjs`（在 `mcp-orchestrator/` 下）
 - 作用：直接打 `SangoIndex`，不经模型、不经 MCP，秒级出结果，可作 CI 回归
 - 输出：4 种配置的 `@1` / `@3` / `@5` 召回命中率、主案例排名、注入窗口二阶截断率
-- 落点：待随 bug-00003 落成 `mcp-orchestrator/scripts/probe/recall-bench.mjs`（探针 B，见 §5）
+- 落点：**已完成**（2026-09-18）`mcp-orchestrator/scripts/probe/recall-bench.mjs`（探针 B，见 §5）
 
 > 用例集与判定口径即本文 §2 所述；§4 的收益数字均由该脚本复现。脚本内 V0 走真实 `search()`（混合召回），V1-V3 为纯 BM25 演进，用于隔离各因素的独立贡献。
 
