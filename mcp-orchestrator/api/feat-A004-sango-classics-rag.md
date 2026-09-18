@@ -71,8 +71,10 @@ mcp-server/sango/data/
 
 - 语料源：`dev-docs/docs/三国演义.txt`（120 回，含站点杂质）。**只清洗不改内容**；底本 / 点校版权在正式上线前确认（上线阻塞项，不影响本期开发与验收）。
 - 管线：清洗（去除站点杂质）→ chunk 级切分（六步算法：250 字目标 / 400 字硬上限 / 零重叠 / 只在句末切）+ 类型标注（narration/verse/comment）+ 引语表抽取（`quotes[]`）→ 输出 `corpus/` JSON（schema v2）→ 生成 `vectors/` 离线向量。
-- 向量：D2 本地 embedding，BGE-M3；下载先设 `HF_ENDPOINT=https://hf-mirror.com`；若镜像下载不可行 → 用确定性哈希降级（保证管线可跑），恢复 BGE-M3 作为后续优化项。
-- 检索：BM25 + 向量 hybrid（或内存余弦 / sqlite-vec），数据规模为千级 chunk；**明确不做** query 改写 / rerank / 专用向量库。
+- 向量：D2 本地 embedding，BGE-M3；下载先设 `HF_ENDPOINT=https://hf-mirror.com`；**BGE-M3 已落地**（下载需设 `HF_ENDPOINT=https://hf-mirror.com`）；离线产物 `sanguo-yanyi.bin` 头 `scheme=1`、2344 chunk × dim=1024，与 `chunks[]` 同序。
+- 检索：BM25 + **真向量** hybrid（内存余弦，`VEC_WEIGHT=1`）；词法无命中时走向量兜底（`MIN_COSINE=0.3`，Step 4 待按真向量分布重定）。数据规模为千级 chunk；**明确不做** query 改写 / rerank / 专用向量库。
+  - **运行期 query 编码**：Node 侧 `onnxruntime-node` 内嵌同一份 BGE-M3 权重（`sango/data/models/bge-m3/`，**不入库，部署须整目录下发**，含 `tokenizer_config.json`；可用 `SANGO_BGE_M3_DIR` 覆盖）。懒加载单例：首次检索约 2.4s，之后约 42ms，常驻内存约 1.4GB。
+  - **降级（注意是静默的）**：权重缺失或推理失败 → stderr 告警并退化为纯 BM25，不阻断启动、不抛异常；运维漏拷权重会导致检索质量无声下降，部署验收需核对启动日志的 `vectors 已加载：... scheme=model`。
 
 ## 工具契约 sango_novel_search
 
