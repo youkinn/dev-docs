@@ -5,7 +5,7 @@
 - 团队约定（唯一权威）：`D:\workplace\dev-docs\AGENTS.md`
 
 **2. 范围清单**（一次读全，读不到=路径写错回查不猜）
-- `dev-docs\docs\sango-corpus-spec.md` —— **本轮核心产物**：chunk 划分规范（§0 结论 / §3 算法 / §4 参数 / §5 schema / §6 出处渲染 / §7 验收 / §8 影响面 / §9 拍板），约 472 行。**注意：规范正文不含派单与人员分工**（派单属团队通用流程，见本交接 §5）
+- `dev-docs\docs\sango-corpus-spec.md` —— **本轮核心产物**：chunk 划分规范（§0 结论 / §3 算法 / §4 参数 / §5 schema / §6 出处渲染 / §7 验收 / §8 影响面 / §9 拍板），约 464 行。**注意：规范正文不含派单与人员分工**（派单属团队通用流程，见本交接 §5），**也不含「变更记录」**（未定稿不写变更记录，定稿/上线后才补）
 - `dev-docs\docs\sango-chunk-sweep.mjs` —— 决策证据脚本（§3 算法参考实现 + §7b/§7d/§8–§13 全部读数；文档所有数字由它产出）
 - `dev-docs\docs\sango-recall-quality.md` —— 召回诊断 + §4.6 真向量分步计划（Step 0–4）+ §7 拍板结果
 - `dev-docs\docs\sango-classics-rag-design.md` —— 技术方案定稿 + §9 决策记录 1–9
