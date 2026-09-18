@@ -98,12 +98,14 @@ mcp-server/sango/data/
 
 返回**结构化条目数组**（按相关度降序，最多 `limit` 条；MCP 文本内容为 JSON 序列化结果）。**不再返回拼接文本块、不含【出处】头**：条目文本内一律不含出处、回目、段号、类型、分数——出处与引用原文全部由字段承载，由服务端渲染（见「注入视图」）。
 
-字段定义与 `docs/sango-corpus-spec.md` §5 逐字一致：
+字段定义与 `docs/sango-corpus-spec.md` §5 一致（`chapter` / `title` 为回级字段，语料文件存于文档层、**工具出参时随每条条目展开**，理由见下）：
 
 | 字段 | 类型 | 说明 |
 |------|------|------|
 | `id` | string | chunk 唯一 ID，规则 `{source}:{回号4位补零}:c{回内序号4位补零}`（例 `sanguo-yanyi:0073:c0007`） |
 | `text` | string | chunk 纯原文（250 字目标 / 400 字硬上限，可跨段） |
+| `chapter` | integer | **回号**（回级元数据随条目携带，见下） |
+| `title` | string | **回目**；服务端据此渲染出处，只到回目 |
 | `type` | string (enum) | `narration`（叙述）/ `verse`（诗赞）/ `comment`（评注） |
 | `segFrom` | integer | 起始段号（对应构建期 `segments[].index`，从 1 起） |
 | `segTo` | integer | 结束段号；跨段 chunk 时 `segFrom != segTo` |
@@ -121,6 +123,8 @@ mcp-server/sango/data/
   {
     "id": "sanguo-yanyi:0073:c0007",
     "text": "瑾曰：“特来求结两家之好……请君侯思之。”云长勃然大怒曰：“吾虎女安肯嫁犬子乎！……”",
+    "chapter": 73,
+    "title": "玄德进位汉中王　云长攻拔襄阳郡",
     "type": "narration",
     "segFrom": 5,
     "segTo": 5,
@@ -133,7 +137,7 @@ mcp-server/sango/data/
 ]
 ```
 
-- `chapter` / `title` / `source` 是**回级**字段（见「数据位置」每回 JSON 结构），条目级不重复携带；服务端渲染出处时按 `id` 内的回号回溯该回文件取 `chapter` / `title`。
+- **`chapter` / `title` 必须在条目级携带**：检索跨全库，单次召回的多条条目可来自**不同回**（top5 跨回是常态），出处只能逐条对应渲染，不能用文档级字段代替。语料文件本身仍按回分文件、`chapter` / `title` 存于**文档层**（见「数据位置」每回 JSON 结构），工具出参时把回级字段**随每条条目展开**。`source` 不在条目级重复（调用方入参已知）。
 - 召回 chunk **自足**（本身可独立支撑作答，不依赖上下文）。
 - 模型对召回片段**只归纳、不补全**：不得补充片段外的情节 / 细节 / 人名。
 
@@ -143,7 +147,7 @@ mcp-server/sango/data/
 
 - **片段编号** `[片段N]`：N 从 1 起，为本次注入内序号；按相关度降序，只取最符合的前 3 段。
 - **引语标记** `⟨Qn⟩`：片段内每对引语前插入该标记（约 4~5 字）；`n` 为该引语**本次注入内的全局序号**，由服务端把各 chunk 的 chunk 内 `qid` 重编号而来（见 `docs/sango-corpus-spec.md` §5「qid 规则」）。
-- **不回目、不带段号、不带分数**（回目会污染人名断言扫描，如「三英战吕布」→ 吕布）。
+- **不回目、不带段号、不带分数**（回目会污染人名断言扫描，如「三英战吕布」→ 吕布）：条目里的 `chapter` / `title` 只供**服务端渲染出处**，注入前剥离，不进模型上下文。
 
 注入示意：
 
@@ -312,7 +316,7 @@ sango RAG 域统一提示词（`UNIFIED_SYSTEM_PROMPT` 内，小胡编排措辞�
 | # | 验收标准 | 契约落点 |
 |---|----------|----------|
 | ① | 《演义》原著问句 → `domain=sango-novel` 快路径：服务端预先调 `sango_novel_search(source=sanguo-yanyi)` 并注入片段，单次 LLM 生成（agentic 路径先检索后作答） | 「POST /api/chat」快路径 + prompt 第 1 条 |
-| ② | 工具输出 = 结构化条目数组（`id` / `text` / `type` / `segFrom` / `segTo` / `quoteBalanced` / `quotes[]{qid,text,offset,speaker}`），文本内无出处头、无回目 / 段号 / 类型 / 分数；按相关度排序、limit 生效 | 「输出（命中）」+ `docs/sango-corpus-spec.md` §5 |
+| ② | 工具输出 = 结构化条目数组（`id` / `text` / `chapter` / `title` / `type` / `segFrom` / `segTo` / `quoteBalanced` / `quotes[]{qid,text,offset,speaker}`），文本内无出处头、无回目 / 段号 / 类型 / 分数；按相关度排序、limit 生效 | 「输出（命中）」+ `docs/sango-corpus-spec.md` §5 |
 | ③ | 无命中 → 「未召回任何原文段落」，模型走兜底（原文片段 + 出处 + 结论句，由服务端从字段渲染） | 「无命中」+ 「引用硬校验」兜底 |
 | ④ | 非法 source → 工具报错 → /api/chat 503 | 「非法 source 报错」+ 错误语义 |
 | ⑤ | /api/tools 合并 weather + sango + 本地工具 | 「GET /api/tools」示例 |
