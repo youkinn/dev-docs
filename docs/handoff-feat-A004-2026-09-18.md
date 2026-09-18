@@ -5,7 +5,7 @@
 - 团队约定（唯一权威）：`D:\workplace\dev-docs\AGENTS.md`
 
 **2. 范围清单**（一次读全，读不到=路径写错回查不猜）
-- `dev-docs\docs\sango-corpus-spec.md` —— **本轮核心产物**：chunk 划分规范（§0 结论 / §3 算法 / §4 参数 / §5 schema / §6 出处渲染 / §7 验收 / §8 影响面 / §9 拍板），约 464 行。**注意：规范正文不含派单与人员分工**（派单属团队通用流程，见本交接 §5），**也不含「变更记录」**（未定稿不写变更记录，定稿/上线后才补）
+- `dev-docs\docs\sango-corpus-spec.md` —— **本轮核心产物**：chunk 划分规范（§0 结论 / §3 算法 / §4 参数 / §5 schema / §6 出处渲染 / §7 验收 / §8 影响面 / §9 拍板），约 464 行。**注意：规范正文不含派单与人员分工**（派单属团队通用流程，见本交接 §5），**也不含「变更记录」**（未定稿不写变更记录，定稿/上线后才补）。同规则适用于本次全部文档
 - `dev-docs\docs\sango-chunk-sweep.mjs` —— 决策证据脚本（§3 算法参考实现 + §7b/§7d/§8–§13 全部读数；文档所有数字由它产出）
 - `dev-docs\docs\sango-recall-quality.md` —— 召回诊断 + §4.6 真向量分步计划（Step 0–4）+ §7 拍板结果
 - `dev-docs\docs\sango-classics-rag-design.md` —— 技术方案定稿 + §9 决策记录 1–9
@@ -30,11 +30,11 @@
 - **已知缺陷登记**：`verse` 标注失真——173 个 verse 段中 **153 个（88%）是「叙述+诗」融合段**（标记在段长 30% 之后）；根因 `build_corpus.py` 的 `classify()` 是行级判定。已升级为本期修复（C3）
 - **验收基线（不得低于）**：`@1 17/24`、`@3 20/24`、`@5 21/24`、覆盖 13/24 与 15/24；主案例不劣于 #2
 
-**4. git 状态**（2026-09-18 12:58）
-- dev-docs：`chen/feat-A004_sango-classics-rag`，本轮提交 `af73d4b` **已推送**；**本交接提交后需再推一次**
-- mcp-server：`chen/feat-A004_sango-classics-rag`，**领先 origin 1 个未推送**（`7799880` 别名归一化 + 向量权重）
-- mcp-orchestrator：`coco/feat-A004_sango-classics-rag`，**领先 origin 2 个未推送**（`823b6eb`、`74eeb23`）
-- mcp-web：`ye/feat-A004_sango-classics-rag`，与 origin 同步（`165b4dd`）
+**4. git 状态**（2026-09-18 12:59，全部已推送，无待推）
+- dev-docs：`chen/feat-A004_sango-classics-rag`，远端最新 `ed0079a`（本轮 3 个提交：`af73d4b` 拍板登记 / `a8f66a0` 去派单与人员分工 + 交接文档 / `ed0079a` 删除变更记录）
+- mcp-server：`chen/feat-A004_sango-classics-rag`，远端最新 `7799880`（别名归一化 + 向量权重）
+- mcp-orchestrator：`coco/feat-A004_sango-classics-rag`，远端最新 `823b6eb`（注入收窄至 top3 + 注入窗口锚最稀有 key）
+- mcp-web：`ye/feat-A004_sango-classics-rag`，远端 `165b4dd`（domain=sango-novel 标签）
 - 本轮**未发起任何 PR**（负责人明确：推送，不 PR）
 
 **5. 派单与待办**（派单属通用流程，故只落在本交接，不写进规范正文）
