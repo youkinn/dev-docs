@@ -30,14 +30,18 @@
 - **已知缺陷登记**：`verse` 标注失真——173 个 verse 段中 **153 个（88%）是「叙述+诗」融合段**（标记在段长 30% 之后）；根因 `build_corpus.py` 的 `classify()` 是行级判定。已升级为本期修复（C3）
 - **验收基线（不得低于）**：`@1 17/24`、`@3 20/24`、`@5 21/24`、覆盖 13/24 与 15/24；主案例不劣于 #2
 
-**4. git 状态**（2026-09-18 12:59，全部已推送，无待推）
-- dev-docs：`chen/feat-A004_sango-classics-rag`，远端最新 `ed0079a`（本轮 3 个提交：`af73d4b` 拍板登记 / `a8f66a0` 去派单与人员分工 + 交接文档 / `ed0079a` 删除变更记录）
-- mcp-server：`chen/feat-A004_sango-classics-rag`，远端最新 `7799880`（别名归一化 + 向量权重）
-- mcp-orchestrator：`coco/feat-A004_sango-classics-rag`，远端最新 `823b6eb`（注入收窄至 top3 + 注入窗口锚最稀有 key）
-- mcp-web：`ye/feat-A004_sango-classics-rag`，远端 `165b4dd`（domain=sango-novel 标签）
+**4. git 状态**（2026-09-18 13:04）
+- dev-docs：`chen/feat-A004_sango-classics-rag`，远端 `ed0079a`（本轮 3 提交：`af73d4b` 拍板登记 / `a8f66a0` 去派单与人员分工+交接文档 / `ed0079a` 删除变更记录）；**本地领先 1 个未推送**（`8d86725` 交接文档登记推送结果）——推送时 `github.com:443` 连续失败，负责人判定「晚点再推，不影响」，**新会话接手第一件事先补推**
+- mcp-server：`chen/feat-A004_sango-classics-rag`，远端 `7799880` ✅ 已推送（别名归一化 + 向量权重）
+- mcp-orchestrator：`coco/feat-A004_sango-classics-rag`，远端 `823b6eb` ✅ 已推送（注入收窄至 top3 + 注入窗口锚最稀有 key）
+- mcp-web：`ye/feat-A004_sango-classics-rag`，远端 `165b4dd` ✅ 已推送（domain=sango-novel 标签）
 - 本轮**未发起任何 PR**（负责人明确：推送，不 PR）
 
 **5. 派单与待办**（派单属通用流程，故只落在本交接，不写进规范正文）
+
+> **新会话按本表 spawn 子代理**（参数依 `AGENTS.md`「Token 控制」：轻量模型 + `fork_context=false` + 紧凑 prompt + 阻塞式长 wait，禁轮询）。
+> **依赖顺序硬约束**：**C1 先行**——C1 接口文档未出前，**不得启动 C4 与 Y1**。C2/C3/C5 同批（语料只重建一次）。C6 不阻塞任何人。
+> **环境约束**：本机沙箱**只有 `D:\workplace\dev-docs` 可写**，改 `mcp-server` / `mcp-orchestrator` / `mcp-web` 的文件需提权（`require_escalated`）；`git commit` / `git push` 同样需提权。本机**无真实 Python**（仅 WindowsApps 0 字节别名），C6 需先装。
 - **老陈**：C1 接口文档修订（**先行，阻塞 C4 与小叶**）→ C2 六步切分 + I1~I9 断言 + `quotes[]` → C3 `classify()` 诗句级 → C4 `sango-index.ts` 适配 → C5 语料+向量**同批重建** → C6 Step 0 真向量前置
 - **小胡**：H1 注入改纯原文+指针 → H2 指针校验替换 → H3 服务端渲染引用 → H4 长引语安全网 → H5 删死代码 → H6 探针 B 编排侧 + tokenizer 复核
 - **小叶**：Y1 前端展示适配（**观感不变**，待 C1 后确认字段）
