@@ -30,12 +30,11 @@
 - **已知缺陷登记**：`verse` 标注失真——173 个 verse 段中 **153 个（88%）是「叙述+诗」融合段**（标记在段长 30% 之后）；根因 `build_corpus.py` 的 `classify()` 是行级判定。已升级为本期修复（C3）
 - **验收基线（不得低于）**：`@1 17/24`、`@3 20/24`、`@5 21/24`、覆盖 13/24 与 15/24；主案例不劣于 #2
 
-**4. git 状态**（2026-09-18 13:12，以 `git status -sb` 为准）
-- dev-docs：`chen/feat-A004_sango-classics-rag`，远端 `ed0079a`（本轮 3 提交：`af73d4b` 拍板登记 / `a8f66a0` 去派单与人员分工+交接文档 / `ed0079a` 删除变更记录）；远端已推到 `6c20e85`（含方案 A 拍板登记）；`github.com` 连接有抖动，推送需重试 1~3 次即可成功
-- mcp-server：`chen/feat-A004_sango-classics-rag`，远端 `7799880` ✅ 已推送（别名归一化 + 向量权重）
-- mcp-orchestrator：`coco/feat-A004_sango-classics-rag`，远端 `823b6eb` ✅ 已推送（注入收窄至 top3 + 注入窗口锚最稀有 key）
-- mcp-web：`ye/feat-A004_sango-classics-rag`，远端 `165b4dd` ✅ 已推送（domain=sango-novel 标签）
+**4. git 状态**（分支名固定，提交号与领先关系一律现查 `git status -sb`，不写死）
+
+- 四个仓库都在各自个人分支上，分支名 `{owner}/feat-A004_sango-classics-rag`：dev-docs 与 mcp-server 是 `chen/`，mcp-orchestrator 是 `coco/`，mcp-web 是 `ye/`
 - 本轮**未发起任何 PR**（负责人明确：推送，不 PR）
+- `github.com` 连接有抖动，`git push` 失败重试 1~3 次即可；`git commit` / `git push` 均需提权
 
 **5. 派单与待办**（派单属通用流程，故只落在本交接，不写进规范正文）
 
