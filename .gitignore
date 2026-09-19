@@ -1,0 +1,3 @@
+# 会话交接文档：仅本机使用，不入库
+docs/handoff-*.md
+/test
