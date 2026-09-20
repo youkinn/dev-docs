@@ -1,7 +1,7 @@
 # feat-A005: 风云三国迁出总台（fengyunsanguo MCP）
 
 > 特性号：feat-A005
-> 状态：草稿
+> 状态：已定稿
 > 作者：Coco
 > 涉及项目：mcp-orchestrator, mcp-server, mcp-web
 > 日期：2026-09-20
@@ -94,13 +94,26 @@
 | mcp-web domain 改名 | 小叶 | 接口文档 |
 | 需求 / 架构文档定稿、INDEX、审查提测 | Coco | — |
 
+## 分支计划（2026-09-20）
+
+- dev-docs：`coco/feat-A005_fengyunsanguo-to-mcp`（当前分支，文档契约）
+- mcp-orchestrator：Coco 拉需求分支 `coco/feat-A005_fengyunsanguo-to-mcp`；老陈 / 小胡基于它拉个人分支（`chen/feat-A005_*`、`hu/feat-A005_*`），成员自合入需求分支
+- mcp-server：单人（老陈）直接拉个人分支 `chen/feat-A005_fengyunsanguo-mcp`；独立目录，与 A004 收尾并行、零冲突
+- mcp-web：单人（小叶）直接拉个人分支 `ye/feat-A005_domain-rename`
+
 ## 故事号（Coco 生产）
 
 | 故事号 | 内容 | 负责人 | 状态 |
 |--------|------|--------|------|
-| story-A005-01 | 需求文档与故事号规则落地（含本次修订） | Coco | 已推送待核对 |
+| story-A005-01 | 需求文档与故事号规则落地（含本次修订、定稿） | Coco | 开发中（已完成，待负责人核对） |
+| story-A005-02 | 接口文档：fengyunsanguo 工具契约 + 编排侧行为 + 破坏性变更说明（老陈先出） | 老陈 | 开发中 |
+| story-A005-03 | mcp-server `fengyunsanguo/` 新建：SangoService 搬迁 + 3 工具 + 测试与脚本迁入 | 老陈 | 开发中 |
+| story-A005-04 | 总台改造：`MCP_FENGYUNSANGUO_SCRIPT` 注册表 / .env / 装配 / random 薄转发 / 删 `src/sango.ts`+`data/sango-questions.json` / domain 改名（orchestrator 侧 A004 已合入 main，可开工） | 老陈 | 开发中 |
+| story-A005-05 | agent.ts 接线：快路径回退、prompt 工具名、L3 注入点、测试更新 | 小胡 | 待开发（依赖接口文档） |
+| story-A005-06 | mcp-web domain 改名：`client.ts` / `stores/chat.ts` / `WeatherView.vue` | 小叶 | 待开发（依赖接口文档） |
+| story-A005-07 | 需求 / 架构文档定稿（文档同步清单）、INDEX、审查提测 | Coco | 待开发 |
 
-> 开发排期时由 Coco 按拆分粒度登记并分配；故事号全局唯一、一经分配不变，**特性上线后归档作废、不再用于新提交、永不重用**（故事号表状态列：开发中 / 已归档）；提交以故事号为准（格式见 AGENTS.md「编号与 Commit」），git 可依故事号追查代码归属。需要拆分向 Coco 申请补发。
+> 开发排期时由 Coco 按拆分粒度登记并分配；故事号全局唯一、一经分配不变，**特性上线后归档作废、不再用于新提交、永不重用**（故事号表状态列：开发中 / 待开发 / 已归档，归档仅在特性上线后）；提交以故事号为准（格式见 AGENTS.md「编号与 Commit」），git 可依故事号追查代码归属。需要拆分向 Coco 申请补发。
 
 ## 合并记录
 
