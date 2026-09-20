@@ -14,7 +14,7 @@
 
 ## 目标
 
-- [ ] 风云三国题库能力（题库数据、召回、随机一题状态机、L3 高置信识别）全部下沉 mcp-server 独立 MCP `fengyunsanguo/`，总台不再含风云三国领域代码与数据
+- [ ] 风云三国题库能力（题库数据、召回、随机一题状态机、L3 高置信识别）全部下沉 mcp-server 独立 MCP `fengyunsanguo/`；**代码与数据必须全部迁出（含测试与脚本），总台不允许残留任何风云三国领域代码**
 - [ ] 对外 HTTP 契约 domain 值 `sango` → `fengyunsanguo`（破坏性变更，orchestrator 与 mcp-web 同发）
 - [ ] 功能行为零变化：知识问答、随机一题、判题、无标签 L3 自动路由与现状一致
 - [ ] MCP 工具契约：`fengyunsanguo_query`（候选召回，先保留，调用侧默认 limit=1）/ `fengyunsanguo_quiz_command`（随机一题状态机）/ `fengyunsanguo_quiz_route`（L3 识别）
