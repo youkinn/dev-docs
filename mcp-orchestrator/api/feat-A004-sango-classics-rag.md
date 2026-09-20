@@ -3,13 +3,13 @@
 > 作者：老陈
 > 对应特性号：feat-A004
 > 涉及项目：mcp-orchestrator（transport 多 server 注册表 / server.ts / index.ts）、mcp-server（新增独立 server「sango」：sango/src/ TypeScript + 数据构建 sango/data/，构建产物 sango/dist/index.js）、mcp-web（小叶对接：新增「三国演义」标签，请求携带 domain=sango-novel）
-> 日期：2026-09-16（2026-09-18 修订：feat-A004 chunk 规范落地，出参结构化 + 服务端渲染引用；2026-09-20 修订：注入策略改「top5 整段保底 + 第 6–10 段预算兜底」，去段内窗口裁剪）
+> 日期：2026-09-16（2026-09-18 修订：feat-A004 chunk 规范落地，出参结构化 + 服务端渲染引用；2026-09-20 修订：注入策略改「top5 整段保底 + 第 6–10 段预算兜底」，去段内窗口裁剪；2026-09-20 feat-A006 定稿：citations 结构化，A004 相关条款同步修订）
 
 ## 概述
 
 新增独立 MCP server「sango」（入口 `mcp-server/sango/dist/index.js`——TypeScript 构建产物，服务名 `sango`），提供《三国演义》原著 RAG 检索工具 `sango_novel_search`。**确定性优先 + LLM 兜底**：`domain=sango-novel` 走快路径（服务端预先检索 → 注入原文片段 → 单次 LLM 生成，见「POST /api/chat」），其余场景保留大模型按语义自主调度工具（LLM 兜底）；先检索原文段落、再基于召回原文归纳作答，禁止编造原文外内容。`sango` 与现有 weather server 完全隔离、互不改。
 
-orchestrator 的 transport 由单 MCP server 重构为**多 server 注册表**：weather 与 sango 各为一个 stdio 子进程，工具名 → 归属 server 显式映射；`GET /api/tools` 合并上报两个 server 的工具与本地工具。HTTP 层 `POST /api/chat` **不新增字段**（沿用既有 `message` / `domain` 白名单，本期为 `domain` 新增取值 `sango-novel`；响应 `data` 仍为 `{ answer }`），工具调度默认由模型按语义决定（`domain=sango-novel` 时走确定性快路径，见「POST /api/chat」）。
+orchestrator 的 transport 由单 MCP server 重构为**多 server 注册表**：weather 与 sango 各为一个 stdio 子进程，工具名 → 归属 server 显式映射；`GET /api/tools` 合并上报两个 server 的工具与本地工具。HTTP 层 `POST /api/chat` 请求体字段保持不变（沿用既有 `message` / `domain` 白名单，本期为 `domain` 新增取值 `sango-novel`；响应 `data` 统一为 `{ answer, citations }`——字段只增不减（旧前端忽略 `citations` 照常工作），口径见 `api/feat-A006-citation-display.md`），工具调度默认由模型按语义决定（`domain=sango-novel` 时走确定性快路径，见「POST /api/chat」）。
 
 全部接口沿用 `{ code, data, message }` 信封（见 `mcp-orchestrator/api/response-convention.md`）。
 
@@ -152,7 +152,7 @@ mcp-server/sango/data/
 - **总预算**：注入视图全问约 **2000 字**封顶（前 5 段保底可软超；第 6+ 段吃剩余预算），控制输入 token 成本。
 - **开关**（编排侧代码常量，不读配置文件）：`INJECT_TAIL_FALLBACK_ENABLED`，默认 **true**（前 5 段整段保底 + 第 6–10 段预算兜底）；置 **false** 时**固定只注入前 5 段整段**（关闭尾部兜底，用于让检索侧精度/排序问题显性化）。
 - **引语标记** `⟨Qn⟩`：片段内每对引语前插入该标记（约 4~5 字）；`n` 为该引语**本次注入内的全局序号**，由服务端把各 chunk 的 chunk 内 `qid` 重编号而来（见 `docs/sango-corpus-spec.md` §5「qid 规则」）。
-- **不回目、不带段号、不带分数**（回目会污染人名断言扫描，如「三英战吕布」→ 吕布）：条目里的 `chapter` / `title` 只供**服务端渲染出处**，注入前剥离，不进模型上下文。
+- **不回目、不带段号、不带分数**（回目会污染人名断言扫描，如「三英战吕布」→ 吕布）：条目里的 `chapter` / `title` 只供**服务端组装 `citations`**（feat-A006），注入前剥离，不进模型上下文。
 
 注入示意：
 
@@ -167,10 +167,12 @@ mcp-server/sango/data/
 关羽拒绝了孙权的联姻，回以[Q2]。
 ```
 
-服务端按指针查 `quotes[]`，结合回级 `chapter` / `title` 渲染 `「原文」（出处：第N回 回目）`——**出处与引用原文照常展示，但不展示段号**；展示给用户的最终答案与现状观感一致：
+服务端按指针查 `quotes[]`（A006 渲染）：把模型输出的 `[Qn]` 指针替换为「引文」+ 全局上标角标（¹²³…，按出现顺序从 1 起），并把对应片段原文与回级 `chapter` / `title` 组装进 `data.citations`（第 1 条引用下标 0 → ¹）；`answer` 内不再内联出处。展示给用户：
 
 ```
-关羽拒绝了孙权的联姻，回以「吾虎女安肯嫁犬子乎！不看汝弟之面，立斩汝首！再休多言！」（出处：第73回 玄德进位汉中王　云长攻拔襄阳郡）。
+关羽拒绝了孙权的联姻，回以「吾虎女安肯嫁犬子乎」¹。
+
+对应 `data.citations` 含一条：`text` = 该片段原文（`云长勃然大怒曰：“吾虎女安肯嫁犬子乎！……”`）、`chapter` = 73、`title` = `玄德进位汉中王　云长攻拔襄阳郡`；完整形状与角标-下标对应规则见 `api/feat-A006-citation-display.md`。
 ```
 
 ### 无命中
@@ -181,7 +183,7 @@ mcp-server/sango/data/
 未召回任何原文段落
 ```
 
-模型按「兜底」规则作答（见引用硬校验）：原文片段 + 出处 + 结论句；该结果同样由服务端从 `quotes[]` / `chapter` / `title` 字段渲染（不展示段号）。无原文可引用时不得编造。
+模型按「兜底」规则作答（见引用硬校验）：结论句 + 恰一条兜底片段，输出形状为 A006 结构化（`answer` 结论句带角标 ¹、`citations` 一条），由服务端从 `quotes[]` / `chapter` / `title` 字段渲染。无原文可引用时不得编造。
 
 ### 非法 source 报错
 
@@ -199,10 +201,10 @@ mcp-server/sango/data/
 1. **本地别名表 ID 扫描**：答案与召回中的名字先经 `alias.json` 归一到人物 ID，按 ID 比对（例：用户问「关羽」、答案写「云长」、召回含「关羽」→ 同 ID `P002`，视为命中）。扫描对象是模型输出的结论正文；引语与出处由服务端渲染、不进模型输出，故断言来源更干净（不再混入引语里的人名与回目名）。
 2. **未命中 ID → 退化字符串包含**：别名表未收录的名字退化为字符串包含比对（名字出现在召回原文即通过）。
 3. **指针校验**（与引用校验同层）：答案须含**合法指针**，指针 ∈ 本次注入的 qid 集合；非法（缺失 / 越界 / 不在本次注入集合内）即走兜底。
-4. **长引语安全网**（与引用校验同层）：模型输出中出现超 **30 字**的 `「…」` 视为违规抄写，**丢弃该引语、改用 `quotes[]` 字段渲染结果替换**（把「省输出 token」从依赖 prompt 变为确定性回收）。
+4. **长引语安全网**（与引用校验同层）：模型输出中出现超 **30 字**的 `「…」` 视为违规抄写，**丢弃该引语、改按 `quotes[]` 字段渲染**（引文 + 角标并入 `data.citations`，见 `api/feat-A006-citation-display.md`「兜底路径」；把「省输出 token」从依赖 prompt 变为确定性回收）。
 
 - v1 **人名校验只覆盖人名**：地名、事件名不校验，留待后续版本；第 3、4 条（指针校验 / 长引语安全网）属引用形式校验，与「只校验人名」的范围界定不冲突。
-- **兜底输出格式**（校验不过或无召回时）：`原文片段 + 出处 + 结论句`，**只输出最符合的一段（整段、不裁剪；chunk 上限 400 字，天然防刷屏），禁止多段拼刷**；引用与出处同样由服务端从 `quotes[]` + `chapter` / `title` 渲染为 `「原文」（出处：第N回 回目）`，**不展示段号**。
+- **兜底输出格式**（校验不过或无召回时）——A006 结构化：`answer` 放结论句（带角标 ¹）、`citations` 恰一条兜底片段（整段、不裁剪；chunk 上限 400 字，天然防刷屏，禁止多段拼刷）；兜底片段 `text` 为该片段原文、`chapter` / `title` 引自回级字段，完整形状见 `api/feat-A006-citation-display.md`「兜底路径」。
 - 数据依赖：校验读取 `mcp-server/sango/data/alias.json`（老陈构建期产出）；校验执行在 agent 作答路径（小胡落位，见「与小胡的接口边界」）。
 
 ## prompt 限定 6 条
@@ -253,12 +255,12 @@ sango RAG 域统一提示词（`UNIFIED_SYSTEM_PROMPT` 内，小胡编排措辞�
 }
 ```
 
-### POST /api/chat（不新增字段）
+### POST /api/chat
 
-- 请求体沿用既有白名单 `{ message, domain }`（字段集不变，本期不新增字段）；`domain` 取值扩展为 `sango`（风云三国题库，硬锁题库域）/ `sango-novel`（三国演义原著解读，软性域提示）/ 缺省（模型语义自主路由），其余值 400。
-- 响应 `data` 仍为 `{ answer }`，不新增字段。
+- 请求体沿用既有白名单 `{ message, domain }`（字段集保持不变）；`domain` 取值扩展为 `sango`（风云三国题库，硬锁题库域）/ `sango-novel`（三国演义原著解读，软性域提示）/ 缺省（模型语义自主路由），其余值 400。
+- 响应 `data` 统一为 `{ answer, citations }`（`citations` 为 feat-A006 新增，字段只增不减、无引用时恒 `[]`；口径见 `api/feat-A006-citation-display.md`）。
 - 工具调度由模型按语义决定：sango 域命中 → 调 `sango_novel_search`；天气 → 天气工具；题库 → `sango_query` / `/api/sango/random`。`domain=sango-novel` 时追加「三国演义原著解读」域提示（软性：问候 / 天气等非原著问句仍按自由对话处理，不硬锁）。
-- **快路径（`domain=sango-novel`，确定性优先）**：服务端先调 `sango_novel_search(source=sanguo-yanyi, query=白话问句, limit=10)` → 取结构化条目 → 按「注入视图」策略拼接（**top5 整段保底不裁剪 + 第 6–10 段预算兜底**；片段编号 `[片段N]` + 引语标记 `⟨Qn⟩`，**不回目、不带段号、不带分数**）注入 user 消息（【已检索到的《三国演义》原文片段】）→ 从可用工具中移除 `sango_novel_search` → 单次 LLM 生成（避免多轮 tool-use 的 2+ 次串行调用；注入全问约 2000 字封顶）→ 本地引用校验 + 指针校验（+ 长引语安全网）→ 服务端按指针渲染引用与出处 → 兜底。LLM 调用次数由 2+ 次降为 1 次。
+- **快路径（`domain=sango-novel`，确定性优先）**：服务端先调 `sango_novel_search(source=sanguo-yanyi, query=白话问句, limit=10)` → 取结构化条目 → 按「注入视图」策略拼接（**top5 整段保底不裁剪 + 第 6–10 段预算兜底**；片段编号 `[片段N]` + 引语标记 `⟨Qn⟩`，**不回目、不带段号、不带分数**）注入 user 消息（【已检索到的《三国演义》原文片段】）→ 从可用工具中移除 `sango_novel_search` → 单次 LLM 生成（避免多轮 tool-use 的 2+ 次串行调用；注入全问约 2000 字封顶）→ 本地引用校验 + 指针校验（+ 长引语安全网）→ 服务端按指针把引文 + 角标拼入 `answer`、组装 `citations`（A006）→ 兜底。LLM 调用次数由 2+ 次降为 1 次。
 - 错误语义同 A003：`ToolExecutionError` → 503；其余 → 500；本地工具失败不包装 → 500。
 ### 注册表配置（环境变量）
 
@@ -282,7 +284,7 @@ sango RAG 域统一提示词（`UNIFIED_SYSTEM_PROMPT` 内，小胡编排措辞�
 |------|----------|------|----------------|
 | prompt 限定 6 条（sango RAG 域，第 6 条为「结论 + 引语指针」） | `UNIFIED_SYSTEM_PROMPT` 内 | 小胡编排措辞，本文档「prompt 限定 6 条」为不变量 | 老陈不复制提示词文本，只读不变量 |
 | 引用硬校验（答案人物 ⊆ 召回人物，本地别名表扫描 + 指针校验 + 长引语安全网） | agent 作答路径 | 小胡 | 校验读取老陈产出的 `alias.json` |
-| 注入视图拼接 + 引用/出处服务端渲染 | agent 作答路径 | 小胡（编排）/ 老陈（`quotes[]` + `chapter` / `title` 字段产出） | 字段口径见「输出（命中）」与 `docs/sango-corpus-spec.md` §5 |
+| `answer` 引文 + 角标拼装、`citations` 组装（A006） | agent 作答路径 | 小胡（编排）/ 老陈（`quotes[]` + `chapter` / `title` 字段产出） | 字段口径见「输出（命中）」、`docs/sango-corpus-spec.md` §5 与 `api/feat-A006-citation-display.md` |
 | `alias.json`（人名 → ID，P001 起按规范名去重，关羽 → P002） | `mcp-server/sango/data/alias.json` | 老陈（构建期产出） | 小胡按「数据位置」格式读取 |
 
 ## 路由归属（模型自主决定，不由请求字段决定）
@@ -302,7 +304,7 @@ sango RAG 域统一提示词（`UNIFIED_SYSTEM_PROMPT` 内，小胡编排措辞�
 - **本期前端需改动**：聊天页模式标签「天气 / 风云三国」旁新增「三国演义」；选中后请求 `POST /api/chat` 携带 `domain: "sango-novel"`，输入区显示「三国演义」标识（`res.code === 200` 用 `res.data.answer`，否则展示 `res.message`，信封处理不变）。
 - 「风云三国」标签行为不变：问题查询 → `domain: "sango"`；随机一题 → `/api/sango/random`。
 - `/api/tools` 返回的工具列表新增 `sango_novel_search`；如前端展示工具列表，按 `name` 自行过滤或原样展示（顺序不保证）。
-- **前端无需为引用与出处新增字段**：引用原文与出处由服务端从 `quotes[]` + `chapter` / `title` 渲染后拼进 `data.answer`，前端仍按纯文本展示（观感与现状一致、不展示段号）；展示位若需拆分「结论 / 引用 / 出处」，本期不提供结构化字段，须另行提出。
+- **展示位拆分已由 A006 结构化**（见 `api/feat-A006-citation-display.md`）：引用原文入 `data.answer` 内联（服务端拼「引文」+ 全局上标角标 ¹²³…，前端零解析），出处下沉 `data.citations`（前端据此渲染引用出处卡片区）；前端单一渲染路径，沿用 `res.data.answer` 纯文本展示、按需读取 `res.data.citations` 画卡片，不解析角标。
 - 无新增端点。
 - 上线顺序：orchestrator transport 重构属后端部署变更，需确认 weather + sango 两进程均已配置后发布；HTTP 前端改动可与后端同时或先后发布。
 ## 破坏性变更说明
@@ -312,7 +314,7 @@ sango RAG 域统一提示词（`UNIFIED_SYSTEM_PROMPT` 内，小胡编排措辞�
 | mcp-orchestrator（transport） | 单 server → 多 server 注册表 | 后端内部重构；部署需同时配置 weather + sango 两个 MCP 子进程（.env 注册表 MCP_WEATHER_SCRIPT / MCP_SANGO_SCRIPT），orchestrator 以 `npm run dev` 无参启动 |
 | mcp-server | 新增独立 server「sango」 | weather 不动，无破坏 |
 | mcp-server | `sango_novel_search` 出参由「单条拼接文本块（含【出处】头）」改为「结构化条目数组（`id` / `text` / `type` / `segFrom` / `segTo` / `quoteBalanced` / `quotes[]`）」 | MCP 工具层契约变更；消费方为 orchestrator（小胡编排路径），HTTP 层不受影响 |
-| HTTP /api/chat | 无新增字段 | 无破坏（请求 / 响应结构不变） |
+| HTTP /api/chat | 请求体字段不变；响应 `data` 统一 `{ answer, citations }`（`citations` 由 A006 新增） | 无破坏（字段只增不减，旧前端忽略 `citations` 照常工作） |
 | HTTP /api/tools | 工具列表新增 `sango_novel_search` | 语义新增，非破坏；前端按需适配展示 |
 | mcp-web | 新增「三国演义」标签；`/api/chat` 请求携带 `domain=sango-novel` | 语义新增，非破坏；需前端发版 |
 
@@ -322,10 +324,10 @@ sango RAG 域统一提示词（`UNIFIED_SYSTEM_PROMPT` 内，小胡编排措辞�
 |---|----------|----------|
 | ① | 《演义》原著问句 → `domain=sango-novel` 快路径：服务端预先调 `sango_novel_search(source=sanguo-yanyi)` 并注入片段，单次 LLM 生成（agentic 路径先检索后作答） | 「POST /api/chat」快路径 + prompt 第 1 条 |
 | ② | 工具输出 = 结构化条目数组（`id` / `text` / `chapter` / `title` / `type` / `segFrom` / `segTo` / `quoteBalanced` / `quotes[]{qid,text,offset,speaker}`），文本内无出处头、无回目 / 段号 / 类型 / 分数；按相关度排序、limit 生效 | 「输出（命中）」+ `docs/sango-corpus-spec.md` §5 |
-| ③ | 无命中 → 「未召回任何原文段落」，模型走兜底（原文片段 + 出处 + 结论句，由服务端从字段渲染） | 「无命中」+ 「引用硬校验」兜底 |
+| ③ | 无命中 → 「未召回任何原文段落」，模型走兜底（A006 结构化：结论句 + 恰一条兜底片段） | 「无命中」+ 「引用硬校验」兜底 |
 | ④ | 非法 source → 工具报错 → /api/chat 503 | 「非法 source 报错」+ 错误语义 |
 | ⑤ | /api/tools 合并 weather + sango + 本地工具 | 「GET /api/tools」示例 |
-| ⑥ | /api/chat 不新增字段、data 仍 { answer }；`domain` 支持 sango / sango-novel | 「POST /api/chat（不新增字段）」 |
+| ⑥ | /api/chat 请求体字段不变、响应 data 统一 { answer, citations }（字段只增不减，无引用 citations 恒 []）；`domain` 支持 sango / sango-novel | 「POST /api/chat」+ `api/feat-A006-citation-display.md` |
 | ⑦ | 答案人物集合 ⊆ 召回人物集合（v1 人名，本地别名表扫描；扫描对象为模型结论正文） | 「引用硬校验」+ alias.json 规则 |
 | ⑧ | prompt 限定 6 条（第 6 条：结论 + 引语指针，不输出引语原文与出处） | 「prompt 限定 6 条」 |
 | ⑨ | 统一信封 | 全部成功 / 错误示例均为 `{ code, data, message }`，失败 `data` 为 `null` |
@@ -333,4 +335,4 @@ sango RAG 域统一提示词（`UNIFIED_SYSTEM_PROMPT` 内，小胡编排措辞�
 | ⑪ | 小叶可仅据此文档开发前端 | 全部 HTTP 契约集中于本文档；`domain` 取值与「三国演义」标签行为见「mcp-web 对接说明」 |
 | ⑫ | 指针校验：答案须含合法指针且 ∈ 本次注入的 qid 集合，非法即走兜底 | 「引用硬校验」第 3 条 |
 | ⑬ | 长引语安全网：模型输出中超 30 字的 `「…」` 视为违规抄写，丢弃并替换为字段渲染结果 | 「引用硬校验」第 4 条 |
-| ⑭ | 服务端渲染：`「引用原文」（出处：第N回 回目）` 由 `quotes[]` + `chapter` / `title` 拼出，不展示段号 | 「注入视图」+ 「输出（命中）」 |
+| ⑭ | 服务端渲染（A006）：`[Qn]` 指针替换为引文 + 全局上标角标拼入 `answer`，对应片段原文 + `chapter` / `title` 组装 `data.citations`，不展示段号 | 「注入视图」+ `api/feat-A006-citation-display.md` |
