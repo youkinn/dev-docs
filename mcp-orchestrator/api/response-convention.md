@@ -1,4 +1,4 @@
-﻿# API 响应格式约定
+# API 响应格式约定
 
 > 作者：Coco（定稿）
 > 涉及项目：mcp-orchestrator（老陈实现）, mcp-web（小叶对接）
@@ -97,7 +97,7 @@ if (res.code === 200) {
 
 **成功：**
 ```json
-{ "code": 200, "data": { "answer": "今天纽约晴朗，气温..." }, "message": "" }
+{ "code": 200, "data": { "answer": "今天纽约晴朗，气温...", "citations": [] }, "message": "" }
 ```
 
 **失败：**
@@ -117,7 +117,7 @@ if (res.code === 200) {
 
 **成功：**
 ```json
-{ "code": 200, "data": { "answer": "题目：夏侯惇的字是什么？\nA. 元让\nB. 妙才\nC. 子龙\nD. 云长" }, "message": "" }
+{ "code": 200, "data": { "answer": "题目：夏侯惇的字是什么？\nA. 元让\nB. 妙才\nC. 子龙\nD. 云长", "citations": [] }, "message": "" }
 ```
 
 **失败：**

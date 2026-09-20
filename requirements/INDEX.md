@@ -9,6 +9,7 @@
 | feat-A003 | 模型自主工具路由（统一对话入口） | mcp-orchestrator, mcp-server, mcp-web | 已定稿 | 2026-09-15 |
 | feat-A004 | 三国演义解读（只解读不评论） | mcp-orchestrator, mcp-server, mcp-web | 已定稿 | 2026-09-16 |
 | feat-A005 | 风云三国迁出总台（fengyunsanguo MCP） | mcp-orchestrator, mcp-server, mcp-web | 已定稿 | 2026-09-20 |
+| feat-A006 | 答案展示结构化（结论 + 引用出处卡片） | mcp-orchestrator, mcp-web | 待定稿 | 2026-09-20 |
 | feat-A007 | 链路日志追踪（后台管理页） | mcp-orchestrator, mcp-web | 已定稿 | 2026-09-20 |
 
 
