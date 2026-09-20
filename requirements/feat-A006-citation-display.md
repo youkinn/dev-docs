@@ -31,6 +31,14 @@ feat-A004 为「前端零改动」，把引文 + 出处由服务端渲染成一�
 
 ## 接口契约（老陈出接口文档时直接引用）
 
+### 统一形状（全域抹平，2026-09-20 负责人确认）
+
+- `POST /api/chat` 与 `POST /api/sango/random` 响应 `data` **统一**为单一形状 `{ answer, citations }`，不做 domain 分支
+- 无引用时 `citations` 恒为 `[]`，**不省略、不缺失**；weather / fengyunsanguo（含随机一题）永远为空数组，行为与现状零变化
+- 前端单一渲染路径：`answer` 段 + `citations.length > 0` 时渲染参考资料卡片区；角标 `¹²³` 是服务端拼进 `answer` 的普通字符，前端零解析
+- 兼容：字段只增不减，旧前端忽略 `citations` 照常工作；A006 总台与前端同发，无中间态
+- 以后新增域默认 `citations: []`，契约不再变更
+
 `POST /api/chat`，`domain=sango-novel`（或自动路由落入 sango-novel）响应示例：
 
 ```json
@@ -63,7 +71,7 @@ feat-A004 为「前端零改动」，把引文 + 出处由服务端渲染成一�
 - 角标号与 `citations` 下标**一一对应**（第 1 条引语下标 0 → 角标 ¹）
 - 多个引语落在同一片段 → 合并为一条 citation（片段粒度），角标数量 = 片段数量
 - 兜底路径：`answer` 放结论句，`citations` 放一条兜底片段，结构相同
-- weather / fengyunsanguo：响应 `data` 仍为 `{ answer }`，**不返回 `citations`**，行为与现状零变化
+- weather / fengyunsanguo（含 `/api/sango/random`）：`citations` 恒为 `[]`，行为与现状零变化
 - 兼容性：`answer` 自洽可独立成读，旧前端忽略 `citations` 不受影响（仅无卡片区）
 
 ## 展示规则（前端，小叶实现）
@@ -97,7 +105,7 @@ feat-A004 为「前端零改动」，把引文 + 出处由服务端渲染成一�
 - [ ] 同回多条引用：合并一个出处头，组内条目角标连续
 - [ ] 兜底路径：`citations` 恰好一条
 - [ ] 无引用：`citations` 为 `[]`，前端无卡片区
-- [ ] weather / fengyunsanguo 响应无 `citations`，前端展示与现状一致
+- [ ] weather / fengyunsanguo（含 `/api/sango/random`）`citations` 恒为 `[]`，前端展示与现状一致
 - [ ] 任何展示位不出现段号
 
 ## 任务与负责人
