@@ -6,6 +6,8 @@
 > 涉及项目：mcp-web, mcp-orchestrator
 > 日期：2026-09-14
 
+> **演进注记（feat-A005，2026-09-20）**：风云三国题库能力已从总台迁出为 mcp-server 独立 MCP `fengyunsanguo`——工具 `fengyunsanguo_query` 承接原本地 `sango_query`，HTTP domain `sango` → `fengyunsanguo`，`/api/sango/random` 内部改调 `fengyunsanguo_quiz_command`。本特性时点的 `scenario` / `service` 契约与本地题库表述已被 A003 / A005 取代，接口现状以 `mcp-orchestrator/api/feat-A005-fengyunsanguo-mcp.md` 为准。
+
 ## 背景
 
 《风云三国》（骑马与砍杀：战团 mod）招募武将时需回答问题。玩家希望在现有聊天界面中快速查答案、练习答题，减少游戏内招将答错的成本。题库以 JSON 知识库维护，简单处理，不改动现有天气链路。

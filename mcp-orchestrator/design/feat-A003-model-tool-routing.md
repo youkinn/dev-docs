@@ -4,6 +4,8 @@
 > 对应特性号：feat-A003
 > 日期：2026-09-15
 
+> **演进注记（feat-A005，2026-09-20）**：`sango_query` 本地工具已由 MCP `fengyunsanguo_query` 承接（题库迁入 `mcp-server/fengyunsanguo/`；domain `sango` → `fengyunsanguo`；总台无本地工具，快路径经 MCP 转发）。本文为 A003 时点设计记录。
+
 ## 涉及文件
 
 | 文件 | 操作 | 说明 |

@@ -1,12 +1,12 @@
 # mcp-server 架构决策：单仓多 MCP、独立构建与部署、TypeScript 打底
 
-> 作者：Coco ｜ 关联：feat-A004 三国演义解读 ｜ 日期：2026-09-16
+> 作者：Coco ｜ 关联：feat-A004 三国演义解读 / feat-A005 风云三国迁出 ｜ 日期：2026-09-16（A005 更新：2026-09-20）
 > 状态：**已定稿**（负责人 2026-09-16 拍板）
 
 ## 1. 决策
 
 1. **保持 `mcp-server` 一个项目（仓库）**，其下放各个 MCP 子项目，**单独构建、单独部署**。
-2. 目录结构：`weather/`（天气，本次**仅迁移目录、内容零改动**）、`sango/`（三国，feat-A004 新增，TypeScript）。
+2. 目录结构：`weather/`（天气，本次**仅迁移目录、内容零改动**）、`sango/`（三国演义，feat-A004 新增，TypeScript）、`fengyunsanguo/`（风云三国，feat-A005 新增，TypeScript）。
 3. 每个 MCP = 独立子项目：独立 package.json / 构建产物（dist）/ 数据 / 入口；独立 stdio 子进程；**只改动被改的那个 MCP，不涉及的不重建、不重部署**。
 4. 技术栈：**新增 MCP 一律 TypeScript 打底**；weather 存量 JS 本次不动（仅搬目录），待其首次真实改动时再迁 TS。
 5. 备选方案「新建独立仓库」不采纳（对比见 §4），触发条件满足时再拆。
@@ -20,18 +20,23 @@ mcp-server/                    # 仓库 = MCP servers 集合
 │   ├── package.json           # ← 原根 package.json（name=weather）迁入
 │   ├── src/index.js           # ← 原 src/weather/index.js（内容不动，启动路径随迁）
 │   └── node_modules/          # 随迁（或根统一安装，实现时二选一并登记）
-└── sango/                     # 三国 MCP（feat-A004，TypeScript 打底）
+├── sango/                     # 三国 MCP（feat-A004，TypeScript 打底）
     ├── package.json           # name=mcp-sango；build: tsc → dist/
     ├── tsconfig.json
     ├── src/index.ts           # 入口 → dist/index.js
     ├── data/                  # corpus/（分回语料）、vectors/（离线向量）、alias.json（线上只读）
     └── scripts/               # 语料清洗 / 离线向量（Python 侧车，D5）
+└── fengyunsanguo/             # 风云三国 MCP（feat-A005，TypeScript 打底）
+    ├── package.json           # name=mcp-fengyunsanguo；build: tsc → dist/
+    ├── tsconfig.json
+    ├── src/index.ts           # 入口 → dist/index.js
+    └── data/                  # fengyunsanguo-questions.json（88 题题库）
 ```
 
 ## 3. 关键机制：单改单编译、单改单部署
 
-- **构建**：每 MCP 项目目录内独立 `npm run build`（sango = tsc → `sango/dist/`）；weather 无构建（纯 JS）。改 sango 只编 sango。
-- **部署（粒度 = stdio 子进程）**：orchestrator 多 server 注册表分别拉起 `node weather/src/index.js` 与 `node sango/dist/index.js`；改 sango → 只替换 `sango/dist/` 并重启 sango 子进程；weather 产物与进程不被触碰、不重新部署。注册表入口来自 orchestrator 根 `.env`（`MCP_WEATHER_SCRIPT` / `MCP_SANGO_SCRIPT`），orchestrator 用 `npm run dev` 无参启动；新增 MCP 通用流程见 orchestrator README「新增一个 MCP server」。
+- **构建**：每 MCP 项目目录内独立 `npm run build`（sango / fengyunsanguo = tsc → 各自 `dist/`）；weather 无构建（纯 JS）。改哪个只编哪个。
+- **部署（粒度 = stdio 子进程）**：orchestrator 多 server 注册表分别拉起 `node weather/src/index.js` 与 `node sango/dist/index.js`、`node fengyunsanguo/dist/index.js`；改 sango → 只替换 `sango/dist/` 并重启 sango 子进程；weather 产物与进程不被触碰、不重新部署。注册表入口来自 orchestrator 根 `.env`（`MCP_WEATHER_SCRIPT` / `MCP_SANGO_SCRIPT` / `MCP_FENGYUNSANGUO_SCRIPT`），orchestrator 用 `npm run dev` 无参启动；新增 MCP 通用流程见 orchestrator README「新增一个 MCP server」。
 - **依赖**：每项目自包含（own node_modules）优先，保证独立部署；根仅聚合脚本。
 - **边界**：orchestrator 整体重启时 weather 子进程以相同代码重启（属进程重启、非重新部署）；如需连进程重启都隔离，transport 加「按 server reload」（默认不做，见开放问题）。
 

@@ -5,6 +5,8 @@
 > 涉及项目：mcp-orchestrator（server.ts / index.ts / cli.ts）、mcp-server（工具描述）、mcp-web（小叶对接）
 > 日期：2026-09-15
 
+> **演进注记（feat-A005，2026-09-20）**：本地题库工具 `sango_query` 已由 MCP `fengyunsanguo_query` 取代（domain `sango` → `fengyunsanguo`）；`/api/sango/random` 内部改调 `fengyunsanguo_quiz_command`（quiz 缺配新增 503）；A004 已追加 `domain=sango-novel` 与 `sango_novel_search`。接口现状以 `mcp-orchestrator/api/feat-A005-fengyunsanguo-mcp.md` 与 `feat-A004-sango-classics-rag.md` 为准。
+
 ## 概述
 
 对话侧只保留一个统一 Agent：工具集 = MCP 天气工具（`get-forecast` / `get-alerts`）+ 本地题库工具 `sango_query`，调不调、调哪个由模型按语义自主决定，HTTP 层不再出现 `scenario` / `service` 等业务概念。`POST /api/chat` 请求体只接受 `message`；确定性命令「随机一题」拆到 `POST /api/sango/random`（本地规则，不经 LLM）。`GET /api/tools` 改为上报模型实际可见的全部工具（含 `sango_query`）。响应 `data` 结构不变（仍为 `{ answer }`），不新增响应字段；全部接口沿用 `{ code, data, message }` 信封（见 `mcp-orchestrator/api/response-convention.md`）。

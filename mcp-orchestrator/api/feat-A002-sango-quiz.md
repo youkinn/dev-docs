@@ -5,6 +5,9 @@
 > 涉及项目：mcp-orchestrator, mcp-web
 > 日期：2026-09-14
 
+> **演进注记（feat-A005，2026-09-20）**：本文档为 A002 时点接口记录。题库此后演进：A003 统一对话入口（去 `scenario` / `service`，`/api/sango/random` 独立）、A005 迁出为 MCP `fengyunsanguo`（工具 `fengyunsanguo_query` / `fengyunsanguo_quiz_command`，domain `sango` → `fengyunsanguo`，白名单 `["fengyunsanguo","sango-novel"]`，旧值 400）。接口现状以 `mcp-orchestrator/api/feat-A005-fengyunsanguo-mcp.md` 为准。
+
+
 ## 概述
 
 在既有聊天接口上扩展：general（普通问答，缺省）、weather（现状）、sango（风云三国，含两个子服务）：service=knowledge 知识问答（本地召回 Top-K 候选 + LLM 语义判定，答案取自题库原文）、service=random 随机一题（本地规则出题判题，不经 LLM）。统一返回信封 `{ code, data, message }`。
