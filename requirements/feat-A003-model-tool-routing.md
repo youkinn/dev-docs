@@ -6,6 +6,8 @@
 > 涉及项目：mcp-orchestrator, mcp-server, mcp-web
 > 日期：2026-09-15
 
+> **演进注记（feat-A005，2026-09-20）**：风云三国题库已迁出为 MCP `fengyunsanguo`（工具 `fengyunsanguo_query`，domain `sango` → `fengyunsanguo`），统一 Agent 工具集不再含本地工具，`/api/tools` 只上报 MCP 工具；接口现状以 `mcp-orchestrator/api/feat-A005-fengyunsanguo-mcp.md` 为准。
+
 ## 背景
 
 feat-A002 用 `POST /api/chat` 的 `scenario` / `service` 字段做场景分发，`src/server.ts` 用 if 链把参数翻译成三个 Agent（general / weather / sangoKnowledge）之一。当前痛点：
