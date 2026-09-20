@@ -4,6 +4,7 @@
 > 涉及项目：mcp-orchestrator（老陈实现）, mcp-web（小叶对接）
 > 日期：2026-09-11
 > 修订：2026-09-15 同步 feat-A003（503 改为按错误类型判定、新增 `POST /api/sango/random`、`/api/tools` 含本地工具）
+> 修订：2026-09-20 同步 feat-A007（新增「分页约定」小节：`pageNo` 从 1 起 / `pageSize`，响应元数据放 `data` 内 `{ list, total, pageNo, pageSize }`，所有列表页通用）
 >
 > 本文件只定「信封 + 通用错误语义」。字段级契约（请求体白名单、每个 code 的触发条件与 message 原文）以各特性接口文档为准：`api/feat-A00X-*.md`。
 
@@ -24,6 +25,26 @@
 | `code` | number | HTTP 状态码。`200` 表示成功，其他表示失败 |
 | `data` | object / array / null | 成功时的业务数据；失败时为 `null` |
 | `message` | string | 失败时必填，描述错误原因；成功时可为空字符串 |
+
+## 分页约定
+
+所有列表页接口通用（feat-A007 起）：请求参数 `pageNo`（从 1 起，默认 1）/ `pageSize`（默认 20，范围 1–100，越界裁剪）；响应元数据放 `data` 内：
+
+```json
+{
+  "code": 200,
+  "data": {
+    "list": [],
+    "total": 0,
+    "pageNo": 1,
+    "pageSize": 20
+  },
+  "message": ""
+}
+```
+
+- `list`：当前页数据数组；`total`：满足过滤条件的总条数（供分页器使用）
+- 过滤参数与列表项结构以各特性接口文档为准
 
 ## 小叶前端统一处理
 
