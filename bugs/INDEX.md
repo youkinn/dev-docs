@@ -14,3 +14,4 @@
 | bug-00008 | 召回评测口径缺陷（字面匹配对「概括型答案」失效，A 类读数虚高） | dev-docs | feat-A004 | 待修复 | — |
 | bug-00009 | 注入指针 qid 空洞（窗口裁掉引语 → 模型输出无效 [Qn] → Guard 兜底）+ 兜底盲取 fragments[0] 答非所问（华雄题 672 行答案被替换） | mcp-orchestrator | feat-A004 | 已修复 | 2026-09-20 |
 | bug-00010 | 演义检索工具出参 quotes[] 重复携带原文子串，响应 / 落库日志体积激增 | mcp-server, mcp-orchestrator | feat-A004 | 待修复 | — |
+| bug-00011 | 首页 / weather / logs 互相切换时页面抖动（顶部宽度不一致），logs 两个标签间切换同样抖动 | mcp-web | feat-A007 | 已修复 | 2026-09-21 |
