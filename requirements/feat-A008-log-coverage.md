@@ -1,7 +1,7 @@
 # feat-A008: 风云三国与天气日志补全
 
 > 特性号：feat-A008
-> 状态：定稿（负责人 2026-09-21 拍板「先做 A008」）
+> 状态：已提测（2026-09-21 提测，负责人在 chen/ 、ye/feat-A008_log-coverage 分支验收中）
 > 作者：Coco
 > 涉及项目：mcp-orchestrator（埋点注册 / domain 白名单）、mcp-web（traceId 上报 / domain 传参）
 > 日期：2026-09-21
