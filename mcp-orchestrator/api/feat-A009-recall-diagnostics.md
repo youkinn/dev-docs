@@ -6,6 +6,7 @@
 > 涉及项目：mcp-orchestrator（transport.ts / storage/logs.ts / agent 作答路径）、mcp-server（sango：检索诊断产出）、mcp-web（小叶对接：日志详情面板）
 > 日期：2026-09-21
 > 前置：feat-A004（sango RAG / `sango_novel_search` 出参）、feat-A006（citations 形状）、feat-A007（链路日志：主表 / `tool_call_logs` / 查询接口）
+> 修订（2026-09-21 Coco 审查）：§1.3 与验收 7 的 `candidates` 排序口径明确为「最终返回序（死亡意图置顶优先，组内 `finalScore` 降序）」；文末「待落实细节」回填实现落地口径。
 
 ## 概述
 
@@ -133,7 +134,7 @@ sango 检索工具（`sango_novel_search`）成功时，在响应 `result._meta.
 | `query` | object | query 处理链（基准 2-④） |
 | `env` | object | 环境与降级（基准 2-⑤） |
 | `funnel` | object | 召回漏斗各阶段数字（基准 2-①） |
-| `candidates` | array | 候选分数表，按 `finalScore` 降序，**≤20 条**（基准 2-②） |
+| `candidates` | array | 候选分数表，按**最终返回序**（死亡意图置顶优先，组内按 `finalScore` 降序；与工具出参、`rank` 同序），**≤20 条**（基准 2-②） |
 | `nextRank` | object \| null | 第 N+1 名（未进 top-N），候选不足为 null（基准 1-④） |
 | `deathIntent` | object | 死亡意图判定与置顶（基准 2-⑤） |
 
@@ -338,7 +339,7 @@ result_summary = summarizeJson(summary);   // 不含 _meta.diagnostics
 | 4 | 基准 1 · 第 N+1 名 | `nextRank` 存在、`rank = topN + 1`、`gapToTopN` = 与 top-N 最后一名 `finalScore` 的分差（≥0）；候选不足时为 null |
 | 5 | 基准 1 · answer 与 citations 自洽 | `funnel.cited` = citations 去重后 chunk 数；citations 引用的候选均 `injected=true`（服务端引用硬校验既有逻辑不变） |
 | 6 | 基准 2 · ① 漏斗数字可核 | `funnel` 各字段有值且满足管道约束：`mergedCandidates ≤ lexicalHits + vectorTop50 + labelHits`（去重后）、`topN ≤ mergedCandidates`、`injected ≤ topN`、`cited ≤ injected`（兜底路径按 §3.2 口径） |
-| 7 | 基准 2 · ② 分数表 | `candidates` 每条含 rank / chunkId / chapter / title / bm25 / cosine / labelHit / finalScore / injected / cited；按 `finalScore` 降序、≤20 条 |
+| 7 | 基准 2 · ② 分数表 | `candidates` 每条含 rank / chunkId / chapter / title / bm25 / cosine / labelHit / finalScore / injected / cited；按最终返回序（死亡意图置顶优先，组内 `finalScore` 降序，与工具出参同序）、≤20 条 |
 | 8 | 基准 2 · ③ 顶上来 / 未进 top-N 原因 | `sources` 能说明每条被哪一路召回；`nextRank.gapToTopN` 说明第 N+1 名差多少分 |
 | 9 | 基准 2 · ④ query 处理链 | `query.raw` = 工具入参；`normalized` / `tokens` 与 sango 实际 alias 归一化、分词结果一致（抽 1 例人工核对） |
 | 10 | 基准 2 · ⑤ 环境与降级 | `env.vectorScheme` / `corpusChunks` / `aliasCount` / `vectorDim` 与 sango 实际加载一致；`deathIntent` 字段齐全；降级场景 `degradedBm25Only=true` 且 `cosine` / `vectorDim` 为 null |
@@ -365,9 +366,10 @@ result_summary = summarizeJson(summary);   // 不含 _meta.diagnostics
 6. **死亡意图判定规则**：契约只定形状（`detected` / `pinned` / `chunkIds`）；判定阈值与置顶策略属 sango 检索逻辑，实现时定稿，若涉及业务口径需与 Coco 对齐后再定（见「需拍板项」）。
 7. **citations 无 chunkId 字段（A006 形状 `{text, chapter, title}`）**：`cited` 判定不依赖逐条文本比对，走总台组装 citations 时的「片段 → 候选」映射（服务端内部已知），前端不自算深度自洽（§7 自洽提示口径）。
 
-## 待落实细节（实现前确认）
+## 待落实细节（2026-09-21 审查回填：实现落地口径）
 
-- [ ] 死亡意图判定规则：触发词 / 阈值 / 置顶后排序口径（sango 实现侧定稿；涉业务口径报 Coco）。
-- [ ] 兜底路径 `cited` / `injected` 计数口径按 §3.2 实现，验收时人工核对一条兜底 trace。
-- [ ] LLM 自主 tool-use 路径（非快路径）`injected=0` 口径确认（该路径无注入视图，citations 仍由总台渲染，`cited` 正常回填）。
-- [ ] `createLogStore` 需支持按 `trace_id + seq` 写入 / 查询诊断的接口（存储层增量，随实现提交）。
+- [x] 死亡意图判定规则（已落地）：判定与置顶沿用 feat-A004 既有逻辑（`matchDeathIntent` 问法分类 + 人名词典强命中置顶；不改分数、只改排序两级）；诊断只暴露 `detected` / `pinned` / `chunkIds`（= 实际置顶且仍在合并候选内的 chunkId），不暴露触发词与阈值 —— 与负责人 2026-09-21 拍板一致。
+- [x] 兜底路径 `cited` / `injected` 计数口径（已落地，按 §3.2）：兜底选中片段（`pickBestFallbackFragment`）能映射到候选则计入 `cited`；未经注入视图故不计 `injected`。
+- [x] LLM 自主 tool-use 路径 `injected=0`（已落地）：`injected` 只统计快路径确定性注入的片段，tool-use 片段计入 `cited`；citations 仍由总台渲染。
+- [x] `createLogStore` 增量（已落地）：`appendRetrievalLog(trace_id, seq, diagnostics)` 写入 + 明细查询回填 `toolCalls[].diagnostics`（无诊断行 / JSON 解析失败 → null）。
+- [ ] 混跑场景（快路径注入后又触发 LLM tool-use 复调检索）`injected` / `cited` 归属口径：实现按「`injected` 只计快路径片段、tool-use 片段计 `cited`」执行；**待负责人给一条混跑 trace 人工核对后定稿**（随本次验收一并核对）。
