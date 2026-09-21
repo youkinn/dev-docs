@@ -90,10 +90,11 @@ sango 检索工具（`sango_novel_search`）成功时，在响应 `result._meta.
             "chapter": 73,
             "title": "玄德进位汉中王　云长攻拔襄阳郡",
             "bm25": 12.34,
-            "cosine": 0.812,
+            "bm25Norm": 0.8,
+            "cosine": 0.8,
             "labelHit": true,
-            "finalScore": 0.92,
-            "sources": ["lexical", "vector"],
+            "finalScore": 0.88,
+            "sources": ["lexical", "vector", "label"],
             "injected": null,
             "cited": null
           }
@@ -103,8 +104,9 @@ sango 检索工具（`sango_novel_search`）成功时，在响应 `result._meta.
           "chunkId": "sanguo-yanyi:0074:c0012",
           "chapter": 74,
           "title": "庞令明抬榇决死战　关云长放水淹七军",
-          "bm25": 3.10,
-          "cosine": 0.451,
+          "bm25": null,
+          "bm25Norm": null,
+          "cosine": 0.7,
           "labelHit": false,
           "finalScore": 0.51,
           "sources": ["vector"],
@@ -177,14 +179,15 @@ sango 检索工具（`sango_novel_search`）成功时，在响应 `result._meta.
 | `chunkId` | string | chunk 唯一 ID（如 `sanguo-yanyi:0073:c0007`） |
 | `chapter` | number | 回号 |
 | `title` | string | 回目 |
-| `bm25` | number \| null | BM25 分；词法未命中为 null |
-| `cosine` | number \| null | 向量余弦相似度；向量路未命中 / 降级为 null |
+| `bm25` | number \| null | 原始 BM25 分（round3，仅调试用）；词法未命中为 null |
+| `bm25Norm` | number \| null | BM25 归一化值（词法命中集合内 min-max，全精度，实际参与 0.3 权重）；词法未命中为 null |
+| `cosine` | number \| null | 原始向量余弦（全精度，向量路可用时对每条候选都回传，不限于 top-50）；降级纯 BM25 为 null；复算用 `(cosine+1)/2` |
 | `labelHit` | boolean | 标签是否命中 |
 | `finalScore` | number | 最终分（合并排序分） |
 | `sources` | string[] | 命中来源子集：`lexical` / `vector` / `label`，说明被哪一路召回 / 顶上来（基准 2-③） |
 | `injected` | boolean \| null | 是否进注入视图；总台回填 |
 | `cited` | boolean \| null | 是否被引用；总台回填 |
-| `gapToTopN` | number | 仅 `nextRank`：与 top-N 最后一名 `finalScore` 的分差，≥0（基准 1-④） |
+| `gapToTopN` | number | 仅 `nextRank`：与 top-N 最后一名 `finalScore` 的分差，≥0（基准 1-④）。**精度 6 位小数**（不用 3 位口径——真实分差常 < 0.0005，3 位会被四舍五入成 0 而看不出「差多少」）；前端按 4 位小数展示 |
 
 **`deathIntent`：**
 
@@ -193,6 +196,17 @@ sango 检索工具（`sango_novel_search`）成功时，在响应 `result._meta.
 | `detected` | boolean | 是否判定死亡意图 |
 | `pinned` | boolean | 是否触发置顶 |
 | `chunkIds` | string[] | 被置顶的候选 chunkId；未置顶为 `[]` |
+
+**计分口径（供复算最终分，接口已回传参与计算的两个分量 `bm25Norm` 与 `cosine`）：**
+
+`finalScore` = `0.3 × bm25Norm` + `0.6 × 向量映射` + `0.1 × 标签命中`，三项均在 `[0,1]`，故 `finalScore ∈ [0,1]`。
+
+- 向量映射 = `(cosine + 1) / 2`（余弦 ∈ [-1,1] → [0,1]）；`cosine` = null（降级纯 BM25）→ 该项 0
+- `bm25Norm` 由 sango 预先算好（词法命中集合内 min-max：最高分 → 1、最低分 → 0；单条命中恒 1）；`null`（非词法命中）→ 该项 0
+- 标签命中 = `labelHit ? 1 : 0`
+- 逐条复算：`finalScore = round3(0.3*(bm25Norm ?? 0) + 0.6*(cosine === null ? 0 : (cosine+1)/2) + 0.1*(labelHit ? 1 : 0))`；`bm25Norm` / `cosine` 全精度输出，复算结果与 `finalScore` 严格一致。
+
+例（trace `60aa5476-6ea1-4d2d-a560-c8287101ab4a` 的 rank 1）：`bm25Norm=1`（原始 BM25=38.979 为该次最高分）、`cosine=0.622` → 向量映射 `(0.622+1)/2 = 0.811` → `0.3×1 + 0.6×0.811 + 0.1×1 = 0.8866` → `round3 = 0.887`。rank 2 这类「不在向量 top-50」的候选，`cosine` 也照常回传（不再为 null）。
 
 **载荷纪律（硬约束 3）：**只放结构化小数据——top20 候选的 `chunkId` + 三路分 + 最终分 + 元数据（回目 / 来源 / 置顶标记），**不放 chunk 文本**。预计正常载荷 < 10 KB，64 KB 预算为安全网（§5）。
 
