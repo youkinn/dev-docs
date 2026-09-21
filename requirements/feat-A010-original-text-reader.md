@@ -77,7 +77,7 @@ feat-A009 让后台能看到「召回了哪几条、分数怎么算」，但**�
 |------|------|------|
 | `GET /api/v1/logs` 增 `domain` 过滤参数 | 老陈（总台） | 枚举校验 `weather` / `fengyunsanguo` / `sango-novel`；与既有参数同层叠加 |
 | 新增 `GET /api/v1/sango/chapters/:chapter` | 老陈（总台） | 返回 `{ chapter, title, prev, next, chunks[] }`；`prev/next` 为 `{chapter, title}` 或 `null`（供按钮显示相邻回标题，避免为拿标题多拉一次全文） |
-| 新增 MCP 工具 `sango_novel_chapter` | 老陈（器坊） | 入参 `chapter`，返回 `{ chapter, title, chunks[] }`（`chunkId` / `text` / `type` / `segFrom` / `segTo`）；该工具不得暴露给模型（见技术要点） |
+| 新增 MCP 工具 `sango_novel_chapter` | 老陈（器坊） | 入参 `chapter`，返回 `{ chapter, title, prev, next, chunks[] }`（`chunkId` / `text` / `type` / `segFrom` / `segTo`）；`prev` / `next` 为相邻回 `{ chapter, title }` 或 `null`（相邻回目只有器坊持有，由器坊出参携带，避免总台为拿标题多次调用）；该工具不得暴露给模型（见技术要点） |
 | 前端组件 + 两处入口 | 小叶（前厅） | 无路由变更 |
 
 ## 技术要点
@@ -124,8 +124,8 @@ feat-A009 让后台能看到「召回了哪几条、分数怎么算」，但**�
 | 故事号 | 内容 | 负责人 | 状态 |
 |--------|------|--------|------|
 | story-A010-01 | 需求文档定稿与 INDEX 登记 | Coco | 已定稿（2026-09-22） |
-| story-A010-02 | 接口文档：`domain` 过滤 + 原文接口 + 组件入参 + 工具可见性 | 老陈 | 待开发 |
-| story-A010-03 | 实现：器坊 `sango_novel_chapter` + 总台接口与白名单 | 老陈 | 待开发 |
-| story-A010-04 | 前端：项目筛选 + traceId 复制操作列 + 阅读器组件 + 两处入口 | 小叶 | 待开发 |
+| story-A010-02 | 接口文档：`domain` 过滤 + 原文接口 + 组件入参 + 工具可见性 | 老陈 | 已定稿（2026-09-22） |
+| story-A010-03 | 实现：器坊 `sango_novel_chapter` + 总台接口与白名单 | 老陈 | 进行中 |
+| story-A010-04 | 前端：项目筛选 + traceId 复制操作列 + 阅读器组件 + 两处入口 | 小叶 | 进行中 |
 
 > 按 需求 / 接口 / 实现 / 前端 4 粒度分配（跨三侧 + 新接口 + 新工具 + 新组件），各粒度开发期间复用各自故事号。
