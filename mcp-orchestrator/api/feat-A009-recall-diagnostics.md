@@ -93,6 +93,7 @@ sango 检索工具（`sango_novel_search`）成功时，在响应 `result._meta.
             "bm25Norm": 0.8,
             "cosine": 0.8,
             "labelHit": true,
+            "hitLabels": ["人物之死-关羽之死", "结盟/外交-满宠使吴"],
             "finalScore": 0.88,
             "sources": ["lexical", "vector", "label"],
             "injected": null,
@@ -108,6 +109,7 @@ sango 检索工具（`sango_novel_search`）成功时，在响应 `result._meta.
           "bm25Norm": null,
           "cosine": 0.7,
           "labelHit": false,
+          "hitLabels": [],
           "finalScore": 0.51,
           "sources": ["vector"],
           "injected": null,
@@ -183,6 +185,7 @@ sango 检索工具（`sango_novel_search`）成功时，在响应 `result._meta.
 | `bm25Norm` | number \| null | BM25 归一化值（词法命中集合内 min-max，全精度，实际参与 0.3 权重）；词法未命中为 null |
 | `cosine` | number \| null | 原始向量余弦（全精度，向量路可用时对每条候选都回传，不限于 top-50）；降级纯 BM25 为 null；复算用 `(cosine+1)/2` |
 | `labelHit` | boolean | 标签是否命中 |
+| `hitLabels` | string[] | **命中了哪个 / 哪些标签**：该 chunk 命中的标签表原始文本（`tags/*.json` 中 `|` 拆分后的单个标签，如 `人物之死-关羽之死`）；未命中为 `[]`；恒满足 `labelHit === (hitLabels.length > 0)`。与 `labelHit` 同判定口径（标签文本与 query 同口径归一化 + 分词，取长度 ≥ 2 的词元求交），只作展示 / 排查用，不参与计分 |
 | `finalScore` | number | 最终分（合并排序分） |
 | `sources` | string[] | 命中来源子集：`lexical` / `vector` / `label`，说明被哪一路召回 / 顶上来（基准 2-③） |
 | `injected` | boolean \| null | 是否进注入视图；总台回填 |
@@ -331,7 +334,7 @@ result_summary = summarizeJson(summary);   // 不含 _meta.diagnostics
 |------|----------|----------|
 | 顶部状态条 | `diagnostics.truncated` / `truncatedCount` | `truncated=true` 显示黄条「诊断已截断（64KB），候选显示不全」，附丢弃条数 |
 | 召回漏斗 | `diagnostics.funnel` | 流程条：`corpusChunks` → `lexicalHits` \| `vectorTop50` \| `labelHits` → `mergedCandidates` → `topN` → `injected` → `cited`；各阶段数字可直接核对 |
-| 候选分数表 | `diagnostics.candidates` | 列：排名 / chunkId / 回目（`chapter`+`title`）/ BM25（null 显「—」）/ 余弦（null 显「—」）/ 标签命中 / 最终分 / 来源（`sources` 标签）/ 注入 / 引用；`rank ≤ funnel.topN` 高亮「进 top-N」 |
+| 候选分数表 | `diagnostics.candidates` | 列：排名 / chunkId / 回目（`chapter`+`title`）/ BM25（null 显「—」）/ 余弦（null 显「—」）/ 标签命中 / 最终分 / 来源（`sources` 标签）/ 注入 / 引用；`rank ≤ funnel.topN` 高亮「进 top-N」。**标签命中列**：命中显「是」（可 hover 展示 `hitLabels` 全部标签，多个逐行）、未命中显「否」；`hitLabels` 缺失（历史 trace 诊断）时不展示 tooltip，不显示 `undefined` |
 | 第 N+1 名 | `diagnostics.nextRank` | 独立卡片：chunkId + 回目 + 三路分 + `gapToTopN`（「差 0.19 分未进 top-N」）；`nextRank=null` 隐藏 |
 | query 处理链 | `diagnostics.query` | `raw` → `normalized` → `tokens`（chip 展示） |
 | 环境与降级 | `diagnostics.env` | scheme / chunk 数 / alias 条数 / dim；`degradedBm25Only=true` 红色告警「已降级纯 BM25」 |
@@ -353,7 +356,7 @@ result_summary = summarizeJson(summary);   // 不含 _meta.diagnostics
 | 4 | 基准 1 · 第 N+1 名 | `nextRank` 存在、`rank = topN + 1`、`gapToTopN` = 与 top-N 最后一名 `finalScore` 的分差（≥0）；候选不足时为 null |
 | 5 | 基准 1 · answer 与 citations 自洽 | `funnel.cited` = citations 去重后 chunk 数；citations 引用的候选均 `injected=true`（服务端引用硬校验既有逻辑不变） |
 | 6 | 基准 2 · ① 漏斗数字可核 | `funnel` 各字段有值且满足管道约束：`mergedCandidates ≤ lexicalHits + vectorTop50 + labelHits`（去重后）、`topN ≤ mergedCandidates`、`injected ≤ topN`、`cited ≤ injected`（兜底路径按 §3.2 口径） |
-| 7 | 基准 2 · ② 分数表 | `candidates` 每条含 rank / chunkId / chapter / title / bm25 / cosine / labelHit / finalScore / injected / cited；按最终返回序（死亡意图置顶优先，组内 `finalScore` 降序，与工具出参同序）、≤20 条 |
+| 7 | 基准 2 · ② 分数表 | `candidates` 每条含 rank / chunkId / chapter / title / bm25 / bm25Norm / cosine / labelHit / hitLabels / finalScore / sources / injected / cited；`labelHit === (hitLabels.length > 0)`；按最终返回序（死亡意图置顶优先，组内 `finalScore` 降序，与工具出参同序）、≤20 条 |
 | 8 | 基准 2 · ③ 顶上来 / 未进 top-N 原因 | `sources` 能说明每条被哪一路召回；`nextRank.gapToTopN` 说明第 N+1 名差多少分 |
 | 9 | 基准 2 · ④ query 处理链 | `query.raw` = 工具入参；`normalized` / `tokens` 与 sango 实际 alias 归一化、分词结果一致（抽 1 例人工核对） |
 | 10 | 基准 2 · ⑤ 环境与降级 | `env.vectorScheme` / `corpusChunks` / `aliasCount` / `vectorDim` 与 sango 实际加载一致；`deathIntent` 字段齐全；降级场景 `degradedBm25Only=true` 且 `cosine` / `vectorDim` 为 null |
