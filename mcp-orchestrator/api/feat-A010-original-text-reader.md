@@ -156,7 +156,7 @@ GET /api/v1/logs?domain=sango-novel&logType=chat&pageNo=1&pageSize=20
 
 出参字段口径与 §2.2 完全一致（`chunkId` / `text` / `type` / `segFrom` / `segTo`）。注意：语料 schema v2 的字段名为 `id`，**出参按契约名 `chunkId` 输出**（同一值：`{source}:{回号4位补零}:c{回内序号4位补零}`）。
 
-> **相对需求「接口影响」表的一处扩展**：需求表工具返回记为 `{ chapter, title, chunks[] }`；本契约工具出参**增加 `prev` / `next`**。理由：HTTP 契约需要相邻回标题（§2.2），而相邻回目数据只有器坊持有（总台不读语料目录），由器坊出参携带成本最低（见 §8 与「待落实细节」）。
+> **相对需求「接口影响」表的一处扩展（Coco 已确认 2026-09-22）**：需求表工具返回记为 `{ chapter, title, chunks[] }`；本契约工具出参**增加 `prev` / `next`**。理由：HTTP 契约需要相邻回标题（§2.2），而相邻回目数据只有器坊持有（总台不读语料目录），由器坊出参携带成本最低（§8.5）。
 
 ### 3.2 复用现有语料加载路径
 
@@ -184,11 +184,12 @@ GET /api/v1/logs?domain=sango-novel&logType=chat&pageNo=1&pageSize=20
 
 ### 4.2 方案：常量白名单 + 装配处过滤
 
-- 总台新增常量 **`MODEL_VISIBLE_TOOLS: string[]`**（模型可见工具白名单），初始值 = 当前模型可见工具全集（MCP 工具 + 本地工具，**以现状 `/api/tools` 输出为准核对登记**）：
+- 总台新增常量 **`MODEL_VISIBLE_TOOLS: string[]`**（模型可见工具白名单），**登记对象 = 工具定义清单**：MCP 工具（`transport.listTools()` 返回的 `MCPToolDefinition`）+ 由 `options.tools` 注入的本地工具定义——工具定义只来自 `options.tools ?? transport.listTools()`（`agent.ts:804`）。
+  **不是 `options.localTools` 的 key**：`localTools`（`agent.ts:240` / `820`）是「工具名 → 处理器」的派发映射，只决定「模型调用某工具时走本地实现还是 MCP 转发」，不产出工具定义，无需登记、也不得作为登记来源。
+- 初始值 = 当前模型可见工具定义全集（story-A010-03 按现状 `/api/tools` 实际输出核对登记）：
   - `get-alerts` / `get-forecast`（天气）
   - `fengyunsanguo_query` / `fengyunsanguo_quiz_command` / `fengyunsanguo_quiz_route`（风云三国）
   - `sango_novel_search`（演义检索）
-  - 本地工具（`options.localTools` 装配项，如既有 `sango_query` 等，按现状登记）
   - **不包含** `sango_novel_chapter`
 - 过滤点收敛到一处：agent 新增私有方法统一取模型可见工具，`agent.ts:804` 与 `agent.ts:419` 两处均改调它：
 
@@ -287,11 +288,13 @@ GET /api/v1/logs?domain=sango-novel&logType=chat&pageNo=1&pageSize=20
 2. **`citation.text` 匹配定位** → `includes` 精确匹配，同回两 chunk 文本完全相同落到第一处；匹配不到停正文顶部（需求已定口径）。
 3. **数据量（25~38KB / 回）** → 整回一次返回、不分页；前端按回缓存兜住并发打开。
 4. **卡片角标未入契约（已知约束）** → 记明：回答正文 `¹` 由总台渲染（`citation.ts:482 renderAnswerWithCitations`），引用卡片左上角 `¹` 由前厅复算（`WeatherView.vue:52 buildCitationGroups` 按 `toSuperscript(index+1)`），总台不下发该字段、`citations[]` 契约无角标字段，两边靠复算对齐；阅读器弹框内不渲染引用角标。如需修另开票。
-5. **工具出参相对需求表扩展 `prev/next`** → 本契约已定（§3.1），待 Coco 审查确认（见下）。
+5. **工具出参相对需求表扩展 `prev/next`** → **Coco 已确认（2026-09-22）**，契约以 §3.1 为准；需求文档「接口影响」表由 Coco 同步。
 
 ## 待落实细节
 
 - [x] 白名单机制（§4 定稿：常量白名单 + `resolveModelTools()` 单点过滤）。
 - [x] `domain` 过滤与存储层增量（`ListQuery.domain` + `AND domain = ?`）。
-- [ ] **工具出参含 `prev/next`（§3.1）**：需求「接口影响」表工具返回记为 `{ chapter, title, chunks[] }`，本契约扩展 `prev/next` —— 请 Coco 审查确认；若否，退化为总台对相邻回各调一次工具（成本高，不推荐）。
-- [ ] 白名单初始值以当前 `/api/tools` 实际输出核对登记（§4.2），实现时随 story-A010-03 一并回填本文档。
+- [x] **工具出参含 `prev/next`（§3.1）**：Coco 已确认（2026-09-22）；需求文档「接口影响」表由 Coco 同步。
+- [x] 白名单初始值已按当前 `/api/tools` 实际输出核对登记（§4.2，story-A010-03 回填）。
+
+
