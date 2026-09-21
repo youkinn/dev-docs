@@ -1,7 +1,7 @@
 # bug-00010：演义检索工具出参 quotes[] 重复携带原文子串，响应 / 落库日志体积激增
 
 > Bug 号：bug-00010
-> 状态：修复中（2026-09-21 启动，排期前提 feat-A008 已归档）
+> 状态：修复中（2026-09-21 已实现 + Coco 审查通过，已提测；分支仅本地，推送被网络阻断）
 > 关联特性：feat-A004（quotes 语料 schema / 引用链路）
 > 涉及项目：mcp-server（sango 检索出参）、mcp-orchestrator（编排透传 / 落库）
 > 登记：负责人 ／ 报告：负责人 ／ 登记日期：2026-09-21
@@ -62,6 +62,18 @@
 **回归断言（审查打回条件）**：候选 1 落地后，同一批问题的注入视图 `⟨Qn⟩` 数量与 `citations` 内容须与现状逐题相等 —— 最大风险是 `toRecallFragments`（`citation.ts:292`）过滤条件漏改（现按 `quote.text` 过滤），导致 quotes 被静默丢空 → 无 `⟨Qn⟩` → 指针校验失败 → 全量走兜底、引用丢失（bug-00009 同类）。
 
 **改动清单**：`mcp-server/sango/src/search/sango-index.ts:481`（`toEntry()`）、`mcp-server/sango/src/types.ts:9`、`mcp-orchestrator/src/citation.ts:83` / `:292` / `:306`；测试 `mcp-server/sango/src/test/feat-A004/sango-index.test.ts:99`、`mcp-orchestrator/src/test/feat-A004/citation.test.ts`、`agent-novel.test.ts`；文档 spec §5、接口文档「输出（命中）」+ 验收 ②、两处 README。**语料 JSON / 向量不重建**（`build_corpus.py` 不改）。
+
+## 进展（2026-09-21）
+
+| 项 | 结果 |
+|---|---|
+| 实现 | 老陈（mcp-server 出参 + 契约测试 ⑤⑧）/ 小胡（编排侧类型、过滤、按 offset 定位 + 切片还原 + 测试 ⑲/⑲.1/⑲.2） |
+| 分支（仅本地，推送被网络阻断） | `chen/bug-00010_quotes-payload-slim`（提交 `0620771`）、`hu/bug-00010_quotes-payload-slim`（提交 `0b829fc`）、dev-docs `coco/bug-00010_quotes-payload-bloat` |
+| 审查读数 | mcp-server sango 16/16、mcp-orchestrator 167/167，两侧 `tsc` 干净 |
+| 跨仓冒烟（Coco 实跑：老陈真实 `toEntry` 出参 → 小胡解析/注入） | 2344 chunk / 8937 条引语**零丢失**；出参键集合恰为 `{offset,len}`；切片边界 8937/8937 正确；注入视图 `⟨Qn⟩` 21/21 精确贴合开引号；真检索两题（关羽拒婚 / 张飞长坂桥）出参引语数 == marker 数 |
+| 回归修正（顺带） | 同一 chunk 内引语文本重复的 7 处，定位由 `indexOf`（全指第一处，错位）改为按 `offset` 各就各位 |
+| 误报澄清 | `mcp-orchestrator/scripts/probe/chunk-sweep.mjs` **不消费工具出参**（自建语料引语表），无需加 `len` |
+| 遗留 | ① 推送待网络恢复；② `speaker` 抽取规则仍为脏值（bug-00005 启用前须先修）；③ `markQuotesInWindow` 已注释声明「`text` 须与 `offset` 同基准」，将来若恢复窗口裁剪须先做基准换算 |
 
 **关联质量缺陷（本 bug 内一并处理，不另立 bug 号）**：`speaker` 抽取规则 `([\u4e00-\u9fa5]{1,4})(曰|云|问|答|喝|叱|骂)：“$` 会把动词短语当人名 —— 实测值 `咬牙大叱`、`回叱飞`、`颜喝`、`低头便拜`、`大`。运行期未读取该字段，故无用户可见影响；但若要启用 `speaker`，必须先修抽取规则（改为词表 / 别名表匹配，而非任意 1–4 汉字）。
 
