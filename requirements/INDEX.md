@@ -11,6 +11,10 @@
 | feat-A005 | 风云三国迁出总台（fengyunsanguo MCP） | mcp-orchestrator, mcp-server, mcp-web | 已定稿 | 2026-09-20 |
 | feat-A006 | 答案展示结构化（结论 + 引用出处卡片） | mcp-orchestrator, mcp-web | 待定稿 | 2026-09-20 |
 | feat-A007 | 链路日志追踪（后台管理页） | mcp-orchestrator, mcp-web | 已定稿 | 2026-09-20 |
+| feat-A008 | 风云三国与天气日志补全 | mcp-orchestrator, mcp-web | 已定稿 | 2026-09-21 |
+| feat-A009 | 检索诊断（召回可解释） | mcp-server, mcp-orchestrator, mcp-web | 草稿 | — |
+
+> feat-A009 排期在 bug-00010（quotes[] 契约瘦身）之后；依赖顺序：feat-A008 → bug-00010 → feat-A009。
 
 
 > 未立项的迭代想法、候选方向见 [BACKLOG.md](BACKLOG.md)。那不是需求、不占编号，立项才发 feat 号。
