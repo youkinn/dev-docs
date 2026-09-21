@@ -285,6 +285,18 @@
 
 **工具出参的回级字段展开（2026-09-18 补，Coco）**：`chapter` / `title` 在**语料文件里是文档级**（按回分文件，不重复），但 `sango_novel_search` 的**出参条目必须逐条携带** `chapter` / `title`——检索跨全库，单次召回的多条条目可来自**不同回**（top5 跨回是常态），编排侧只能逐条渲染出处；且 orchestrator 进程不读 mcp-server 的语料目录，无法「按 id 回溯回文件」。注入时这两个字段被剥离，不进模型上下文（§6.3 第 5 点）。
 
+**出参 `quotes[]` 与语料不同形（bug-00010，2026-09-21 拍板）**：上表是**语料 schema**；`sango_novel_search` 的**出参**只回 `{ offset, len }`——
+
+| 层 | `quotes[]` | 说明 |
+|---|---|---|
+| 语料 JSON（`data/corpus/**`） | `{ qid, text, offset, speaker }` | 构建期产物，**本次不动、语料不重建**；`speaker` 留库供 bug-00005 备用 |
+| 工具出参（`sango_novel_search`） | `{ offset, len }` | `text` 由条目原文切片还原：`entry.text.slice(offset - 1, offset - 1 + len + 2)` = `“` + 引语 + `”` |
+
+- **删 `qid`**：注入期由服务端按出参顺序重编号为全局 `Qn`（§6.3），出参里的 `qid` 从未被消费。
+- **删 `speaker`**：运行期零消费（渲染只需引语文本 + 回级字段），出参带它是纯浪费字节；bug-00005 启用时先修抽取规则（见下）再按需加回出参（增量字段，向后兼容）。
+- **理由**：`quotes[].text` 与 `entry.text` 重复传输，最坏情况（整段对话）出参体积接近翻倍，挤占落库 `result_summary` 的 8000 预算。实测全量语料 `quotes` 体积 **-82.7%**、「原文 + quotes」总量 **-32.5%**；切片口径 8937/8937 条 0 失配，非 BMP 字符 0 chunk（Python 码点下标与 JS UTF-16 下标口径一致）。详见 `bugs/bug-00010-quotes-payload-bloat.md`。
+- **两份 schema 从此分叉**：改 `quotes` 相关契约时须对账两处（本表 + `mcp-orchestrator/api/feat-A004-sango-classics-rag.md`「输出（命中）」），不要只改一处。
+
 变更点与理由：
 
 | 变更 | 现状 | v2 | 理由 |
@@ -348,7 +360,7 @@
 ### 6.3 语料侧怎么支撑（本次唯一的契约变更）
 
 1. **文本纯净（I6）**：`chunk.text` 只含原文；出处、回目、段号、类型、分数一律走字段。
-2. **引语冗余表（§3 步骤 6）**：`quotes[]` = `{ qid, text, offset, speaker }`，构建期抽好。**这是「原文不经模型」的语料前提**——服务端要能在不调用模型的前提下，拿到逐字可信的引语原文。
+2. **引语冗余表（§3 步骤 6）**：语料 `quotes[]` = `{ qid, text, offset, speaker }`，构建期抽好；**出参只传 `{ offset, len }`**（bug-00010 瘦身，引语文本由条目原文切片还原）。**这是「原文不经模型」的语料前提**——服务端要能在不调用模型的前提下，拿到逐字可信的引语原文。
 3. **元数据冗余**：`chapter / title / segFrom / segTo` 独立字段，服务端据此渲染 `（出处：第73回 玄德进位汉中王　云长攻拔襄阳郡）`。
 4. **工具出参结构化**：`sango_novel_search` 不再把出处拼进文本块，改为返回结构化条目（字段见 §5）。**接口变更，接口文档先行**（`mcp-orchestrator/api/feat-A004-sango-classics-rag.md` 的「出参」与验收标准 ② 需同步修订）。
 5. **注入视图只给纯原文 + 轻量指针**：片段只带服务端编号（如 `[片段1]`），**不带回目、不带段号、不带分数**；引语在片段内以轻量标记标出（如 `⟨Q2⟩`，约 4~5 字），模型据此引用。**不回目 → 模型无从抄写出处**，回目污染断言扫描的坑（`agent.ts:457` 注释点名「三英战吕布」→ 吕布）也从源头消失。
@@ -448,6 +460,7 @@
 | `build_corpus.py` 改切分（六步算法 + I1~I9 断言 + `quotes[]` 抽取） | `mcp-server/sango/scripts/`；语料与向量**需重建** |
 | `sango-index.ts` 适配 `chunks[]` + 出参结构化（去出处头） | `mcp-server/sango/src/`；`Doc` 增加 `chunkId/segFrom/segTo` |
 | 接口文档修订（出参由「拼接文本」改「结构化条目 + quotes」） | `mcp-orchestrator/api/feat-A004-sango-classics-rag.md` 出参 + 验收 ② |
+| `quotes[]` 出参瘦身为 `{ offset, len }`（bug-00010，2026-09-21） | `mcp-server/sango/src/search/sango-index.ts` 出参 + `mcp-orchestrator/src/citation.ts` 解析/定位；**语料与向量不动、不重建** |
 | 注入改纯原文 + 指针校验 + 服务端渲染引用 + 删出处剥离死代码 | `mcp-orchestrator/src/agent.ts`、`src/citation.ts` |
 | 前端展示（引用与出处照常展示，来源改为服务端渲染） | `mcp-web`；**观感不变**，待接口文档出来后确认字段 |
 | `classify()` 改诗句级切分（§4.6 选项 ①，本期） | 与切分改造同批，可省一次语料重建 |
