@@ -75,6 +75,7 @@
 
 1. **一票一分支。** 每个 feat / bug 新建分支，禁止直接在 main 上修改；main 只接受 PR 合入，所有合并由负责人执行。（2026-09-12 决策：GitHub Free 私有仓库不支持分支保护 / Rulesets，本条靠流程纪律执行。）（开发阶段 bug 例外见本段首注）
 2. **新需求先拉 main（2026-09-14 决策）。** 必须基于最新 `origin/main`（先 fetch）新建分支，禁止基于未合并分支继续开发。单人需求直接拉个人分支；多人协作同一需求时，Coco 先拉需求分支 `coco/feat-XXX_{描述}`，成员再基于需求分支拉个人分支。
+- **分支上游纪律（2026-09-21 决策）**：新分支必须用 `git push -u origin <分支名>` 显式指定上游；禁止让分支自动跟踪 `origin/main`（`git checkout -b X origin/main` 会把上游设为 main，之后普通 `git push` 会误推 main —— 本迭代已发生一次）。
 3. 分支命名 `{owner}/feat-AAA_{简短描述}` 或 `{owner}/bug-XXXXX_{简短描述}`；owner：`ye` 小叶 / `hu` 小胡 / `chen` 老陈 / `coco` Coco。例：`ye/feat-A001_weather-chat`。
 4. 成员完成后先自查（编译 + 测试通过）再提交，可减少打回往返（2026-09-15 决策）。
 5. 单人需求跳过本条；多人协作由成员将个人分支直接合入需求分支并推送（不经 PR、无需 Coco）。
