@@ -18,3 +18,5 @@
 | bug-00012 | A003 测试 harness 未注入独立日志库 → 测试写入开发库 data/logs.db，日志页出现测试噪声（「随机一题」既有「对话」又有「答题」；负责人核对：该条无耗时、无域，确认为测试数据）。修复＝两个 harness 注入 `:memory:` | mcp-orchestrator | feat-A007 / feat-A008 | 待修复 | — |
 | bug-00013 | 检索诊断 finalScore 无法由接口数据复算（接口回传原始 bm25/cosine，缺 BM25 归一化；cosine 对非向量 top-50 置 null 藏掉向量加分项）。修复＝candidates 增全精度 bm25Norm + cosine 全量回传 | mcp-server, mcp-orchestrator, mcp-web | feat-A009 | 已修复 | 2026-09-22 |
 | bug-00014 | 第 81 回回目分隔符多余空格（`急兄仇张飞遇害　　雪弟恨先主兴兵` 双空格），影响出参 / 日志 / 面板回目展示。修复＝081.json 与 _segments/081.json 归一为全角单空格并补文件尾换行（feat-A004 导入语料时带入） | mcp-server | feat-A004 | 已修复 | 2026-09-22 |
+| bug-00015 | 原文阅读器弹框点「上一回 / 下一回」抖动。根因＝`goTo()` 置 `data = null` 后正文区塌缩成 spinner，滚动容器高度与弹框尺寸跳变、滚动位置重置。修复口径＝滚动容器高度固定占满视口，翻回不塌缩（feat-A010 验收打回） | mcp-web | feat-A010 | 修复中 | — |
+| bug-00016 | 原文阅读器打开后未滚动到指定片段。根因＝`load()` 中 `await scrollToTarget()` 时 `loading` 仍为 `true`，chunk 行未挂载、`querySelector` 落空 → `scrollTop = 0`。修复口径＝正文渲染后再定位，容器内偏移滚动替代 `scrollIntoView`（feat-A010 验收打回） | mcp-web | feat-A010 | 修复中 | — |

@@ -23,7 +23,7 @@
 ```
 日志页候选分数表 chunkId 点击 → panel emit { chapter, title, chunkId } → LogsView 打开阅读器
   → 组件读共享缓存（未命中 GET /api/v1/sango/chapters/:chapter）→ 渲染 A4 长纸
-  → chunkId 命中则 scrollIntoView + 高亮，未命中/未传停正文顶部
+  → chunkId 命中则正文行挂载后容器内偏移滚动居中 + 高亮，未命中/未传停正文顶部
 聊天页「查看原文」→ fetchSangoChapter(chapter)（与组件共用缓存，不重复请求）
   → chunks[].text.includes(citation.text) 取 chunkId（同回重复文本落第一处）
   → 匹配不到不传 chunkId → 打开组件（组件读缓存渲染）
@@ -33,6 +33,9 @@
 
 - 阅读器入参严格按需求「组件入参契约」表；打开/关闭用 `v-model:open`，无额外业务入参
 - A4 观感：210mm 纸宽 + 纸面阴影 + 衬线正文 + 长纸滚动（不分页）；正文只渲染 chunkId 尾段短号（如 c0021），不展示整串 chunkId 与 segFrom/segTo
+- 弹框尺寸（负责人 2026-09-22 验收意见）：宽固定 960px；正文区纵向 flex 撑满视口（`height: calc(100vh - 240px)` = 100vh − 顶部 100 − 标题栏 56 − body 内边距 48 − wrap 底部内边距 24，留余量），纸面 `min-height: 100%` 随之变高；底部导航条 `flex: 0 0 auto` 常驻不随正文滚动
+- 定位与防抖：正文区高度固定，翻回 / 跳转时 `data = null` 不再塌缩；先置 `loading = false` + `await nextTick()` 让 chunk 行挂载，再用容器内偏移 `scrollTop = centeredScrollTop(el.offsetTop, el.offsetHeight, container.clientHeight)` 居中，不用 `scrollIntoView`（避免连带滚动弹框外层 / 页面）
+- 定位测量口径：只用**与祖先 transform 无关的布局量**（`offsetTop` / `offsetHeight` / `clientHeight`）——antd v4 Modal 打开带 `ant-zoom` 动画（`.ant-modal` 上 `scale(0.2)` → `scale(1)`，0.3s），祖先 transform 会等比缩放 `getBoundingClientRect`，用 rect 差值算偏移会被乘上当时的 scale 而偏上；故 `.reader-scroll` 加 `position: relative` 使其成为 `chunk-row` 的 offsetParent，组件内不保留任何依赖 rect 的定位计算
 - 底部「上一回/下一回 {标题}」直取 data.prev/next，第 1 / 120 回对应按钮禁用；回号输入跳转 1~120，越界 warning 不跳转
 - 旧「chunkId 纯文本」渲染路径随入口改造一并清理（验收 14）
 - 复制：复制 traceId / chunkId 均走 copyText 降级路径（http / https 都能复制），成功 message 反馈
