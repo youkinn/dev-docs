@@ -12,7 +12,7 @@
 | feat-A006 | 答案展示结构化（结论 + 引用出处卡片） | mcp-orchestrator, mcp-web | 待定稿 | 2026-09-20 |
 | feat-A007 | 链路日志追踪（后台管理页） | mcp-orchestrator, mcp-web | 已定稿 | 2026-09-20 |
 | feat-A008 | 风云三国与天气日志补全 | mcp-orchestrator, mcp-web | 已归档 | 2026-09-21 |
-| feat-A009 | 检索诊断（召回可解释） | mcp-server, mcp-orchestrator, mcp-web | 定稿 | 2026-09-21 |
+| feat-A009 | 检索诊断（召回可解释） | mcp-server, mcp-orchestrator, mcp-web | 已提测 | 2026-09-21 |
 
 > feat-A009 依赖顺序：feat-A008（已归档）→ bug-00010（已修复）→ feat-A009（2026-09-21 定稿，前置已解除，可开工）。
 
