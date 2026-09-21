@@ -14,7 +14,7 @@
 | feat-A008 | 风云三国与天气日志补全 | mcp-orchestrator, mcp-web | 已归档 | 2026-09-21 |
 | feat-A009 | 检索诊断（召回可解释） | mcp-server, mcp-orchestrator, mcp-web | 定稿 | 2026-09-21 |
 
-> feat-A009 依赖顺序：feat-A008（已归档）→ bug-00010（已修复）→ feat-A009（2026-09-21 定稿，前置已解除，可开工）；bug-00012（测试噪声写入开发日志库）随本迭代一并修。
+> feat-A009 依赖顺序：feat-A008（已归档）→ bug-00010（已修复）→ feat-A009（2026-09-21 定稿，前置已解除，可开工）。
 
 
 > 未立项的迭代想法、候选方向见 [BACKLOG.md](BACKLOG.md)。那不是需求、不占编号，立项才发 feat 号。

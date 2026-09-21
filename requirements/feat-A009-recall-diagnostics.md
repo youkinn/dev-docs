@@ -2,11 +2,12 @@
 
 > 特性号：feat-A009
 > 状态：定稿（2026-09-21 负责人确认）
-> **排期：前置 bug-00010（quotes[] 契约瘦身）已于 2026-09-21 完成并上线（mcp-server #9 / mcp-orchestrator #14 / dev-docs #22），本特性即刻可开工**
+> **排期（2026-09-21 负责人指示）：先修 bug（独立票独立分支，不并入本特性），bug 修完再开本特性开发；两者都完成后一起提测**
+> 前置 bug-00010（quotes[] 契约瘦身）已于 2026-09-21 完成并上线（mcp-server #9 / mcp-orchestrator #14 / dev-docs #22）
 > 作者：Coco
 > 涉及项目：mcp-server（sango 检索诊断产出）、mcp-orchestrator（traceId 透传 / 落库 / 查询接口）、mcp-web（日志页诊断面板）
 > 日期：2026-09-21
-> 关联：feat-A007（链路日志追踪）、feat-A004（演义 RAG）、feat-A008（日志覆盖补齐，先做）、bug-00010（前置依赖，已完成）、bug-00005 / bug-00006（本特性为其提供排查手段）、bug-00012（日志页测试噪声，本迭代一并修）
+> 关联：feat-A007（链路日志追踪）、feat-A004（演义 RAG）、feat-A008（日志覆盖补齐，先做）、bug-00010（前置依赖，已完成）、bug-00005 / bug-00006（本特性为其提供排查手段）
 
 ## 背景
 
@@ -42,7 +43,6 @@ feat-A007 把埋点铺到 MCP 边界，能看到 `sango_novel_search` 的入参�
 - **日志列表「操作」列 + 复制 traceId 按钮**：负责人排查时要把 traceId 交给 Coco 查库，手工选中易错；在「Token（输入/输出）」列后新增操作列，一键复制该行 traceId。
 - **为何并入本特性而非另开特性号**：与诊断面板同页、同负责人、同分支、同一次审查；且它正是基准 1 的排查入口（「给定 traceId 能判断结果对不对」），与验收工作流同源。如需独立追溯，在 PR 标题 / 描述中标注。
 - **契约影响**：无 —— 列表接口已返回 	raceId（A007 既有字段），纯前端改动。
-- **不属于本特性的相邻问题**：日志页出现测试噪声（同一「随机一题」既有「对话」又有「答题」）另立 bug-00012，不并入前端范围。
 
 ## 验收标准
 
@@ -107,7 +107,6 @@ feat-A007 把埋点铺到 MCP 边界，能看到 `sango_novel_search` 的入参�
 | 总台：traceId 透传 + 诊断落库 + 查询接口 | 老陈 | 接口文档 |
 | 编排侧：诊断与注入视图 / 引用链路关联 | 小胡 | 接口文档 |
 | 前端：日志页「检索诊断」面板（漏斗 / 分数表 / query 链 / 环境）+ 列表「操作」列复制 traceId | 小叶 | 接口文档 |
-| bug-00012：A003 测试 harness 注入 `:memory:` 日志库（止住测试噪声写入开发库） | 老陈 | —（独立分支，随本迭代） |
 | 需求 / INDEX 定稿、审查提测 | Coco | — |
 
 ## 分支计划
@@ -116,7 +115,6 @@ feat-A007 把埋点铺到 MCP 边界，能看到 `sango_novel_search` 的入参�
 - mcp-orchestrator：Coco 拉需求分支 `coco/feat-A009_recall-diagnostics`，老陈 / 小胡基于它拉个人分支（`chen/feat-A009_*`、`hu/feat-A009_*`），自合入需求分支
 - mcp-server：老陈单人直拉 `chen/feat-A009_sango-diagnostics`
 - mcp-web：小叶单人直拉 `ye/feat-A009_log-diagnostics`（诊断面板 + 复制 traceId 同一分支）
-- mcp-orchestrator：bug-00012 独立分支 `chen/bug-00012_test-log-isolation`（已上线特性的一票一分支口径）
 
 ## 故事号（Coco 生产）
 
