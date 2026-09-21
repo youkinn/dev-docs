@@ -1,7 +1,7 @@
 # bug-00013：检索诊断 finalScore 无法由接口数据复算（接口只回原始 bm25/cosine，缺 BM25 归一化与全量余弦）
 
 > Bug 号：bug-00013
-> 状态：待修复（已登记未分配）
+> 状态：修复中（2026-09-21 三侧落地：mcp-server `99fa77e` / mcp-orchestrator `ab8c13b` / mcp-web `f19ff8b`，均在 feat-A009 各分支上，待 Coco 审查）
 > 关联特性：feat-A009（检索诊断，§1.3 `candidates[]` 分数表）
 > 涉及项目：mcp-server（sango 诊断产出）、mcp-orchestrator（诊断透传 / 落库 / 查询，仅测试断言）、mcp-web（日志页「检索诊断」面板展示）
 > 登记：负责人 ／ 报告：负责人 ／ 登记日期：2026-09-21
@@ -89,6 +89,7 @@ finalScore = round3(
   - 测试 `sango/src/test/feat-A009/sango-diagnostics.test.ts`：每条候选含新字段；逐条断言 `round3(0.3*(bm25Norm??0) + 0.6*((cosine??-1)+1)/2 + 0.1*(labelHit?1:0)) === finalScore`；`bm25Norm` 命中集合内 min-max 口径；降级夹具 `cosine`/`bm25Norm` null 语义；截断 fixture 补字段。
 - **mcp-orchestrator（老陈）**：存储 / 查询**零代码改动**（`storage/logs.ts` 为 `JSON.stringify`/`JSON.parse` 泛化透传，无字段白名单）；仅补测试 `src/test/feat-A009/logs-api-diagnostics.test.ts`：固定 trace 样本查询返回含 `bm25Norm` 且可复算。
 - **mcp-web（小叶）**：`src/api/client.ts` 类型增 `bm25Norm`；`src/utils/retrievalDiagnostics.ts` + `src/components/RetrievalDiagnosticsPanel.vue`「三路分」改展示参与计算的三条分量（BM25 归一化 / 向量映射 / 标签），原始 `bm25`/`cosine` 放 tooltip 或副文案。
+- **不属本 bug（2026-09-21 负责人）**：候选表「最终分」列的 hover 算式代入展示（原样列算式 + 逐项代入实际值）为展示能力追加，归 **feat-A009 验收 6b**，复用本 bug 补齐的契约字段（`bm25Norm` / `cosine` / `labelHit` / `finalScore`），不另立票。
 - **dev-docs（Coco 审）**：`mcp-orchestrator/api/feat-A009-recall-diagnostics.md` §1.2 示例 + §1.3 字段表 + 计分口径 + 60aa5476 例；`requirements/feat-A009-recall-diagnostics.md` 验收 6 分数表描述同步。
 
 ## 验收标准（负责人）
