@@ -17,4 +17,4 @@
 | bug-00011 | 首页 / weather / logs 互相切换时页面抖动（顶部宽度不一致），logs 两个标签间切换同样抖动 | mcp-web | feat-A007 | 已修复 | 2026-09-21 |
 | bug-00012 | A003 测试 harness 未注入独立日志库 → 测试写入开发库 data/logs.db，日志页出现测试噪声（「随机一题」既有「对话」又有「答题」；负责人核对：该条无耗时、无域，确认为测试数据）。修复＝两个 harness 注入 `:memory:` | mcp-orchestrator | feat-A007 / feat-A008 | 待修复 | — |
 | bug-00013 | 检索诊断 finalScore 无法由接口数据复算（接口回传原始 bm25/cosine，缺 BM25 归一化；cosine 对非向量 top-50 置 null 藏掉向量加分项）。修复＝candidates 增全精度 bm25Norm + cosine 全量回传 | mcp-server, mcp-orchestrator, mcp-web | feat-A009 | 待修复 | — |
-| bug-00014 | 第 81 回回目分隔符多余空格（`急兄仇张飞遇害　　雪弟恨先主兴兵` 双空格，其余回为单空格），影响出参 / 日志 / 面板回目展示。修复＝081.json 与 _segments/081.json 归一为单空格并补文件尾换行（feat-A004 导入语料时带入） | mcp-server | feat-A004 | 修复中 | — |
+| bug-00014 | 第 81 回回目分隔符多余空格（`急兄仇张飞遇害　　雪弟恨先主兴兵` 双空格），影响出参 / 日志 / 面板回目展示。修复＝081.json 与 _segments/081.json 归一为全角单空格并补文件尾换行（feat-A004 导入语料时带入） | mcp-server | feat-A004 | 修复中 | — |
