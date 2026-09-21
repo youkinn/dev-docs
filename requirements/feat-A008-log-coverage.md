@@ -33,15 +33,15 @@ feat-A007 打通了 `POST /api/chat` 全链路埋点，但按需求明确只覆�
 
 ## 验收标准
 
-1. [ ] 风云三国随机出题一次后，列表出现 `log_type=quiz` 记录：`domain=fengyunsanguo`、`user_input` 为提交文本、`answer` 为工具返回文本、`citations=[]`
-2. [ ] 该记录的明细含工具 `fengyunsanguo_quiz_command`（入参 / 出参 / 耗时），**无 LLM 明细**，列表 `tokens` 为 null
-3. [ ] quiz 的 `durations.frontend` 有值（前端 t0 上报 + t6 补报各就各位）
-4. [ ] 天气标签一问一答后，「域」列显示 `weather`，天气工具明细（`mcp_server=weather`）可查
-5. [ ] 日志页类型下拉可切 `chat` / `quiz` 并正确过滤；默认仍为「全部」
-6. [ ] 前端选中「天气」标签时请求体带 `domain=weather`，后端不再拒绝（`CHAT_ALLOWED_DOMAINS` 含 weather）
-7. [ ] 风云三国知识问答（`domain=fengyunsanguo`）有测试覆盖：工具明细落 `fengyunsanguo_query`
-8. [ ] quiz 埋点失败不影响 `/api/sango/random` 主流程（旁路原则，故障注入验证）
-9. [ ] 既有 A003~A007 相关测试全绿（埋点不改业务行为）
+1. [√] 风云三国随机出题一次后，列表出现 `log_type=quiz` 记录：`domain=fengyunsanguo`、`user_input` 为提交文本、`answer` 为工具返回文本、`citations=[]`
+2. [√] 该记录的明细含工具 `fengyunsanguo_quiz_command`（入参 / 出参 / 耗时），**无 LLM 明细**，列表 `tokens` 为 null
+3. [√] quiz 的 `durations.frontend` 有值（前端 t0 上报 + t6 补报各就各位）
+4. [√] 天气标签一问一答后，「域」列显示 `weather`，天气工具明细（`mcp_server=weather`）可查
+5. [√] 日志页类型下拉可切 `chat` / `quiz` 并正确过滤；默认仍为「全部」
+6. [√] 前端选中「天气」标签时请求体带 `domain=weather`，后端不再拒绝（`CHAT_ALLOWED_DOMAINS` 含 weather）
+7. [√] 风云三国知识问答（`domain=fengyunsanguo`）有测试覆盖：工具明细落 `fengyunsanguo_query`
+8. [√] quiz 埋点失败不影响 `/api/sango/random` 主流程（旁路原则，故障注入验证）
+9. [√] 既有 A003~A007 相关测试全绿（埋点不改业务行为）
 
 ## 接口影响
 
