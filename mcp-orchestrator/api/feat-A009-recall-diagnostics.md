@@ -208,6 +208,7 @@ sango 检索工具（`sango_novel_search`）成功时，在响应 `result._meta.
 - `bm25Norm` 由 sango 预先算好（词法命中集合内 min-max：最高分 → 1、最低分 → 0；单条命中恒 1）；`null`（非词法命中）→ 该项 0
 - 标签命中 = `labelHit ? 1 : 0`
 - 逐条复算：`finalScore = round3(0.3*(bm25Norm ?? 0) + 0.6*(cosine === null ? 0 : (cosine+1)/2) + 0.1*(labelHit ? 1 : 0))`；`bm25Norm` / `cosine` 全精度输出，复算结果与 `finalScore` 严格一致。
+- **前端复算展示口径（feat-A009 验收 6b）**：候选表「最终分」列 hover 浮层按上式**代入实际值**展示，代入值取 4 位小数（与列内展示口径一致），乘积与求和用全精度计算，最后显式写出 `round3` 步骤，例如：`0.3 × 1 + 0.6 × 0.811 + 0.1 × 1 = 0.8866 → round3 = 0.887`。`bm25Norm` / `cosine` 为 null 的候选按 `0` 代入并标注原因（非词法命中 / 降级纯 BM25），不得只展示最终数字。
 
 例（trace `60aa5476-6ea1-4d2d-a560-c8287101ab4a` 的 rank 1）：`bm25Norm=1`（原始 BM25=38.979 为该次最高分）、`cosine=0.622` → 向量映射 `(0.622+1)/2 = 0.811` → `0.3×1 + 0.6×0.811 + 0.1×1 = 0.8866` → `round3 = 0.887`。rank 2 这类「不在向量 top-50」的候选，`cosine` 也照常回传（不再为 null）。
 
@@ -334,8 +335,8 @@ result_summary = summarizeJson(summary);   // 不含 _meta.diagnostics
 |------|----------|----------|
 | 顶部状态条 | `diagnostics.truncated` / `truncatedCount` | `truncated=true` 显示黄条「诊断已截断（64KB），候选显示不全」，附丢弃条数 |
 | 召回漏斗 | `diagnostics.funnel` | 流程条：`corpusChunks` → `lexicalHits` \| `vectorTop50` \| `labelHits` → `mergedCandidates` → `topN` → `injected` → `cited`；各阶段数字可直接核对 |
-| 候选分数表 | `diagnostics.candidates` | 列：排名 / chunkId / 回目（`chapter`+`title`）/ BM25（null 显「—」）/ 余弦（null 显「—」）/ 标签命中 / 最终分 / 来源（`sources` 标签）/ 注入 / 引用；`rank ≤ funnel.topN` 高亮「进 top-N」。**标签命中列**：命中显「是」（可 hover 展示 `hitLabels` 全部标签，多个逐行）、未命中显「否」；`hitLabels` 缺失（历史 trace 诊断）时不展示 tooltip，不显示 `undefined` |
-| 第 N+1 名 | `diagnostics.nextRank` | 独立卡片：chunkId + 回目 + 三路分 + `gapToTopN`（「差 0.19 分未进 top-N」）；`nextRank=null` 隐藏 |
+| 候选分数表 | `diagnostics.candidates` | 列：排名 / chunkId / 回目（`chapter`+`title`）/ BM25（null 显「—」）/ 余弦（null 显「—」）/ 标签命中 / 最终分 / 来源（`sources` 标签）/ 注入 / 引用；`rank ≤ funnel.topN` 高亮「进 top-N」。**标签命中列**：命中显「是」（可 hover 展示 `hitLabels` 全部标签，多个逐行）、未命中显「否」；`hitLabels` 缺失（历史 trace 诊断）时不展示 tooltip，不显示 `undefined`。**最终分列**：hover 展示算式代入过程（原样列算式 + 逐项代入 `bm25Norm` / 向量映射值 / 标签命中 → 三个乘积、求和、`round3` 结果），不只给最终数字（验收 6b） |
+| 第 N+1 名 | `diagnostics.nextRank` | 独立卡片：chunkId + 回目 + 三路分 + `gapToTopN`（「差 0.19 分未进 top-N」）；`nextRank=null` 隐藏。最终分同 6b 口径（hover 展示算式代入过程） |
 | query 处理链 | `diagnostics.query` | `raw` → `normalized` → `tokens`（chip 展示） |
 | 环境与降级 | `diagnostics.env` | scheme / chunk 数 / alias 条数 / dim；`degradedBm25Only=true` 红色告警「已降级纯 BM25」 |
 | 死亡意图 | `diagnostics.deathIntent` | `detected && pinned` 提示置顶 chunkId 列表 |
