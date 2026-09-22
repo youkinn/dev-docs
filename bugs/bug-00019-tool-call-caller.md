@@ -40,8 +40,12 @@ traceId `2ef3608a-be62-4c66-856c-ed156f574fb9`（2026-09-22 18:14 CST，`log_typ
 | 落库 | `MCPTransport.callTool(name, args, origin?)`，`origin = { caller, stage }`；成功 / 失败两处 `appendToolCall` 均带；调用点显式传值，不得推断 / 兜底默认。`stage` 为联合类型（`ToolCallStage`），拼错阶段名需编译失败 |
 | 调用点 | `src/index.ts:49` L3 matcher → `server` / `l3`；域锁定快路径预调 → `server` / `fastpath`；L3 命中后题库预调 → `server` / `l3`；分类轮判定 1 / 2 后预调 → `server` / `classify`；`src/api/v1/sango.ts:49` 与 `src/server.ts:323` 后台直调 → `server` / `admin` |
 | 接口 | `GET /api/logs/:traceId` 的 `data.toolCalls[]` 增 `caller`、`stage`（均可为 null） |
-| 前端 | 「调用方法」后增「调用方」列，合成显示：`服务端 · L3 预检` / `服务端 · 域快路径` / `服务端 · 分类轮` / `服务端 · 后台直调` / `大模型 · 生成轮`；NULL / 缺字段 → `—` |
+| 前端 | 「调用方法」后增「调用方」列，合成显示：`服务端 · L3 预检` / `服务端 · 域快路径` / `服务端 · 分类轮预调` / `服务端 · 后台直调` / `大模型 · 生成轮调用`；NULL / 缺字段 → `—` |
 | 不做 | 不改路由行为；不做按调用方 / 阶段筛选与统计（需要另开票） |
+
+## 命名口径（2026-09-22 负责人确认）
+
+工具明细 `stage` 与 `llm_call_logs.stage` **同名不同义**：前者是「该工具调用由哪个阶段驱动发起」，后者是「本次 LLM 调用属于哪个阶段」。同一 auto 请求里：LLM 表 `classify` = 分类轮那次调用本身；工具表 `classify` = 分类轮判定出编号后服务端按编号预调域工具（发生在分类轮结束之后）。展示文案改用动作语义（`分类轮预调` / `生成轮调用`）避免同词误读。
 
 ## 另议（本票不做）
 
