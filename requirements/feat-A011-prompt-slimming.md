@@ -89,7 +89,7 @@
 - 不给天气域加快路径（天气本次整体下线）
 - 不改 L1 域标签白名单（除移除 weather）；**既有 L3 题库向量识别保留不动**
 - 不改题库域「随机一题」状态机（走独立端点，不经 `/api/chat`）
-- 不改模型 / provider / `max_tokens` / `temperature`
+- 不改模型 / provider / `max_tokens` / `temperature`（**例外**：bug-00018 按口径关闭思考——只改「是否思考」，模型 / provider / `max_tokens` / `temperature` 均不动）
 - 不改 `/api/chat` 的请求与响应形状（`answer` / `citations` 不变）
 - 不改召回算法、语料、切分与标签体系
 - 不做提示词外部化（不引入模板文件 / 配置中心），保持 TS 常量
