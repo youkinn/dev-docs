@@ -77,7 +77,7 @@ CREATE TABLE tool_call_logs (
   status           TEXT NOT NULL,                      -- 单次调用成败：'success' | 'failed'
   error_message    TEXT NOT NULL DEFAULT '',
   caller           TEXT,                               -- bug-00019：谁发起：'server' 服务端预调 | 'model' 大模型自主调用；历史行 NULL
-  stage            TEXT,                               -- bug-00019：哪个阶段发起：'l3' 题库向量预检 | 'fastpath' 域锁定快路径 | 'classify' auto 分类轮按编号预调 | 'generation' 生成轮模型自主调用；历史行 NULL
+  stage            TEXT,                               -- bug-00019：哪个阶段发起：'l3' 题库向量预检 | 'fastpath' 域锁定快路径 | 'classify' auto 分类轮按编号预调 | 'generation' 生成轮模型自主调用 | 'admin' 后台/管理接口直调；历史行 NULL
   PRIMARY KEY (trace_id, seq)
 );
 ```

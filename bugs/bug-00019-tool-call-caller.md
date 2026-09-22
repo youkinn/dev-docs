@@ -35,12 +35,12 @@ traceId `2ef3608a-be62-4c66-856c-ed156f574fb9`（2026-09-22 18:14 CST，`log_typ
 |----|------|
 | DB 列 | `tool_call_logs.caller TEXT`（谁发起）+ `tool_call_logs.stage TEXT`（哪个阶段）；均可空，历史行不回填 → NULL |
 | caller 值域 | `server` = 服务端预调；`model` = 大模型自主调用 |
-| stage 值域 | `l3` = L3 题库向量预检；`fastpath` = 域锁定快路径（L1 标签 / L2 关键词）预调；`classify` = auto 分类轮按编号预调；`generation` = 生成轮模型自主调用（当前无调用点，值域预留） |
+| stage 值域 | `l3` = L3 题库向量预检；`fastpath` = 域锁定快路径（L1 标签 / L2 关键词）预调；`classify` = auto 分类轮按编号预调；`generation` = 生成轮模型自主调用（当前无调用点，值域预留）；`admin` = 后台 / 管理接口直调（原文阅读器 `sango_novel_chapter`、随机一题 `fengyunsanguo_quiz_command`） |
 | 迁移 | 新库建表带列；旧库 `ALTER TABLE tool_call_logs ADD COLUMN`（参照 `cached_tokens` 的写法 `src/storage/logs.ts:442-446`） |
-| 落库 | `MCPTransport.callTool(name, args, origin?)`，`origin = { caller, stage }`；成功 / 失败两处 `appendToolCall` 均带；调用点显式传值，不得推断 / 兜底默认 |
-| 调用点 | `src/index.ts:49` L3 matcher → `server` / `l3`；域锁定快路径预调 → `server` / `fastpath`；L3 命中后题库预调 → `server` / `l3`；分类轮判定 1 / 2 后预调 → `server` / `classify` |
+| 落库 | `MCPTransport.callTool(name, args, origin?)`，`origin = { caller, stage }`；成功 / 失败两处 `appendToolCall` 均带；调用点显式传值，不得推断 / 兜底默认。`stage` 为联合类型（`ToolCallStage`），拼错阶段名需编译失败 |
+| 调用点 | `src/index.ts:49` L3 matcher → `server` / `l3`；域锁定快路径预调 → `server` / `fastpath`；L3 命中后题库预调 → `server` / `l3`；分类轮判定 1 / 2 后预调 → `server` / `classify`；`src/api/v1/sango.ts:49` 与 `src/server.ts:323` 后台直调 → `server` / `admin` |
 | 接口 | `GET /api/logs/:traceId` 的 `data.toolCalls[]` 增 `caller`、`stage`（均可为 null） |
-| 前端 | 「调用方法」后增「调用方」列，合成显示：`服务端 · L3 预检` / `服务端 · 域快路径` / `服务端 · 分类轮` / `大模型 · 生成轮`；NULL / 缺字段 → `—` |
+| 前端 | 「调用方法」后增「调用方」列，合成显示：`服务端 · L3 预检` / `服务端 · 域快路径` / `服务端 · 分类轮` / `服务端 · 后台直调` / `大模型 · 生成轮`；NULL / 缺字段 → `—` |
 | 不做 | 不改路由行为；不做按调用方 / 阶段筛选与统计（需要另开票） |
 
 ## 另议（本票不做）
