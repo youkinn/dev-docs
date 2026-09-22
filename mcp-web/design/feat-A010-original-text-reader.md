@@ -15,7 +15,7 @@
 | src/utils/sangoChapter.ts | 新增 | 短号提取、citation.text 匹配（includes）、回号范围校验等纯函数 |
 | src/views/LogsView.vue | 修改 | 「项目」筛选（全部/天气/风云三国/三国演义→不传/weather/fengyunsanguo/sango-novel），重置一并清空；列表末尾「操作」列复制 traceId；`scroll.x` 用 `max-content`；挂载阅读器 |
 | src/components/RetrievalDiagnosticsPanel.vue | 修改 | 候选分数表 chunkId 由纯文本改为可点击（emit open-reader，带 candidates[].chapter / title，不解析 chunkId 字符串）；表尾新增「操作」列复制完整 chunkId（成功反馈、不开阅读器） |
-| src/views/WeatherView.vue | 修改 | 三国演义模式引用卡片原文末尾「查看原文」按钮：fetchSangoChapter（共享缓存）→ includes 匹配 → 打开阅读器；匹配不到不传 chunkId 停顶部 |
+| src/views/WeatherView.vue | 修改 | 三国演义模式引用卡片原文末尾「查看全文」按钮：fetchSangoChapter（共享缓存）→ includes 匹配 → 打开阅读器；匹配不到不传 chunkId 停顶部 |
 | src/style.less | 修改 | `html` 滚动条口径：`overflow-y: scroll` → `overflow-y: auto; scrollbar-gutter: stable`（槽位照旧预留、无溢出时不绘制滚动条）；新增 `html body { overflow-y: visible !important; width: auto !important }` 中和 antd 滚动锁对 body 的副作用（bug-00017） |
 | src/utils/*.test.ts、src/api/client.test.ts | 修改/新增 | node:test 组件层逻辑单测覆盖验收条目 |
 
@@ -25,7 +25,7 @@
 日志页候选分数表 chunkId 点击 → panel emit { chapter, title, chunkId } → LogsView 打开阅读器
   → 组件读共享缓存（未命中 GET /api/v1/sango/chapters/:chapter）→ 渲染 A4 长纸
   → chunkId 命中则正文行挂载后容器内偏移滚动居中 + 高亮，未命中/未传停正文顶部
-聊天页「查看原文」→ fetchSangoChapter(chapter)（与组件共用缓存，不重复请求）
+聊天页「查看全文」→ fetchSangoChapter(chapter)（与组件共用缓存，不重复请求）
   → chunks[].text.includes(citation.text) 取 chunkId（同回重复文本落第一处）
   → 匹配不到不传 chunkId → 打开组件（组件读缓存渲染）
 ```

@@ -225,7 +225,7 @@ GET /api/v1/logs?domain=sango-novel&logType=chat&pageNo=1&pageSize=20
 | `chapter` | 是 | `GET /api/v1/sango/chapters/:chapter` 路径参数 | 回号 1~120 |
 | `chapterTitle` | 否 | `data.title` | 接口必然返回 `title`；入参仅用于接口返回前的占位显示（避免标题闪烁），拿不到就不传 |
 | `chunkId` | 否 | `data.chunks[].chunkId` | 传入则滚动定位并高亮该片段；不传则停正文顶部 |
-| `showFooter` | 否 | 无对应接口字段 | 纯前端展示开关：默认 `true`；传 `false` 不渲染底部区域（「上一回/下一回」+ 回号跳转）。聊天页「查看原文」入口传 `false`，日志页入口不传 |
+| `showFooter` | 否 | 无对应接口字段 | 纯前端展示开关：默认 `true`；传 `false` 不渲染底部区域（「上一回/下一回」+ 回号跳转）。聊天页「查看全文」入口传 `false`，日志页入口不传 |
 
 ### 5.2 打开即定位的数据时序
 
@@ -237,12 +237,12 @@ GET /api/v1/logs?domain=sango-novel&logType=chat&pageNo=1&pageSize=20
 
 ### 5.3 聊天侧定位（`citation.text` 精确匹配）
 
-- 入口：三国演义模式引用卡片原文末尾「查看原文」按钮（引用卡片本体不做点击入口）。
+- 入口：三国演义模式引用卡片原文末尾「查看全文」按钮（引用卡片本体不做点击入口）。
 - 定位口径：用 `citation.text` 与整回原文**精确匹配** —— `chunks[].text.includes(citation.text)` 命中该 chunk，取其 `chunkId` 传入组件。
   - 同回内两 chunk 文本完全相同（重叠 0，概率极低）→ 落到第一处。
   - 匹配不到 → 不传 `chunkId`，停在正文顶部，不报错。
 - **零契约变更**：`citations[]` 维持 `{ text, chapter, title }`（feat-A006 形状），**不加 `chunkId`**。
-- 数据时序：点击「查看原文」→ 读共享按回缓存（未命中则请求）→ 匹配 `chunkId` → 以 `{ chapter, chapterTitle: citation.title, chunkId? }` 打开组件 → 组件读缓存渲染（**不重复请求**）→ 定位。
+- 数据时序：点击「查看全文」→ 读共享按回缓存（未命中则请求）→ 匹配 `chunkId` → 以 `{ chapter, chapterTitle: citation.title, chunkId?, showFooter: false }` 打开组件 → 组件读缓存渲染（**不重复请求**）→ 定位。
 
 ### 5.4 日志页入口
 
@@ -273,7 +273,7 @@ GET /api/v1/logs?domain=sango-novel&logType=chat&pageNo=1&pageSize=20
 | 4 | 「操作」列不破坏列宽 / 横向滚动 | 否 | 前端（`scroll.x` 调整），接口列表项结构不变，无需接口验证 |
 | 5 | 日志页候选分数表 `chunkId` 可点击，打开阅读器定位高亮 | 是 | 抽样真实 trace：`GET /api/v1/sango/chapters/{chapter}` 返回 `chunks[].chunkId` 与候选分数表 `chunkId` 一致（同口径），`text` 完整；前端滚动定位 + 高亮 |
 | 5a | 候选分数表「操作」列复制完整 chunkId | 否 | 前端（复制按钮 + 成功反馈），接口不变 |
-| 6 | 聊天页「查看原文」用 `citation.text` 定位 | 是 | 抽样真实 trace：`citations[].text` 能被对应回 `chunks[].text` 包含（`includes` 命中）；构造匹配不到用例 → 不传 `chunkId` 停顶部不报错 |
+| 6 | 聊天页「查看全文」用 `citation.text` 定位 | 是 | 抽样真实 trace：`citations[].text` 能被对应回 `chunks[].text` 包含（`includes` 命中）；构造匹配不到用例 → 不传 `chunkId` 停顶部不报错 |
 | 7 | A4 观感 | 否 | 前端视觉验收 |
 | 8 | 片段号短号（`c0021`）与候选分数表一一对应 | 是 | 抽样：接口 `chunks[].chunkId` 尾段（`c\d{4}`）与候选分数表短号一致；前端正文只渲染短号 |
 | 9 | 上一回 / 下一回按钮标题、第 1 / 120 回禁用 | 是 | `GET /api/v1/sango/chapters/1` → `prev=null`、`next={2,title}`；`/120` → `next=null`、`prev={119,title}`；中间回 `prev/next` 标题与语料回目一致 |
