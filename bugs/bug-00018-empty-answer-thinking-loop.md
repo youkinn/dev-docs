@@ -1,7 +1,7 @@
 # bug-00018：域锁定生成轮返回空答案（思考模型推理不收敛 + 空答案当成功直通 200）
 
 > Bug 号：bug-00018
-> 状态：修复中（2026-09-22 负责人已验收；本地提交 `6361974`，待推送 + 发起 PR 合并——`github.com:443` 连不通，按约定搁置重试）
+> 状态：已修复（2026-09-22 负责人验收通过，本 bug 关闭；后端本地提交 `6361974`、前端展示层优化本地提交 `b88663d`，均在本地分支**未合并 main**——`github.com:443` 连不通，负责人决定不发起 PR）
 > 关联特性：feat-A011（提测验收中发现；**非 A011 引入**，改动前已有同类偶发）
 > 涉及项目：mcp-orchestrator
 > 登记：Coco ／ 报告：负责人 ／ 登记日期：2026-09-22
@@ -81,6 +81,9 @@ traceId `80544fe4-2835-484f-9f04-c49678a8f6cc`：`request_logs.status=success`�
 
 本票只做「关思考 + 空答案变参重试 / 报错」。
 「日志采集 `reasoning_tokens`、重试标识落库、日志页重试标记与 hover 中文表达」属新能力且跨 mcp-orchestrator / mcp-web 两侧，**另开 feat-A012**，不在本票内。
+
+补充（2026-09-22 负责人决策）：本票追加一处**展示层**优化——日志页「LLM 调用」表失败行的错误信息，由内联红字改为鼠标 hover「失败」标签时以 tooltip 展示（`mcp-web` 提交 `b88663d`，文件 `src/views/LogsView.vue`）。理由：本票修复后「失败」行首次真实出现在该表，内联错误文本把失败行行高从 58px 撑到 74px。
+范围边界：本次只动「LLM 调用」表，工具调用表同款内联写法**不动**。原划归 feat-A012 的「日志页 hover 中文表达」（`finish_reason` / `reasoning_tokens`）仍归 A012，A012 定稿时按「追加到既有 tooltip」处理，不推翻本次实现。
 
 顺带清理（本票内随实现一并做）：`src/agent.ts` 残留调试输出 `console.error('[callModel]', 'messages:', messages)` 与 `console.time('callModel')`。
 
