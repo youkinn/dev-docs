@@ -138,18 +138,47 @@
 你是统一对话助手，用简体中文回答用户问题。问候、闲聊与通用问题直接自由作答，简洁清楚，不加模板、不提及工具名。
 ```
 
-## 三、日志 `cachedTokens`
+## 三、模型调用口径（bug-00018）
 
-### 3.1 存储层（`src/storage/logs.ts`）
+> 同步自 `bugs/bug-00018-empty-answer-thinking-loop.md`（2026-09-22 负责人确认），本特性各轮次调用按此口径设置思考开关与空答案兜底。
+
+### 3.1 关思考判据
+
+**只要 messages 里有服务端注入的依据、或本轮输出已被锁成编号 / 单句 → 关闭思考；只有「无注入的自由模式 99 生成轮」保留思考。**
+判据不是「我们有没有给答案」，而是「任务是否已确定 + 输出是否已被约束」。
+
+| 轮次 | 关思考 |
+|------|--------|
+| 域锁定快路径（原著 / 题库）生成轮 | 关 |
+| 指针校验失败的兜底结论轮 | 关 |
+| `auto` → 1 / 2 的分类轮 | 关 |
+| `auto` → 1 / 2 的生成轮（已注入） | 关 |
+| `auto` → 99 的分类轮 | 关 |
+| `auto` → 99 的生成轮（无注入） | 不关 |
+
+### 3.2 空答案兜底口径
+
+触发面**只限**「`content` 为空 / `finish_reason=length`」；超时、限流、工具不可用不在其列（重试会放大故障）。
+
+1. **第一层：变参重试 1 次**。变参写死为「`temperature → 0` 必做；该轮若开着思考则一并关闭」。注意：按 §3.1，除「自由模式 99 生成轮」外均默认已关思考，这些轮次的实际变参只剩 `temperature=0`——实现时不得视为空操作而不变参。
+2. **第二层：仍失败 → 报错**。500 + 固定文案「处理请求失败，请稍后重试」，不透传模型原文；日志 `status=failed`、`response_code=500`、`error_message` 写明「生成轮两次空答案」。不新造状态码。
+
+### 3.3 `/api/chat` 请求与响应形状不变
+
+本次**不新增任何字段**，请求 / 响应形状与既有契约（`answer` / `citations`）保持一致。
+
+## 四、日志 `cachedTokens`
+
+### 4.1 存储层（`src/storage/logs.ts`）
 
 - `llm_call_logs` 增列：`cached_tokens INTEGER`（建表语句同步加列；既有库 `ALTER TABLE llm_call_logs ADD COLUMN cached_tokens INTEGER`，SQLite 支持缺省 NULL）。
 - `LlmCallPayload` / `LlmCallLog` 增 `cachedTokens?: number | null`。
 
-### 3.2 采集点（`src/agent.ts` `callModel` 成功分支）
+### 4.2 采集点（`src/agent.ts` `callModel` 成功分支）
 
 `cachedTokens: response.usage?.prompt_tokens_details?.cached_tokens ?? null`。类型 `number | null`；`null` = provider 未返回或失败调用不采集（与 `promptTokens` 同口径）。
 
-### 3.3 `/api/v1/logs/:traceId` 响应（前端日志页「缓存命中」列消费）
+### 4.3 `/api/v1/logs/:traceId` 响应（前端日志页「缓存命中」列消费）
 
 `llmCalls[]` 每项新增字段（camelCase，与既有 `promptTokens` / `completionTokens` 同风格）：
 
@@ -160,11 +189,11 @@
 - 列表接口 `/api/v1/logs` 列表项结构不变（不加字段）。
 - 前端展示口径：`null` 显示 `—`，`0` 显示 `0`（有数据但未命中缓存）。
 
-### 3.4 旧数据兼容
+### 4.4 旧数据兼容
 
 旧行缺列 → 读取为 `null` → 响应 `cachedTokens: null`；不迁移、不回填历史数据。
 
-## 四、天气下线契约
+## 五、天气下线契约
 
 | # | 契约 | 具体口径 |
 |---|------|----------|
@@ -177,23 +206,23 @@
 
 **注意（两处枚举不同源）**：`/api/chat` 的 `CHAT_ALLOWED_DOMAINS` 移除 weather；`/api/v1/logs` 的 domain 过滤枚举保留 weather。二者解耦，勿在实现时统一改掉。
 
-## 五、feat-A003 演进说明（待改要点，供后续同步）
+## 六、feat-A003 演进说明（待改要点，供后续同步）
 
-### 5.1 `docs/sango-mcp-routing-design.md`
+### 6.1 `docs/sango-mcp-routing-design.md`
 
 1. 路由判定流程更新：L1 → L2 → L3（题库高置信，仅 auto）→ **新增「轻量分类出编号」**替代「统一 Agent 带工具自主决策」；补编号表（1 / 2 / 99）与预调注入时序。
 2. 路由目标枚举变化：`weather | fengyunsanguo | sango-novel | auto` → `fengyunsanguo | sango-novel | auto`（移除 weather）。
 3. 快路径说明更新：域锁定快路径不再携带工具定义（原「模型可见工具 = 白名单」仅剩 `GET /api/tools` 展示面）。
 4. 工具自主决策路径删除 → 相应段落标注废止（避免与现状混读）。
 
-### 5.2 `mcp-orchestrator/api/feat-A003-model-tool-routing.md`
+### 6.2 `mcp-orchestrator/api/feat-A003-model-tool-routing.md`
 
 1. 第 1 次调用语义变更：auto 首轮从「带工具自主决策（routing）」改为「无 tools 轻量分类（classify）」；`LlmStage` 枚举与日志 `stage` 值同步。
 2. 工具可见性章节：白名单保留但语义收窄（模型可见工具仅在 `GET /api/tools` 与未来兜底路径出现；LLM 请求不再携带 tools）。
 3. 天气能力下线相关段落标注移除；domain 校验枚举变更。
 4. 域提示语义不变（预调注入后只按域提示作答），仅文本瘦身与拆分为「分类提示 + 域提示 + 自由提示」三常量。
 
-## 六、接口侧验收清单（覆盖达标硬指标 + 契约）
+## 七、接口侧验收清单（覆盖达标硬指标 + 契约）
 
 | # | 条目 | 验证方法 |
 |---|------|----------|
@@ -215,5 +244,5 @@
 1. **token 估算为折算口径**：§1.4 / §2 的估算按 0.47~0.63 token/字符折算，验收以日志实测回填；cachedTokens 上线后即可核对。
 2. **分类轮误判成本**：兜底倾向 1/2 → 误判成本 = 一次空预调 + 域提示不适配，远低于误判 99 漏掉能力域；若误判率偏高另开 bug 票跟踪。
 3. **`stage` 新增 `classify`**：日志明细与前端若按枚举渲染需兼容（未知值回退字符串直显）；`/api/v1/logs` 无 stage 过滤参数，不影响接口。
-4. **两处 domain 枚举解耦**：chat 校验移除 weather、日志过滤保留 weather，已写明（§四注），防实现时统一误删。
+4. **两处 domain 枚举解耦**：chat 校验移除 weather、日志过滤保留 weather，已写明（§五注），防实现时统一误删。
 5. **`UNIFIED_SYSTEM_PROMPT` 拆分**：拆为 `CLASSIFY_SYSTEM_PROMPT` + 域提示常量 + 自由提示常量，保持 TS 常量不外部化；原常量删除，无孤儿引用。

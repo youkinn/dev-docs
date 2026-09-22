@@ -7,7 +7,7 @@
 
 > **演进注记（feat-A005，2026-09-20）**：本地题库工具 `sango_query` 已由 MCP `fengyunsanguo_query` 取代（domain `sango` → `fengyunsanguo`）；`/api/sango/random` 内部改调 `fengyunsanguo_quiz_command`（quiz 缺配新增 503）；A004 已追加 `domain=sango-novel` 与 `sango_novel_search`。接口现状以 `mcp-orchestrator/api/feat-A005-fengyunsanguo-mcp.md` 与 `feat-A004-sango-classics-rag.md` 为准。
 
-> **演进注记（feat-A011，2026-09-22）**：auto 首轮由「带工具自主决策」改为「无 tools 轻量分类出编号（1 / 2 / 99）」，`LlmStage` 同步为 `"classify" | "generation"`（分类轮日志 `stage=classify`）；天气能力下线——`/api/chat` 不再接受 `domain=weather`（白名单 `['fengyunsanguo','sango-novel']`）、总台不装配 weather server、`GET /api/tools` 不再含天气工具；模型可见工具语义收窄——白名单仅剩 `GET /api/tools` 展示面，快路径与生成轮一律不携带工具定义，description 由总台 `MODEL_VISIBLE_DESCRIPTIONS` 渲染层替换（器坊描述原文一字不动）。日志过滤 `domain` 枚举保留 weather（历史日志可查）。详见 `mcp-orchestrator/api/feat-A011-prompt-slimming.md` §二 / §四。
+> **演进注记（feat-A011，2026-09-22）**：auto 首轮由「带工具自主决策」改为「无 tools 轻量分类出编号（1 / 2 / 99）」，`LlmStage` 同步为 `"classify" | "generation"`（分类轮日志 `stage=classify`）；天气能力下线——`/api/chat` 不再接受 `domain=weather`（白名单 `['fengyunsanguo','sango-novel']`）、总台不装配 weather server、`GET /api/tools` 不再含天气工具；模型可见工具语义收窄——白名单仅剩 `GET /api/tools` 展示面，快路径与生成轮一律不携带工具定义，description 由总台 `MODEL_VISIBLE_DESCRIPTIONS` 渲染层替换（器坊描述原文一字不动）。日志过滤 `domain` 枚举保留 weather（历史日志可查）。详见 `mcp-orchestrator/api/feat-A011-prompt-slimming.md` §二 / §五。
 
 ## 概述
 
