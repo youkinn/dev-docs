@@ -26,3 +26,5 @@
 | bug-00020 | 日志页「耗时」hover tooltip 文案冗余：写「开始 X ～ 结束 Y」，两个标签字多余（LLM 调用表 + 工具调用表同格式；trace `6e59249f` 复现）。修复＝文案只留「X ～ Y」（`mcp-web/src/views/LogsView.vue:199`、`:252`），时间戳与耗时口径本身正确、不改 | mcp-web | feat-A011 | 已修复 | 2026-09-22 |
 
 | bug-00021 | 域锁定题库问句答成模型先验知识（问「玄德是谁的字」→ 200 返回「刘备」、`citations` 空，答案不在工具候选内）。根因＝feat-A011 提示词瘦身（`ec4cfcb`）把旧版「候选不相关 → 只回『题库未收录该题』+ 禁止用题库外知识作答」两条约束窄化成只覆盖「候选为空」；叠加 `fengyunsanguo_query` 无相似度门限（`candidates()` 只 `filter(score>0)` 取 topN、默认 limit=1）给不出空候选。修复口径＝`FENGYUNSANGUO_DOMAIN_PROMPT` 补回上述约束；召回侧不靠门限修（模板化问句「刘备的字是什么？」top1=0.667 高于真命中 0.400，门限拦不住），判定归 LLM。**仅 A011 分支复现**（main 旧提示词有约束）。详见 `bugs/bug-00021-domain-lock-prior-knowledge.md` | mcp-orchestrator, mcp-server | feat-A011 | 修复中 | — |
+
+| bug-00022 | 题库域低分并列候选被当对应题作答（问「关于字什么」→ 200 返回「吕布的字是奉先。」）。根因＝输入与 16 道「XX的字是什么」只共享「什么」→ dice 全并列 0.200，稳定排序按题库序取到「吕布的字是什么？」；快路径 `limit` 默认 1 只给一条候选、模型无比对空间（契约允许传 8，实测正确项「关羽的字是什么？」排第 6）；生成轮未守「含义不对应 → 未收录」与「只输出答案原文」，题库域无服务端硬校验（提示词已被两次绕过）。修复口径＝服务端 Guard（输出必须命中注入候选答案集合，否则回未收录话术）+ 快路径 limit 1→8。详见 `bugs/bug-00022-tie-candidate-wrong-answer.md` | mcp-orchestrator, mcp-server | feat-A011 | 待修复 | — |
