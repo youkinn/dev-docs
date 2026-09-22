@@ -14,6 +14,7 @@
 | feat-A008 | 风云三国与天气日志补全 | mcp-orchestrator, mcp-web | 已归档 | 2026-09-21 |
 | feat-A009 | 检索诊断（召回可解释） | mcp-server, mcp-orchestrator, mcp-web | 已归档 | 2026-09-21 |
 | feat-A010 | 原文查看（A4 阅读器）+ 日志页筛选增强 | mcp-web, mcp-orchestrator, mcp-server | 已归档 | 2026-09-22 |
+| feat-A011 | 输入 token 优化（提示词瘦身 + 天气下线 + auto 原著快路径） | mcp-orchestrator, mcp-server, mcp-web | 定稿 | 2026-09-22 |
 
 > feat-A009 依赖顺序：feat-A008（已归档）→ bug-00010（已修复）→ feat-A009（2026-09-21 定稿，前置已解除，可开工）。
 
