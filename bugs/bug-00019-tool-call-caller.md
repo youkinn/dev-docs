@@ -1,7 +1,7 @@
 # bug-00019：工具调用记录缺「调用方 / 发起阶段」→ 日志页无法区分模型调用与服务端预调
 
 > Bug 号：bug-00019
-> 状态：修复中（2026-09-22 提测，负责人验收中；后端 `f650e49` on `coco/feat-A011_prompt-slimming` ／ 前端 `b4762a1` on `ye/feat-A011_logs-cache-and-chat-rename`）
+> 状态：已修复（2026-09-22 负责人验收通过；按负责人指示不单独发起 PR —— 改动随 feat-A011 需求分支上线。后端 `f650e49` on `coco/feat-A011_prompt-slimming` ／ 前端 `0a6c6d3` on `ye/feat-A011_logs-cache-and-chat-rename`）
 > 关联特性：feat-A011（负责人提测验收中发现）
 > 涉及项目：mcp-orchestrator（主要）、mcp-web
 > 登记：Coco ／ 报告：负责人 ／ 登记日期：2026-09-22
