@@ -58,7 +58,7 @@ Resolve-DnsName github.com -Type A   # 期望返回脚本选定的 IP
 powershell -ExecutionPolicy Bypass -File scripts/fix-github-hosts.ps1 [-DryRun]
 ```
 
-做的事：按候选表探测可用 IP（TCP 3 s 超时）→ 当前 IP 可用就直接退出 → 否则备份 hosts、只改 `github.com` 一行、刷 DNS → **只输出一行结论**。`-DryRun` 只报选定结果、不改文件。
+做的事：按候选表探测可用 IP（先 TCP 预筛 3 s，再用 `curl --resolve` 做 **TLS 实测** —— 实测发现「TCP 能握手、TLS 被卡死」的 IP 仍不可用，只测 TCP 会误选）→ 当前 IP 可用就直接退出 → 否则备份 hosts、只改 `github.com` 一行、刷 DNS → **只输出一行结论**。`-DryRun` 只报选定结果、不改文件。
 
 ## 验证
 

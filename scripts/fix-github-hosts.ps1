@@ -1,14 +1,16 @@
 ﻿#requires -Version 5.1
 <#
-  修复本机 github.com 被解析到不可达 IP（GitHub520 hosts 过期 / 间歇性阻断）导致的 git / gh 连不上。
+  修复本机 github.com 被解析到不可用 IP（GitHub520 hosts 过期、间歇性阻断）导致的 git / gh 连不上。
+  判据：TCP 预筛 + TLS 实测（TCP 能握手不代表 TLS 能过）。
   用法：powershell -ExecutionPolicy Bypass -File scripts/fix-github-hosts.ps1 [-DryRun]
-  判据与说明：docs/github-hosts-fix.md
+  说明：docs/github-hosts-fix.md
 #>
 [CmdletBinding()]
 param(
-    [string[]]$Candidates = @('140.82.112.3', '140.82.114.3', '140.82.116.3', '140.82.121.3', '20.27.177.113', '4.237.22.38', '20.205.243.166', '140.82.113.3'),
+    [string[]]$Candidates = @('140.82.116.3', '20.27.177.113', '20.205.243.166', '140.82.112.3', '140.82.114.3', '140.82.121.3', '4.237.22.38', '140.82.113.3'),
     [int]$Port = 443,
-    [int]$TimeoutMs = 3000,
+    [int]$TcpTimeoutMs = 3000,
+    [int]$TlsTimeoutSec = 8,
     [string]$HostsPath = "$env:SystemRoot\System32\drivers\etc\hosts",
     [switch]$DryRun
 )
@@ -18,7 +20,7 @@ function Test-Tcp {
     $client = New-Object Net.Sockets.TcpClient
     try {
         $async = $client.BeginConnect($Ip, $Port, $null, $null)
-        if (-not $async.AsyncWaitHandle.WaitOne($TimeoutMs)) { return $false }
+        if (-not $async.AsyncWaitHandle.WaitOne($TcpTimeoutMs)) { return $false }
         $client.EndConnect($async)
         return $true
     } catch {
@@ -26,6 +28,13 @@ function Test-Tcp {
     } finally {
         $client.Close()
     }
+}
+
+function Test-Tls {
+    param([string]$Ip)
+    $target = "github.com:${Port}:$Ip"
+    $code = (& curl.exe --resolve $target -I --max-time $TlsTimeoutSec -sS -o NUL -w "%{http_code}" https://github.com/ 2>$null) -join ''
+    return ($code -match '^(200|301|302)$')
 }
 
 function Get-HostsIp {
@@ -37,18 +46,18 @@ function Get-HostsIp {
 
 $current = Get-HostsIp 'github.com'
 
-if ($current -and (Test-Tcp $current)) {
-    "github.com -> $current 可达，无需改动"
+if ($current -and (Test-Tls $current)) {
+    "github.com -> $current TLS 实测可用，无需改动"
     exit 0
 }
 
 $pick = $null
 foreach ($ip in $Candidates) {
-    if (Test-Tcp $ip) { $pick = $ip; break }
+    if ((Test-Tcp $ip) -and (Test-Tls $ip)) { $pick = $ip; break }
 }
 
 if (-not $pick) {
-    "github.com 当前($current)不可达，候选 IP 全部探测失败；疑似整体网络不通，稍后重试"
+    "github.com 当前($current)不可用，候选 IP 全部 TLS 实测失败；疑似整体网络不通或全线阻断，稍后重试"
     exit 1
 }
 
