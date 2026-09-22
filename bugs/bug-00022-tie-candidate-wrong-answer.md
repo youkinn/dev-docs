@@ -36,21 +36,12 @@
 | 4 | 本票 A+B（服务端 Guard + `limit` 1→8）是否做 | 负责人 2026-09-23 已答「不需要，当前有 bug 记录就够了」→ **暂不做** |
 
 **相关文件**：`docs/sango-quiz-recall-calibration.md`（标定集草案与扰动口径）、`bugs/bug-00021-domain-lock-prior-knowledge.md`、`docs/troubleshooting-notes.md`（trace 索引）。
-### 待办（网络恢复后执行，2026-09-23 记录）
+### 推送与 PR（2026-09-23 已执行）
 
-- `dev-docs` 本地 ahead 4（`a81b2fe` 状态落档 / `773d148` INDEX 收敛 / `bcc51a7` 验收落档 / `72c604e` PR 一键命令）→ 先 push。
-- 两仓库发起 PR（`coco/feat-A011_prompt-slimming` → `main`）：`mcp-orchestrator`（已推送，最新 `022ae3d`）、`dev-docs`。
-- PR 由负责人合并；合并后 Coco 按第 10 条做归档登记（feat-A011 状态置「已归档」+ 验收勾选 + `requirements/INDEX.md` 同步）。
-- 2026-09-23 01:46 复测：DNS 正常（`github.com` → 20.205.243.166），TCP 443 不通、未配置代理 → 网络层阻断；`fetch` + `push` 重试 3 次后按 `AGENTS.md` 第 10 条搁置，本地提交保留。
-
-```powershell
-cd D:\workplace\dev-docs; git push
-cd D:\workplace\mcp-orchestrator; git push
-gh pr create --repo youkinn/mcp-orchestrator --base main --head coco/feat-A011_prompt-slimming --title "feat-A011: 输入 token 优化（提示词瘦身 + 天气下线 + auto 轻量分类）" --body "验收通过（2026-09-23 负责人）。含 bug-00021 修复（题库域提示词补回未命中约束 + 集成用例）、bug-00018/00019/00020 修复。已知未修：bug-00022（题库域并列候选答非所问，负责人决定仅留档、后续再说）。"
-gh pr create --repo youkinn/dev-docs --base main --head coco/feat-A011_prompt-slimming --title "feat-A011: 需求、接口与文档（含 bug-00021/00022 记录）" --body "A011 需求与接口文档；bug-00021（已修复）、bug-00022（待修复，仅留档）记录；题库召回标定集草案；审查标准增「概括词展开成判定用例」。"
-```
-
-> 网络失败重试 3 次以上（`github.com:443` 连不上）→ 按 `AGENTS.md` 第 10 条搁置，本地提交保留；`gh` 已登录 `youkinn`，网络恢复即可直接执行。
+- 根因：`github.com:443` 不通**不是断网** —— 本机 GitHub520 hosts 块把 `github.com` 钉在 `20.205.243.166`（该 IP 已不可达），而 `api.github.com` / `codeload.github.com` / `ssh.github.com` 与 `140.82.x.x` 段均正常；改 hosts 为 `140.82.114.3` 后恢复。备份 `C:\Users\YEXIN\hosts.bak-20260923`；GitHub520 定时同步会覆盖，复发按同法处理。
+- `dev-docs` `coco/feat-A011_prompt-slimming` 已推送（`83db091`）；`mcp-orchestrator` 同分支已推送（`022ae3d`）。
+- PR 已发起：`mcp-orchestrator#18`、`dev-docs#27`（均 → `main`）。
+- 待负责人合并；合并后 Coco 按第 10 条做归档登记（feat-A011 状态置「已归档」+ 验收勾选 + `requirements/INDEX.md` 同步）。
 
 ## 现象
 
