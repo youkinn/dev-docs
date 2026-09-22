@@ -38,10 +38,10 @@
 **相关文件**：`docs/sango-quiz-recall-calibration.md`（标定集草案与扰动口径）、`bugs/bug-00021-domain-lock-prior-knowledge.md`、`docs/troubleshooting-notes.md`（trace 索引）。
 ### 待办（网络恢复后执行，2026-09-23 记录）
 
-- `dev-docs` 本地 ahead 3（`a81b2fe` 状态落档 / `773d148` INDEX 收敛 / 本提交）→ 先 push。
+- `dev-docs` 本地 ahead 4（`a81b2fe` 状态落档 / `773d148` INDEX 收敛 / `bcc51a7` 验收落档 / `72c604e` PR 一键命令）→ 先 push。
 - 两仓库发起 PR（`coco/feat-A011_prompt-slimming` → `main`）：`mcp-orchestrator`（已推送，最新 `022ae3d`）、`dev-docs`。
 - PR 由负责人合并；合并后 Coco 按第 10 条做归档登记（feat-A011 状态置「已归档」+ 验收勾选 + `requirements/INDEX.md` 同步）。
-- 期间网络失败重试 3 次以上（`github.com:443` 连不上），按 `AGENTS.md` 第 10 条搁置，本地提交保留。
+- 2026-09-23 01:46 复测：DNS 正常（`github.com` → 20.205.243.166），TCP 443 不通、未配置代理 → 网络层阻断；`fetch` + `push` 重试 3 次后按 `AGENTS.md` 第 10 条搁置，本地提交保留。
 
 ```powershell
 cd D:\workplace\dev-docs; git push
