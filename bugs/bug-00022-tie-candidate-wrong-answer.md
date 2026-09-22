@@ -13,7 +13,7 @@
 | 项 | 状态 |
 |----|------|
 | 本票 bug-00022 | 待修复 —— 负责人决定暂不修；修复口径已备（见「修复口径」节） |
-| A011 提测验收 | **不通过**：bug-00021 修复项已通过（「刘备字什么」→ 未收录话术）；本票为打回项，未修 |
+| A011 提测验收 | **通过**（2026-09-23 负责人）；bug-00021 修复项已验收，本票作为**已知未修缺陷**随 A011 上线（仅留档，后续再说） |
 | bug-00021 | 已修复（2026-09-23 负责人验收通过；代码在 `coco/feat-A011_prompt-slimming`，**未合并 main**） |
 | 召回重做（大改） | 负责人已定「大改」；**未立项**（缺 feat 号与边界确认）；标定集草案已备 |
 
@@ -36,6 +36,12 @@
 | 4 | 本票 A+B（服务端 Guard + `limit` 1→8）是否做 | 负责人 2026-09-23 已答「不需要，当前有 bug 记录就够了」→ **暂不做** |
 
 **相关文件**：`docs/sango-quiz-recall-calibration.md`（标定集草案与扰动口径）、`bugs/bug-00021-domain-lock-prior-knowledge.md`、`docs/troubleshooting-notes.md`（trace 索引）。
+### 待办（网络恢复后执行，2026-09-23 记录）
+
+- `dev-docs` 本地 ahead 3（`a81b2fe` 状态落档 / `773d148` INDEX 收敛 / 本提交）→ 先 push。
+- 两仓库发起 PR（`coco/feat-A011_prompt-slimming` → `main`）：`mcp-orchestrator`（已推送，最新 `022ae3d`）、`dev-docs`。
+- PR 由负责人合并；合并后 Coco 按第 10 条做归档登记（feat-A011 状态置「已归档」+ 验收勾选 + `requirements/INDEX.md` 同步）。
+- 期间网络失败重试 3 次以上（`github.com:443` 连不上），按 `AGENTS.md` 第 10 条搁置，本地提交保留。
 
 ## 现象
 
