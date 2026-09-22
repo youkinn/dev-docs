@@ -43,6 +43,15 @@
 - PR 由负责人合并；合并后 Coco 按第 10 条做归档登记（feat-A011 状态置「已归档」+ 验收勾选 + `requirements/INDEX.md` 同步）。
 - 期间网络失败重试 3 次以上（`github.com:443` 连不上），按 `AGENTS.md` 第 10 条搁置，本地提交保留。
 
+```powershell
+cd D:\workplace\dev-docs; git push
+cd D:\workplace\mcp-orchestrator; git push
+gh pr create --repo youkinn/mcp-orchestrator --base main --head coco/feat-A011_prompt-slimming --title "feat-A011: 输入 token 优化（提示词瘦身 + 天气下线 + auto 轻量分类）" --body "验收通过（2026-09-23 负责人）。含 bug-00021 修复（题库域提示词补回未命中约束 + 集成用例）、bug-00018/00019/00020 修复。已知未修：bug-00022（题库域并列候选答非所问，负责人决定仅留档、后续再说）。"
+gh pr create --repo youkinn/dev-docs --base main --head coco/feat-A011_prompt-slimming --title "feat-A011: 需求、接口与文档（含 bug-00021/00022 记录）" --body "A011 需求与接口文档；bug-00021（已修复）、bug-00022（待修复，仅留档）记录；题库召回标定集草案；审查标准增「概括词展开成判定用例」。"
+```
+
+> 网络失败重试 3 次以上（`github.com:443` 连不上）→ 按 `AGENTS.md` 第 10 条搁置，本地提交保留；`gh` 已登录 `youkinn`，网络恢复即可直接执行。
+
 ## 现象
 
 traceId `9b2825f3-53b6-4425-b812-38c7ff6066bf`：
