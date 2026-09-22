@@ -1,3 +1,5 @@
 # 会话交接文档：仅本机使用，不入库
 docs/handoff-*.md
 /test
+# 本地运行产物（在 dev-docs 目录下跑总台代码会生成 data/logs.db 副本）：不入库
+/data/
