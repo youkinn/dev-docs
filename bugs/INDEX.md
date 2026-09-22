@@ -2,6 +2,9 @@
 
 编号规则：5 位数字自增，不可重用。
 
+> **本文件只做索引，不记录过程**（2026-09-23 负责人决定）：一行 = 编号 + 现象标题 + 涉及项目 + 关联特性 + 状态 + 修复日期。
+> 根因、机制读数、修复口径、验证方式等过程内容**一律写在各票自己的文件**（`bugs/bug-XXXXX-*.md`），此处不复述；无独立文件的票，本行即其唯一记录。
+
 | Bug 号 | 标题 | 涉及项目 | 关联特性 | 状态 | 修复日期 |
 |--------|------|----------|----------|------|----------|
 | bug-00001 | 知识问答省略/冗余问法未命中题库（「夏侯惇字什么」提示未收录） | mcp-orchestrator | feat-A002 | 已修复 | 2026-09-14 |
@@ -18,6 +21,13 @@
 | bug-00012 | A003 测试 harness 未注入独立日志库 → 测试写入开发库 data/logs.db，日志页出现测试噪声（「随机一题」既有「对话」又有「答题」；负责人核对：该条无耗时、无域，确认为测试数据）。修复＝两个 harness 注入 `:memory:` | mcp-orchestrator | feat-A007 / feat-A008 | 待修复 | — |
 | bug-00013 | 检索诊断 finalScore 无法由接口数据复算（接口回传原始 bm25/cosine，缺 BM25 归一化；cosine 对非向量 top-50 置 null 藏掉向量加分项）。修复＝candidates 增全精度 bm25Norm + cosine 全量回传 | mcp-server, mcp-orchestrator, mcp-web | feat-A009 | 已修复 | 2026-09-22 |
 | bug-00014 | 第 81 回回目分隔符多余空格（`急兄仇张飞遇害　　雪弟恨先主兴兵` 双空格），影响出参 / 日志 / 面板回目展示。修复＝081.json 与 _segments/081.json 归一为全角单空格并补文件尾换行（feat-A004 导入语料时带入） | mcp-server | feat-A004 | 已修复 | 2026-09-22 |
-| bug-00015 | 原文阅读器弹框点「上一回 / 下一回」抖动（首跳最明显：chunkId 入口自动定位到正文深位置，塌缩把滚动位置打回顶部，视觉跳得最远）。根因＝`goTo()` 置 `data = null` 后正文区塌缩，且高度链被 antd 焦点哨兵吃掉 —— antd-vue 4.2.6 在 `.ant-modal` 下渲染两个无 class 子 div（第 1 个 sentinelStart 包 `.ant-modal-content`，第 2 个 sentinelEnd 焦点哨兵带内联 `width:0;height:0;overflow:hidden`），原规则 `.ant-modal > * { flex: 1 1 auto }` 把哨兵一并撑开，loading 态（内容比弹框矮）富余高度归哨兵（实测包裹层 615 / 哨兵 115）→ `.reader-scroll` 601→486、纸面 5756→426、底部导航上跳 665→550。修复口径＝只撑开内容包裹层（`.ant-modal > div:first-child`）+ 哨兵钉死 0（`.ant-modal > div:last-child { flex: 0 0 0; height: 0 }`）+ `.reader-scroll` 槽位常驻（scrollbar-gutter: stable）；真浏览器实测（慢网 1200ms 拉长 loading 态、逐帧采样）loading ↔ loaded 读数恒定 730 / 730 / 601 / 541 / 665，翻回不抖（feat-A010 验收打回，待负责人复验） | mcp-web | feat-A010 | 修复中 | — |
-| bug-00016 | 原文阅读器打开后未滚动到指定片段（日志页候选分数表 chunkId 入口；二次验收仍未通过）。根因＝定位时机早于弹框正文挂载，`scrollRef` 为 null 即静默 return。根因＝弹框高度链断裂致 .reader-scroll 不可滚（scrollTop 恒 0）+ 定位早于正文挂载。修复口径＝补齐高度链 + 等「容器已挂载 + 目标行存在」再测量（声明式 watch(flush: post)；antd-vue 4.2.6 无 afterOpenChange，只有 afterClose） | mcp-web | feat-A010 | 修复中 | — |
-| bug-00017 | 日志页候选分数表点 chunkId 开 / 关阅读器弹框，页面抖一次且关闭后滚动位置被重置到顶部（验收 7a 相关）。根因＝antd 滚动锁改写 `document.body` 的 overflow + width，与 `scrollbar-gutter: stable` 槽位叠加。修复口径＝开 / 关不得改变页面宽度与滚动位置：antd 滚动锁开关条件恒真（传 :get-container 绕不开，实测仍注入 html body{overflow-y:hidden;width:calc(100% - 15px)}，致 body 宽 -15 且页面滚动被重置为 0），改用 html body{overflow-y:visible !important;width:auto !important} 中和；页面不滚动靠 wrap 的 overscroll-behavior: contain | mcp-web | feat-A010 | 修复中 | — |
+| bug-00015 | 原文阅读器弹框点「上一回 / 下一回」抖动（首跳最明显：chunkId 入口自动定位到正文深位置，塌缩把滚动位置打回顶部，视觉跳得最远）。根因＝`goTo()` 置 `data = null` 后正文区塌缩，且高度链被 antd 焦点哨兵吃掉 —— antd-vue 4.2.6 在 `.ant-modal` 下渲染两个无 class 子 div（第 1 个 sentinelStart 包 `.ant-modal-content`，第 2 个 sentinelEnd 焦点哨兵带内联 `width:0;height:0;overflow:hidden`），原规则 `.ant-modal > * { flex: 1 1 auto }` 把哨兵一并撑开，loading 态（内容比弹框矮）富余高度归哨兵（实测包裹层 615 / 哨兵 115）→ `.reader-scroll` 601→486、纸面 5756→426、底部导航上跳 665→550。修复口径＝只撑开内容包裹层（`.ant-modal > div:first-child`）+ 哨兵钉死 0（`.ant-modal > div:last-child { flex: 0 0 0; height: 0 }`）+ `.reader-scroll` 槽位常驻（scrollbar-gutter: stable）；真浏览器实测（慢网 1200ms 拉长 loading 态、逐帧采样）loading ↔ loaded 读数恒定 730 / 730 / 601 / 541 / 665，翻回不抖（feat-A010 验收打回，待负责人复验） | mcp-web | feat-A010 | 已修复 | 2026-09-22 |
+| bug-00016 | 原文阅读器打开后未滚动到指定片段（日志页候选分数表 chunkId 入口；二次验收仍未通过）。根因＝定位时机早于弹框正文挂载，`scrollRef` 为 null 即静默 return。根因＝弹框高度链断裂致 .reader-scroll 不可滚（scrollTop 恒 0）+ 定位早于正文挂载。修复口径＝补齐高度链 + 等「容器已挂载 + 目标行存在」再测量（声明式 watch(flush: post)；antd-vue 4.2.6 无 afterOpenChange，只有 afterClose） | mcp-web | feat-A010 | 已修复 | 2026-09-22 |
+| bug-00017 | 日志页候选分数表点 chunkId 开 / 关阅读器弹框，页面抖一次且关闭后滚动位置被重置到顶部（验收 7a 相关）。根因＝antd 滚动锁改写 `document.body` 的 overflow + width，与 `scrollbar-gutter: stable` 槽位叠加。修复口径＝开 / 关不得改变页面宽度与滚动位置：antd 滚动锁开关条件恒真（传 :get-container 绕不开，实测仍注入 html body{overflow-y:hidden;width:calc(100% - 15px)}，致 body 宽 -15 且页面滚动被重置为 0），改用 html body{overflow-y:visible !important;width:auto !important} 中和；页面不滚动靠 wrap 的 overscroll-behavior: contain | mcp-web | feat-A010 | 已修复 | 2026-09-22 |
+| bug-00018 | 域锁定生成轮返回空答案（`/api/chat` 200 但 `answer=""`）。根因＝思考模型 `max_tokens` 与思考预算共享 + 该输入下推理不收敛（放大预算到 3000 仍 `length`、content 仍空）+ 空答案走 Guard 软性域直通当 success 返回。修复口径＝生成轮关闭思考（实测 1000→150 token 且答案正常）+ 空答案/`finish_reason=length` 不得 200 直通。补充（2026-09-22）＝日志页「LLM 调用」表失败错误信息改 hover「失败」标签展示（真浏览器实测：失败行行高 74→58px，hover 出 tooltip） | mcp-orchestrator, mcp-web | feat-A011 | 已修复 | 2026-09-22 |
+| bug-00019 | 工具调用记录缺「调用方 / 发起阶段」（日志页只看得到「谁被调用」，看不出「谁发起、哪个阶段发起」）→ auto 路径的服务端 L3 题库预检被读成模型乱调工具（trace `2ef3608a`）。修复口径＝`tool_call_logs` 增 `caller`（model / server）+ `stage`（l3 / fastpath / classify / generation），历史 NULL 不回填；日志页「调用方法」后增「调用方」列合成显示 | mcp-orchestrator, mcp-web | feat-A011 | 已修复 | 2026-09-22 |
+| bug-00020 | 日志页「耗时」hover tooltip 文案冗余：写「开始 X ～ 结束 Y」，两个标签字多余（LLM 调用表 + 工具调用表同格式；trace `6e59249f` 复现）。修复＝文案只留「X ～ Y」（`mcp-web/src/views/LogsView.vue:199`、`:252`），时间戳与耗时口径本身正确、不改 | mcp-web | feat-A011 | 已修复 | 2026-09-22 |
+
+| bug-00021 | 域锁定题库问句答成模型先验知识（问「玄德是谁的字」→ 200 返回「刘备」、`citations` 空） | mcp-orchestrator, mcp-server | feat-A011 | 已修复 | 2026-09-23 |
+
+| bug-00022 | 题库域并列候选被当对应题作答（问「关于字什么」→ 200 返回「吕布的字是奉先。」） | mcp-orchestrator, mcp-server | feat-A011 | 待修复 | — |
