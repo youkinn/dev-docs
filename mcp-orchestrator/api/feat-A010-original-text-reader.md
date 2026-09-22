@@ -225,10 +225,11 @@ GET /api/v1/logs?domain=sango-novel&logType=chat&pageNo=1&pageSize=20
 | `chapter` | 是 | `GET /api/v1/sango/chapters/:chapter` 路径参数 | 回号 1~120 |
 | `chapterTitle` | 否 | `data.title` | 接口必然返回 `title`；入参仅用于接口返回前的占位显示（避免标题闪烁），拿不到就不传 |
 | `chunkId` | 否 | `data.chunks[].chunkId` | 传入则滚动定位并高亮该片段；不传则停正文顶部 |
+| `showFooter` | 否 | 无对应接口字段 | 纯前端展示开关：默认 `true`；传 `false` 不渲染底部区域（「上一回/下一回」+ 回号跳转）。聊天页「查看原文」入口传 `false`，日志页入口不传 |
 
 ### 5.2 打开即定位的数据时序
 
-1. 调用方以三项入参打开组件（打开方式 / 关闭回调由小叶自定，`v-model:open` 或 `open()` 均可）。
+1. 调用方以入参打开组件（`chapter` / `chapterTitle` / `chunkId` / `showFooter`；打开方式 / 关闭回调由小叶自定，`v-model:open` 或 `open()` 均可）。
 2. 组件渲染：有 `chapterTitle` 先占位显示标题，正文区 loading。
 3. 组件经**共享按回缓存**取数据：缓存命中 → 直接用；未命中 → `GET /api/v1/sango/chapters/:chapter` 请求，成功后写入缓存（key = `chapter`）。
 4. 数据就绪 → 渲染标题 + 正文 chunks（片段号列显示 chunkId 尾段短号，如 `c0021`；整串 chunkId 与段号不进正文）。
@@ -256,7 +257,7 @@ GET /api/v1/logs?domain=sango-novel&logType=chat&pageNo=1&pageSize=20
 - 本期无主动失效（语料只读、服务端数据稳定）；如需失效另开票。
 ## 六、前端对接章节（小叶）
 
-- 组件：`src/components/SangoChapterReader.vue`，两处入口复用同一组件、入参一致（§5.1 三项）。
+- 组件：`src/components/SangoChapterReader.vue`，两处入口复用同一组件、入参一致（§5.1；聊天页入口 `showFooter: false`，纯前端展示开关，与接口无关）。
 - 无路由变更；打开方式 / 关闭回调按 §5.2 自行决定。
 - A4 观感（210mm 纸宽 + 纸面阴影 + 衬线正文 + 长纸滚动）、底部上一回 / 下一回 / 按回号跳转（1~120，越界提示不跳转）、片段号短号列等为前端实现细节，见前端 design 文档。
 - 底部「上一回 {标题}」/「下一回 {标题}」直接使用 `data.prev` / `data.next`；第 1 回 / 第 120 回对应按钮禁用（接口侧 `prev` / `next` 为 `null`）。
@@ -278,7 +279,7 @@ GET /api/v1/logs?domain=sango-novel&logType=chat&pageNo=1&pageSize=20
 | 9 | 上一回 / 下一回按钮标题、第 1 / 120 回禁用 | 是 | `GET /api/v1/sango/chapters/1` → `prev=null`、`next={2,title}`；`/120` → `next=null`、`prev={119,title}`；中间回 `prev/next` 标题与语料回目一致 |
 | 10 | 按回号跳转 1~120、越界提示 | 是 | `chapter=1`、`120` → 200；`0` / `-1` / `121` / `abc` / `1.5` → 400 且 `message` 为 `chapter 只支持 1~120 的整数`；前端越界提示不跳转 |
 | 11 | 传 `chunkId` 打开即定位；未传停顶部 | 是 | 接口数据完整（`chunks[]` 按序、`chunkId` 可命中）；前端时序见 §5.2；传入不存在 `chunkId` → 停顶部不报错 |
-| 12 | 两处入口同一组件、入参一致 | 部分 | 前端代码审查（同一组件、三项入参）；接口侧保证两入口所需字段同一契约（§5.3 / §5.4） |
+| 12 | 两处入口同一组件、入参一致 | 部分 | 前端代码审查（同一组件、同一套入参，仅 `showFooter` 取值不同）；接口侧保证两入口所需字段同一契约（§5.3 / §5.4） |
 | 13 | 同回重复打开不重复请求；本地首次打开 < 1s | 是 | 前端按回缓存（§5.5）；接口侧验证单回响应体 25~38KB、整回返回不分页（`data` 非分页信封） |
 | 14 | 旧「chunkId 纯文本」渲染路径清理，文档同步 | 否 | 代码审查（无孤儿代码）+ 本文档与需求 / 前端 design 同步 |
 

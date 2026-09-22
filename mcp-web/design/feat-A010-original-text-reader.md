@@ -9,7 +9,7 @@
 
 | 文件 | 操作 | 说明 |
 |------|------|------|
-| src/components/SangoChapterReader.vue | 新增 | A4 阅读器组件，`v-model:open` + 三项入参（chapter / chapterTitle / chunkId） |
+| src/components/SangoChapterReader.vue | 新增 | A4 阅读器组件，`v-model:open` + 四项入参（chapter / chapterTitle / chunkId / showFooter） |
 | src/api/client.ts | 修改 | `LogListQuery` 增 `domain`；新增 sango chapter 类型与 `fetchSangoChapter`（模块级按回缓存 Map<number, Promise>，失败不写缓存） |
 | src/utils/clipboard.ts | 新增 | `copyText`：navigator.clipboard 优先，降级 execCommand + 临时 textarea |
 | src/utils/sangoChapter.ts | 新增 | 短号提取、citation.text 匹配（includes）、回号范围校验等纯函数 |
@@ -32,7 +32,7 @@
 
 ## 选型 & 注意
 
-- 阅读器入参严格按需求「组件入参契约」表；打开/关闭用 `v-model:open`，无额外业务入参
+- 阅读器入参严格按需求「组件入参契约」表；打开/关闭用 `v-model:open`，无额外业务入参；`showFooter`（默认 `true`）控制底部区域显隐，聊天页入口传 `false`（负责人 2026-09-22 验收补充）
 - A4 观感：210mm 纸宽 + 纸面阴影 + 衬线正文 + 长纸滚动（不分页）；正文只渲染 chunkId 尾段短号（如 c0021），不展示整串 chunkId 与 segFrom/segTo
 - 弹框尺寸（负责人 2026-09-22 验收意见 + 二次验收调整）：宽固定 960px；正文区纵向 flex 撑满视口，**不写 magic number、不写 `100vh` 算术**——`a-modal` 加 `wrap-class-name="reader-modal-wrap"`，非 scoped 样式块（选择器统一挂 `.reader-modal-wrap` 下，不外泄）覆盖 antd 默认 `top: 100px` / `padding-bottom: 24px`：`.ant-modal { display: flex; flex-direction: column; top: 0; height: 100%; max-height: 100%; padding-bottom: 0 }` → `.ant-modal > * { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0 }`（antd-vue 多出的无 class 包裹 div，见 bug-00015 条）→ `.ant-modal-content, .ant-modal-body { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0 }` → `.reader-body { flex: 1 1 auto; min-height: 0 }`；纸面 `min-height: 100%` 随之变高；底部导航条 `flex: 0 0 auto` 常驻不随正文滚动。弹框吃满一屏（wrap 不再加 `padding: 12px 0` 上下留白），正文区底色改 `#00000087`（纸面浮在深色底上）
 - 弹框高度基准：**以 `.ant-modal-wrap` 实际盒子为基准**——wrap 是 `position: fixed; inset: 0`（= 视口高、无内边距），`.ant-modal { height: 100%; max-height: 100% }` 吃 wrap 的 content box，正好「最多一屏」，不会比 wrap 高而在视口右缘（弹框外）弹出滚动条；wrap 吃 antd 默认 `overflow: auto`（不再覆盖 `overflow: hidden`），因弹框高度不超过 wrap，wrap 自身不产生滚动条；弹框链路上唯一实际滚动容器是 `.reader-scroll`（加 `scrollbar-gutter: stable`，见 bug-00015 条）
@@ -41,7 +41,7 @@
 - 页面滚动口径：`html { overflow-y: auto; scrollbar-gutter: stable }` —— 槽位照旧预留（滚动条出现 / 消失不再横向抖动，bug-00011 修法效果保留），无溢出时不绘制；阅读器弹框打开时 antd 滚动锁对 body 的副作用由 `html body { overflow-y: visible !important; width: auto !important }` 中和（见上条 bug-00017），`html` 无需常驻绘制 inert 滚动条。已知边界：Safari 18.2 以下不支持 `scrollbar-gutter`，该情形退化为 `overflow-y: auto`，可能重现滚动条出现 / 消失的横向抖动，属已知约束，需要时另开票
 - 定位时机与高度链（bug-00016 修法）：**根因是高度链断了** —— antd-vue 4.2.6 Modal 在 `.ant-modal` 与 `.ant-modal-content` 之间多一层无 class 包裹 div，`.ant-modal-content { height: 100% }` 的父级是 auto 高度 → 百分比解析失败 → 整条 flex 链失效，`.reader-scroll` 高度等于 scrollHeight（容器不可滚），组件设的 `scrollTop` 恒无效（"未滚动到指定片段"）；修法见上两条（`.ant-modal` 自身纵向 flex + `.ant-modal > *` 撑开 + content 不写 `height: 100%`，实测修后 contentH 804 / clientH 675 / scrollH 6422 / scrollTop 739 = 期望居中值）。定位时机：antd-vue 4.2.6 Modal **没有 `afterOpenChange`**（只有 `afterClose`），设计稿早先写的 `@after-open-change` 不存在、不要用；改为声明式触发 `watch([scrollRef, loading, data], scrollToTarget, { flush: 'post' })` —— 模板 ref 挂载（弹框正文挂载）/ `loading` 结束 / `data` 就绪（chunk 行渲染）时各测一次，满足「容器已挂载 + 目标行存在」再测量，命中则 `container.scrollTop = targetScrollTop(container.clientHeight, el)`（未传 chunkId / 目标行不在当前回 → `scrollTop = 0`，停正文顶部不报错），不做无界轮询
 - 定位测量口径：只用**与祖先 transform 无关的布局量**（`offsetTop` / `offsetHeight` / `clientHeight`）——antd v4 Modal 打开带 `ant-zoom` 动画（`.ant-modal` 上 `scale(0.2)` → `scale(1)`，0.3s），祖先 transform 会等比缩放 `getBoundingClientRect`，用 rect 差值算偏移会被乘上当时的 scale 而偏上；故 `.reader-scroll` 加 `position: relative` 使其成为 `chunk-row` 的 offsetParent，组件内不保留任何依赖 rect 的定位计算
-- 底部「上一回/下一回 {标题}」直取 data.prev/next，第 1 / 120 回对应按钮禁用；回号输入跳转 1~120，越界 warning 不跳转
+- 底部「上一回/下一回 {标题}」直取 data.prev/next，第 1 / 120 回对应按钮禁用；回号输入跳转 1~120，越界 warning 不跳转；整块底部区域由 `showFooter` 控制，聊天页入口不渲染（纯前端，无接口变更）
 - 旧「chunkId 纯文本」渲染路径随入口改造一并清理（验收 14）
 - 复制：复制 traceId / chunkId 均走 copyText 降级路径（http / https 都能复制），成功 message 反馈
 - 引用卡片本体不加点击入口；阅读器不渲染引用角标
