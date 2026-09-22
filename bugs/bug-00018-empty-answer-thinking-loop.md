@@ -70,7 +70,19 @@ traceId `80544fe4-2835-484f-9f04-c49678a8f6cc`：`request_logs.status=success`�
 
 上述 5 处已在代码中加口径备注（注释，无行为改动，`npm run build` 通过）。实现时需同步接口文档（`auto` 轻量分类调用契约与生成轮契约增「是否思考」口径）。
 
-**仍待负责人定**：空答案 / `finish_reason=length` 的兜底口径（重试一次 / 走兜底结论 / 直接报错，三选一）——与「关思考」独立，必须落地其一。
+### 空答案兜底口径（2026-09-22 负责人确认）
+
+触发面**只限**「`content` 为空 / `finish_reason=length`」；超时、限流、工具不可用不在其列（重试会放大故障）。
+
+1. **第一层：变参重试 1 次**。变参写死为「`temperature → 0` 必做；该轮若开着思考则一并关闭」。注意：按上表除「自由模式 99 生成轮」外均默认已关思考，这些轮次的实际变参只剩 `temperature=0`——实现时不得视为空操作而不变参。
+2. **第二层：仍失败 → 报错**。沿用现有映射（`src/server.ts:152`）：**500 + 固定文案「处理请求失败，请稍后重试」**，不透传模型原文；日志 `status=failed`、`response_code=500`、`error_message` 写明「生成轮两次空答案」。不新造状态码。
+
+## 范围（2026-09-22 负责人确认）
+
+本票只做「关思考 + 空答案变参重试 / 报错」。
+「日志采集 `reasoning_tokens`、重试标识落库、日志页重试标记与 hover 中文表达」属新能力且跨 mcp-orchestrator / mcp-web 两侧，**另开 feat-A012**，不在本票内。
+
+顺带清理（本票内随实现一并做）：`src/agent.ts` 残留调试输出 `console.error('[callModel]', 'messages:', messages)` 与 `console.time('callModel')`。
 
 ## 登记说明
 
