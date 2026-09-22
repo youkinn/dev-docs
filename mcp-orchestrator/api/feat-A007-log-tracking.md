@@ -76,6 +76,8 @@ CREATE TABLE tool_call_logs (
   result_summary   TEXT,                               -- 返回内容，≤8000
   status           TEXT NOT NULL,                      -- 单次调用成败：'success' | 'failed'
   error_message    TEXT NOT NULL DEFAULT '',
+  caller           TEXT,                               -- bug-00019：谁发起：'server' 服务端预调 | 'model' 大模型自主调用；历史行 NULL
+  stage            TEXT,                               -- bug-00019：哪个阶段发起：'l3' 题库向量预检 | 'fastpath' 域锁定快路径 | 'classify' auto 分类轮按编号预调 | 'generation' 生成轮模型自主调用；历史行 NULL
   PRIMARY KEY (trace_id, seq)
 );
 ```
@@ -87,7 +89,7 @@ CREATE TABLE tool_call_logs (
 - 类型扩展：主表以 `log_type` 区分（本期 `chat`）；明细表对未涉及的类型为空；记录器按「类型 / 入口接口」注册表登记，新类型只加注册、不改结构
 - 校验失败也落库：参数无效（400）/ 超长（413）等未入队请求同样落主表一条（trace_id 已透传）
 - 时间点只记一次：「大模型发出工具请求」与「MCP 收到请求」是同一时刻，只记 `call_sent_at`
-- 明细一对多：tool-use 是循环，一次请求可多次调 LLM / 工具
+- 明细一对多：一次请求可多次调 LLM（分类轮 / 生成轮）与多次调工具（L3 预检 / 域预调）；工具明细带 caller / stage 标明谁发起、哪个阶段发起（bug-00019）
 - 派生值不落库：耗时由时间点相减、token 聚合由 llm 明细 SUM，均在查询 / 展示层计算（v1 不加冗余列）
 - 无 LLM 调用时 token 为 null（列表 tokens 与明细 token 字段均如此，不返回 0）
 
@@ -237,7 +239,9 @@ CREATE TABLE tool_call_logs (
         "completionTokens": 860,
         "finishReason": "tool_calls",
         "status": "success",
-        "errorMessage": ""
+        "errorMessage": "",
+        "caller": "server",
+        "stage": "fastpath"
       }
     ],
     "toolCalls": [
@@ -250,7 +254,9 @@ CREATE TABLE tool_call_logs (
         "callReturnedAt": 1789884003800,
         "resultSummary": "[{...}]",
         "status": "success",
-        "errorMessage": ""
+        "errorMessage": "",
+        "caller": "server",
+        "stage": "fastpath"
       }
     ]
   },
