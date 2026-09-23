@@ -108,7 +108,7 @@
 
 ## 分支计划
 
-- dev-docs：`coco/feat-A999_a012-doc`（文档 / 仓库维护类提交，走 feat-A999）
+- dev-docs：`coco/feat-A999_a012-*`（文档 / 仓库维护类提交，走 feat-A999；按批次新建，接口文档落 `coco/feat-A999_a012-interface-doc`）
 - mcp-orchestrator：需求分支 `coco/feat-A012_llm-call-observability`；成员分支 `chen/feat-A012_llm-call-observability`、`hu/feat-A012_llm-call-observability`
 - mcp-web：`ye/feat-A012_log-observability`
 
@@ -122,3 +122,4 @@
 
 - 2026-09-23 负责人拍板：明确 Token 明细的落点为 **LLM 调用子表** —— 该表 `Token（输入/输出）` 合并列拆为「输入 Token」「输出 Token」两列、各列 hover 出明细；最外层表格 Token 列不动。
 - 2026-09-23 负责人拍板：输出列 hover 明细增加 `max_tokens`（本次调用上限）；该值当前无调用级记录，故随调用落库（`llm_call_logs` 新增列）。
+- 2026-09-23 Coco：分支计划补记 dev-docs 文档分支口径（`coco/feat-A999_a012-*`，按批次新建）。
