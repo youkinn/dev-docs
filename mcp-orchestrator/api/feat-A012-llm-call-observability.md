@@ -12,10 +12,10 @@
 本特性为 LLM 调用可观测增强，全链路只做「日志 / 统计 / 展示」侧扩展，`/api/chat` 请求 / 响应形状零变更，重试策略零变更：
 
 1. **调用级新维度**：`llm_call_logs` 新增 `reasoning_tokens`（思考 token）、`attempt`（重试标识，服务端写入）、`input_breakdown`（输入分段 token 估算）、`max_tokens`（本次调用输出上限）。
-2. **请求级新维度**：`request_logs` 新增 `route_source`（路由来源五分支），前端日志列表行展示角标。
+2. **请求级新维度**：`request_logs` 新增 `route_source`（路由来源五分支），前端日志列表行 hover 类型标签展示（不加角标）。
 3. **输出侧拆「思考 / 正文」**：正文 = `completion_tokens − reasoning_tokens`（两项均为 provider 真值，不做估算）。
-4. **Token 图表缓存维度**：token-stats 按桶聚合 `cached_tokens`，前端输入柱拆「缓存 / 未缓存」两段，图表读数区展示区间总 token 与缓存命中率。
-5. **日志页展示优化**：LLM 调用子表 Token 列拆「输入 / 输出」两列并 hover 明细；列表最外层状态列简化。
+4. **Token 图表缓存维度**：token-stats 按桶聚合 `cached_tokens`，前端合并为单根三段堆叠柱（缓存输入 / 未缓存输入 / 输出），图表读数区展示区间总 token 与缓存命中率。
+5. **日志页展示优化**：LLM 调用子表 Token 列拆「输入 / 输出」两列并 hover 明细；列表最外层状态列简化；token 数值统一精确整数 + 千分位。
 
 不改：`/api/chat` 请求 / 响应形状（`answer` / `citations`）、重试策略（bug-00018 空答案变参重试 1 次）、`status` / `responseCode` 筛选口径、明细子表状态列、最外层 Token 合并列、`route_source` 查询过滤（列表无此筛选项）、分段精确对账（`input_breakdown` 与 `prompt_tokens` 不对账）、tokenizer 依赖（不引入）。
 
@@ -23,7 +23,7 @@
 
 - `input_breakdown` 为**本地启发式 token 估算**：CJK 字符（含全角标点）按 1 token/字，其余字符按 1 token/4 字符，各段累加后四舍五入取整（公式见 §2.3）。与 `prompt_tokens` 同量纲，但各段之和不要求等于 `prompt_tokens`；页面必须标注「估算」；分段不按 `cached_tokens` 拆分。
 - `input_breakdown` 在 `src/agent.ts` `callModel` 调用点计算（messages 已结构化），**不得从 `request_summary` 反推**（该字段 8000 字符截断）。
-- 缓存口径：`cached_tokens ⊂ prompt_tokens`，未缓存 = 输入 − 缓存，两段之和恒等于该桶输入（不加第三根柱）；历史 `null` 计 0；单桶若 `cached_tokens > prompt_tokens`（异常数据）未缓存段兜底 0，不出现负值柱。
+- 缓存口径：`cached_tokens ⊂ prompt_tokens`，未缓存 = 输入 − 缓存，两段之和恒等于该桶输入；历史 `null` 计 0；单桶若 `cached_tokens > prompt_tokens`（异常数据）未缓存段兜底 0，不出现负值柱。三段（缓存输入 / 未缓存输入 / 输出）合并为**单根堆叠柱**（§4.4）。
 - 缓存命中率 = 区间缓存合计 / 区间输入合计，均为**区间合计**（非逐桶）；输入合计 0 时显示「—」。
 
 ## 一、存储层字段契约
@@ -255,22 +255,49 @@ export function reportRouteSource(traceId: string, routeSource: RouteSource): vo
 ### 4.1 LLM 调用子表：Token 列拆分 + hover 明细
 
 - 「Token（输入/输出）」合并列拆为**「输入 Token」「输出 Token」两列**。
-  - 输入 Token 列值 = `promptTokens`；hover 明细展示 `inputBreakdown` 三段估算：`system` / `user` / `injected`（数据来源 `llmCalls[].inputBreakdown`，单位 token，**标注「估算」**）；`history` / `tools` 恒 0 可不展示。
-  - 输出 Token 列值 = `completionTokens`；hover 明细展示：思考 = `reasoningTokens`、正文 = `completionTokens − reasoningTokens`（两项均非 null 时计算，否则该项显示「—」）、上限 = `maxTokens`（数据来源 `llmCalls[].reasoningTokens` / `.maxTokens`）。
+  - 输入 Token 列值 = `promptTokens`；hover 明细展示 `inputBreakdown` 三段估算，段名用中文：`系统提示（system）` / `用户输入（user）` / `检索注入（injected）`（数据来源 `llmCalls[].inputBreakdown`，单位 token，**标注「估算」**）；`history` / `tools` 恒 0 可不展示。
+  - 输出 Token 列值 = `completionTokens`；hover 明细给出算式与代入过程（写法对齐候选分数表 `finalScoreFormula`）：首行 `输出 Token = 思考 + 正文`，随后 `思考 <reasoningTokens>`、`正文 <completionTokens − reasoningTokens>（<completionTokens> − <reasoningTokens>）`、`上限（max_tokens）<maxTokens>`（数据来源 `llmCalls[].reasoningTokens` / `.maxTokens`）。两项均非 null 时计算，否则该项显示「—」；`reasoningTokens` 为 null 时不显示「思考」行，`maxTokens` 为 null 时不显示上限行。
   - null 显示「—」（与 `cachedTokens` 展示口径一致）。
 - **不改明细子表状态列**；**不改最外层（列表行）Token 合并列**。
 
-### 4.2 日志列表行：重试 / 路由来源标记
+### 4.2 日志列表行：重试 / 路由来源标记（hover 展示）
 
-- 「是否重试」：`list[].hasRetry === true` 显示角标（如「重试」，图标即可），否则不显示。
-- 「路由来源」：`list[].routeSource` 非 null 显示角标 / 图标（`label` / `keyword` / `vector` / `classify` / `free` 五值，建议图标 + tooltip 显示枚举名）；null 不显示。
-- **不新增整列**（避免列表过宽），角标 / 图标形态由小叶定。
+- 落点：**hover 最外层表格「类型」列的类型标签**弹 tooltip，不在类型列内联角标 / 图标（避免行内噪音）。
+- tooltip 内容两行：`路由来源：标签路由（label）`（`list[].routeSource` 非 null 时）/ `重试：存在变参重试（attempt=2）`（`list[].hasRetry === true` 时）；有哪项列哪项，两项都不满足时不弹 tooltip。
+- **不新增整列**（避免列表过宽）；`routeSource` 枚举中文名与图标映射沿用现有实现。
 
 ### 4.3 列表最外层状态列简化
 
-- 失败行：只保留「失败」标签，响应码从标签降为普通文本；hover 展示「异常 code + 错误消息」（数据来源 `list[].responseCode` + `list[].errorMessage`）。
+- 失败行：只保留「失败」标签，**页面不出现响应码文本**；hover 展示「异常 code + 错误消息」（数据来源 `list[].responseCode` + `list[].errorMessage`）。
 - 成功行：保持现状（「成功」）。
 - **不改 `status` / `responseCode` 筛选口径**（接口筛选参数不变）。
+
+### 4.4 Token 图表：单根三段堆叠柱 + 数值单位
+
+- 单根堆叠柱，段顺序自下而上：`缓存输入`（淡蓝）→ `未缓存输入`（紫）→ `输出`（深绿）；柱高 = 三段之和 = 该桶 token 总消耗（输入 + 输出）。图例三项同名。
+- `未缓存输入 = max(0, inputTokens − cachedTokens)`（沿用 §3.3 兜底口径，不出现负值段）；历史区间（`cached_tokens` 全 null）整段落在未缓存。
+- 读数区（区间总 Token、缓存命中率）口径不变（§3.3）。
+- **数值单位**：token 数值一律精确整数 + 千分位（如 `12,345`），不用 `k` / `m` 缩写；null 显示 `—`。落点：最外层表格 Token（输入/输出）列、LLM 子表「输入 Token」「输出 Token」列值与 hover 明细、区间总 Token、图表 y 轴 axisLabel。
+- 数据来源不变（`GET /api/v1/logs/token-stats` 每桶 `inputTokens` / `outputTokens` / `cachedTokens`），**接口形状零变更**。
+
+### 4.5 列表耗时列 tooltip：层级标注
+
+- 目的：消除「总 / 总台 / LLM / 工具」四行并列被误读为相加关系（负责人实测：总 4.8s、总台 4.8s、LLM 1.5s、工具 3.3s）。
+- 展示结构（缩进即层级）：
+
+```
+总 4.8s（= 前端 + 队列等待 + 总台）
+前端 24ms
+队列等待 2ms
+总台 4.8s（服务端墙钟）
+　LLM 1.5s
+　工具 3.3s
+　LLM + 工具 4.8s
+```
+
+- 口径：`总台` = `server_responded_at − server_received_at`（服务端墙钟，`durations.server`）；`LLM` / `工具` 为各调用累计和（`durations.llm` / `.tool`），**与总台不保证相等**（差值 = 路由 / 落库等框架开销），故不写死「总台 = LLM + 工具」，只给合计行。
+- 当 `|总台 − (LLM + 工具)| ≥ 100ms` 时追加一行 `其他 x（路由 / 落库等）`；否则不显示该行。
+- 数据来源不变（`list[].durations`），**接口形状零变更**。
 
 ## 五、接口侧验收清单（文档级，逐条自检）
 
@@ -296,6 +323,10 @@ export function reportRouteSource(traceId: string, routeSource: RouteSource): vo
 3. **`attempt` 不含 provider 侧重试**：当前无 provider 自动重试，`attempt=2` 仅对应 bug-00018 空答案变参重试；重试策略本身不变（非目标）。
 4. **列表接口新增字段**：`routeSource` / `hasRetry` 为展示契约所需（列表行角标），超出「明细回传全部字段」表述，已在 §3.2 明示，确认无异议。
 5. **`resolveRoute` 返回形状变更**：由纯 `RouteTarget` 改为 `RouteDecision { route, source }`，影响 `processQueryData` 与相关测试断言（路由用例需同步更新，属文档同步范围）。
+
+## 维护记录
+
+- 2026-09-23 负责人验收打回（`test/feat-A012/test.md`）后同步展示契约：§4.1 输入 / 输出 hover 改中文段名 + 算式代入；§4.2 角标改 hover 类型标签；§4.3 失败行不再展示响应码；新增 §4.4 单根三段堆叠柱 + 千分位单位、§4.5 耗时 tooltip 层级标注。**接口形状零变更**（仅展示侧）。
 
 
 
