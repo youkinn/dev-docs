@@ -351,10 +351,10 @@ LogStore 新增方法（均旁路静默 / 同步直写）：`appendCacheLog(trac
 
 ```json
 { "code": 200, "data": { "hitTotal": 12, "markedMisjudge": 1, "misjudgeRate": 0.0833,
-  "note": "误判率 = 区间标记误判命中数 / 区间命中总数；未标记不计为正确；hitTotal=0 时 rate 为 null" }, "message": "" }
+  "note": "误判率 = 区间标记误判数 / 区间命中总数；未标记不计为正确；hitTotal=0 时 rate 为 null" }, "message": "" }
 ```
 
-口径：`hitTotal` = 区间内 `hit=1` 行数；`markedMisjudge` = 其中 `marked=1` 行数；`misjudgeRate` = 两者之比（4 位小数）；`hitTotal=0` → `rate: null`（页面显示「—」）。不自动判定对错（无真值来源，需求口径）。
+口径：`hitTotal` = 区间内 `hit=1` 行数；`markedMisjudge` = 区间内 `marked=1` 行数（含未命中灰色区标记）；`misjudgeRate` = 两者之比（4 位小数）；`hitTotal=0` → `rate: null`（页面显示「—」）。不自动判定对错（无真值来源，需求口径）。
 
 ### 3.10 命中解释 —— 并入日志明细与列表
 
@@ -475,3 +475,5 @@ LogStore 新增方法（均旁路静默 / 同步直写）：`appendCacheLog(trac
 - 2026-09-24 bug-00027 新增 §3.11 相似度分布桶明细（similarity-rows）柱形下钻接口；§4.2 补柱形点击下钻展示契约；验收表增第 18 行图表下钻对账（Coco 拍板）。
 - 2026-09-24 验收反馈 grayzone 增可选 similarityMin/Max 区间过滤（Coco 拍板）。
 - 2026-09-24 验收反馈 新增 §3.12 entries/:id/hits 命中记录接口（Coco 拍板）。
+- 2026-09-24 验收反馈 修复 cache_entries 镜像 id 与内存分叉导致 hits 404（Coco 拍板）。
+- 2026-09-24 验收反馈 misjudge 口径改为区间内 marked=1 行数（含未命中灰色区标记）（Coco 拍板）。
