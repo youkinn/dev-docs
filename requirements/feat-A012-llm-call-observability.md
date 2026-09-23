@@ -108,7 +108,7 @@
 
 ## 分支计划
 
-- dev-docs：`coco/feat-A012_llm-call-observability`
+- dev-docs：`coco/feat-A999_a012-doc`（文档 / 仓库维护类提交，走 feat-A999）
 - mcp-orchestrator：需求分支 `coco/feat-A012_llm-call-observability`；成员分支 `chen/feat-A012_llm-call-observability`、`hu/feat-A012_llm-call-observability`
 - mcp-web：`ye/feat-A012_log-observability`
 
