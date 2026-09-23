@@ -250,7 +250,7 @@ CREATE INDEX IF NOT EXISTS idx_cache_logs_hit_created ON cache_logs(hit, created
 | embedding 获取 | `src/cache.ts` → `transport.callInternal("sango_query_embed")` | 每次 sango-novel 判定前（开关开启时） |
 | 开关状态 | `src/cache.ts` 内存态；API 读写 | 启动取 `CACHE_ENABLED`，运行时 API 切换 |
 
-LogStore 新增方法（均旁路静默 / 同步直写）：`appendCacheLog(traceId, payload)`、`queryCacheLogByTrace(traceId)`、`queryCacheLogs(filter)`、`queryCacheDistribution(startAt, endAt)`、`queryMisjudgeStats(startAt, endAt)`、`updateCacheLogMark(id, marked, markedBy)`、cache_entries 读写（`insertCacheEntry` / `updateCacheEntry` / `deleteCacheEntry` / `listCacheEntries` / `clearCacheEntries` / `countCacheEntries`）。编排侧判定 / LRU 逻辑在 `src/cache.ts`（新文件，CacheManager）；后台 API 在 `src/api/v1/cache.ts`（新文件，createCacheApi）。
+LogStore 新增方法（均旁路静默 / 同步直写）：`appendCacheLog(traceId, payload)`、`queryCacheLogByTrace(traceId)`、`queryCacheLogs(filter)`、`queryCacheDistribution(startAt, endAt)`、`querySimilarityRows(filter)`、`queryMisjudgeStats(startAt, endAt)`、`updateCacheLogMark(id, marked, markedBy)`、cache_entries 读写（`insertCacheEntry` / `updateCacheEntry` / `deleteCacheEntry` / `listCacheEntries` / `clearCacheEntries` / `countCacheEntries`）。编排侧判定 / LRU 逻辑在 `src/cache.ts`（新文件，CacheManager）；后台 API 在 `src/api/v1/cache.ts`（新文件，createCacheApi）。
 
 ## 三、后台 API 契约
 
@@ -370,6 +370,22 @@ LogStore 新增方法（均旁路静默 / 同步直写）：`appendCacheLog(trac
 `reason` 枚举：`hit` / `miss-low` / `miss-gray` / `miss-tie` / `miss-focus`（低相似 / 灰色区 / 歧义 / 焦点拒判）；`similarity` / `nearestQuery` / `tieHits` 语义同表列（池空 null）。
 - `GET /api/v1/logs` 新增每行 `cacheHit`：`1`（命中）/ `0`（未命中）/ `null`（非 sango-novel、开关关闭、embedding 降级旁路，或 A013 前历史行）。派生方式：`LEFT JOIN cache_logs`（trace_id 唯一）。列表行 hover 展示（§4.2）。
 
+### 3.11 GET /api/v1/cache/stats/similarity-rows —— 相似度分布桶明细（柱形下钻）
+
+参数：`startAt` / `endAt`（必填毫秒时间戳，校验同 §3.7）/ `bucketIndex`（int 0~49，默认 0）/ `pageNo` / `pageSize`（同 §3.5）。数据源恒为 `cache_logs`，供前端点击分布图柱形（桶）查看该桶请求记录。
+
+```json
+{ "code": 200, "data": { "list": [
+  { "cacheLogId": 88, "traceId": "dc1b7b5b-2db8-4288-ba06-f4711e0b7a30", "createdAt": 1779408000000,
+    "userQuery": "严颜被义释是哪一回", "nearestQuery": "义释严颜的经过",
+    "similarity": 0.8512, "hit": false, "tieHits": 0, "hitLine": 0.92, "marked": false }
+], "total": 9, "pageNo": 1, "pageSize": 20 }, "message": "" }
+```
+
+过滤口径（与 §3.7 `bucketIndex(sim)` 同源，桶边界含下不含上）：`bucketIndex=0` → `similarity IS NULL OR similarity < 0.02`；`1 ≤ i ≤ 48` → `i × 0.02 ≤ similarity < (i + 1) × 0.02`；`49` → `0.98 ≤ similarity ≤ 1.00`（含 1.0）。排序 `created_at DESC`（同刻按 id DESC）。`total` = 该桶未分页行数；`hit` / `tieHits` 布尔化语义同表列（池空 `similarity` / `tieHits` 为 null）。
+
+对账：同时间窗、无其他筛选时 `total === similarity-distribution.buckets[bucketIndex].count`（前端可用作下钻加载完成校验）。
+
 ## 四、命中时 trace 形态与前端展示契约
 
 ### 4.1 日志链路（命中 = 0 次 LLM + 0 次检索）
@@ -391,6 +407,7 @@ LogStore 新增方法（均旁路静默 / 同步直写）：`appendCacheLog(trac
   - A009 检索诊断面板区：`data.cache.hit === true` 时显示「缓存命中，未走检索」，不展示空检索诊断（避免误判为链路故障，需求口径）。
 - **日志列表行**：`cacheHit` 非 null 时，hover 该行类型标签弹 tooltip 一行：`缓存命中`（绿）/ `缓存未命中`（灰）（A012 §4.2 同款 hover 方式，不新增整列）；null 无标。
 - **三色分布图**（§3.7 数据）：单柱直方图，x 轴相似度 0~1.0、y 轴请求数；**每根柱颜色由桶所在区间决定**（< 0.80 蓝 / [0.80, hitLine) 黄 / ≥ hitLine 绿）——区间着色，与行分类无关；命中线只改着色分界；池空行（sim=null）落第 0 桶（蓝区）。数值单位：请求数精确整数；相似度轴 2 位小数刻度。
+- **柱形点击下钻**：点击分布图任一柱（桶）展示该桶明细（数据源 similarity-rows §3.11，字段 / 空态 / 对账见该小节）。
 - **灰色区清单**（§3.8）：表格列 traceId / 时间 / 用户输入原文 / 最相近条目原文 / 相似度（4 位小数）/ 命中线 / 误判标记；行内可跳转日志详情（traceId）；误判标记 / 取消在命中解释卡片与灰色区清单均可操作；`markedBy` 输入框（缺省「控制台」）。
 - **缓存概览页**（§3.6）：条目数 / 答案字节合计 / embedding 字节 / 近似内存（标注「近似」+ 口径 note）；条目列表（§3.5）排序切换；开关（§3.2）+ 全量清除（§3.3，二次确认）+ 单条删除（§3.4）。
 - **误判率展示**（§3.9）：命中总数 / 标记误判数 / 误判率，`rate: null` 显示「—」，配 note 文案。
@@ -416,6 +433,7 @@ LogStore 新增方法（均旁路静默 / 同步直写）：`appendCacheLog(trac
 | 15 | 语义工具 | `sango_query_embed` 出现在 sango `tools/list`，但不在 `GET /api/tools` 与模型可见工具集；内部调用不落 `tool_call_logs`、不注入 `_meta.traceId`；权重缺失 → 旁路行为与开关关闭一致（验收 8）且不抛 503 |
 | 16 | 旧库兼容 | 存量 db 升级后两新表可建（幂等），明细 / 列表 / 既有接口全部 200；`data.cache` 与 `cacheHit` 对历史行为 null |
 | 17 | 内部调用旁路 | 故障注入（权重缺失 / embed 异常）：/api/chat 正常返回，错误码与 message 与原链路一致；cache 判定旁路且 console.warn 一次 |
+| 18 | 图表下钻对账 | 某桶下钻 `total ==` 分布图该柱 `count`（同时间窗、无其他筛选，口径见 §3.11） |
 
 ## 六、明确不改什么（非目标）与互补关系
 
@@ -441,3 +459,4 @@ LogStore 新增方法（均旁路静默 / 同步直写）：`appendCacheLog(trac
 ## 维护记录
 
 - 2026-09-23 story-A013-02 首版定稿：缓存契约 / 新表 DDL / 后台 API / 命中解释与图表展示契约 / 命中 trace 形态；语义判定落点裁决 = mcp-server 轻量工具（mcp-server 本期新增 `sango_query_embed`，不改现有契约）。
+- 2026-09-24 bug-00027 新增 §3.11 相似度分布桶明细（similarity-rows）柱形下钻接口；§4.2 补柱形点击下钻展示契约；验收表增第 18 行图表下钻对账（Coco 拍板）。
