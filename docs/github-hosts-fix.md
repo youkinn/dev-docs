@@ -47,24 +47,36 @@ Failed to connect to github.com:443 after 21064 ms: Could not connect to server
 
 ```powershell
 ipconfig /flushdns
-Resolve-DnsName github.com -Type A   # 期望返回 140.82.114.3
+Resolve-DnsName github.com -Type A   # 期望返回脚本选定的 IP
 ```
 
 改完 `git push` 与 `gh pr create` 立即恢复。
 
+### 一键脚本（推荐）
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/fix-github-hosts.ps1 [-DryRun]
+```
+
+做的事：按候选表探测可用 IP（先 TCP 预筛 3 s，再用 `curl --resolve` 做 **TLS 实测** —— 实测发现「TCP 能握手、TLS 被卡死」的 IP 仍不可用，只测 TCP 会误选）→ 当前 IP 可用就直接退出 → 否则备份 hosts、只改 `github.com` 一行、刷 DNS → **只输出一行结论**。`-DryRun` 只报选定结果、不改文件。
+
 ## 验证
 
-- `Resolve-DnsName github.com -Type A` → `140.82.114.3`
+- `Resolve-DnsName github.com -Type A` → 脚本选定的 IP（本次 `140.82.112.3`）
 - `git push origin <分支>` 成功（本次 `dev-docs` 推至 `83db091`）
 - `gh pr create` 成功（本次 `mcp-orchestrator#18`、`dev-docs#27`）
 
 ## 风险与已知约束
 
-1. **会复发**：GitHub520 有定时同步，下次同步会把它自己那套（含已失效的 `20.205.243.166`）写回，覆盖本次修改。复发时按「修复」重做一次，或停掉 GitHub520 的自动更新任务。
-2. **IP 会变**：`140.82.114.3` 只是当前可用值，不保证长期有效；失效时先按「定位」复测，再换一个可达的 GitHub IP。
+1. **会复发**：GitHub520 有定时同步，下次同步会把它自己那套（含已失效的 `20.205.243.166`）写回，覆盖本次修改。复发时跑上面的脚本即可（或按「修复」手动重做），也可停掉 GitHub520 的自动更新任务。
+2. **IP 会变，且阻断是间歇性的**：实测 2026-09-23 当天 `140.82.114.3`、`140.82.113.3` 先后失效，而同一时刻其他 GitHub IP 仍通 —— 不要写死单一 IP，用脚本重新探测。
 3. **只改一行**：本次 `api.github.com` / `codeload.github.com` 等条目实测正常，未动；不要顺手全量替换。
 4. **影响范围是整机**：hosts 是机器级配置，影响本机所有程序对 `github.com` 的解析。
 
 ## 备份与回滚
 
-改动前的 hosts 已备份至 `C:\Users\YEXIN\hosts.bak-20260923`。回滚：覆盖回 `C:\Windows\System32\drivers\etc\hosts`，再 `ipconfig /flushdns`。
+改动前的 hosts 已备份至 `C:\Users\YEXIN\hosts.bak-20260923`；脚本每次改动也会另存一份到 `%TEMP%\hosts.bak-<时间戳>`。回滚：覆盖回 `C:\Windows\System32\drivers\etc\hosts`，再 `ipconfig /flushdns`。
+
+## 维护记录
+
+- 2026-09-23：新增一键脚本 `scripts/fix-github-hosts.ps1`（候选 IP 探测由「只看 TCP」改为「TCP 预筛 + TLS 实测」，避免 TCP 能握手但 TLS 被卡死的 IP 被误选）；本文补脚本用法、备份位置与间歇性阻断读数（Coco 执行，负责人确认）。
