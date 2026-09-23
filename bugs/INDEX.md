@@ -34,3 +34,4 @@
 | bug-00023 | 演义域主宾反转 / 错误前提未识别（问「严颜义释张飞」按「张飞义释严颜」作答，未按契约回「演义中未涉及」；检索三途径无语义、生成轮无前提校验） | mcp-server, mcp-orchestrator | feat-A004 | 待修复 | — |
 | bug-00024 | 同题两次请求答案渲染不一致（「三英战吕布」一条 answer 只有角标 ¹ ² 无引语正文，trace 932d36fc / 5018ace0，citations 相同） | mcp-orchestrator | feat-A006 | 待修复 | — |
 | bug-00025 | 演义域答案内联服务端内部编号 ⟨Qn⟩（问「孙尚香后来怎么样了」→ answer 出现 ⟨Q6⟩~⟨Q15⟩，trace 20117022；模型抄写注入片段 + 渲染层未剥离内部标记 + H4 安全网不识别弯引号抄写） | mcp-orchestrator | feat-A006 | 待修复 | — |
+| bug-00026 | 缓存概览条目明细表「ID」列全部空白（前端 bodyCell 模板漏 column.key === 'id' 分支、该列又无 dataIndex，antd 兜底取 record[undefined] 为空；接口正常返回 id，数据未丢）+ 同行做负责人优化点：操作列加「复制 ID」按钮。修复口径＝bodyCell 补 id 分支渲染 record.id；操作列「删除」旁并排「复制」按钮（clipboard + 提示） | mcp-web | feat-A013 | 待修复 | — |
