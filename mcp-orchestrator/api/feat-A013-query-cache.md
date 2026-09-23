@@ -331,7 +331,7 @@ LogStore 新增方法（均旁路静默 / 同步直写）：`appendCacheLog(trac
 
 ### 3.8 GET /api/v1/cache/grayzone —— 灰色区 query 对明细
 
-参数：`startAt` / `endAt`（必填）/ `pageNo` / `pageSize`（同 §3.5）/ `marked`（`all` 默认 / `marked` / `unmarked`）。口径 = `hit=0 AND similarity ≥ 0.80 AND similarity < hit_line`（「差点命中谁」不去重，按次一行）。
+参数：`startAt` / `endAt`（必填）/ `pageNo` / `pageSize`（同 §3.5）/ `marked`（`all` 默认 / `marked` / `unmarked`）/ `similarityMin` / `similarityMax`（可选、可单传：0~1 数字，`min ≤ max` 否则 400 且消息点名参数；空字符串视为未传；在灰色区口径之上叠加过滤，边界按包含 `similarity ≥ min` / `similarity ≤ max`）。口径 = `hit=0 AND similarity ≥ 0.80 AND similarity < hit_line`（「差点命中谁」不去重，按次一行）。
 
 ```json
 { "code": 200, "data": { "list": [
@@ -385,6 +385,19 @@ LogStore 新增方法（均旁路静默 / 同步直写）：`appendCacheLog(trac
 过滤口径（与 §3.7 `bucketIndex(sim)` 同源，桶边界含下不含上）：`bucketIndex=0` → `similarity IS NULL OR similarity < 0.02`；`1 ≤ i ≤ 48` → `i × 0.02 ≤ similarity < (i + 1) × 0.02`；`49` → `0.98 ≤ similarity ≤ 1.00`（含 1.0）。排序 `created_at DESC`（同刻按 id DESC）。`total` = 该桶未分页行数；`hit` / `tieHits` 布尔化语义同表列（池空 `similarity` / `tieHits` 为 null）。
 
 对账：同时间窗、无其他筛选时 `total === similarity-distribution.buckets[bucketIndex].count`（前端可用作下钻加载完成校验）。
+
+### 3.12 GET /api/v1/cache/entries/:id/hits —— 缓存条目命中记录
+
+参数：`:id`（条目 id，非法 400）/ `pageNo` / `pageSize`（同 §3.5，默认 1 / 20，1~100）。供前端「缓存条目列表」点命中次数 > 0 弹框展示哪些请求命中了该条目。
+
+口径：`cache_logs` 中 `hit=1` 且 `nearest_query =` 该条目 `query_text` 的行（命中该条目的请求记录），按 `created_at DESC`（同刻按 `id DESC`）分页；条目不存在 404。`marked` 布尔化语义同表列。
+
+```json
+{ "code": 200, "data": { "list": [
+  { "traceId": "dc1b7b5b-2db8-4288-ba06-f4711e0b7a30", "userQuery": "严颜被义释是哪一回",
+    "similarity": 0.9821, "createdAt": 1779408000000, "marked": false }
+], "total": 9, "pageNo": 1, "pageSize": 20 }, "message": "" }
+```
 
 ## 四、命中时 trace 形态与前端展示契约
 
@@ -460,3 +473,5 @@ LogStore 新增方法（均旁路静默 / 同步直写）：`appendCacheLog(trac
 
 - 2026-09-23 story-A013-02 首版定稿：缓存契约 / 新表 DDL / 后台 API / 命中解释与图表展示契约 / 命中 trace 形态；语义判定落点裁决 = mcp-server 轻量工具（mcp-server 本期新增 `sango_query_embed`，不改现有契约）。
 - 2026-09-24 bug-00027 新增 §3.11 相似度分布桶明细（similarity-rows）柱形下钻接口；§4.2 补柱形点击下钻展示契约；验收表增第 18 行图表下钻对账（Coco 拍板）。
+- 2026-09-24 验收反馈 grayzone 增可选 similarityMin/Max 区间过滤（Coco 拍板）。
+- 2026-09-24 验收反馈 新增 §3.12 entries/:id/hits 命中记录接口（Coco 拍板）。
