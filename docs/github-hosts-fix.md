@@ -76,3 +76,7 @@ powershell -ExecutionPolicy Bypass -File scripts/fix-github-hosts.ps1 [-DryRun]
 ## 备份与回滚
 
 改动前的 hosts 已备份至 `C:\Users\YEXIN\hosts.bak-20260923`；脚本每次改动也会另存一份到 `%TEMP%\hosts.bak-<时间戳>`。回滚：覆盖回 `C:\Windows\System32\drivers\etc\hosts`，再 `ipconfig /flushdns`。
+
+## 维护记录
+
+- 2026-09-23：新增一键脚本 `scripts/fix-github-hosts.ps1`（候选 IP 探测由「只看 TCP」改为「TCP 预筛 + TLS 实测」，避免 TCP 能握手但 TLS 被卡死的 IP 被误选）；本文补脚本用法、备份位置与间歇性阻断读数（Coco 执行，负责人确认）。
