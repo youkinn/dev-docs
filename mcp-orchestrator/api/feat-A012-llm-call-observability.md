@@ -256,7 +256,16 @@ export function reportRouteSource(traceId: string, routeSource: RouteSource): vo
 
 - 「Token（输入/输出）」合并列拆为**「输入 Token」「输出 Token」两列**。
   - 输入 Token 列值 = `promptTokens`；hover 明细展示 `inputBreakdown` 三段估算，段名用中文：`系统提示（system）` / `用户输入（user）` / `检索注入（injected）`（数据来源 `llmCalls[].inputBreakdown`，单位 token，**标注「估算」**）；`history` / `tools` 恒 0 可不展示。
-  - 输出 Token 列值 = `completionTokens`；hover 明细给出算式与代入过程（写法对齐候选分数表 `finalScoreFormula`）：首行 `输出 Token = 思考 + 正文`，随后 `思考 <reasoningTokens>`、`正文 <completionTokens − reasoningTokens>（<completionTokens> − <reasoningTokens>）`、`上限（max_tokens）<maxTokens>`（数据来源 `llmCalls[].reasoningTokens` / `.maxTokens`）。两项均非 null 时计算，否则该项显示「—」；`reasoningTokens` 为 null 时不显示「思考」行，`maxTokens` 为 null 时不显示上限行。
+  - 输出 Token 列值 = `completionTokens`；hover 明细给出算式与代入过程（写法对齐候选分数表 `finalScoreFormula`），**每行带英文字段名**，示例（`completionTokens=201` / `reasoningTokens=0` / `maxTokens=1000`）：
+
+    ```
+    输出 Token = 思考 + 正文
+    思考（reasoningTokens） 0
+    正文（completionTokens − reasoningTokens）= 201 − 0 = 201
+    上限（max_tokens） 1,000
+    ```
+
+    字段来源 `llmCalls[].completionTokens` / `.reasoningTokens` / `.maxTokens`；正文行左端为字段名、右端为代入求值（禁止只写裸括号 `（201 − 0）`，无法自解释）。两项均非 null 时计算，否则该项显示「—」；`reasoningTokens` 为 null 时不显示「思考」行，`maxTokens` 为 null 时不显示上限行。
   - null 显示「—」（与 `cachedTokens` 展示口径一致）。
 - **不改明细子表状态列**；**不改最外层（列表行）Token 合并列**。
 
@@ -327,6 +336,7 @@ export function reportRouteSource(traceId: string, routeSource: RouteSource): vo
 ## 维护记录
 
 - 2026-09-23 负责人验收打回（`test/feat-A012/test.md`）后同步展示契约：§4.1 输入 / 输出 hover 改中文段名 + 算式代入；§4.2 角标改 hover 类型标签；§4.3 失败行不再展示响应码；新增 §4.4 单根三段堆叠柱 + 千分位单位、§4.5 耗时 tooltip 层级标注。**接口形状零变更**（仅展示侧）。
+- 2026-09-23 负责人二次复验：§4.1 输出 hover 每行补英文字段名，正文行改为完整等式（正文（completionTokens − reasoningTokens）= 201 − 0 = 201），避免裸括号代入过程被误读。
 
 
 

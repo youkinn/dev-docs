@@ -1,4 +1,4 @@
-# feat-A012：调用链路可观测增强（`reasoning_tokens` + 重试标识 + 路由来源 + Token 明细 / 图表缓存维度 + 状态列简化）
+﻿# feat-A012：调用链路可观测增强（`reasoning_tokens` + 重试标识 + 路由来源 + Token 明细 / 图表缓存维度 + 状态列简化）
 
 > 特性号：feat-A012
 > 状态：已提测（2026-09-23 提测：Coco 审查通过，负责人在需求分支验收）
@@ -18,17 +18,17 @@
 
 ## 目标
 
-- [ ] `llm_call_logs` 新增 `reasoning_tokens`（取自 `usage.completion_tokens_details.reasoning_tokens`，provider 不返回为 `null`），全量记录所有调用轮，不限于重试轮
-- [ ] 新增重试标识字段（如 `attempt`：1 = 首次 / 2 = 重试），由服务端写入，不靠前端按 `seq` / 时间推断
-- [ ] `request_logs` 新增路由来源 `route_source`（枚举 `label` / `keyword` / `vector` / `classify` / `free`），历史行为 `null`
-- [ ] `llm_call_logs` 新增输入 token 分段估算（JSON 列，如 `input_breakdown`）：`system`（域提示 / 分类提示）、`user`（当前输入）、`injected`（检索注入片段）；`history` / `tools` 保留字段、当前恒 0
-- [ ] 输出侧拆分为「思考 / 正文」：正文 = `completion_tokens` − `reasoning_tokens`（两项均为 provider 真值）
-- [ ] `llm_call_logs` 新增 `max_tokens`（该次调用的输出上限，取调用点参数原值），历史行为 `null`
-- [ ] `GET /api/v1/logs` 明细回传以上字段
-- [ ] LLM 调用子表：`Token（输入/输出）` 合并列拆为「输入 Token」「输出 Token」两列，各自 hover 展示明细（输入列＝分段估算；输出列＝思考 / 正文 + `max_tokens` 上限）
-- [ ] 日志列表行 hover 类型标签可见「是否重试」与「路由来源」（不加角标、不占列宽）
-- [ ] Token 图表：单根堆叠柱（缓存输入 / 未缓存输入 / 输出 三段，柱高 = 该桶输入 + 输出合计），y 轴上方显示区间总 token 数与缓存命中率
-- [ ] 日志列表（最外层表格）状态列简化：失败行只保留「失败」标签（不展示响应码），hover 展示异常 code + 错误消息
+- [√] `llm_call_logs` 新增 `reasoning_tokens`（取自 `usage.completion_tokens_details.reasoning_tokens`，provider 不返回为 `null`），全量记录所有调用轮，不限于重试轮
+- [√] 新增重试标识字段（如 `attempt`：1 = 首次 / 2 = 重试），由服务端写入，不靠前端按 `seq` / 时间推断 （伪造数据）
+- [√] `request_logs` 新增路由来源 `route_source`（枚举 `label` / `keyword` / `vector` / `classify` / `free`），历史行为 `null`
+- [√] `llm_call_logs` 新增输入 token 分段估算（JSON 列，如 `input_breakdown`）：`system`（域提示 / 分类提示）、`user`（当前输入）、`injected`（检索注入片段）；`history` / `tools` 保留字段、当前恒 0
+- [√] 输出侧拆分为「思考 / 正文」：正文 = `completion_tokens` − `reasoning_tokens`（两项均为 provider 真值）
+- [√] `llm_call_logs` 新增 `max_tokens`（该次调用的输出上限，取调用点参数原值），历史行为 `null`
+- [√] `GET /api/v1/logs` 明细回传以上字段
+- [√] LLM 调用子表：`Token（输入/输出）` 合并列拆为「输入 Token」「输出 Token」两列，各自 hover 展示明细（输入列＝分段估算；输出列＝思考 / 正文 + `max_tokens` 上限）
+- [√] 日志列表行 hover 类型标签可见「是否重试」与「路由来源」（不加角标、不占列宽）
+- [√] Token 图表：单根堆叠柱（缓存输入 / 未缓存输入 / 输出 三段，柱高 = 该桶输入 + 输出合计），y 轴上方显示区间总 token 数与缓存命中率
+- [√] 日志列表（最外层表格）状态列简化：失败行只保留「失败」标签（不展示响应码），hover 展示异常 code + 错误消息
 
 ## 非目标
 
@@ -46,18 +46,18 @@
 
 ## 验收标准
 
-1. [ ] 库表迁移（旧库 ALTER）后历史行 `reasoning_tokens` / `max_tokens` / `route_source` / `input_breakdown` 为 `null`，新行按实际落值
+1. [√] 库表迁移（旧库 ALTER）后历史行 `reasoning_tokens` / `max_tokens` / `route_source` / `input_breakdown` 为 `null`，新行按实际落值
 2. [ ] 一次发生重试的请求：两轮调用分别落库，重试轮标识可区分
-3. [ ] `GET /api/v1/logs` 明细含 `reasoningTokens`、`maxTokens`、重试标识、`routeSource`、输入分段
-4. [ ] LLM 调用子表：「输入 Token」「输出 Token」两列分开展示；输入列 hover 见各段估算值（中文段名：系统提示 / 用户输入 / 检索注入，标注「估算」），输出列 hover 给出「输出 Token = 思考 + 正文」算式与代入过程（正文 = 输出合计 − 思考）及 `max_tokens` 上限；关闭思考的轮次不显示「思考 0」；最外层表格 Token 列保持原样
-5. [ ] 五条路径各走一次（L1 标签 / L2 关键词 / L3 向量 / L4 分类编号 1 或 2 / L4 编号 99），`routeSource` 与实测路径一致
-6. [ ] 最外层表格「类型」列不加角标：hover 类型标签可见「路由来源：标签路由（label）」与「重试：存在变参重试（attempt=2）」（有哪项列哪项，两项都无则不弹）；LLM 子表 hover 可见中文 `finish_reason`
-7. [ ] Token 图表：区间内同时存在缓存命中与未命中的调用时，单根柱子呈三段堆叠（缓存输入 + 未缓存输入 + 输出），段读数之和 = 该桶输入 + 输出合计；`GET /api/v1/logs/token-stats` 每桶返回的缓存值与页面读数一致
-8. [ ] y 轴上方显示区间总 token 数（输入 + 输出合计）与缓存命中率（= 缓存合计 / 输入合计），读数与接口返回一致；区间输入合计为 0 时命中率显示 `—`
-9. [ ] 历史区间（`cached_tokens` 全为 `null`）按 0 计入未缓存：整段为「未缓存」，无负值段 / 空白段
-10. [ ] 日志列表状态列：失败行只有一枚「失败」标签（页面不出现响应码文本），hover 同时可见异常 code 与错误消息；成功行仍为单枚「成功」标签
-11. [ ] `npm run build` 通过、既有测试全绿
-12. [ ] token 数值展示（最外层 Token 列、LLM 子表输入 / 输出 Token 列与 hover 明细、区间总 Token、图表 y 轴）为精确整数 + 千分位，无 `k` / `m` 缩写；null 仍显示 `—`
+3. [√] `GET /api/v1/logs` 明细含 `reasoningTokens`、`maxTokens`、重试标识、`routeSource`、输入分段
+4. [√] LLM 调用子表：「输入 Token」「输出 Token」两列分开展示；输入列 hover 见各段估算值（中文段名：系统提示 / 用户输入 / 检索注入，标注「估算」），输出列 hover 给出「输出 Token = 思考 + 正文」算式与代入过程（正文 = 输出合计 − 思考）及 `max_tokens` 上限；关闭思考的轮次不显示「思考 0」；最外层表格 Token 列保持原样
+5. [√] 五条路径各走一次（L1 标签 / L2 关键词 / L3 向量 / L4 分类编号 1 或 2 / L4 编号 99），`routeSource` 与实测路径一致
+6. [√] 最外层表格「类型」列不加角标：hover 类型标签可见「路由来源：标签路由（label）」与「重试：存在变参重试（attempt=2）」（有哪项列哪项，两项都无则不弹）；LLM 子表 hover 可见中文 `finish_reason`
+7. [√] Token 图表：区间内同时存在缓存命中与未命中的调用时，单根柱子呈三段堆叠（缓存输入 + 未缓存输入 + 输出），段读数之和 = 该桶输入 + 输出合计；`GET /api/v1/logs/token-stats` 每桶返回的缓存值与页面读数一致
+8. [√] y 轴上方显示区间总 token 数（输入 + 输出合计）与缓存命中率（= 缓存合计 / 输入合计），读数与接口返回一致；区间输入合计为 0 时命中率显示 `—`
+9. [√] 历史区间（`cached_tokens` 全为 `null`）按 0 计入未缓存：整段为「未缓存」，无负值段 / 空白段
+10. [√] 日志列表状态列：失败行只有一枚「失败」标签（页面不出现响应码文本），hover 同时可见异常 code 与错误消息；成功行仍为单枚「成功」标签
+11. [√] `npm run build` 通过、既有测试全绿
+12. [√] token 数值展示（最外层 Token 列、LLM 子表输入 / 输出 Token 列与 hover 明细、区间总 Token、图表 y 轴）为精确整数 + 千分位，无 `k` / `m` 缩写；null 仍显示 `—`
 
 ## 接口影响
 
