@@ -33,3 +33,4 @@
 | bug-00022 | 题库域并列候选被当对应题作答（问「关于字什么」→ 200 返回「吕布的字是奉先。」） | mcp-orchestrator, mcp-server | feat-A011 | 待修复 | — |
 | bug-00023 | 演义域主宾反转 / 错误前提未识别（问「严颜义释张飞」按「张飞义释严颜」作答，未按契约回「演义中未涉及」；检索三途径无语义、生成轮无前提校验） | mcp-server, mcp-orchestrator | feat-A004 | 待修复 | — |
 | bug-00024 | 同题两次请求答案渲染不一致（「三英战吕布」一条 answer 只有角标 ¹ ² 无引语正文，trace 932d36fc / 5018ace0，citations 相同） | mcp-orchestrator | feat-A006 | 待修复 | — |
+| bug-00025 | 演义域答案内联服务端内部编号 ⟨Qn⟩（问「孙尚香后来怎么样了」→ answer 出现 ⟨Q6⟩~⟨Q15⟩，trace 20117022；模型抄写注入片段 + 渲染层未剥离内部标记 + H4 安全网不识别弯引号抄写） | mcp-orchestrator | feat-A006 | 待修复 | — |
