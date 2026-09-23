@@ -361,11 +361,12 @@ LogStore 新增方法（均旁路静默 / 同步直写）：`appendCacheLog(trac
 - `GET /api/v1/logs/:traceId` 新增 `data.cache`（cache_logs 无行时为 `null`）：
 
 ```json
-{ "hit": true, "hitLine": 0.92, "similarity": 0.9821, "tieHits": 1,
+{ "cacheLogId": 88, "hit": true, "hitLine": 0.92, "similarity": 0.9821, "tieHits": 1,
   "userQuery": "严颜是怎么被义释的", "nearestQuery": "义释严颜是怎么回事",
   "reason": "hit", "marked": false, "createdAt": 1779408000000 }
 ```
 
+- `cacheLogId` = `cache_logs.id`（误判标记 / 取消按 §3.9 `records/:id` 定位，2026-09-23 契约补充，前端已按缺失降级实现）
 `reason` 枚举：`hit` / `miss-low` / `miss-gray` / `miss-tie` / `miss-focus`（低相似 / 灰色区 / 歧义 / 焦点拒判）；`similarity` / `nearestQuery` / `tieHits` 语义同表列（池空 null）。
 - `GET /api/v1/logs` 新增每行 `cacheHit`：`1`（命中）/ `0`（未命中）/ `null`（非 sango-novel、开关关闭、embedding 降级旁路，或 A013 前历史行）。派生方式：`LEFT JOIN cache_logs`（trace_id 唯一）。列表行 hover 展示（§4.2）。
 
@@ -434,6 +435,8 @@ LogStore 新增方法（均旁路静默 / 同步直写）：`appendCacheLog(trac
 6. **上限与命中线未实测校准**：默认 500 条 + 0.92 是起步值；概览接口（avgAnswerBytes）+ 分布图表上线后按 §1.5 公式与三色数据拍板调整（env + 重启）。
 7. **误判率依赖人工标记**：不标记则失真偏低；用灰色区 query 对清单 + 命中解释引导巡检（需求口径）。
 8. **多实例部署内存缓存各自独立**：当前单实例，记风险不阻塞。
+
+- 2026-09-23 story-A013-02 契约补充：§3.10 `data.cache` 增 `cacheLogId`（误判标记 / 取消按 records/:id 定位；Coco 批准，前端已按缺失降级实现）。
 
 ## 维护记录
 
