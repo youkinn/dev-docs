@@ -71,6 +71,8 @@
 
 `cosine` 用全精度计算、落库与回传按 **4 位小数**（`Math.round(x * 10000) / 10000`，A009 展示口径同款）；cosine=1.0 恒命中（原句重复提问不受命中线影响）。
 
+**判定前归一化（字号/别称 → 本名）**：查询进入判定链路前，将三国人物字号/别称统一替换为本名（表驱动、长词优先，如 云长/关云长→关羽）；只作用于 embedding、cosine 比对与焦点校验，`cache_logs.user_query` 与缓存条目 `queryText`（nearestQuery）仍存原始文本（实现见编排侧 cache.ts `normalizePersonNames`）。
+
 #### 1.2.1 焦点一致性轻校验（问点防御，规则定稿）
 
 纯字符串包含匹配（本地执行，无 LLM、无工具调用、无 embedding）。焦点词表分两类（**词表为文档常量，实现照抄；按词条长度降序匹配，命中即停，一个 query 可命中多类**）：
@@ -94,9 +96,9 @@
 
 焦点校验只作用于「唯一候选 ≥ 命中线」时（防御层 ②）；命中线以下的拒绝由阈值本身完成。
 
-### 1.3 命中线 / 分区（默认 0.92，可配置）
+### 1.3 命中线 / 分区（默认 0.92，后台可调）
 
-- `CACHE_HIT_LINE`（env，默认 `"0.92"`）：**启动配置项，运行时不可改**（非目标：不做动态调阈值；调整由负责人按三色分布数据拍板后改 env 重启）。
+- `CACHE_HIT_LINE`（env，默认 `"0.92"`）为启动初始值；命中线支持后台运行时调整（`PUT /api/v1/cache/hit-line`，见 §3.2）：调整立即生效于后续判定与图表着色上沿，重启回 `CACHE_HIT_LINE` 初始值（不持久化）。
 - 灰色区 = `0.80 ≤ similarity < hitLine`（默认即 [0.80, 0.92)）；图表三色 = 低相似 < 0.80 / 灰色区 / 高置信 ≥ hitLine，**着色分界 = 0.80 固定 + hitLine 变量**。
 - 每条 `cache_logs` 落 `hit_line`（本次请求生效值），历史行解释不随配置漂移。
 
@@ -267,6 +269,8 @@ LogStore 新增方法（均旁路静默 / 同步直写）：`appendCacheLog(trac
 ### 3.2 PUT /api/v1/cache/status —— 开关切换
 
 请求体 `{ "enabled": true }`（必须 boolean，否则 400「enabled 必须为布尔值」）。**立即生效**：关闭后同一问题二次提问走 LLM、不查缓存、不产生 cache_logs；开启后恢复命中。返回新 status（同 §3.1 形状）。重启回 `CACHE_ENABLED` 初始值。
+
+另：`PUT /api/v1/cache/hit-line`，body `{ "hitLine": number }`（0 < hitLine ≤ 1，否则 400「hitLine 必须为 0~1 的数字」）：命中线运行时调整，立即生效于后续判定与图表着色上沿，返回 `{ code: 200, data: { hitLine }, message: "" }`；不持久化，重启回 `CACHE_HIT_LINE` 初始值。历史 `cache_logs.hit_line` 不漂移（§1.3）。
 
 ### 3.3 POST /api/v1/cache/clear —— 全量清除
 
@@ -477,3 +481,5 @@ LogStore 新增方法（均旁路静默 / 同步直写）：`appendCacheLog(trac
 - 2026-09-24 验收反馈 新增 §3.12 entries/:id/hits 命中记录接口（Coco 拍板）。
 - 2026-09-24 验收反馈 修复 cache_entries 镜像 id 与内存分叉导致 hits 404（Coco 拍板）。
 - 2026-09-24 验收反馈 misjudge 口径改为区间内 marked=1 行数（含未命中灰色区标记）（Coco 拍板）。
+- 2026-09-24 验收反馈 命中线改为后台可配置（PUT hit-line）；判定链路增加人名字号归一化（云长→关羽 等换说法命中）（Coco 拍板）。
+- 2026-09-24 验收反馈 命中线改为后台可配置（负责人拍板）。
