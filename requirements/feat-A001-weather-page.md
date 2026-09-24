@@ -68,6 +68,6 @@
 
 | 成员 | 分支名 | 审查结果 | 合并日期 |
 |------|--------|----------|----------|
-| 小叶 | ye/feat-A001_weather-ux | ✅ | — |
+| 小叶 | ye/feat-A001_weather-ux | ✅ | 2026-09-12 |
 | 老陈 | chen/feat-A001_error-protocol | ✅ | — |
-| 小胡 | hu/feat-A001_error-handling | ✅ | — |
+| 小胡 | hu/feat-A001_error-handling | ✅ | 2026-09-12 |
