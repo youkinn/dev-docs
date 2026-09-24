@@ -1,9 +1,10 @@
 # feat-A013: 三国演义问答缓存（应用层 query→answer 语义缓存）
 
 > 特性号：feat-A013
-> 状态：定稿
+> 状态：已归档（2026-09-24 合并上线：dev-docs PR #39，mcp-orchestrator PR #21，mcp-web PR #17，mcp-server PR #13）
+> **验收通过（2026-09-24 负责人）：13 项验收标准勾选，2 项召回质量相关延后 [×]（见正文口径，召回质量修复后再验收）**
 > 作者：Coco
-> 涉及项目：mcp-orchestrator、mcp-web（mcp-server 视语义判定设施落点而定，接口文档确认）
+> 涉及项目：mcp-orchestrator、mcp-web、mcp-server（缓存判定 embedding 内部工具）
 > 日期：2026-09-23
 > 关联：feat-A004（演义 RAG）、feat-A009（检索诊断 / 最终分可解释先例）、feat-A011 / feat-A012（provider 侧 prompt 缓存，与本特性互补不替代）、bug-00022（语义判定同族风险评估）
 
