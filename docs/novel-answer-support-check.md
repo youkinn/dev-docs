@@ -31,6 +31,8 @@
      - 部分支撑 → 仅保留 `supported` 引用，指针重编号，`citations` 与 `funnel.cited` 回填；
      - `uncertain` → 按 `unsupported` 处理（宁拒勿猜；观测分布后调整，不新增规则）。
    - 解析失败（非 JSON / 字段缺失）→ 重试 1 次 → 仍失败按 `unsupported` 拒答（宁拒勿猜；A006 要求答案必带引用，「去引用保留答案」破坏响应形态，否决）。解析失败计数记入日志供观测解析率。
+   - 复核轮 LLM 调用异常（网络 / 限流 / 超时）沿生成轮既有口径向 server 上抛（不隐式拒答——「演义中未涉及」只表「原文未涉及」，不表系统故障，口径不可混淆）。
+   - `overall=supported` 但逐条判定无任何 `supported` 引用留存（模型自相矛盾）→ 按 `kept=0` 拒答（口径延伸）。
 4. **日志契约（A007）**：`llm_call_logs` 新增 `stage=novel_support_check`（复用现有表结构，不新增字段）；`request_logs` 无需新字段（`answer` / `citations` 已承载结果）；同步 `docs/troubleshooting.md` 维护记录。
 5. **缓存（A013）**：复核轮后写缓存（拒答类不写缓存规则不变）；缓存命中跳过生成 + 复核（缓存内容即复核后答案）。
 
@@ -55,3 +57,9 @@
 | 保险丝封闭清单与单测 | 小胡 |
 | `troubleshooting.md` 维护记录同步 + 审查 | Coco |
 | 全量回归 + 提测 | Coco |
+
+## 维护记录
+
+| 日期 | 变更 | 拍板 |
+|------|------|------|
+| 2026-09-24 | 定稿当日补充决策：复核轮 LLM 调用异常上抛不隐式拒答；`overall=supported` 但无 `supported` 引用留存按拒答；解析失败标记行使 `llm_count +1` 为已知口径 | Coco |
