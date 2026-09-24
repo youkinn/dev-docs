@@ -79,6 +79,7 @@
 | 对接 bug（负责人报问题） | `docs/bug-intake.md` |
 | 排查定位（拿到 traceId 后怎么读日志、归因） | `docs/troubleshooting.md` |
 | 排查笔记（基线读数 / 采集缺口 / 线索，随时追加） | `docs/troubleshooting-notes.md` |
+| 答案准确度代码现状（以 main 为锚的事实库，代码冲突以此为准，随迭代维护） | `docs/llm-answer-accuracy-current-state.md` |
 
 触发词（措辞不限，意思到了就行）：负责人说「对接 feat-XXX 新需求」→ 走需求对接；负责人说「我发现了一个 bug」→ **先问属于哪个特性**，再走 bug 对接。
 
