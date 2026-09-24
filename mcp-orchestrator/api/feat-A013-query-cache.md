@@ -312,11 +312,14 @@ CREATE TABLE IF NOT EXISTS cache_hit_line_changes (
 ```json
 { "code": 200, "data": { "list": [
   { "id": 12, "queryText": "义释严颜是怎么回事", "answerBytes": 1842, "embeddingBytes": 4096,
-    "hitCount": 3, "lastAccessAt": 1779408000000, "createdAt": 1779312000000 }
+    "hitCount": 3, "lastAccessAt": 1779408000000, "createdAt": 1779312000000,
+    "traceId": "dc1b7b5b-2db8-4288-ba06-f4711e0b7a30" }
 ], "total": 37, "pageNo": 1, "pageSize": 20 }, "message": "" }
 ```
 
 **载荷纪律**：不含 embedding 与答案全文（前端删除 / 概览用不到）；`answerBytes` 与概览对账（Σ = `answerBytesTotal`）。`embeddingBytes` = 4096（1024 × 4B，常量）。
+
+**`traceId` 口径（验收修正）**：最近一条同该条目 `queryText` 的 `cache_logs.traceId`（`user_query` = 条目 `query_text`，按 `id DESC` 取最新）；无关联行（池空 / 历史）为 `null`。数据源为 `cache_logs` 关联查询，`cache_entries` 镜像表不加列（§2.1 表结构不变）。供前端条目列表「查询（用户输入原文）」点击跳转日志明细（traceId 精确跳转 + 自动展开明细，同灰色区清单 §4.2）；字段名 `traceId`，前端按其取值跳转（非空才可跳转，`null` 不渲染跳转）。
 
 ### 3.6 GET /api/v1/cache/overview —— 缓存概览（口径可复算）
 
@@ -525,3 +528,4 @@ CREATE TABLE IF NOT EXISTS cache_hit_line_changes (
 - 2026-09-24 验收反馈 命中线改为后台可配置（负责人拍板）。
 - 2026-09-24 负责人验收反馈：命中线修改留记录（新增 `cache_hit_line_changes` 表 §2.5，PUT hit-line 每次调整落一条，overview 返回 `lastHitLineChange`）。
 - 2026-09-24 负责人验收反馈：检索分阶段耗时（sango 诊断新增 `diagnostics.timing` §3.13，orchestrator 全量透传）。
+- 2026-09-24 负责人验收反馈：条目跳转需 traceId 关联（§3.5 增 `traceId`，取最近一条同 userQuery 的 `cache_logs.traceId`，无则 null）。
