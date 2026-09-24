@@ -30,7 +30,7 @@
 
 > 全部走 SQLite `ALTER TABLE ... ADD COLUMN`（缺省 NULL），与 feat-A011 `cached_tokens` 迁移同模式：建表语句同步加列；迁移 try/catch 幂等（新库 / 已迁移库重复执行忽略）。**历史行一律不迁移、不回填，读取为 `null`。**
 
-### 1.1 llm_call_logs（4 个新列）
+### 1.1 llm_call_logs（5 个新列）
 
 | 列名 | 类型 | 空值语义 | 说明 |
 |------|------|----------|------|
@@ -38,6 +38,7 @@
 | `attempt` | INTEGER | null = 历史行（A012 前），读取语义见 §2.1 | 重试标识：`1` = 首次 / `2` = 变参重试；**服务端写入，前端不得按 seq / 时间推断** |
 | `input_breakdown` | TEXT（JSON 字符串） | null = 历史行；正常调用必有值 | 输入分段 token 估算（折算规则见 §2.3），形状 `{ system, user, injected, history, tools }` |
 | `max_tokens` | INTEGER | null = 历史行 | 本次调用输出上限，取调用点参数原值（当前恒为常量 1000，bug-00018 口径） |
+| `temperature` | REAL | null = 历史行（或采集未接入阶段的缺省），读取语义同 `attempt`——**前端不推断** | 本次调用温度实参，取调用点 `callOptions.temperature ?? 0.7` 原值（feat-A013 验收修正；agent 侧采集随后接入） |
 
 旧库迁移 SQL（每句独立 try/catch，幂等）：
 
@@ -46,6 +47,7 @@ ALTER TABLE llm_call_logs ADD COLUMN reasoning_tokens INTEGER;
 ALTER TABLE llm_call_logs ADD COLUMN attempt INTEGER;
 ALTER TABLE llm_call_logs ADD COLUMN input_breakdown TEXT;
 ALTER TABLE llm_call_logs ADD COLUMN max_tokens INTEGER;
+ALTER TABLE llm_call_logs ADD COLUMN temperature REAL;
 ```
 
 ### 1.2 request_logs（1 个新列）
@@ -68,6 +70,7 @@ ALTER TABLE request_logs ADD COLUMN route_source TEXT;
 | `attempt` | 同上（`LlmCallPayload.attempt`）；写入 `src/agent.ts` `callModel` 的 `callOnce` → `recordCall` | 每次调用落库时显式携带（1 / 2） |
 | `input_breakdown` | 同上（`LlmCallPayload.inputBreakdown`）；计算 `src/agent.ts` `callModel` 调用点 | 每次调用落库时携带（含失败调用） |
 | `max_tokens` | 同上（`LlmCallPayload.maxTokens`）；采集 `src/agent.ts` `callModel` 调用点 | 每次调用落库时携带（取本次 `params.max_tokens` 原值） |
+| `temperature` | `src/storage/logs.ts` `LlmCallPayload.temperature`；采集 `src/agent.ts` `callModel` 调用点（feat-A013 验收修正，**采集侧随后接入**，本轮未改 agent.ts） | 每次调用落库时携带（取本次 `callOptions.temperature ?? 0.7` 原值） |
 | `route_source` | `src/storage/logs.ts` 新增模块级便捷函数（与 `appendLlmCall` 同模式，agent 直接 import）；回填 `src/agent.ts` `processQueryData` | 路由判定完成后立即回填一次（LLM 调用之前），见 §2.2 |
 
 ## 二、采集口径（判定规则，无歧义）
@@ -186,6 +189,7 @@ export function reportRouteSource(traceId: string, routeSource: RouteSource): vo
 | `attempt` | number / null | `1` = 首次 / `2` = 变参重试；null = 历史行 |
 | `inputBreakdown` | `{ system: number; user: number; injected: number; history: number; tools: number }` / null | 输入分段 token 估算（§2.3 折算规则）；null = 历史行 |
 | `maxTokens` | number / null | 本次调用输出上限；null = 历史行 |
+| `temperature` | number / null | 本次调用温度实参（`callOptions.temperature ?? 0.7` 原值）；null = 历史行 / 采集侧未接入（前端不推断） |
 
 响应 JSON 示例（`data.llmCalls` 每项）：
 
@@ -201,6 +205,7 @@ export function reportRouteSource(traceId: string, routeSource: RouteSource): vo
   "attempt": 1,
   "inputBreakdown": { "system": 230, "user": 45, "injected": 180, "history": 0, "tools": 0 },
   "maxTokens": 1000,
+  "temperature": 0.7,
   "finishReason": "stop",
   "status": "success",
   "errorMessage": ""
@@ -337,6 +342,7 @@ export function reportRouteSource(traceId: string, routeSource: RouteSource): vo
 
 - 2026-09-23 负责人验收打回（`test/feat-A012/test.md`）后同步展示契约：§4.1 输入 / 输出 hover 改中文段名 + 算式代入；§4.2 角标改 hover 类型标签；§4.3 失败行不再展示响应码；新增 §4.4 单根三段堆叠柱 + 千分位单位、§4.5 耗时 tooltip 层级标注。**接口形状零变更**（仅展示侧）。
 - 2026-09-23 负责人二次复验：§4.1 输出 hover 每行补英文字段名，正文行改为完整等式（正文（completionTokens − reasoningTokens）= 201 − 0 = 201），避免裸括号代入过程被误读。
+- 2026-09-24 负责人验收反馈：llm_call_logs 增 `temperature` 列（存储层 + 明细 `llmCalls[].temperature`；null = 历史行，前端不推断，参照 attempt 先例）；agent 侧采集随后接入（Coco 拍板）。
 
 
 

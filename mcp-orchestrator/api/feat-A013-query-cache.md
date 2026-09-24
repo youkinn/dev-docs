@@ -98,7 +98,7 @@
 
 ### 1.3 命中线 / 分区（默认 0.92，后台可调）
 
-- `CACHE_HIT_LINE`（env，默认 `"0.92"`）为启动初始值；命中线支持后台运行时调整（`PUT /api/v1/cache/hit-line`，见 §3.2）：调整立即生效于后续判定与图表着色上沿，重启回 `CACHE_HIT_LINE` 初始值（不持久化）。
+- `CACHE_HIT_LINE`（env，默认 `"0.92"`）为启动初始值；命中线支持后台运行时调整（`PUT /api/v1/cache/hit-line`，见 §3.2）：调整立即生效于后续判定与图表着色上沿；**运行时值不持久化**（重启回 `CACHE_HIT_LINE` 初始值），但每次调整落一条修改记录到 `cache_hit_line_changes`（§2.5，跨重启保留），概览 `lastHitLineChange`（§3.6）可取最近一条。
 - 灰色区 = `0.80 ≤ similarity < hitLine`（默认即 [0.80, 0.92)）；图表三色 = 低相似 < 0.80 / 灰色区 / 高置信 ≥ hitLine，**着色分界 = 0.80 固定 + hitLine 变量**。
 - 每条 `cache_logs` 落 `hit_line`（本次请求生效值），历史行解释不随配置漂移。
 
@@ -169,7 +169,7 @@
 
 ## 二、存储层字段契约
 
-> 两张新表进 `src/storage/logs.ts` 的 `SCHEMA_SQL`（`CREATE TABLE IF NOT EXISTS`，对旧库同样幂等，A012 迁移先例风格）；**cache 相关写一律同步直写**（不经 A007 写缓冲，见核心口径）。库仍为 `data/logs.db` 单库。
+> 三张新表进 `src/storage/logs.ts` 的 `SCHEMA_SQL`（`CREATE TABLE IF NOT EXISTS`，对旧库同样幂等，A012 迁移先例风格）；**cache 相关写一律同步直写**（不经 A007 写缓冲，见核心口径）。库仍为 `data/logs.db` 单库。
 
 ### 2.1 cache_entries（缓存条目镜像表）
 
@@ -250,9 +250,30 @@ CREATE INDEX IF NOT EXISTS idx_cache_logs_hit_created ON cache_logs(hit, created
 | `cache_entries` INSERT / UPDATE / DELETE | `src/cache.ts`（写缓存 / 命中计数 / 淘汰 / 删除 / 清除）→ LogStore 镜像方法 | 与内存操作同一次调用内完成（事件循环内原子） |
 | `cache_logs` marked 更新 | `src/api/v1/cache.ts` → LogStore | 误判标记 / 取消接口 |
 | embedding 获取 | `src/cache.ts` → `transport.callInternal("sango_query_embed")` | 每次 sango-novel 判定前（开关开启时） |
+| `cache_hit_line_changes` 插入 | `src/api/v1/cache.ts` PUT /hit-line → LogStore.`appendHitLineChange`（同步直写，旁路静默） | 每次命中线成功调整后立即落一条（改前 / 改后） |
 | 开关状态 | `src/cache.ts` 内存态；API 读写 | 启动取 `CACHE_ENABLED`，运行时 API 切换 |
 
-LogStore 新增方法（均旁路静默 / 同步直写）：`appendCacheLog(traceId, payload)`、`queryCacheLogByTrace(traceId)`、`queryCacheLogs(filter)`、`queryCacheDistribution(startAt, endAt)`、`querySimilarityRows(filter)`、`queryMisjudgeStats(startAt, endAt)`、`updateCacheLogMark(id, marked, markedBy)`、cache_entries 读写（`insertCacheEntry` / `updateCacheEntry` / `deleteCacheEntry` / `listCacheEntries` / `clearCacheEntries` / `countCacheEntries`）。编排侧判定 / LRU 逻辑在 `src/cache.ts`（新文件，CacheManager）；后台 API 在 `src/api/v1/cache.ts`（新文件，createCacheApi）。
+LogStore 新增方法（均旁路静默 / 同步直写）：`appendCacheLog(traceId, payload)`、`queryCacheLogByTrace(traceId)`、`queryCacheLogs(filter)`、`queryCacheDistribution(startAt, endAt)`、`querySimilarityRows(filter)`、`queryMisjudgeStats(startAt, endAt)`、`updateCacheLogMark(id, marked, markedBy)`、`appendHitLineChange(previous, current)` / `getLastHitLineChange()`（§2.5）、cache_entries 读写（`insertCacheEntry` / `updateCacheEntry` / `deleteCacheEntry` / `listCacheEntries` / `clearCacheEntries` / `countCacheEntries`）。编排侧判定 / LRU 逻辑在 `src/cache.ts`（新文件，CacheManager）；后台 API 在 `src/api/v1/cache.ts`（新文件，createCacheApi）。
+
+### 2.5 cache_hit_line_changes（命中线修改记录表）
+
+| 列名 | 类型 | 说明 |
+|------|------|------|
+| `id` | INTEGER PRIMARY KEY AUTOINCREMENT | 行号；读取恒取最大 id（最近一条） |
+| `previous` | REAL NOT NULL | 调整前命中线 |
+| `current` | REAL NOT NULL | 调整后命中线 |
+| `changed_at` | INTEGER NOT NULL | 修改时刻（epoch ms） |
+
+角色：命中线修改履历（§3.2 PUT hit-line 每次成功调整落一行；§3.6 `overview.lastHitLineChange` 数据源）。**运行时命中线值本身不持久化**（重启回 `CACHE_HIT_LINE`，§1.3），但修改履历持久化、跨重启保留。写入同步直写 + 失败旁路静默（不影响 PUT 成功语义）。
+
+```sql
+CREATE TABLE IF NOT EXISTS cache_hit_line_changes (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  previous   REAL NOT NULL,
+  current    REAL NOT NULL,
+  changed_at INTEGER NOT NULL
+);
+```
 
 ## 三、后台 API 契约
 
@@ -270,7 +291,7 @@ LogStore 新增方法（均旁路静默 / 同步直写）：`appendCacheLog(trac
 
 请求体 `{ "enabled": true }`（必须 boolean，否则 400「enabled 必须为布尔值」）。**立即生效**：关闭后同一问题二次提问走 LLM、不查缓存、不产生 cache_logs；开启后恢复命中。返回新 status（同 §3.1 形状）。重启回 `CACHE_ENABLED` 初始值。
 
-另：`PUT /api/v1/cache/hit-line`，body `{ "hitLine": number }`（0 < hitLine ≤ 1，否则 400「hitLine 必须为 0~1 的数字」）：命中线运行时调整，立即生效于后续判定与图表着色上沿，返回 `{ code: 200, data: { hitLine }, message: "" }`；不持久化，重启回 `CACHE_HIT_LINE` 初始值。历史 `cache_logs.hit_line` 不漂移（§1.3）。
+另：`PUT /api/v1/cache/hit-line`，body `{ "hitLine": number }`（0 < hitLine ≤ 1，否则 400「hitLine 必须为 0~1 的数字」）：命中线运行时调整，立即生效于后续判定与图表着色上沿，返回 `{ code: 200, data: { hitLine }, message: "" }`；每次成功调整同步落一条修改记录到 `cache_hit_line_changes`（§2.5，改前 / 改后 / 时刻），写入失败旁路静默不影响成功语义；`/overview.lastHitLineChange`（§3.6）可取最近一条。运行时值本身不持久化（重启回 `CACHE_HIT_LINE` 初始值），历史 `cache_logs.hit_line` 不漂移（§1.3）。
 
 ### 3.3 POST /api/v1/cache/clear —— 全量清除
 
@@ -302,7 +323,8 @@ LogStore 新增方法（均旁路静默 / 同步直写）：`appendCacheLog(trac
 ```json
 { "code": 200, "data": { "enabled": true, "hitLine": 0.92, "maxEntries": 500,
   "entryCount": 37, "answerBytesTotal": 68154, "embeddingBytesTotal": 151552,
-  "approximateBytes": 239220, "avgAnswerBytes": 1842 }, "message": "" }
+  "approximateBytes": 239220, "avgAnswerBytes": 1842,
+  "lastHitLineChange": { "previous": 0.92, "current": 0.85, "at": 1779408000000 } }, "message": "" }
 ```
 
 口径（页面标注「近似」，接口给口径以便复算）：
@@ -310,6 +332,7 @@ LogStore 新增方法（均旁路静默 / 同步直写）：`appendCacheLog(trac
 - `embeddingBytesTotal` = `entryCount × 4096`（纯计算）。
 - `approximateBytes` = `answerBytesTotal + embeddingBytesTotal + entryCount × 256`（256 = 条目结构开销常数，进程 heap 无法逐条归属，故为「近似」）。
 - `avgAnswerBytes` = `answerBytesTotal / entryCount`（entryCount=0 时 0），供上限校准（§1.5）。
+- `lastHitLineChange` = `cache_hit_line_changes` 最近一条（`ORDER BY id DESC LIMIT 1`），形状 `{ previous, current, at }`；无任何修改记录时为 `null`。
 
 ### 3.7 GET /api/v1/cache/stats/similarity-distribution —— 三色分布图表
 
@@ -403,6 +426,23 @@ LogStore 新增方法（均旁路静默 / 同步直写）：`appendCacheLog(trac
 ], "total": 9, "pageNo": 1, "pageSize": 20 }, "message": "" }
 ```
 
+### 3.13 检索分阶段耗时（toolCalls[].diagnostics.timing）
+
+日志明细（`GET /api/v1/logs/:traceId`）的 `toolCalls[].diagnostics.timing`（sango 检索诊断，feat-A013 验收修正）：
+
+```json
+{ "bm25": 3.1, "vector": 4.2, "label": 0.4, "merge": 1.2 }
+```
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `bm25` | number / null | BM25 打分循环 + 归一化段耗时（毫秒） |
+| `vector` | number / null | 向量编码（embedQuery）+ cosineAll 段耗时（毫秒）；`useVectors=false` 降级（scheme=hash / 无向量文件）时为 null；编码失败也计入耗时（降级状态以 `env.degradedBm25Only` 表达） |
+| `label` | number / null | 标签路由循环段耗时（毫秒） |
+| `merge` | number / null | 多路候选合并 + 重排（含 topK / sort，到 hits 切片）段耗时（毫秒）；空结果早退路径未执行到合并产出时为 null |
+
+口径：字段归属 sango 诊断契约（feat-A009 §1.3 的扩展；A009 文档已归档不再改，本小节为唯一权威）；**orchestrator 全量透传**（存储 / 接口零改动，不解析不裁剪）；64 KB 预算截断不丢 `timing`（`truncated=true` 时仍全量保留）。前端用于检索耗时展示（BM25 / 向量 / 标签路由 / 合并重排四段）。
+
 ## 四、命中时 trace 形态与前端展示契约
 
 ### 4.1 日志链路（命中 = 0 次 LLM + 0 次检索）
@@ -483,3 +523,5 @@ LogStore 新增方法（均旁路静默 / 同步直写）：`appendCacheLog(trac
 - 2026-09-24 验收反馈 misjudge 口径改为区间内 marked=1 行数（含未命中灰色区标记）（Coco 拍板）。
 - 2026-09-24 验收反馈 命中线改为后台可配置（PUT hit-line）；判定链路增加人名字号归一化（云长→关羽 等换说法命中）（Coco 拍板）。
 - 2026-09-24 验收反馈 命中线改为后台可配置（负责人拍板）。
+- 2026-09-24 负责人验收反馈：命中线修改留记录（新增 `cache_hit_line_changes` 表 §2.5，PUT hit-line 每次调整落一条，overview 返回 `lastHitLineChange`）。
+- 2026-09-24 负责人验收反馈：检索分阶段耗时（sango 诊断新增 `diagnostics.timing` §3.13，orchestrator 全量透传）。
