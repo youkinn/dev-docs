@@ -71,7 +71,7 @@ Invoke-WebRequest http://localhost:3000/health -UseBasicParsing
 ```text
 前端发起 t0 ──上行──> 总台收到 t1 ──串行队列等待──> 出队处理 t2
   ──> [分类轮 LLM] ──> [工具调用：L3 预检 / 域快路径预调 / 分类轮预调]
-  ──> [生成轮 LLM] ──> [支撑复核轮 LLM（演义域，bug-00028）] ──> 总台返回 t5 ──下行──> 前端收到 t6（前端补报）
+  ──> [生成轮 LLM] ──> 总台返回 t5 ──下行──> 前端收到 t6（前端补报）
 ```
 
 ### 3.2 埋点覆盖面
@@ -169,7 +169,7 @@ tool#1 sango/sango_novel_search caller=server stage=fastpath success ms=63 diag=
 
 | 字段 | 判读 |
 |------|------|
-| `stage` | `classify` = auto 路由的无 tools 轻量分类轮；`generation` = 生成轮；`novel_support_check` = 演义域生成轮后的引用支撑复核轮（bug-00028，语义裁决交 LLM，见 `docs/novel-answer-support-check.md`） |
+| `stage` | `classify` = auto 路由的无 tools 轻量分类轮；`generation` = 生成轮；`fallback` = 引用校验兜底结论归纳轮 |
 | `seq` | 同 `stage` 多条 = **重试**（当前实现为「空答案变参重试」）；不同 `stage` = 正常多轮 |
 | `finishReason` | `stop` 正常；`length` = 被 `max_tokens` 截断（思考 token 吃满即空答案）；`tool_calls` = 模型要求调工具（A011 后生成轮已无 tool-use 循环，出现即异常） |
 | `cachedTokens` | 接近 `promptTokens` = 提示词缓存命中；骤降 = 缓存失效（提示词改动） |
@@ -376,3 +376,4 @@ $now=[DateTimeOffset]::Now.ToUnixTimeMilliseconds(); $from=$now-7*86400000
 | 2026-09-22 | 初版：链路与埋点覆盖面、排查流程（步骤 0–9）、怎么判、现象 → 先看哪个读数、命令速查、读数陷阱、闭环口径 | 负责人要求：用现有日志系统规范化排查流程 | 总台 :3000 + 日志页 :8001 在线，全部命令以真实 trace 实测（样本 `f21dd6be-27c1-45dc-aa84-7da74e33d78a`） |
 | 2026-09-22 | 会过期的内容（bug 号结论、已知问题对照、经验阈值）移出到 `docs/troubleshooting-notes.md`；`§N` 引用改为节名 | 负责人：本手册必须准确、不误导；唯一可信是需求文档 | 逐节复核引用与节名 |
 | 2026-09-24 | LLM 明细新增 `stage=novel_support_check`（演义域生成轮后的引用支撑复核轮，bug-00028 长期机制）；拒答口径：复核判不支撑 / `uncertain` / 解析失败重试后仍失败 → 答案「演义中未涉及」+ 空引用、`funnel.cited=0` | bug-00028 定稿设计 `docs/novel-answer-support-check.md` | 全量测试 349 绿 + 真实 trace 实测 |
+| 2026-09-24 | 撤销 `novel_support_check` 复核轮 stage（负责人否决二次 LLM 调用，成本 / 延迟翻倍）；演义域改为单轮生成 + 结构保险丝（生成轮通用语义指令 + 句-片段文本重叠结构门），拒答口径不变，见 `docs/novel-answer-support-check.md` 新版 | bug-00028 设计改版 | 全量测试绿 + 三例 trace 复测 |
