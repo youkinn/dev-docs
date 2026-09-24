@@ -1,7 +1,7 @@
 # bug-00013：检索诊断 finalScore 无法由接口数据复算（接口只回原始 bm25/cosine，缺 BM25 归一化与全量余弦）
 
 > Bug 号：bug-00013
-> 状态：修复中（2026-09-21 三侧落地：mcp-server `99fa77e` / mcp-orchestrator `ab8c13b` / mcp-web `f19ff8b`，均在 feat-A009 各分支上，待 Coco 审查）
+> 状态：已修复（2026-09-22 feat-A009 收尾：INDEX 置为已修复；三侧代码均已合入 main —— mcp-server PR #10 `99fa77e` / mcp-orchestrator PR #15 `ab8c13b` / mcp-web PR #12 `f19ff8b`；验收 6b 算式 tooltip 由 story-A009-04 `437ce04` 落地。2026-09-24 本票头部补同步）
 > 关联特性：feat-A009（检索诊断，§1.3 `candidates[]` 分数表）
 > 涉及项目：mcp-server（sango 诊断产出）、mcp-orchestrator（诊断透传 / 落库 / 查询，仅测试断言）、mcp-web（日志页「检索诊断」面板展示）
 > 登记：负责人 ／ 报告：负责人 ／ 登记日期：2026-09-21
