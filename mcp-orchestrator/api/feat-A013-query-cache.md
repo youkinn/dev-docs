@@ -116,8 +116,8 @@
 
 ### 1.5 LRU 淘汰与上限（默认 500 条）
 
-- `CACHE_MAX_ENTRIES`（env，默认 `"500"`）：命中 / 写入后若条目数 > 上限，从队尾（最久未用端）**逐出直至不超限**（逐出 = 内存删 + `DELETE FROM cache_entries`）。
-- 校准公式（按实测答案体积，需求口径）：目标内存预算 `M`（如 20 MB）→ `maxEntries ≤ (M - 结构常数) / (avgAnswerBytes + 4 × 1024 + 256)`，其中 `avgAnswerBytes` 来自概览接口（§3.6），结构常数 = 每条约 256 B；实测读数后由负责人改 env 重启。**默认取 500（保守起步），实测后上调至 ≤ 1000。**
+- `CACHE_MAX_ENTRIES`（env，默认 `"500"`）为启动初始值；命中 / 写入后若条目数 > 上限，从队尾（最久未用端）**逐出直至不超限**（逐出 = 内存删 + `DELETE FROM cache_entries`）；上限支持后台运行时调整（`PUT /api/v1/cache/max-entries`，见 §3.2）：**立即生效——调大即放开写入限制，调小立即从队尾逐出至新上限；运行时值不持久化（重启回 `CACHE_MAX_ENTRIES` 初始值）**。
+- 校准公式（按实测答案体积，需求口径）：目标内存预算 `M`（如 20 MB）→ `maxEntries ≤ (M - 结构常数) / (avgAnswerBytes + 4 × 1024 + 256)`，其中 `avgAnswerBytes` 来自概览接口（§3.6），结构常数 = 每条约 256 B；上限运行时可调（见 §3.2），实测读数后由负责人校准（可直接 PUT，或改 env 重启设新初始值）。**默认取 500（保守起步），实测后上调至 ≤ 1000。**
 - LRU 顺序 = 内存链表，不依赖 `last_access_at` 列（列仅作概览展示与对账）。
 
 ### 1.6 开关 / 清除 / 删除 / 版本失效 / 降级
@@ -300,6 +300,8 @@ CREATE TABLE IF NOT EXISTS cache_hit_line_changes (
 请求体 `{ "enabled": true }`（必须 boolean，否则 400「enabled 必须为布尔值」）。**立即生效**：关闭后同一问题二次提问走 LLM、不查缓存、不产生 cache_logs；开启后恢复命中。返回新 status（同 §3.1 形状）。重启回 `CACHE_ENABLED` 初始值。
 
 另：`PUT /api/v1/cache/hit-line`，body `{ "hitLine": number }`（0 < hitLine ≤ 1，否则 400「hitLine 必须为 0~1 的数字」）：命中线运行时调整，立即生效于后续判定与图表着色上沿，返回 `{ code: 200, data: { hitLine }, message: "" }`；每次成功调整同步落一条修改记录到 `cache_hit_line_changes`（§2.5，改前 / 改后 / 时刻），写入失败旁路静默不影响成功语义；`/overview.lastHitLineChange`（§3.6）可取最近一条。运行时值本身不持久化（重启回 `CACHE_HIT_LINE` 初始值），历史 `cache_logs.hit_line` 不漂移（§1.3）。
+
+另：`PUT /api/v1/cache/max-entries`，body `{ "maxEntries": number }`（整数且 1 ≤ maxEntries ≤ 5000，否则 400「maxEntries 必须为 1~5000 的整数」）：缓存上限运行时调整，**立即生效**——调大即放开写入限制，调小立即从队尾（最久未用端）逐出条目直至不超新上限；返回 `{ code: 200, data: { maxEntries }, message: "" }`。运行时值不持久化（重启回 `CACHE_MAX_ENTRIES` 初始值）。
 
 ### 3.3 POST /api/v1/cache/clear —— 全量清除
 
@@ -544,3 +546,4 @@ CREATE TABLE IF NOT EXISTS cache_hit_line_changes (
 - 2026-09-24 负责人验收反馈：条目跳转需 traceId 关联（§3.5 增 `traceId`，取最近一条同 userQuery 的 `cache_logs.traceId`，无则 null）。
 - 2026-09-24 负责人验收反馈：耗时归因，缓存判定耗时落库拆分展示（cache_logs 增 `lookup_ms` → 列表 `durations.cacheLookupMs` / 明细 `data.cache.lookupMs`，tooltip 拆「缓存判定」段；采集侧随后接入）。
 - 2026-09-24 验收问题「缓存概览 4」：§3.5 条目列表 `hitCount` 改为累计命中次数（同 §3.12 弹框口径，`cache_logs` 中 `hit=1` 且 `nearest_query` = 条目 `query_text`；含历史池，重启不归零），`sortBy=hitCount` 同步按累计值排序（Coco 拍板）。
+- 2026-09-24 验收问题「缓存概览 5」：缓存上限（maxEntries）改为后台可配置（§3.2 新增 `PUT /api/v1/cache/max-entries`，调小立即逐出尾部条目，重启回 `CACHE_MAX_ENTRIES` 初始值）（Coco 拍板）。
