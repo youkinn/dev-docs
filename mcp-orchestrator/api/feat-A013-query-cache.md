@@ -203,13 +203,14 @@
 | `marked_by` | TEXT | 标记人（接口入参，无登录体系，前端传固定「控制台」或用户输入） |
 | `marked_at` | INTEGER | 标记时间 epoch ms |
 | `created_at` | INTEGER NOT NULL | 判定时间 |
+| `lookup_ms` | INTEGER | 本次请求缓存判定耗时（毫秒，含 embedding 冷启动）；历史行 / 未采集 = NULL（验收第七批） |
 
 区间归类（派生，无枚举列）：`hit=1` → 高置信命中；`hit=0 且 similarity IS NULL` → 低相似（池空）；`hit=0 且 similarity < 0.80` → 低相似；`hit=0 且 0.80 ≤ similarity < hit_line` → 灰色区；`hit=0 且 similarity ≥ hit_line` → 歧义或焦点拒判（tie_hits ≥ 2 = 歧义）。索引：`idx_cache_logs_created`、`idx_cache_logs_hit_created(hit, created_at)`。
 
 ### 2.3 迁移 SQL（幂等，A012 先例）
 
 ```sql
--- 进 SCHEMA_SQL，每次启动执行；新表无旧库 ALTER 场景，IF NOT EXISTS 即幂等（重复执行忽略）
+-- 进 SCHEMA_SQL，每次启动执行；建表 IF NOT EXISTS 即幂等；旧库缺列走下方 ALTER（duplicate column 忽略）
 CREATE TABLE IF NOT EXISTS cache_entries (
   id             INTEGER PRIMARY KEY AUTOINCREMENT,
   query_text     TEXT NOT NULL,
@@ -234,10 +235,17 @@ CREATE TABLE IF NOT EXISTS cache_logs (
   marked        INTEGER NOT NULL DEFAULT 0,
   marked_by     TEXT,
   marked_at     INTEGER,
-  created_at    INTEGER NOT NULL
+  created_at    INTEGER NOT NULL,
+  lookup_ms     INTEGER
 );
 CREATE INDEX IF NOT EXISTS idx_cache_logs_created ON cache_logs(created_at);
 CREATE INDEX IF NOT EXISTS idx_cache_logs_hit_created ON cache_logs(hit, created_at);
+```
+
+```sql
+-- 旧库迁移（幂等，A012 先例）：A013 早期版本已建的 cache_logs 缺 lookup_ms，补列；
+-- 新库建表已含该列，重复执行（duplicate column）忽略；历史行保持 NULL 不回填（未采集无法事后推断）
+ALTER TABLE cache_logs ADD COLUMN lookup_ms INTEGER;
 ```
 
 启动清镜像（每次初始化执行）：`DELETE FROM cache_entries;`（幂等，残留即清）。
@@ -393,12 +401,14 @@ CREATE TABLE IF NOT EXISTS cache_hit_line_changes (
 ```json
 { "cacheLogId": 88, "hit": true, "hitLine": 0.92, "similarity": 0.9821, "tieHits": 1,
   "userQuery": "严颜是怎么被义释的", "nearestQuery": "义释严颜是怎么回事",
-  "reason": "hit", "marked": false, "createdAt": 1779408000000 }
+  "reason": "hit", "marked": false, "createdAt": 1779408000000, "lookupMs": 175 }
 ```
 
 - `cacheLogId` = `cache_logs.id`（误判标记 / 取消按 §3.9 `records/:id` 定位，2026-09-23 契约补充，前端已按缺失降级实现）
 `reason` 枚举：`hit` / `miss-low` / `miss-gray` / `miss-tie` / `miss-focus`（低相似 / 灰色区 / 歧义 / 焦点拒判）；`similarity` / `nearestQuery` / `tieHits` 语义同表列（池空 null）。
 - `GET /api/v1/logs` 新增每行 `cacheHit`：`1`（命中）/ `0`（未命中）/ `null`（非 sango-novel、开关关闭、embedding 降级旁路，或 A013 前历史行）。派生方式：`LEFT JOIN cache_logs`（trace_id 唯一）。列表行 hover 展示（§4.2）。
+- 明细 `data.cache.lookupMs`：本次请求缓存判定耗时（毫秒，含 embedding 冷启动；如 BGE-M3 首次加载 ~3.4s、权重就绪后 ~175ms，参考 trace 2631c162）；历史行 / 未采集 = `null`（验收第七批：耗时归因，前端按非 null 展示）。
+- `GET /api/v1/logs` 每行 `durations` 增 `cacheLookupMs`（毫秒；无 cache_logs 行 / 未采集 = `null`），派生：queryList SQL `LEFT JOIN cache_logs` 取 `cl.lookup_ms`（trace_id 唯一，行数不放大）。前端耗时 tooltip 将「其他」拆出「缓存判定」独立成段展示（§4.2）。
 
 ### 3.11 GET /api/v1/cache/stats/similarity-rows —— 相似度分布桶明细（柱形下钻）
 
@@ -466,6 +476,7 @@ CREATE TABLE IF NOT EXISTS cache_hit_line_changes (
   - 歧义：`≥ 命中线候选 2 条 → 歧义，不命中`；焦点拒判：`最高相似度 0.9550 ≥ 命中线 0.92，焦点不一致（chapter vs process）→ 不命中`。
   - A009 检索诊断面板区：`data.cache.hit === true` 时显示「缓存命中，未走检索」，不展示空检索诊断（避免误判为链路故障，需求口径）。
 - **日志列表行**：`cacheHit` 非 null 时，hover 该行类型标签弹 tooltip 一行：`缓存命中`（绿）/ `缓存未命中`（灰）（A012 §4.2 同款 hover 方式，不新增整列）；null 无标。
+  - 耗时展示：`durations.cacheLookupMs` 非 null 时 tooltip 中「缓存判定」独立成段（`123ms` / `1.2s` 格式化，同耗时列口径），不再并入「其他」；null 无该段（历史行 / 未采集，§3.10）。
 - **三色分布图**（§3.7 数据）：单柱直方图，x 轴相似度 0~1.0、y 轴请求数；**每根柱颜色由桶所在区间决定**（< 0.80 蓝 / [0.80, hitLine) 黄 / ≥ hitLine 绿）——区间着色，与行分类无关；命中线只改着色分界；池空行（sim=null）落第 0 桶（蓝区）。数值单位：请求数精确整数；相似度轴 2 位小数刻度。
 - **柱形点击下钻**：点击分布图任一柱（桶）展示该桶明细（数据源 similarity-rows §3.11，字段 / 空态 / 对账见该小节）。
 - **灰色区清单**（§3.8）：表格列 traceId / 时间 / 用户输入原文 / 最相近条目原文 / 相似度（4 位小数）/ 命中线 / 误判标记；行内可跳转日志详情（traceId）；误判标记 / 取消在命中解释卡片与灰色区清单均可操作；`markedBy` 输入框（缺省「控制台」）。
@@ -529,3 +540,4 @@ CREATE TABLE IF NOT EXISTS cache_hit_line_changes (
 - 2026-09-24 负责人验收反馈：命中线修改留记录（新增 `cache_hit_line_changes` 表 §2.5，PUT hit-line 每次调整落一条，overview 返回 `lastHitLineChange`）。
 - 2026-09-24 负责人验收反馈：检索分阶段耗时（sango 诊断新增 `diagnostics.timing` §3.13，orchestrator 全量透传）。
 - 2026-09-24 负责人验收反馈：条目跳转需 traceId 关联（§3.5 增 `traceId`，取最近一条同 userQuery 的 `cache_logs.traceId`，无则 null）。
+- 2026-09-24 负责人验收反馈：耗时归因，缓存判定耗时落库拆分展示（cache_logs 增 `lookup_ms` → 列表 `durations.cacheLookupMs` / 明细 `data.cache.lookupMs`，tooltip 拆「缓存判定」段；采集侧随后接入）。
