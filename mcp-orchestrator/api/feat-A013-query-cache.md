@@ -327,6 +327,8 @@ CREATE TABLE IF NOT EXISTS cache_hit_line_changes (
 
 **载荷纪律**：不含 embedding 与答案全文（前端删除 / 概览用不到）；`answerBytes` 与概览对账（Σ = `answerBytesTotal`）。`embeddingBytes` = 4096（1024 × 4B，常量）。
 
+**`hitCount` 口径（验收问题「缓存概览 4」修正）**：累计命中次数（同 §3.12 弹框口径，`cache_logs` 中 `hit=1` 且 `nearest_query` = 条目 `query_text`；含历史池，重启不归零）。`sortBy=hitCount` 按该累计值排序（同值按 id 升 / 降序）。
+
 **`traceId` 口径（验收修正）**：最近一条同该条目 `queryText` 的 `cache_logs.traceId`（`user_query` = 条目 `query_text`，按 `id DESC` 取最新）；无关联行（池空 / 历史）为 `null`。数据源为 `cache_logs` 关联查询，`cache_entries` 镜像表不加列（§2.1 表结构不变）。供前端条目列表「查询（用户输入原文）」点击跳转日志明细（traceId 精确跳转 + 自动展开明细，同灰色区清单 §4.2）；字段名 `traceId`，前端按其取值跳转（非空才可跳转，`null` 不渲染跳转）。
 
 ### 3.6 GET /api/v1/cache/overview —— 缓存概览（口径可复算）
@@ -541,3 +543,4 @@ CREATE TABLE IF NOT EXISTS cache_hit_line_changes (
 - 2026-09-24 负责人验收反馈：检索分阶段耗时（sango 诊断新增 `diagnostics.timing` §3.13，orchestrator 全量透传）。
 - 2026-09-24 负责人验收反馈：条目跳转需 traceId 关联（§3.5 增 `traceId`，取最近一条同 userQuery 的 `cache_logs.traceId`，无则 null）。
 - 2026-09-24 负责人验收反馈：耗时归因，缓存判定耗时落库拆分展示（cache_logs 增 `lookup_ms` → 列表 `durations.cacheLookupMs` / 明细 `data.cache.lookupMs`，tooltip 拆「缓存判定」段；采集侧随后接入）。
+- 2026-09-24 验收问题「缓存概览 4」：§3.5 条目列表 `hitCount` 改为累计命中次数（同 §3.12 弹框口径，`cache_logs` 中 `hit=1` 且 `nearest_query` = 条目 `query_text`；含历史池，重启不归零），`sortBy=hitCount` 同步按累计值排序（Coco 拍板）。
