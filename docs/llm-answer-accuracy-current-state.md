@@ -9,7 +9,7 @@
 
 | 仓库 | main HEAD | 时间 | 内容 |
 |---|---|---|---|
-| mcp-orchestrator | `df8a58d` | 2026-09-24 13:04 | Merge PR #21（feat-A013 语义缓存） |
+| mcp-orchestrator | `e1c5267` | 2026-09-24 14:51 | Merge PR #22（bug-00028 单轮生成+结构保险丝） |
 | mcp-server | `b3d31c5` | 2026-09-24 13:06 | Merge PR #13（A013 cache-embed / sango_query_embed） |
 
 ## 1. 维护约定
@@ -62,7 +62,7 @@ HTTP /api/chat
 - **单轮生成**：复核轮（第二次 LLM 调用）已整体删除（负责人否决：token 与延迟翻倍）——main 上无第二次模型调用。
 - 参数：`MAX_TOKENS=1000`；温度调用点缺省 `0.7`（llm_call_logs 落库生效值）；bug-00018 空答案 / `finish_reason=length` → 关闭思考 + temperature=0 重试 **1 次**（变参重试），异常路径不重试。
 - 域提示词：
-  - `SANGO_NOVEL_DOMAIN_PROMPT`（5 条指令 + 事件结构校验）：只依据片段作答；引语输出 `[Qn]` / `[片段N]`、禁止抄写原文与出处；片段确无内容回复「演义中未涉及」禁止先验补全；`5-1~5-3` 先比对问题与片段的事件结构（施事/动作/受事），**方向不一致禁止用该文档回答**（bug-00023 prompt 级修复，main 已合入 PR #20）。
+  - `SANGO_NOVEL_DOMAIN_PROMPT`（基础 5 条 + 事件结构校验；2026-09-24 PR #22 并入三条通用语义指令、条目扩至 8）：只依据片段作答；引语输出 `[Qn]` / `[片段N]`、禁止抄写原文与出处；片段确无内容回复「演义中未涉及」禁止先验补全；`事件结构 5-1~5-3` 先比对问题与片段的事件结构（施事/动作/受事），**方向不一致禁止用该文档回答**（bug-00023 prompt 级修复，PR #20）；第 8 条：问题事件前提与演义不符时先按片段事实校正前提再作答（bug-00018/00028 伴生指令）。
   - `FENGYUNSANGUO_DOMAIN_PROMPT`：候选中含义相同的那道题才作答；无对应 / 仅字面相似 → 「题库未收录该题，请换个问法」，禁题库外知识。
   - `FREE_CHAT_SYSTEM_PROMPT`（99）：自由对话，无注入。
 
@@ -73,6 +73,8 @@ HTTP /api/chat
 - 通过 → `renderAnswerWithCitations` 服务端渲染（引语由冗余表还原，模型不抄写）。
 - 不通过 → `concludeFallback` + `buildFallback`（`pickBestFallbackFragment` 按结论人物 + 锚点稀有度选段，不再盲取首段，bug-00009）。
 - 确无内容 → 拒答 `NOVEL_NO_HIT_ANSWER = "演义中未涉及"` + `citations: []`。
+
+- **2026-09-24（PR #22，已合入 main）新增**：① 支撑护栏——引用不支撑结论时拒答「演义中未涉及」或裁剪多余引用；② `stripLowOverlapSentences` 句-片段文本重叠门（`SENTENCE_OVERLAP_THRESHOLD=0.5` / `SENTENCE_OVERLAP_NGRAM=2`）：带 `[片段N]` 的叙述句与片段 n-gram 重叠率低于阈值整句裁剪、无留存句拒答；③ 三条通用语义指令并入生成轮提示词（见 §6）。复核轮（第二次 LLM 调用）始终不存在——单轮生成自始成立。
 
 ## 8. 缓存层（`mcp-orchestrator/src/cache.ts` + `agent.ts` 接线）
 
@@ -100,7 +102,7 @@ HTTP /api/chat
 |---|---|---|---|
 | bug-00003 召回质量 | 待修复 | 检索四工程项（别名双侧归一化 / 真向量 / 多路重排 / 注入策略）已落地 main；剩余 MIN_COSINE Step4 + 评测口径 | 保持待修复，标题描述已落后 |
 | bug-00023 主宾反转 | 待修复 | main 已合入 prompt 级事件结构方向校验（5-1~5-3 + 不变量断言，PR #20）；**结构性前提校验未做** | 描述更新，状态待定 |
-| bug-00028 片段不支撑仍答 | 待修复 | main 无修复；`hu/bug-00028_answer-support-guardrail` 分支 +4 提交（支撑护栏杆 / 句-片段重叠门 / 复核轮撤销），未合入未提测；dev-docs PR #44 已记「代码已就绪」 | 待审查提测 |
+| bug-00028 片段不支撑仍答 | 已修复（2026-09-24） | 已合入 main（PR #22，merge `e1c5267`）：支撑护栏（引用不支撑→拒答/裁剪）+ 句-片段重叠门（阈值 0.5 / ngram 2）+ 三条语义指令并入生成轮提示词 | 已修复；INDEX 状态本批同步 |
 | bug-00022 题库并列候选 | 待修复 | prompt 已含「仅含义相同才答」（提示层），结构性保障未做 | 保持待修复 |
 | bug-00024 渲染不一致 | 待修复 | llm_call_logs 已记温度（0.7）；排序稳定性未排查 | 保持待修复 |
 | bug-00025 内部编号泄漏 | 待修复 | 输出层剥离 + 渲染层安全网未做；`MAX_MODEL_QUOTE_LENGTH=30` 已有限制抄写 | 保持待修复 |
@@ -110,15 +112,16 @@ HTTP /api/chat
 
 | 仓库 | 分支 | 待合提交 | 内容 |
 |---|---|---|---|
-| mcp-orchestrator | `hu/bug-00028_answer-support-guardrail` | +4 | 单轮生成细节：支撑护栏杆（引用不支撑→拒答/裁剪）、`stripLowOverlapSentences` 句-片段重叠门（阈值 0.5 / ngram 2）、三条通用语义指令并入生成轮提示词 |
-| mcp-server | `chen/feat-A014_tag-system` | +4 | event.json 校准（A014）：四类与 stray 标签清理、`verify-tag-files.mjs` 静态校验脚本（零 LLM，3502 断言）、索引剥壳、死亡意图补 death_age 年龄问法（刘备之死段进 top10） |
-| dev-docs | `coco/agenda-docs-flow` | — | 本次文档维护的出发分支（干净） |
+| mcp-server | `chen/feat-A014_tag-system` | +4 | event.json 校准（A014）：四类与 stray 标签清理、`verify-tag-files.mjs` 静态校验脚本（零 LLM，3502 断言）、索引剥壳、死亡意图补 death_age 年龄问法（刘备之死段进 top10）；PR #14 已发起（2026-09-25） |
+| dev-docs | `coco/feat-A999_docs-accuracy-state` | +1 | 答案准确度现状事实库 + INDEX/AGENTS 同步（PR #46 已发起；git 通道故障导致修正推送搁置） |
+
+> 已随 PR #45 合入的 `coco/agenda-docs-flow`（收尾流程文档）不再是在途分支。
 
 ## 13. 已知待办（main 注释 / 文档明确标注）
 
 1. `MIN_COSINE` 按真向量分布重定（Step 4，`sango-index.ts` 注释仍标哈希时代死路值 0.3）。
 2. 评测口径 bug-00007 / 00008 修复（答案层判定不能只靠字面正则）。
-3. 缓存门禁扩展：当前只挡「拒答类」，非拒答但片段不支撑的答案仍可写缓存——待 bug-00028 支撑校验合入后，门禁应扩展为「支撑校验不通过也不写」。
+3. 缓存门禁扩展：当前只挡「拒答类」；bug-00028 支撑校验已合入 main（PR #22），门禁可扩展为「支撑校验不通过也不写」。
 4. bug-00024 排序稳定性排查（多路召回并列时 topN 是否稳定）。
 
 ## 维护记录
