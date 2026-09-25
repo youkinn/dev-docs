@@ -48,12 +48,13 @@
   - `GET /dev/benchmark/latest` → 最近一次快照
   - `GET /dev/benchmark/history` → 快照列表（runId / 时间 / 摘要）
 - 评测判定逻辑收敛到 sango 内单模块，dev-docs 命令行脚本与 HTTP 接口共用，禁止两份实现漂移
+- 原文查看复用前厅既有 `SangoChapterReader`（A010 原文查看）；如按 chunkId 精确定位章节内原文缺接口，由老陈在 sango 补一个只读的 chunk 原文入口（仅本地 dev）
 
 ## 执行流程（端到端）
 
 1. 页面点「执行」→ 调 sango 本地 dev 接口 `POST /dev/benchmark/run`
 2. 接口读评测集（兰台 `docs/sango-rag-regression-benchmark_v0.1.md`，当期全部题）→ 逐题调 `SangoIndex.search()` 返回 50 条候选（chunkId + 排名），引索常驻，二次执行秒级
-3. 候选结果返回页面，按题展示片段列表，可点开原文弹框核对
+3. 候选结果返回页面，按题展示片段列表；点击片段 chunkId 打开原文查看（复用前厅既有 `SangoChapterReader` 组件，feat-A010 产物，不新建弹框）核对
 4. 人工逐题确认正确证据 chunkId（也可对「候选里没有正确证据」的题标记未命中-证据不在池内）
 5. 判分：确认的 chunkId 在候选中的 rank 1–5 判对（top5）、6–10 兜底、>10 或未进候选为未命中
 6. 结果写本地快照 `results/feat-A015-日期`（JSON + summary md，不入库），页面展示汇总表 / 展开明细 / 图表 / 筛选 / 历史对比
