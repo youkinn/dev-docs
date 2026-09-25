@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-09-25T16:34:46.964Z",
+ "generatedAt": "2026-09-25T16:48:57.779Z",
  "note": "表起草（Coco），供老陈表设计 / 表合并使用；行 = type + id(PID) + 规范形 + 别名列表；冲突组 bug-00031 不进表；疑似跨主条目词以 referentVerdicts 判定为准；身体器官类以 organGuard 禁入口径为准（单字/歧义短语禁入，安全短语可收）。",
  "person": [
   {
@@ -5641,21 +5641,60 @@
    "canonical": "眼睛",
    "aliases": [
     "眼珠",
-    "眼目",
-    "左目",
-    "右目",
-    "双目"
+    "眼目"
    ],
    "rewriteKeys": [
     "眼珠",
-    "眼目",
-    "左目",
-    "右目",
-    "双目"
+    "眼目"
    ],
    "fragmentOnly": [],
    "organGuard": null,
    "queryHit": true,
+   "corpusHit": true,
+   "numLike": false
+  },
+  {
+   "type": "身体",
+   "canonical": "左眼",
+   "aliases": [
+    "左目"
+   ],
+   "rewriteKeys": [
+    "左目"
+   ],
+   "fragmentOnly": [],
+   "organGuard": null,
+   "queryHit": false,
+   "corpusHit": true,
+   "numLike": false
+  },
+  {
+   "type": "身体",
+   "canonical": "右眼",
+   "aliases": [
+    "右目"
+   ],
+   "rewriteKeys": [
+    "右目"
+   ],
+   "fragmentOnly": [],
+   "organGuard": null,
+   "queryHit": true,
+   "corpusHit": false,
+   "numLike": false
+  },
+  {
+   "type": "身体",
+   "canonical": "双眼",
+   "aliases": [
+    "双目"
+   ],
+   "rewriteKeys": [
+    "双目"
+   ],
+   "fragmentOnly": [],
+   "organGuard": null,
+   "queryHit": false,
    "corpusHit": true,
    "numLike": false
   },
@@ -5744,15 +5783,11 @@
    "canonical": "肩",
    "aliases": [
     "肩膀",
-    "肩窝",
-    "左肩",
-    "右肩"
+    "肩窝"
    ],
    "rewriteKeys": [
     "肩膀",
-    "肩窝",
-    "左肩",
-    "右肩"
+    "肩窝"
    ],
    "fragmentOnly": [],
    "organGuard": null,
@@ -5765,15 +5800,11 @@
    "canonical": "臂",
    "aliases": [
     "手臂",
-    "臂膊",
-    "左臂",
-    "右臂"
+    "臂膊"
    ],
    "rewriteKeys": [
     "手臂",
-    "臂膊",
-    "左臂",
-    "右臂"
+    "臂膊"
    ],
    "fragmentOnly": [],
    "organGuard": null,
@@ -5876,23 +5907,6 @@
    ],
    "rewriteKeys": [
     "肚腹"
-   ],
-   "fragmentOnly": [],
-   "organGuard": null,
-   "queryHit": false,
-   "corpusHit": true,
-   "numLike": false
-  },
-  {
-   "type": "身体",
-   "canonical": "腿",
-   "aliases": [
-    "左腿",
-    "右腿"
-   ],
-   "rewriteKeys": [
-    "左腿",
-    "右腿"
    ],
    "fragmentOnly": [],
    "organGuard": null,

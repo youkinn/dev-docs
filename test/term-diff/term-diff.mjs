@@ -349,7 +349,19 @@ function main() {
     });
     return { g, std, online, corpusStats };
   };
-  const anchors = [anchorCase('过五关斩六将', '战役/事件类'), anchorCase('眼睛', '身体器官类')].filter(Boolean);
+  const eyeMembers = ['左眼', '右眼', '双眼', '左目', '右目', '双目'];
+  const eyeAnchor = {
+    g: { canonical: '左眼/右眼/双眼', aliases: ['左目', '右目', '双目'] },
+    std: stdQuestions.filter((q) => eyeMembers.some((m) => q.question.includes(m))).map((q) => q.question),
+    online: onlineQueries.filter((q) => eyeMembers.some((m) => q.includes(m))),
+    corpusStats: eyeMembers.map((m) => {
+      let titleHits = 0;
+      for (const t of corpus.titles) if (t.title.includes(m)) titleHits++;
+      const bodyHits = corpus.all.split(m).length - 1 - titleHits;
+      return { term: m, titleHits, bodyHits };
+    }),
+  };
+  const anchors = [anchorCase('过五关斩六将', '战役/事件类'), eyeAnchor].filter(Boolean);
 
   // ②跨主条目词候选集：素材底稿疑似节 + 官职/爵位类 + 人物节称号型别名 + 需求点名歧义词
   const priorOf = (raw) => {
