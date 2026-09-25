@@ -97,6 +97,14 @@ const typeLabel = (t) => TYPE_LABEL[t] ?? t;
 const AMBIGUOUS_CONTEXTS = {
   '口': { semantic: '嘴', bad: ['关口', '山口', '渡口', '路口', '洞口', '出口', '入口', '港口', '井口', '刀口', '窗口', '城口', '人口', '一口'], good: ['口中', '口吐', '口内', '口称', '开口', '闭口', '口供', '口出'] },
   '目': { semantic: '眼睛', bad: ['目今', '目下', '目录', '条目', '回目', '名目', '数目', '科目'], good: ['左目', '右目', '双目', '眼目', '耳目', '怒目', '举目', '拭目', '侧目', '注目'] },
+  '首': { semantic: '头', bad: ['首先', '回首', '自首', '首创'], good: ['首级', '斩首', '枭首'] },
+  '发': { semantic: '头发', bad: ['发兵', '发明', '发怒', '发丧', '散发', '发付'], good: ['头发'] },
+  '足': { semantic: '脚', bad: ['不足', '足以', '足下', '足矣', '足见', '丰足'], good: ['手足', '鼎足'] },
+  '须': { semantic: '胡须', bad: ['必须', '须臾', '须得', '务须'], good: ['须发', '长须'] },
+  '指': { semantic: '手指', bad: ['指示', '指挥', '指日', '指教', '指称'], good: ['手指', '十指'] },
+  '面': { semantic: '脸', bad: ['面前', '方面'], good: ['面门', '面目', '面如'] },
+  '肤': { semantic: '皮肤', bad: [], good: ['肌肤'] },
+  '颜': { semantic: '容貌/面色', bad: [], good: ['汗颜', '龙颜'] },
   '唇': { semantic: '嘴唇（部分词，不与嘴互换）', bad: ['唇亡', '唇齿'], good: [] },
   '舌': { semantic: '舌头（部分词）', bad: ['舌战', '鼓舌', '摇舌'], good: ['舌头'] },
   '齿': { semantic: '牙齿（部分词）', bad: ['切齿', '唇齿', '齿冷'], good: ['牙齿', '皓齿'] },
@@ -466,7 +474,7 @@ function main() {
   L.push('|---|---|---|---:|---:|---:|---|');
   for (const r of referents) {
     const dist = r.dist.slice(0, 3).map(([p, n]) => p + 'x' + n).join('、') || '—';
-    const align = /^(跨主条目|禁入改写键|泛称\/官职裸词)/.test(r.verdict) ? '**' + r.verdict + '（禁入改写键）**' : r.verdict;
+    const align = /^(跨主条目|禁入改写键|泛称\/官职裸词)/.test(r.verdict) ? '**' + r.verdict + (r.verdict.includes('禁入改写键') ? '' : '（禁入改写键）') + '**' : r.verdict;
     L.push('| ' + r.term + ' | ' + typeLabel(r.source) + ' | ' + (PRIOR_LABEL[r.prior] ?? '—') + ' | ' + r.occurrences + ' | ' + r.windowCount + ' | ' + dist + ' | ' + align + ' |');
   }
   L.push('');

@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-09-25T16:16:00.189Z",
+ "generatedAt": "2026-09-25T16:29:17.768Z",
  "note": "表起草（Coco），供老陈表设计 / 表合并使用；行 = type + id(PID) + 规范形 + 别名列表；冲突组 bug-00031 不进表；疑似跨主条目词以 referentVerdicts 判定为准；身体器官类以 organGuard 禁入口径为准（单字/歧义短语禁入，安全短语可收）。",
  "person": [
   {
@@ -2713,17 +2713,14 @@
    "type": "地名",
    "canonical": "许都",
    "aliases": [
-    "许昌",
-    "许"
+    "许昌"
    ],
    "rewriteKeys": [
     "许昌"
    ],
-   "fragmentOnly": [
-    "许"
-   ],
+   "fragmentOnly": [],
    "organGuard": null,
-   "queryHit": true,
+   "queryHit": false,
    "corpusHit": true,
    "numLike": false
   },
@@ -3226,23 +3223,6 @@
   },
   {
    "type": "战役",
-   "canonical": "关东诸侯起兵",
-   "aliases": [
-    "讨董联盟",
-    "十八路诸侯"
-   ],
-   "rewriteKeys": [
-    "讨董联盟",
-    "十八路诸侯"
-   ],
-   "fragmentOnly": [],
-   "organGuard": null,
-   "queryHit": true,
-   "corpusHit": true,
-   "numLike": true
-  },
-  {
-   "type": "战役",
    "canonical": "匿传国玺",
    "aliases": [
     "匿玺",
@@ -3598,9 +3578,11 @@
    "type": "战役",
    "canonical": "三分归一统",
    "aliases": [
+    "三国归晋",
     "三分归晋"
    ],
    "rewriteKeys": [
+    "三国归晋",
     "三分归晋"
    ],
    "fragmentOnly": [],
@@ -3871,7 +3853,6 @@
    "type": "势力",
    "canonical": "曹魏",
    "aliases": [
-    "魏",
     "魏国",
     "大魏",
     "曹氏",
@@ -3883,9 +3864,7 @@
     "曹氏",
     "魏室"
    ],
-   "fragmentOnly": [
-    "魏"
-   ],
+   "fragmentOnly": [],
    "organGuard": null,
    "queryHit": true,
    "corpusHit": true,
@@ -3895,7 +3874,6 @@
    "type": "势力",
    "canonical": "蜀汉",
    "aliases": [
-    "蜀",
     "蜀国",
     "西蜀",
     "季汉"
@@ -3905,9 +3883,7 @@
     "西蜀",
     "季汉"
    ],
-   "fragmentOnly": [
-    "蜀"
-   ],
+   "fragmentOnly": [],
    "organGuard": null,
    "queryHit": false,
    "corpusHit": true,
@@ -3917,7 +3893,6 @@
    "type": "势力",
    "canonical": "东吴",
    "aliases": [
-    "吴",
     "吴国",
     "孙吴",
     "江东孙氏",
@@ -3929,9 +3904,7 @@
     "江东孙氏",
     "吴室"
    ],
-   "fragmentOnly": [
-    "吴"
-   ],
+   "fragmentOnly": [],
    "organGuard": null,
    "queryHit": true,
    "corpusHit": true,
@@ -3941,7 +3914,6 @@
    "type": "势力",
    "canonical": "西晋",
    "aliases": [
-    "晋",
     "晋国",
     "大晋",
     "司马氏",
@@ -3953,9 +3925,7 @@
     "司马氏",
     "晋室"
    ],
-   "fragmentOnly": [
-    "晋"
-   ],
+   "fragmentOnly": [],
    "organGuard": null,
    "queryHit": false,
    "corpusHit": true,
@@ -4133,19 +4103,16 @@
    "aliases": [
     "天子",
     "陛下",
-    "至尊",
-    "上"
+    "至尊"
    ],
    "rewriteKeys": [
     "天子",
     "陛下",
     "至尊"
    ],
-   "fragmentOnly": [
-    "上"
-   ],
+   "fragmentOnly": [],
    "organGuard": null,
-   "queryHit": true,
+   "queryHit": false,
    "corpusHit": true,
    "numLike": false
   },
@@ -4213,12 +4180,10 @@
    "type": "官职",
    "canonical": "丞相",
    "aliases": [
-    "相国",
-    "相府"
+    "相国"
    ],
    "rewriteKeys": [
-    "相国",
-    "相府"
+    "相国"
    ],
    "fragmentOnly": [],
    "organGuard": null,
@@ -4243,57 +4208,12 @@
   },
   {
    "type": "官职",
-   "canonical": "国相",
-   "aliases": [
-    "相"
-   ],
-   "rewriteKeys": [],
-   "fragmentOnly": [
-    "相"
-   ],
-   "organGuard": null,
-   "queryHit": false,
-   "corpusHit": true,
-   "numLike": false
-  },
-  {
-   "type": "官职",
-   "canonical": "都督",
-   "aliases": [
-    "大都督"
-   ],
-   "rewriteKeys": [
-    "大都督"
-   ],
-   "fragmentOnly": [],
-   "organGuard": null,
-   "queryHit": false,
-   "corpusHit": true,
-   "numLike": false
-  },
-  {
-   "type": "官职",
    "canonical": "常侍",
    "aliases": [
     "中常侍"
    ],
    "rewriteKeys": [
     "中常侍"
-   ],
-   "fragmentOnly": [],
-   "organGuard": null,
-   "queryHit": false,
-   "corpusHit": true,
-   "numLike": false
-  },
-  {
-   "type": "官职",
-   "canonical": "假节钺",
-   "aliases": [
-    "假节"
-   ],
-   "rewriteKeys": [
-    "假节"
    ],
    "fragmentOnly": [],
    "organGuard": null,
@@ -4333,21 +4253,6 @@
   },
   {
    "type": "官职",
-   "canonical": "军师",
-   "aliases": [
-    "军师将军"
-   ],
-   "rewriteKeys": [
-    "军师将军"
-   ],
-   "fragmentOnly": [],
-   "organGuard": null,
-   "queryHit": false,
-   "corpusHit": true,
-   "numLike": false
-  },
-  {
-   "type": "官职",
    "canonical": "州牧",
    "aliases": [
     "牧伯"
@@ -4369,36 +4274,6 @@
    ],
    "rewriteKeys": [
     "刺使"
-   ],
-   "fragmentOnly": [],
-   "organGuard": null,
-   "queryHit": false,
-   "corpusHit": true,
-   "numLike": false
-  },
-  {
-   "type": "官职",
-   "canonical": "车骑将军",
-   "aliases": [
-    "车骑"
-   ],
-   "rewriteKeys": [
-    "车骑"
-   ],
-   "fragmentOnly": [],
-   "organGuard": null,
-   "queryHit": false,
-   "corpusHit": true,
-   "numLike": false
-  },
-  {
-   "type": "官职",
-   "canonical": "骠骑将军",
-   "aliases": [
-    "骠骑"
-   ],
-   "rewriteKeys": [
-    "骠骑"
    ],
    "fragmentOnly": [],
    "organGuard": null,
@@ -4519,21 +4394,6 @@
   },
   {
    "type": "器物",
-   "canonical": "铁车",
-   "aliases": [
-    "铁车兵"
-   ],
-   "rewriteKeys": [
-    "铁车兵"
-   ],
-   "fragmentOnly": [],
-   "organGuard": null,
-   "queryHit": false,
-   "corpusHit": true,
-   "numLike": false
-  },
-  {
-   "type": "器物",
    "canonical": "连弩",
    "aliases": [
     "十矢连弩"
@@ -4555,21 +4415,6 @@
    ],
    "rewriteKeys": [
     "霹雳车"
-   ],
-   "fragmentOnly": [],
-   "organGuard": null,
-   "queryHit": false,
-   "corpusHit": true,
-   "numLike": false
-  },
-  {
-   "type": "器物",
-   "canonical": "藤甲",
-   "aliases": [
-    "藤甲军"
-   ],
-   "rewriteKeys": [
-    "藤甲军"
    ],
    "fragmentOnly": [],
    "organGuard": null,
@@ -5795,9 +5640,6 @@
    "type": "身体",
    "canonical": "眼睛",
    "aliases": [
-    "目",
-    "眼",
-    "睛",
     "眼珠",
     "眼目",
     "左目",
@@ -5811,56 +5653,9 @@
     "右目",
     "双目"
    ],
-   "fragmentOnly": [
-    "目",
-    "眼",
-    "睛"
-   ],
-   "organGuard": {
-    "term": "目",
-    "semantic": "眼睛",
-    "hasAmbiguity": true,
-    "safePhrases": [
-     "左目",
-     "双目",
-     "眼目",
-     "耳目",
-     "怒目",
-     "举目",
-     "拭目"
-    ]
-   },
-   "queryHit": true,
-   "corpusHit": true,
-   "numLike": false
-  },
-  {
-   "type": "身体",
-   "canonical": "耳朵",
-   "aliases": [
-    "耳"
-   ],
-   "rewriteKeys": [],
-   "fragmentOnly": [
-    "耳"
-   ],
+   "fragmentOnly": [],
    "organGuard": null,
    "queryHit": true,
-   "corpusHit": true,
-   "numLike": false
-  },
-  {
-   "type": "身体",
-   "canonical": "鼻子",
-   "aliases": [
-    "鼻"
-   ],
-   "rewriteKeys": [],
-   "fragmentOnly": [
-    "鼻"
-   ],
-   "organGuard": null,
-   "queryHit": false,
    "corpusHit": true,
    "numLike": false
   },
@@ -5868,38 +5663,21 @@
    "type": "身体",
    "canonical": "嘴",
    "aliases": [
-    "口",
-    "唇",
-    "舌",
-    "齿",
-    "牙",
-    "牙齿",
-    "舌头"
+    "口中",
+    "口吐",
+    "开口",
+    "口内",
+    "口称"
    ],
    "rewriteKeys": [
-    "牙齿",
-    "舌头"
+    "口中",
+    "口吐",
+    "开口",
+    "口内",
+    "口称"
    ],
-   "fragmentOnly": [
-    "口",
-    "唇",
-    "舌",
-    "齿",
-    "牙"
-   ],
-   "organGuard": {
-    "term": "口",
-    "semantic": "嘴",
-    "hasAmbiguity": true,
-    "safePhrases": [
-     "口中",
-     "口吐",
-     "口内",
-     "口称",
-     "开口",
-     "口出"
-    ]
-   },
+   "fragmentOnly": [],
+   "organGuard": null,
    "queryHit": true,
    "corpusHit": true,
    "numLike": false
@@ -5908,7 +5686,6 @@
    "type": "身体",
    "canonical": "头",
    "aliases": [
-    "首",
     "头颅",
     "脑袋",
     "首级"
@@ -5918,9 +5695,7 @@
     "脑袋",
     "首级"
    ],
-   "fragmentOnly": [
-    "首"
-   ],
+   "fragmentOnly": [],
    "organGuard": null,
    "queryHit": true,
    "corpusHit": true,
@@ -5930,9 +5705,7 @@
    "type": "身体",
    "canonical": "脸",
    "aliases": [
-    "面",
     "面门",
-    "颜",
     "面容",
     "容貌"
    ],
@@ -5941,12 +5714,9 @@
     "面容",
     "容貌"
    ],
-   "fragmentOnly": [
-    "面",
-    "颜"
-   ],
+   "fragmentOnly": [],
    "organGuard": null,
-   "queryHit": true,
+   "queryHit": false,
    "corpusHit": true,
    "numLike": false
   },
@@ -5956,7 +5726,6 @@
    "aliases": [
     "脖子",
     "咽喉",
-    "喉",
     "喉咙"
    ],
    "rewriteKeys": [
@@ -5964,9 +5733,7 @@
     "咽喉",
     "喉咙"
    ],
-   "fragmentOnly": [
-    "喉"
-   ],
+   "fragmentOnly": [],
    "organGuard": null,
    "queryHit": false,
    "corpusHit": true,
@@ -6020,7 +5787,6 @@
    "aliases": [
     "手指",
     "十指",
-    "指",
     "手腕"
    ],
    "rewriteKeys": [
@@ -6028,9 +5794,7 @@
     "十指",
     "手腕"
    ],
-   "fragmentOnly": [
-    "指"
-   ],
+   "fragmentOnly": [],
    "organGuard": null,
    "queryHit": true,
    "corpusHit": true,
@@ -6138,21 +5902,6 @@
   },
   {
    "type": "身体",
-   "canonical": "脚",
-   "aliases": [
-    "足"
-   ],
-   "rewriteKeys": [],
-   "fragmentOnly": [
-    "足"
-   ],
-   "organGuard": null,
-   "queryHit": true,
-   "corpusHit": true,
-   "numLike": false
-  },
-  {
-   "type": "身体",
    "canonical": "髀",
    "aliases": [
     "髀肉",
@@ -6204,15 +5953,12 @@
    "type": "身体",
    "canonical": "皮肉",
    "aliases": [
-    "肌肤",
-    "肤"
+    "肌肤"
    ],
    "rewriteKeys": [
     "肌肤"
    ],
-   "fragmentOnly": [
-    "肤"
-   ],
+   "fragmentOnly": [],
    "organGuard": null,
    "queryHit": false,
    "corpusHit": true,
@@ -6237,8 +5983,6 @@
    "type": "身体",
    "canonical": "须髯",
    "aliases": [
-    "须",
-    "髯",
     "胡须",
     "美髯",
     "长髯",
@@ -6250,25 +5994,7 @@
     "长髯",
     "须发"
    ],
-   "fragmentOnly": [
-    "须",
-    "髯"
-   ],
-   "organGuard": null,
-   "queryHit": true,
-   "corpusHit": true,
-   "numLike": false
-  },
-  {
-   "type": "身体",
-   "canonical": "头发",
-   "aliases": [
-    "发"
-   ],
-   "rewriteKeys": [],
-   "fragmentOnly": [
-    "发"
-   ],
+   "fragmentOnly": [],
    "organGuard": null,
    "queryHit": true,
    "corpusHit": true,
@@ -6493,12 +6219,9 @@
     "始现",
     "始出",
     "始登场",
-    "初出",
-    "出山",
-    "出场",
     "登场",
-    "出世",
-    "出仕"
+    "出场",
+    "出世"
    ],
    "rewriteKeys": [
     "首次登场",
@@ -6512,18 +6235,34 @@
     "始现",
     "始出",
     "始登场",
-    "初出",
-    "出山",
-    "出场",
     "登场",
-    "出世",
-    "出仕"
+    "出场",
+    "出世"
    ],
    "fragmentOnly": [],
    "organGuard": null,
    "queryHit": true,
    "corpusHit": true,
    "numLike": true
+  },
+  {
+   "type": "登场",
+   "canonical": "出仕/出山",
+   "aliases": [
+    "出仕",
+    "出山",
+    "入仕"
+   ],
+   "rewriteKeys": [
+    "出仕",
+    "出山",
+    "入仕"
+   ],
+   "fragmentOnly": [],
+   "organGuard": null,
+   "queryHit": true,
+   "corpusHit": true,
+   "numLike": false
   }
  ],
  "referentVerdicts": [
@@ -7308,386 +7047,6 @@
    "topPid": "P002",
    "share": 1,
    "verdict": "跨主条目（多主条目候选）"
-  },
-  {
-   "term": "都督",
-   "source": "官职/爵位类",
-   "note": "大都督",
-   "occurrences": 218,
-   "windowCount": 207,
-   "dist": [
-    [
-     "P004",
-     87
-    ],
-    [
-     "P014",
-     60
-    ],
-    [
-     "P001",
-     39
-    ],
-    [
-     "P015",
-     28
-    ],
-    [
-     "P005",
-     27
-    ],
-    [
-     "P130",
-     26
-    ],
-    [
-     "P006",
-     24
-    ],
-    [
-     "P020",
-     21
-    ],
-    [
-     "P017",
-     18
-    ],
-    [
-     "P007",
-     16
-    ],
-    [
-     "P117",
-     14
-    ],
-    [
-     "P018",
-     14
-    ],
-    [
-     "P120",
-     12
-    ],
-    [
-     "P060",
-     11
-    ],
-    [
-     "P030",
-     11
-    ],
-    [
-     "P019",
-     10
-    ],
-    [
-     "P116",
-     10
-    ],
-    [
-     "P133",
-     10
-    ],
-    [
-     "P059",
-     9
-    ],
-    [
-     "P027",
-     8
-    ],
-    [
-     "P039",
-     7
-    ],
-    [
-     "P119",
-     7
-    ],
-    [
-     "P132",
-     7
-    ],
-    [
-     "P054",
-     7
-    ],
-    [
-     "P002",
-     6
-    ],
-    [
-     "P113",
-     5
-    ],
-    [
-     "P062",
-     5
-    ],
-    [
-     "P068",
-     5
-    ],
-    [
-     "P073",
-     5
-    ],
-    [
-     "P063",
-     4
-    ],
-    [
-     "P051",
-     4
-    ],
-    [
-     "P028",
-     4
-    ],
-    [
-     "P033",
-     4
-    ],
-    [
-     "P115",
-     4
-    ],
-    [
-     "P052",
-     4
-    ],
-    [
-     "P071",
-     4
-    ],
-    [
-     "P134",
-     4
-    ],
-    [
-     "P055",
-     4
-    ],
-    [
-     "P057",
-     4
-    ],
-    [
-     "P126",
-     4
-    ],
-    [
-     "P037",
-     3
-    ],
-    [
-     "P114",
-     3
-    ],
-    [
-     "P142",
-     3
-    ],
-    [
-     "P031",
-     3
-    ],
-    [
-     "P118",
-     3
-    ],
-    [
-     "P072",
-     3
-    ],
-    [
-     "P147",
-     3
-    ],
-    [
-     "P053",
-     3
-    ],
-    [
-     "P083",
-     3
-    ],
-    [
-     "P070",
-     3
-    ],
-    [
-     "P075",
-     3
-    ],
-    [
-     "P074",
-     3
-    ],
-    [
-     "P036",
-     3
-    ],
-    [
-     "P058",
-     3
-    ],
-    [
-     "P125",
-     3
-    ],
-    [
-     "P021",
-     2
-    ],
-    [
-     "P032",
-     2
-    ],
-    [
-     "P112",
-     2
-    ],
-    [
-     "P122",
-     2
-    ],
-    [
-     "P144",
-     2
-    ],
-    [
-     "P123",
-     2
-    ],
-    [
-     "P131",
-     2
-    ],
-    [
-     "P085",
-     2
-    ],
-    [
-     "P124",
-     2
-    ],
-    [
-     "P128",
-     2
-    ],
-    [
-     "P045",
-     1
-    ],
-    [
-     "P022",
-     1
-    ],
-    [
-     "P013",
-     1
-    ],
-    [
-     "P010",
-     1
-    ],
-    [
-     "P104",
-     1
-    ],
-    [
-     "P043",
-     1
-    ],
-    [
-     "P086",
-     1
-    ],
-    [
-     "P089",
-     1
-    ],
-    [
-     "P064",
-     1
-    ],
-    [
-     "P065",
-     1
-    ],
-    [
-     "P088",
-     1
-    ],
-    [
-     "P145",
-     1
-    ],
-    [
-     "P146",
-     1
-    ],
-    [
-     "P141",
-     1
-    ],
-    [
-     "P023",
-     1
-    ],
-    [
-     "P003",
-     1
-    ],
-    [
-     "P067",
-     1
-    ],
-    [
-     "P029",
-     1
-    ],
-    [
-     "P009",
-     1
-    ],
-    [
-     "P136",
-     1
-    ],
-    [
-     "P069",
-     1
-    ],
-    [
-     "P026",
-     1
-    ],
-    [
-     "P093",
-     1
-    ],
-    [
-     "P024",
-     1
-    ],
-    [
-     "P056",
-     1
-    ],
-    [
-     "P129",
-     1
-    ],
-    [
-     "P127",
-     1
-    ]
-   ],
-   "topPid": "P004",
-   "share": 0.42028985507246375,
-   "verdict": "跨主条目"
   },
   {
    "term": "后主",
@@ -8916,278 +8275,6 @@
    "verdict": "跨主条目"
   },
   {
-   "term": "军师",
-   "source": "官职/爵位类",
-   "note": "军师将军",
-   "occurrences": 96,
-   "windowCount": 96,
-   "dist": [
-    [
-     "P004",
-     70
-    ],
-    [
-     "P001",
-     65
-    ],
-    [
-     "P002",
-     27
-    ],
-    [
-     "P007",
-     25
-    ],
-    [
-     "P009",
-     23
-    ],
-    [
-     "P005",
-     18
-    ],
-    [
-     "P003",
-     18
-    ],
-    [
-     "P068",
-     17
-    ],
-    [
-     "P016",
-     14
-    ],
-    [
-     "P072",
-     11
-    ],
-    [
-     "P006",
-     8
-    ],
-    [
-     "P027",
-     6
-    ],
-    [
-     "P052",
-     6
-    ],
-    [
-     "P143",
-     5
-    ],
-    [
-     "P053",
-     5
-    ],
-    [
-     "P110",
-     5
-    ],
-    [
-     "P008",
-     5
-    ],
-    [
-     "P030",
-     4
-    ],
-    [
-     "P088",
-     4
-    ],
-    [
-     "P144",
-     4
-    ],
-    [
-     "P014",
-     4
-    ],
-    [
-     "P145",
-     3
-    ],
-    [
-     "P020",
-     3
-    ],
-    [
-     "P117",
-     3
-    ],
-    [
-     "P071",
-     3
-    ],
-    [
-     "P147",
-     3
-    ],
-    [
-     "P090",
-     3
-    ],
-    [
-     "P065",
-     3
-    ],
-    [
-     "P019",
-     3
-    ],
-    [
-     "P032",
-     2
-    ],
-    [
-     "P028",
-     2
-    ],
-    [
-     "P029",
-     2
-    ],
-    [
-     "P037",
-     2
-    ],
-    [
-     "P060",
-     2
-    ],
-    [
-     "P116",
-     2
-    ],
-    [
-     "P046",
-     2
-    ],
-    [
-     "P047",
-     2
-    ],
-    [
-     "P051",
-     2
-    ],
-    [
-     "P142",
-     2
-    ],
-    [
-     "P141",
-     2
-    ],
-    [
-     "P091",
-     2
-    ],
-    [
-     "P075",
-     2
-    ],
-    [
-     "P130",
-     2
-    ],
-    [
-     "P132",
-     2
-    ],
-    [
-     "P101",
-     1
-    ],
-    [
-     "P033",
-     1
-    ],
-    [
-     "P034",
-     1
-    ],
-    [
-     "P036",
-     1
-    ],
-    [
-     "P031",
-     1
-    ],
-    [
-     "P112",
-     1
-    ],
-    [
-     "P039",
-     1
-    ],
-    [
-     "P026",
-     1
-    ],
-    [
-     "P120",
-     1
-    ],
-    [
-     "P118",
-     1
-    ],
-    [
-     "P023",
-     1
-    ],
-    [
-     "P098",
-     1
-    ],
-    [
-     "P038",
-     1
-    ],
-    [
-     "P108",
-     1
-    ],
-    [
-     "P070",
-     1
-    ],
-    [
-     "P067",
-     1
-    ],
-    [
-     "P069",
-     1
-    ],
-    [
-     "P133",
-     1
-    ],
-    [
-     "P015",
-     1
-    ],
-    [
-     "P093",
-     1
-    ],
-    [
-     "P126",
-     1
-    ]
-   ],
-   "topPid": "P004",
-   "share": 0.7291666666666666,
-   "verdict": "跨主条目"
-  },
-  {
    "term": "大将军",
    "source": "素材疑似节",
    "prior": "banned",
@@ -9793,7 +8880,7 @@
   {
    "term": "皇帝",
    "source": "官职/爵位类",
-   "note": "天子、陛下、至尊、上",
+   "note": "天子、陛下、至尊",
    "occurrences": 59,
    "windowCount": 53,
    "dist": [
@@ -12425,114 +11512,6 @@
    "verdict": "唯一指称候选"
   },
   {
-   "term": "骠骑将军",
-   "source": "官职/爵位类",
-   "note": "骠骑",
-   "occurrences": 12,
-   "windowCount": 11,
-   "dist": [
-    [
-     "P054",
-     2
-    ],
-    [
-     "P015",
-     2
-    ],
-    [
-     "P006",
-     2
-    ],
-    [
-     "P001",
-     2
-    ],
-    [
-     "P017",
-     2
-    ],
-    [
-     "P056",
-     2
-    ],
-    [
-     "P099",
-     1
-    ],
-    [
-     "P081",
-     1
-    ],
-    [
-     "P011",
-     1
-    ],
-    [
-     "P035",
-     1
-    ],
-    [
-     "P102",
-     1
-    ],
-    [
-     "P004",
-     1
-    ],
-    [
-     "P008",
-     1
-    ],
-    [
-     "P075",
-     1
-    ],
-    [
-     "P068",
-     1
-    ],
-    [
-     "P007",
-     1
-    ],
-    [
-     "P147",
-     1
-    ],
-    [
-     "P009",
-     1
-    ],
-    [
-     "P055",
-     1
-    ],
-    [
-     "P053",
-     1
-    ],
-    [
-     "P005",
-     1
-    ],
-    [
-     "P126",
-     1
-    ],
-    [
-     "P127",
-     1
-    ],
-    [
-     "P128",
-     1
-    ]
-   ],
-   "topPid": "P054",
-   "share": 0.18181818181818182,
-   "verdict": "跨主条目"
-  },
-  {
    "term": "魏公",
    "source": "人物节称号",
    "prior": "none",
@@ -13060,62 +12039,6 @@
    "verdict": "跨主条目（同串跨人组）"
   },
   {
-   "term": "假节钺",
-   "source": "官职/爵位类",
-   "note": "假节",
-   "occurrences": 6,
-   "windowCount": 6,
-   "dist": [
-    [
-     "P011",
-     2
-    ],
-    [
-     "P035",
-     1
-    ],
-    [
-     "P002",
-     1
-    ],
-    [
-     "P001",
-     1
-    ],
-    [
-     "P030",
-     1
-    ],
-    [
-     "P018",
-     1
-    ],
-    [
-     "P006",
-     1
-    ],
-    [
-     "P057",
-     1
-    ],
-    [
-     "P058",
-     1
-    ],
-    [
-     "P054",
-     1
-    ],
-    [
-     "P017",
-     1
-    ]
-   ],
-   "topPid": "P011",
-   "share": 0.3333333333333333,
-   "verdict": "跨主条目"
-  },
-  {
    "term": "伏波将军",
    "source": "人物节称号",
    "prior": "none",
@@ -13306,54 +12229,6 @@
    "topPid": "P053",
    "share": 1,
    "verdict": "唯一指称候选"
-  },
-  {
-   "term": "国相",
-   "source": "官职/爵位类",
-   "note": "相",
-   "occurrences": 5,
-   "windowCount": 5,
-   "dist": [
-    [
-     "P005",
-     3
-    ],
-    [
-     "P065",
-     2
-    ],
-    [
-     "P083",
-     2
-    ],
-    [
-     "P001",
-     2
-    ],
-    [
-     "P006",
-     2
-    ],
-    [
-     "P004",
-     1
-    ],
-    [
-     "P014",
-     1
-    ],
-    [
-     "P060",
-     1
-    ],
-    [
-     "P119",
-     1
-    ]
-   ],
-   "topPid": "P005",
-   "share": 0.6,
-   "verdict": "跨主条目"
   },
   {
    "term": "昭烈皇帝",
@@ -14999,6 +13874,252 @@
     ]
    ],
    "hasAmbiguity": true
+  },
+  {
+   "term": "首",
+   "semantic": "头",
+   "total": 392,
+   "bad": [
+    [
+     "首先",
+     3
+    ],
+    [
+     "回首",
+     2
+    ],
+    [
+     "自首",
+     2
+    ]
+   ],
+   "good": [
+    [
+     "首级",
+     90
+    ],
+    [
+     "斩首",
+     30
+    ],
+    [
+     "枭首",
+     5
+    ]
+   ],
+   "hasAmbiguity": true
+  },
+  {
+   "term": "发",
+   "semantic": "头发",
+   "total": 402,
+   "bad": [
+    [
+     "发兵",
+     25
+    ],
+    [
+     "发明",
+     2
+    ],
+    [
+     "发怒",
+     4
+    ],
+    [
+     "发丧",
+     8
+    ],
+    [
+     "散发",
+     2
+    ],
+    [
+     "发付",
+     9
+    ]
+   ],
+   "good": [
+    [
+     "头发",
+     3
+    ]
+   ],
+   "hasAmbiguity": true
+  },
+  {
+   "term": "足",
+   "semantic": "脚",
+   "total": 372,
+   "bad": [
+    [
+     "不足",
+     68
+    ],
+    [
+     "足以",
+     14
+    ],
+    [
+     "足下",
+     44
+    ],
+    [
+     "足矣",
+     12
+    ],
+    [
+     "足见",
+     4
+    ],
+    [
+     "丰足",
+     4
+    ]
+   ],
+   "good": [
+    [
+     "手足",
+     18
+    ],
+    [
+     "鼎足",
+     11
+    ]
+   ],
+   "hasAmbiguity": true
+  },
+  {
+   "term": "须",
+   "semantic": "胡须",
+   "total": 287,
+   "bad": [
+    [
+     "必须",
+     23
+    ],
+    [
+     "须臾",
+     51
+    ],
+    [
+     "须得",
+     6
+    ],
+    [
+     "务须",
+     1
+    ]
+   ],
+   "good": [
+    [
+     "须发",
+     6
+    ],
+    [
+     "长须",
+     5
+    ]
+   ],
+   "hasAmbiguity": true
+  },
+  {
+   "term": "指",
+   "semantic": "手指",
+   "total": 209,
+   "bad": [
+    [
+     "指示",
+     1
+    ],
+    [
+     "指挥",
+     16
+    ],
+    [
+     "指日",
+     3
+    ],
+    [
+     "指教",
+     5
+    ],
+    [
+     "指称",
+     1
+    ]
+   ],
+   "good": [
+    [
+     "手指",
+     19
+    ],
+    [
+     "十指",
+     2
+    ]
+   ],
+   "hasAmbiguity": true
+  },
+  {
+   "term": "面",
+   "semantic": "脸",
+   "total": 807,
+   "bad": [
+    [
+     "面前",
+     23
+    ],
+    [
+     "方面",
+     3
+    ]
+   ],
+   "good": [
+    [
+     "面门",
+     8
+    ],
+    [
+     "面目",
+     30
+    ],
+    [
+     "面如",
+     21
+    ]
+   ],
+   "hasAmbiguity": true
+  },
+  {
+   "term": "肤",
+   "semantic": "皮肤",
+   "total": 2,
+   "bad": [],
+   "good": [
+    [
+     "肌肤",
+     1
+    ]
+   ],
+   "hasAmbiguity": false
+  },
+  {
+   "term": "颜",
+   "semantic": "容貌/面色",
+   "total": 154,
+   "bad": [],
+   "good": [
+    [
+     "汗颜",
+     1
+    ],
+    [
+     "龙颜",
+     1
+    ]
+   ],
+   "hasAmbiguity": false
   },
   {
    "term": "唇",
