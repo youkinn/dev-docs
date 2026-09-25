@@ -70,9 +70,8 @@ JSON 顶层：`{ summary, results }`
 
 ```powershell
 cd D:\workplace\mcp-server\sango
-npm run build
-$env:SANGO_DEV_HTTP_PORT = "8787"
-node dist/index.js   # 加载语料 + 向量约 12 秒；另起终端跑前端
+npm run dev:benchmark   # 构建 + SANGO_DEV_HTTP_PORT=8787 + node dist/index.js（加载语料 + 向量约 12 秒）
+# 等价手写：npm run build; $env:SANGO_DEV_HTTP_PORT = "8787"; node dist/index.js
 ```
 
 ## 8. 边界（不做）
