@@ -70,7 +70,7 @@ JSON 顶层：`{ summary, results }`
 
 ```powershell
 cd D:\workplace\mcp-server\sango
-npm run dev:benchmark   # 构建 + SANGO_DEV_HTTP_PORT=8787 + node dist/index.js（加载语料 + 向量约 12 秒）
+npm run dev   # 构建 + SANGO_DEV_HTTP_PORT=8787 + node dist/index.js（加载语料 + 向量约 12 秒）
 # 等价手写：npm run build; $env:SANGO_DEV_HTTP_PORT = "8787"; node dist/index.js
 ```
 
@@ -80,5 +80,5 @@ npm run dev:benchmark   # 构建 + SANGO_DEV_HTTP_PORT=8787 + node dist/index.js
 
 ## 维护记录
 
-- 2026-09-25 提测验收调整同步：汇总列改「类别 / 总题数 / 通过数 / 失败数 / Top5命中数 / 通过率」；明细字段口径改「序号 / 问题 / 参考答案 / 期望命中 / 排名 / 状态」；候选交互改「查看」按钮 + 候选弹框（短 id + 回目，点条目开原文）；页面分「类别汇总」「图表」两标签页，标签选择跨刷新持久化 — Coco
+- 2026-09-25 提测验收调整同步：汇总列改「类别 / 总题数 / 通过数 / 失败数 / Top5命中数 / 通过率」；明细字段口径改「序号 / 问题 / 参考答案 / 期望命中 / 排名 / 状态」；候选交互改「查看」按钮 + 候选弹框（短 id + 回目，点条目开原文）；页面分「类别汇总」「图表」两标签页，标签选择跨刷新持久化；sango 启动脚本由 `npm run dev:benchmark` 更名 `npm run dev`（负责人拍板），§7 与 CLI 头注同步 — Coco
 *** End Patch

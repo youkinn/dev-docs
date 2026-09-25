@@ -7,7 +7,7 @@
  * （与页面「执行」同一入口），快照由服务端落盘。
  *
  * 前置：先启动 sango dev 服务（加载语料 + 向量约 12 秒）：
- *   cd D:\workplace\mcp-server\sango && npm run dev:benchmark
+ *   cd D:\workplace\mcp-server\sango && npm run dev
  *   （等价手写：npm run build; $env:SANGO_DEV_HTTP_PORT = "8787"; node dist/index.js）
  *
  * 用法（同旧版）：
