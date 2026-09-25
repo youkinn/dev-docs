@@ -57,7 +57,7 @@ JSON 顶层：`{ summary, results }`
 - Vite dev 代理新增 `/sango-bench` → `http://127.0.0.1:8787`（`vite.config.ts`）；页面基址 `VITE_BENCHMARK_API_BASE` 默认 `/sango-bench`（不硬编码后端地址）。
 - 汇总表列：类别 / 总题数 / 通过数 / 失败数 / Top5命中数 / 通过率；口径：通过数 = 命中数 = `summary.top5`、失败数 = `summary.tail + summary.miss`、通过率 = `top5 / total`。
 - 「执行」按钮：点击调 `POST run`，执行中禁用并展示等待态，异常展示 `message`。
-- 类别行可展开：该类别每题明细（序号 1–110 / 问题 / 参考答案 / 期望命中 / 排名 / 状态）+ 候选列「查看」按钮打开候选弹框（全部候选：短 chunkId 去 {source}: 前缀 + 回目），点条目打开 `SangoChapterReader` 定位原文核对。
+- 类别行可展开：该类别每题明细（序号 1–110 / 问题 / 参考答案 / 期望命中 / 排名 / 状态）+ 「召回列表」列「查看」按钮打开召回列表弹框（全部候选：短 chunkId 去 {source}: 前缀 + 回目），点条目打开 `SangoChapterReader` 定位原文核对。
 - 历史快照列表：`GET history`（runId / 时间 / 摘要），点击切换表格 / 展开明细 / 图表为该次数据（`GET snapshot`）；通过率趋势折线按 runId 依次展示历史整体对比。
 - 筛选下拉：全部 / top5（rank 1–5）/ top10（rank 6–10）/ top10+（rank>10 或未召回，rank=0 归此类）；筛选后明细与图表跟随变化。
 - 图表用 echarts（已有依赖，CacheView 先例）：类别 ×（通过 / 兜底 / 未命中）堆叠柱状图 + 整体通过率；点击柱 / 图例联动展开对应类别明细；跟随当前选中快照。
