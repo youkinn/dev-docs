@@ -336,6 +336,21 @@ $now=[DateTimeOffset]::Now.ToUnixTimeMilliseconds(); $from=$now-7*86400000
 (Invoke-WebRequest "http://localhost:3000/api/v1/logs/token-stats?startAt=$from&endAt=$now&granularity=day" -UseBasicParsing).Content
 ```
 
+**F. 整链路快照导出**（**执行人：负责人，Coco 不自跑**；按 traceId 导出单条链路（约 500 行）；chunkId 反查用 `--list` 只列 traceId、不批量导出；落为单文件直接分析并随 bug 票归档；与日志页「一键导出」同构、schema v1）
+
+```powershell
+cd D:\workplace\mcp-orchestrator
+node scripts/probe/trace-export.mjs <traceId> [输出路径]            # 导出单条（缺省 data/trace-exports/；LOGS_DB 可覆盖库路径）
+node scripts/probe/trace-export.mjs --list <chunkId>                # 反查 chunk 命中链路，只列 traceId（不导出）
+# 例：node scripts/probe/trace-export.mjs 5ce3c583-6a50-4745-8b2a-fa0db1afbba5
+# 相对输出路径固定落 data/trace-exports/；终端报行数/KB；chunkId 批量勾选下载由日志页「一键导出」承载
+# 只读打开 data/logs.db，不落任何业务表
+```
+
+**Coco 读取口径**：只按需取字段（Select-String / 片段抽取），不整读文件。
+
+**取数优先级**：① 负责人导出的 traceId 快照 → ② `--list <chunkId>` 反查 traceId → ③ 只读直连日志库（命令速查 D；小结果集 + `LIMIT`，遵守 AGENTS.md 第 8 条输出护栏）。
+
 ---
 
 ## 8. 读数陷阱与已知边界
@@ -377,3 +392,8 @@ $now=[DateTimeOffset]::Now.ToUnixTimeMilliseconds(); $from=$now-7*86400000
 | 2026-09-22 | 会过期的内容（bug 号结论、已知问题对照、经验阈值）移出到 `docs/troubleshooting-notes.md`；`§N` 引用改为节名 | 负责人：本手册必须准确、不误导；唯一可信是需求文档 | 逐节复核引用与节名 |
 | 2026-09-24 | LLM 明细新增 `stage=novel_support_check`（演义域生成轮后的引用支撑复核轮，bug-00028 长期机制）；拒答口径：复核判不支撑 / `uncertain` / 解析失败重试后仍失败 → 答案「演义中未涉及」+ 空引用、`funnel.cited=0` | bug-00028 定稿设计 `docs/novel-answer-support-check.md` | 全量测试 349 绿 + 真实 trace 实测 |
 | 2026-09-24 | 撤销 `novel_support_check` 复核轮 stage（负责人否决二次 LLM 调用，成本 / 延迟翻倍）；演义域改为单轮生成 + 结构保险丝（生成轮通用语义指令 + 句-片段文本重叠结构门），拒答口径不变，见 `docs/novel-answer-support-check.md` 新版 | bug-00028 设计改版 | 全量测试绿 + 三例 trace 复测 |
+| 2026-09-25 | §7 增补 F「整链路快照导出」：`scripts/probe/trace-export.mjs <chunkId|traceId>`（mcp-orchestrator）只读导出全字段 JSON 快照；排查改直接分析快照文件，不再逐条走同流程；日志页「一键导出」交付后与脚本同构 | 负责人拍板双轨机制（自查轨即刻可用 / 页面轨供团队成员） | 脚本实测：`sanguo-yanyi:0050:c0011` 命中 65 条链路导出成功 |
+| 2026-09-25 | §7 F 执行人修正：导出由负责人执行、Coco 不自跑（token 控制）；体量：1 条 trace ≈ 500 行；Coco 收到文件按需取字段、不整读 | 负责人拍板 | 负责人实测体量后确认 |
+| 2026-09-25 | §7 F 补护栏：默认只导前 10 条命中链路（`--limit N` / `--all` 覆盖）；相对输出路径固定落 `data/trace-exports/`；终端报行数/KB 与扫描行数 | 负责人（防 3W 行大文件）+ Coco（实现） | `node --check` + `--limit 1` 冒烟：65 命中→1 条、465 行/35 KB |
+| 2026-09-25 | §7 F 精简：剔除 chunkId 批量导出（负责人试跑后拍板：5000 行不可取）；只留 traceId 单条导出 + `--list <chunkId>` 反查列 traceId；chunkId 批量勾选下载归页面轨 | 负责人 + Coco | 冒烟：traceId 465 行/35 KB；`--list` 65 命中列前 10 条 |
+| 2026-09-25 | §7 F 明确取数优先级：快照文件 → `--list` 反查 → 只读直连查表（小结果集 + 输出护栏） | 负责人（确认够用）+ Coco（落口径） | — |
