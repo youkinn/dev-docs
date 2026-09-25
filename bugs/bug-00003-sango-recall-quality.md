@@ -7,6 +7,8 @@
 > 登记：Coco ／ 报告：负责人 ／ 登记日期：2026-09-17
 > 详细分析：`docs/sango-recall-quality.md`（现状量化 + 提升方案 + 评测基建）
 
+> **现状更新（2026-09-24，Coco 对照 main 核验）**：本文正文描述的是 2026-09-17 诊断时点的现状，以下条目已随 feat-A004 落地 main，不再成立——① 别名表检索侧零引用（现为双侧归一化，`sango-index.ts` loadAliases）；② 段长 BM25 惩罚（语料已改 schema v2，250 字目标 / 400 上限 chunk）；③ 哈希向量负资产（已换 BGE-M3 真向量，`MIN_COSINE=0.3` 可触发，Step 4 待重定）；④ 注入窗口截掉答案句（`trimFragmentToWindow` 已删除，2026-09-20 整段注入）。仍待办：P0-0 query 改写未实现（对齐路线图 D4）；P0-1 的向量分量 min-max 归一化未见落地（现为 `(cosine+1)/2` 映射 + 0.6/0.3/0.1 定参，需确认是否有意按 2026-09-19 定参取代）；「已实测否决重排」与路线图 D2 需对表（见 `docs/recall-quality-roadmap.md`）。
+
 ## 现象与复现
 
 | 输入（domain=sango-novel） | 期望 | 实际 |
