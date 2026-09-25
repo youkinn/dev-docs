@@ -18,6 +18,7 @@
 | feat-A012 | LLM 调用可观测增强（`reasoning_tokens` + 重试标识 + 路由来源 + Token 明细与图表缓存维度 + 状态列简化） | mcp-orchestrator, mcp-web | 已提测 | 2026-09-23 |
 | feat-A013 | 三国演义问答缓存（应用层 query→answer 语义缓存，含命中解释 / 分布图表 / 开关 / 清除） | mcp-orchestrator, mcp-web, mcp-server | 已归档 | 2026-09-23 |
 | feat-A014 | 标签体系评审与使用边界（删四类事件标签、索引剥壳、保留死亡意图与 0.1 通路、校验校准） | mcp-server | 已归档 | 2026-09-24 |
+| feat-A015 | 三国演义 RAG 回归标准集 | dev-docs, mcp-server, mcp-web | 已归档 | 2026-09-25 |
 | feat-A999 | 长期文档与仓库维护（不上线、不归档；仅 Coco 文档提交用） | dev-docs | 草稿 | — |
 
 > feat-A009 依赖顺序：feat-A008（已归档）→ bug-00010（已修复）→ feat-A009（2026-09-21 定稿，前置已解除，可开工）。
