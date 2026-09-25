@@ -1,8 +1,8 @@
-# FEAT-A016: 草稿台 + 温度按域
+# FEAT-A017: 草稿台 + 温度按域
 
 > 只记需求本身：讨论过程、拍板记录、待定项清单等过程性内容不进文档（2026-09-22 约定，见 `AGENTS.md` 基本原则 5）。
 
-> 特性号：FEAT-A016
+> 特性号：FEAT-A017
 > 状态：草稿
 > 作者：Coco
 > 涉及项目：mcp-orchestrator, mcp-web
@@ -26,7 +26,7 @@
 
 - 不改生产注入选择逻辑（叙事序默认关；生产化决策由 A020 收口）
 - 不做全局温度调优（只按域配置与对比）
-- 不做重排模型（A018）与术语归一化（A017）
+- 不做重排模型（A018）与术语归一化（A016）
 
 ## 验收标准
 
@@ -72,12 +72,12 @@
 
 ## 分支计划
 
-- mcp-orchestrator：`hu/feat-A016_draftbench`（需求分支 `coco/feat-A016_draftbench`）
-- mcp-web：`ye/feat-A016_draftbench`
-- dev-docs：`coco/feat-A016_draftbench`
+- mcp-orchestrator：`hu/feat-A017_draftbench`（需求分支 `coco/feat-A017_draftbench`）
+- mcp-web：`ye/feat-A017_draftbench`
+- dev-docs：`coco/feat-A017_draftbench`
 
 ## 故事号（Coco 生产）
 
 | 故事号 | 内容 | 负责人 | 状态 |
 |--------|------|--------|------|
-| story-A016-01 | 草稿台 + 温度按域：接口 / CLI / 页面 / 叙事序开关 / 温度实验 / 回归集 | Coco + 老陈 + 小胡 + 小叶 | 待开工 |
+| story-A017-01 | 草稿台 + 温度按域：接口 / CLI / 页面 / 叙事序开关 / 温度实验 / 回归集 | Coco + 老陈 + 小胡 + 小叶 | 待开工 |

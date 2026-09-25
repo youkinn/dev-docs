@@ -43,3 +43,4 @@
 | bug-00029 | 缓存控制台关闭「缓存开关」后，缓存概览统计与缓存条目列表未清空。负责人 2026-09-25 拍板口径「关=停用+清空」（行为变更：偏离 A013 归档『开关与清除分离』，验收 8『开启后恢复命中』不再成立，重开从空池重新积累）。修复＝mcp-orchestrator `setEnabled(false)` 联动清空缓存池（内存 + cache_entries 镜像，cache_logs 保留）+ mcp-web 开关切换后统一重拉真实数据（不造假清零） | mcp-web, mcp-orchestrator | feat-A013 | 已修复 | 2026-09-25 |
 
 | bug-00030 | 缓存开关状态不持久：后总台关闭缓存开关后重启 mcp-orchestrator，开关自动回 CACHE_ENABLED 初始值（默认开）。修复＝cache_settings 表持久化上次运行时开关值，构造按「显式 options → env CACHE_ENABLED 显式设置 → 持久化值 → 缺省 true」恢复；setEnabled 同步直写 | mcp-orchestrator | feat-A013 | 已修复 | 2026-09-25 |
+| bug-00031 | 人名别名同字不同人被单值结构覆盖（子远 = 许攸/吴懿/孙峻、公明 = 徐晃/管辂、子明 = 吕蒙/孙亮、子孝 = 曹仁/孙和）。根因要点 = alias→PID 单值 + 表不全；修复口径待定（多值结构或上下文判定）；A016 并入前冲突组不进表，本期不修 | mcp-server | feat-A004 | 待修复 | — |
