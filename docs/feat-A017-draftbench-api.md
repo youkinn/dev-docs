@@ -213,9 +213,9 @@ Base：mcp-orchestrator 根（与 `/api/v1/logs*` 同级）。
 ## 5. 页面（mcp-web，小叶；仅输入契约，不含实现）
 
 - 日志页：新增「来源」筛选下拉（默认 `production`，可切 `draftbench`；`fetchLogList` 增传 `source`）+「草稿台」按钮（弹框入口，验收 5「日志页按钮 → 弹框入口」）。
-- 弹框操作流（≤5 步）：输入 traceId → `GET /api/v1/draftbench/trace/:traceId` 拉取（左栏只读源，展示回目 / 段位 / 原文预览 / 注入标记）→ 构造右栏发送清单（左拖右添加 / 右内拖拽排序 / 右侧手增与移除）→ 发送确认弹框（query 可编辑、片段数、总字数、本次参数一次过目，默认值 = `params` 带出值）→ `POST /api/chat` 发送 → 结果区展示 `answer` + `citations` + 差异三态高亮（一致绿 / 缺失黄 / 多余红，配色小叶定）+ 本次生效参数。
+- 弹框操作流（≤5 步）：输入 traceId → `GET /api/v1/draftbench/trace/:traceId` 拉取（左栏只读源，展示回目 / 段位 / 原文预览 / 注入标记）→ 构造右栏发送清单（左拖右添加 / 右内拖拽排序 / 右侧手增与移除）→ 发送确认弹框（query 可编辑、片段数、总字数、本次参数一次过目，默认值 = `params` 带出值）→ `POST /api/chat` 发送 → **发送成功弹框就此结束**：不做结果内联展示、不做差异对比视图；可轻提示「已发送，可在日志页 来源=草稿台 查看」；发送后本次记录与正常日志完全一致，在日志页按正常日志查看（2026-09-27 需求修订口径）。
 - 无需用户拼接 chunkId：chunkId 由清单携带（验收 5）。原文核对复用既有 `SangoChapterReader`（`chapter` 必填 + `chunkId` 定位，feat-A010 契约）；左栏 `preview / segFrom / segTo` 由接口携带（§10 决策 2），弹框内直接可读，点条目跳 `SangoChapterReader` 看整回。
-- 记录与复现：弹框内 `GET /api/v1/draftbench/records` 列表（时间 / traceId / query / 本次参数 / 片段数 / 结果）；点击行 → `GET /api/v1/draftbench/records/:traceId` 载入（回填编辑框 + 展示 diff + 结果）；结果区 traceId 可点进日志详情，复用既有日志页分析视图（`fetchLogDetail` + `RetrievalDiagnosticsPanel`；草稿台行 `cache` 恒 null 时卡片不渲染，已有空态）。
+- 记录与复现：弹框内 `GET /api/v1/draftbench/records` 列表（时间 / traceId / query / 本次参数 / 片段数 / 结果）；点击行 → `GET /api/v1/draftbench/records/:traceId` 载入（回填编辑框继续编辑，结果可回读）；「查看记录」跳日志页（来源=草稿台）详情，复用既有日志页分析视图（`fetchLogDetail` + `RetrievalDiagnosticsPanel`；草稿台行 `cache` 恒 null 时卡片不渲染，已有空态）。页面不消费 `diff` 字段（2026-09-27 需求修订：不做结果对比视图；`diff` 保留供 CLI / 审核）。
 - 前端新增 `client.ts` 类型与函数（`fetchDraftbenchTrace / fetchDraftbenchRecords / fetchDraftbenchRecordDetail` + `DraftbenchTrace / DraftbenchRecord / DraftbenchDiff` 等，字段逐字对齐 §3）；发送复用 `sendChatMessage` 通道扩展 payload（`source / chunks / params`）。
 - 无新增 vite 代理（草稿台接口走既有 `/api` → `http://localhost:3000`）。CLI 不归页面。
 
