@@ -5,7 +5,7 @@
 > 特性号：FEAT-A016
 > 状态：定稿
 > 作者：Coco
-> 涉及项目：mcp-server, mcp-orchestrator
+> 涉及项目：mcp-server, mcp-orchestrator, mcp-web
 > 日期：2026-09-25
 > 关联：docs/recall-quality-roadmap.md（D3 归一化扩展、D4 query 改写、D11 单开）、bug-00003（五关斩六将 vs 过五关斩六将 漏召）
 
@@ -42,11 +42,13 @@
 5. [ ] 漏召修复回测：`过五关斩六将` 与 `五关斩六将` 均能在 top10 召回同一典故证据段
 6. [ ] 人名规范形口径切换回测：`关羽` / `云长` query 归一化到同一规范形，标准集 top≤10 不回退 + 华雄 / 刘备定点不倒车（recall-bench 同基线复跑）
 7. [ ] 跨主条目词核查落档：统计脚本对称号 / 谥号 / 封号 / 官职类别名做语料归属分布核查（零 LLM），跨主条目词（魏王 / 文帝 / 陈留王等）清单落档，明确「禁入改写键 / 标签多挂 / 原文直配」归属
+8. [ ] 归一化过程可观测：后台日志页检索诊断可见改写明细（原文片段 → 规范形）与表版本 normVersion；「召回漏斗」头部标注「归一化改写」环节（embed 前 / 漏斗入口前）；无改写显示「无改写」
 
 ## 接口影响
 
 - mcp-server：检索入口增加改写 / 归一化阶段；表文件加载契约
 - mcp-orchestrator：缓存查询在 embed 前做同一归一化
+- mcp-web：日志页检索诊断面板展示改写明细与漏斗「归一化改写」环节（验收 8）
 - 日志口径：tool_retrieval_logs.diagnostics 内 query.normalized / env.aliasCount / hitLabels 取值随规范形口径变化（表结构不变）；cache_logs 仍存原文，换说法与规范形将命中同一缓存条目。diagnostics 字段语义变更以老陈接口文档为准
 - 契约细节以老陈接口 / 表设计文档为准（接口文档先出）
 
@@ -82,6 +84,7 @@
 | 检索侧：表加载改造 + 规范形口径切换（取消 df 选名）+ query 改写（embed 前）+ 索引重跑 | 老陈 | 表 + 接口文档 |
 | 缓存侧归一化（embed 前）：替换 cache.ts 硬编码 19 对别名 normalize，改用共享单表实现；缓存条目 version_tag 换代（不清表） | 小胡 | 表 |
 | 回测（漏召样例 + 缓存命中 + 人名规范形切换；recall-bench 口径同步） | 老陈 + 小胡 | 实现 |
+| 归一化过程可观测（验收 8，负责人 test-1921 拍板并入）：normalizeDetail + diagnostics.query.rewrites / env.normVersion（老陈）；日志页改写明细 + 召回漏斗「归一化改写」环节（小叶）；编排侧零改动仅验透传（小胡） | 老陈 + 小叶（小胡验证） | 接口文档 |
 | 分支创建 / 提交 / PR / 审查提测 | Coco | 产出 |
 | 端到端验收 | 负责人 | 提测后 |
 
@@ -90,9 +93,14 @@
 - mcp-server：`chen/feat-A016_term-normalization`（需求分支 `coco/feat-A016_term-normalization`）
 - mcp-orchestrator：`hu/feat-A016_term-normalization`
 - dev-docs：`coco/feat-A016_term-normalization`
+- mcp-web：`ye/feat-A016_normalization-observability`（基于 main；A016 增补——负责人 test-1921 拍板并入）
 
 ## 故事号（Coco 生产）
 
 | 故事号 | 内容 | 负责人 | 状态 |
 |--------|------|--------|------|
 | story-A016-01 | 术语口径统一：统计清单 / 单表（含人名）/ 检索与缓存双侧归一化 / query 改写 | Coco + 老陈 + 小胡 | 待开工 |
+
+## 维护记录
+
+- 2026-09-26：验收增补第 8 条「归一化过程可观测」——日志页可见改写明细 + 表版本，召回漏斗头部标注「归一化改写」环节（embed 前）；涉及项目增 mcp-web；实现契约见 docs/feat-A016-term-normalization-interface.md §5、方案见 docs/feat-A016-normalization-observability.md（负责人 test-1921 拍板并入 A016，Coco 定案契约）

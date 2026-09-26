@@ -152,9 +152,12 @@
 |---|---|---|
 | `query.normalized` | alias.json 人名替换后文本（df 选名） | 表 rewriteKeys 替换后文本，人名与换说法同一口径。示例：raw `五关斩六将…` → `过五关斩六将…`；raw `夏侯惇的右目是怎么瞎的` → `…右眼…`；raw `云长…` → `关羽…` |
 | `env.aliasCount` | 别名 PID 数（pidOf.size） | 表内 rewriteKeys 总数（含人物与非人物）；表加载失败为 0。最终值以启动加载日志为准 |
+| `query.rewrites` | （新增，test-1921） | query 侧实际改写命中明细：`[{ from, to }]`，from = 原文片段、to = 规范形，按替换发生顺序排列；邻接延伸检查保护未替换的键不计入；fragmentOnly 键不在 query 侧替换、不计入；无改写为 `[]` |
+| `env.normVersion` | （新增，test-1921） | 表 meta.normVersion（内容 hash）；表加载失败降级为空串，与 aliasCount=0 同口径 |
 | `hitLabels` | 命中标签原始文本 | 取值语义不变（原始标签文本）；补充：跨主条目词经共享实体标签多挂命中后，同一标签词可能出现在多个主条目标签命中里，判定仍以原始标签文本为准 |
 
 - 追溯：sango 启动 stderr 打印 `[sango] entity-table loaded: rows={n} keys={rewriteKeyCount} normVersion={v}`；请求级排查结合该日志与 cache_logs.version_tag 对照表版本。
+- 页面口径（test-1921）：日志页「召回漏斗」头部在「语料 chunk」前新增「归一化改写」环节，显示 `query.rewrites` 命中数并标注「embed 前」；检索诊断 Query 区展示改写明细（原文片段 → 规范形），无改写显示「无改写」。方案见 docs/feat-A016-normalization-observability.md
 
 ## 6. 验收映射
 
@@ -189,3 +192,4 @@
 ## 维护记录
 
 - 2026-09-26：bug-00036 定案修订——§1.6 违规键清单增「跨行 canonical 真子串键（K4）」；§2.1 替换算法增「邻接延伸检查」（防真子串键二次扩张 canonical）。机制与数据裁决以 `bugs/bug-00036-entity-table-key-substring-collision.md` 与 `docs/sango-entity-normalization.md`「键排斥规则」节为准（Coco 定案，老陈实施）。
+- 2026-09-26：test-1921 增补——§5 增加 `query.rewrites` / `env.normVersion` 字段 + 「召回漏斗头部标注归一化改写环节」页面口径（负责人拍板并入 A016，Coco 定案；实现分布与验证见 docs/feat-A016-normalization-observability.md）
