@@ -59,8 +59,9 @@ Invoke-WebRequest http://localhost:3000/health -UseBasicParsing
 | 总台进程 stdout | 埋点旁路失败、MCP 连接告警、未捕获异常（`Failed to process request:`）、启动 / 退出 | 运行总台的终端窗口 —— **不落盘，重启即丢** |
 | 浏览器 DevTools | 前端异常、请求 / 响应原文、真实 UI 表现 | Network / Console（UI 类问题必用，第 11 条） |
 | 直连 DB | 接口未暴露的字段、原始行、跨表 join | 「命令速查」的「D. 直连日志库」 |
+| `llmCalls.requestSummary / responseSummary` | 生成轮完整入参（**含注入片段全文**）与模型**原始输出**（含 `[Qn]` / `[片段N]` 指针） | 步骤 1 命令取 `llmCalls`；值为 JSON 字符串（`[{type,text}]`）。判「自律拒答 vs 护栏误裁」必须看这里（2026-09-26 实录） |
 
-日志系统**看不到**的：前端异常、思考文本、注入文本、错误栈、代码 / 语料版本、`sessionId`。缺证据时的登记与补数建议见 `docs/troubleshooting-notes.md`。
+日志系统**看不到**的：前端异常、思考文本、错误栈、代码 / 语料版本、`sessionId`（注入片段全文与模型原始输出可经 `requestSummary` / `responseSummary` 查——旧口径「注入文本不可见」作废）。缺证据时的登记与补数建议见 `docs/troubleshooting-notes.md`。
 
 ---
 
@@ -397,3 +398,4 @@ node scripts/probe/trace-export.mjs --list <chunkId>                # 反查 chu
 | 2026-09-25 | §7 F 补护栏：默认只导前 10 条命中链路（`--limit N` / `--all` 覆盖）；相对输出路径固定落 `data/trace-exports/`；终端报行数/KB 与扫描行数 | 负责人（防 3W 行大文件）+ Coco（实现） | `node --check` + `--limit 1` 冒烟：65 命中→1 条、465 行/35 KB |
 | 2026-09-25 | §7 F 精简：剔除 chunkId 批量导出（负责人试跑后拍板：5000 行不可取）；只留 traceId 单条导出 + `--list <chunkId>` 反查列 traceId；chunkId 批量勾选下载归页面轨 | 负责人 + Coco | 冒烟：traceId 465 行/35 KB；`--list` 65 命中列前 10 条 |
 | 2026-09-25 | §7 F 明确取数优先级：快照文件 → `--list` 反查 → 只读直连查表（小结果集 + 输出护栏） | 负责人（确认够用）+ Coco（落口径） | — |
+| 2026-09-26 | §2.1 证据源地图补 `llmCalls.requestSummary / responseSummary`（生成轮入参含注入片段全文 + 模型原始输出含指针）；「日志系统看不到」清单删除注入文本、改为可经 summary 查 | A016 验收三票排查（bug-00032/33/34）实测发现旧口径不符 | 四 trace（c549084b / ca7d9c6a / 67119582 / 275551c3）实取 responseSummary 与 final 对照，护栏误裁定案 |
