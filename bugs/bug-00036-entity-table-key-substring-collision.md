@@ -77,6 +77,8 @@ npm test   # src/test/feat-A016/entity-table.test.ts 现锚：rows=407 keys=719 
 
 ## 维护记录
 
+- 2026-09-26 补充（Coco）：素材表曾尝试行内「（片段侧）」标注标记 fragmentOnly（反例，已回滚）——标注会被 `term-diff.mjs parseMaterial` 当别名本体污染草稿；裁决改为三处固化：素材表「键排斥规则」节规则声明（含反例）、entity-table.json 行 note、term-diff 增 `BUG36_FRAGMENT_ONLY` 裁决集（12 键强制 fragmentOnly，防重跑草案时被洗回 rewriteKeys）；另 term-diff 别名来源由已退役 alias.json 切到 entity-table.json 人物行。
+
 - 2026-09-26：登记立票（Coco，负责人指示单独立票）。
 - 2026-09-26：修复实施（老陈，Coco 定案）——
   - 机制层：`src/normalize/entity-table.ts` normalize 增「邻接延伸检查」（键命中处能延伸为表内已知词 canonical / aliases / rewriteKeys 最长命中则不替换）；
