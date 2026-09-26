@@ -44,3 +44,4 @@
 
 | bug-00030 | 缓存开关状态不持久：后总台关闭缓存开关后重启 mcp-orchestrator，开关自动回 CACHE_ENABLED 初始值（默认开）。修复＝cache_settings 表持久化上次运行时开关值，构造按「显式 options → env CACHE_ENABLED 显式设置 → 持久化值 → 缺省 true」恢复；setEnabled 同步直写 | mcp-orchestrator | feat-A013 | 已修复 | 2026-09-25 |
 | bug-00031 | 人名别名同字不同人被单值结构覆盖（子远 = 许攸/吴懿/孙峻、公明 = 徐晃/管辂、子明 = 吕蒙/孙亮、子孝 = 曹仁/孙和）。根因要点 = alias→PID 单值 + 表不全；修复口径待定（多值结构或上下文判定）；A016 并入前冲突组不进表，本期不修 | mcp-server | feat-A004 | 待修复 | — |
+| bug-00032 | A016 验收发现：演义域同题跨请求答案不稳定、与 LLM 直答不一致（「夏侯惇的眼睛是怎么瞎的」trace 67119582 答「左目为曹性射瞎」vs trace 275551c3 答「演义中未涉」且 rank1 候选未被采纳 chunkId sanguo-yanyi:0018:c0014；「孙权遣人向关羽求亲」trace c549084b LLM 直答正确但 /api/chat POST 返回「演义中未涉及」）。根因要点＝同题不同 trace 结果不一致、候选已召回却未进答案；修复口径待定（对齐两 trace 定位检索 / 采纳链） | mcp-server, mcp-orchestrator | feat-A016 | 待修复 | — |
