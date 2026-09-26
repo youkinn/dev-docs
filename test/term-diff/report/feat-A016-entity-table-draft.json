@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-09-25T16:48:57.779Z",
+ "generatedAt": "2026-09-26T03:44:54.527Z",
  "note": "表起草（Coco），供老陈表设计 / 表合并使用；行 = type + id(PID) + 规范形 + 别名列表；冲突组 bug-00031 不进表；疑似跨主条目词以 referentVerdicts 判定为准；身体器官类以 organGuard 禁入口径为准（单字/歧义短语禁入，安全短语可收）。",
  "person": [
   {
@@ -19,14 +19,7 @@
     "织席小儿",
     "卖履小儿"
    ],
-   "newAliases": [
-    "刘皇叔",
-    "刘使君",
-    "昭烈皇帝",
-    "大耳儿",
-    "织席小儿",
-    "卖履小儿"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -44,12 +37,7 @@
     "关二爷",
     "赤面长须"
    ],
-   "newAliases": [
-    "关某",
-    "关将军",
-    "关二爷",
-    "赤面长须"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -65,12 +53,7 @@
     "张车骑",
     "西乡侯"
    ],
-   "newAliases": [
-    "燕人",
-    "燕人张飞",
-    "燕人张翼德",
-    "张车骑"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -88,12 +71,7 @@
     "太祖武皇帝",
     "曹贼"
    ],
-   "newAliases": [
-    "吉利",
-    "魏公",
-    "太祖武皇帝",
-    "曹贼"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -108,10 +86,7 @@
     "文皇帝",
     "魏太子"
    ],
-   "newAliases": [
-    "文皇帝",
-    "魏太子"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -135,9 +110,7 @@
     "曹子文",
     "黄须儿"
    ],
-   "newAliases": [
-    "黄须儿"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -149,55 +122,42 @@
     "魏明帝",
     "明帝"
    ],
-   "newAliases": [
-    "元仲",
-    "明帝"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P148",
    "canonical": "曹芳",
    "aliases": [
     "兰卿",
     "魏主芳",
     "齐王"
    ],
-   "newAliases": [
-    "兰卿",
-    "魏主芳",
-    "齐王"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P149",
    "canonical": "曹髦",
    "aliases": [
     "彦士",
     "高贵乡公"
    ],
-   "newAliases": [
-    "彦士",
-    "高贵乡公"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": "P099",
+   "id": "P150",
    "canonical": "曹奂",
    "aliases": [
     "景明",
     "常道乡公",
     "陈留王"
    ],
-   "newAliases": [
-    "景明",
-    "常道乡公"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -216,12 +176,7 @@
     "相父",
     "诸葛丞相"
    ],
-   "newAliases": [
-    "伏龙",
-    "忠武侯",
-    "相父",
-    "诸葛丞相"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -236,12 +191,7 @@
     "碧眼紫髯",
     "紫髯鼠辈"
    ],
-   "newAliases": [
-    "碧眼儿",
-    "碧眼小儿",
-    "碧眼紫髯",
-    "紫髯鼠辈"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -254,9 +204,7 @@
     "小霸王",
     "孙郎"
    ],
-   "newAliases": [
-    "孙郎"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -268,21 +216,19 @@
     "孙文台",
     "江东猛虎"
    ],
-   "newAliases": [
-    "江东猛虎"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": "P019",
+   "id": "P151",
    "canonical": "孙亮",
    "aliases": [
     "子明",
     "会稽王"
    ],
    "newAliases": [
-    "会稽王"
+    "子明"
    ],
    "inAliasJson": true
   },
@@ -294,10 +240,7 @@
     "子烈",
     "琅琊王"
    ],
-   "newAliases": [
-    "子烈",
-    "琅琊王"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -309,9 +252,7 @@
     "乌程侯",
     "归命侯"
    ],
-   "newAliases": [
-    "元宗"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -324,10 +265,7 @@
     "周郎",
     "周大都督"
    ],
-   "newAliases": [
-    "周郎",
-    "周大都督"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -349,7 +287,9 @@
     "子明",
     "吕子明"
    ],
-   "newAliases": [],
+   "newAliases": [
+    "子明"
+   ],
    "inAliasJson": true
   },
   {
@@ -371,10 +311,7 @@
     "幼节",
     "陆幼节"
    ],
-   "newAliases": [
-    "幼节",
-    "陆幼节"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -400,10 +337,7 @@
     "景王",
     "景帝"
    ],
-   "newAliases": [
-    "景王",
-    "景帝"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -417,11 +351,7 @@
     "文帝",
     "晋王"
    ],
-   "newAliases": [
-    "子尚",
-    "司马子尚",
-    "文王"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -433,9 +363,7 @@
     "晋武帝",
     "晋帝"
    ],
-   "newAliases": [
-    "晋帝"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -447,9 +375,7 @@
     "邓士载",
     "邓征西"
    ],
-   "newAliases": [
-    "邓征西"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -462,10 +388,7 @@
     "钟镇西",
     "钟司徒"
    ],
-   "newAliases": [
-    "钟镇西",
-    "钟司徒"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -478,9 +401,7 @@
     "平襄侯",
     "姜大将军"
    ],
-   "newAliases": [
-    "姜大将军"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -494,10 +415,7 @@
     "马儿",
     "神威天将军"
    ],
-   "newAliases": [
-    "马儿",
-    "神威天将军"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -533,9 +451,7 @@
     "魏文长",
     "南郑侯"
    ],
-   "newAliases": [
-    "南郑侯"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -553,17 +469,14 @@
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P152",
    "canonical": "法正",
    "aliases": [
     "孝直",
     "法孝直"
    ],
-   "newAliases": [
-    "孝直",
-    "法孝直"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
@@ -586,9 +499,7 @@
     "虎痴",
     "虎侯"
    ],
-   "newAliases": [
-    "虎侯"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -659,59 +570,47 @@
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P153",
    "canonical": "刘晔",
    "aliases": [
     "子阳",
     "刘子阳"
    ],
-   "newAliases": [
-    "子阳",
-    "刘子阳"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P154",
    "canonical": "满宠",
    "aliases": [
     "伯宁",
     "满伯宁"
    ],
-   "newAliases": [
-    "伯宁",
-    "满伯宁"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P155",
    "canonical": "吕虔",
    "aliases": [
     "子恪",
     "吕子恪"
    ],
-   "newAliases": [
-    "子恪",
-    "吕子恪"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P156",
    "canonical": "毛玠",
    "aliases": [
     "孝先",
     "毛孝先"
    ],
-   "newAliases": [
-    "孝先",
-    "毛孝先"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
@@ -732,7 +631,9 @@
     "公明",
     "徐公明"
    ],
-   "newAliases": [],
+   "newAliases": [
+    "公明"
+   ],
    "inAliasJson": true
   },
   {
@@ -787,7 +688,9 @@
     "子孝",
     "曹子孝"
    ],
-   "newAliases": [],
+   "newAliases": [
+    "子孝"
+   ],
    "inAliasJson": true
   },
   {
@@ -803,17 +706,14 @@
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P157",
    "canonical": "曹休",
    "aliases": [
     "文烈",
     "曹文烈"
    ],
-   "newAliases": [
-    "文烈",
-    "曹文烈"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
@@ -823,9 +723,7 @@
     "子丹",
     "曹子丹"
    ],
-   "newAliases": [
-    "子丹"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -836,10 +734,7 @@
     "昭伯",
     "曹昭伯"
    ],
-   "newAliases": [
-    "昭伯",
-    "曹昭伯"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -872,25 +767,19 @@
     "仲权",
     "夏侯仲权"
    ],
-   "newAliases": [
-    "仲权",
-    "夏侯仲权"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P158",
    "canonical": "夏侯楙",
    "aliases": [
     "子休",
     "夏侯子休"
    ],
-   "newAliases": [
-    "子休",
-    "夏侯子休"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
@@ -927,17 +816,14 @@
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P159",
    "canonical": "袁熙",
    "aliases": [
     "显奕",
     "袁显奕"
    ],
-   "newAliases": [
-    "显奕",
-    "袁显奕"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
@@ -960,9 +846,7 @@
     "董太师",
     "董贼"
    ],
-   "newAliases": [
-    "董贼"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -976,9 +860,7 @@
     "吕温侯",
     "三姓家奴"
    ],
-   "newAliases": [
-    "三姓家奴"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -988,9 +870,7 @@
    "aliases": [
     "歌伎貂蝉"
    ],
-   "newAliases": [
-    "歌伎貂蝉"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -1047,9 +927,7 @@
     "刘琦",
     "公子琦"
    ],
-   "newAliases": [
-    "公子琦"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -1060,24 +938,19 @@
     "刘琮",
     "公子琮"
    ],
-   "newAliases": [
-    "公子琮"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P160",
    "canonical": "孙夫人",
    "aliases": [
     "枭姬",
     "孙夫人"
    ],
-   "newAliases": [
-    "枭姬",
-    "孙夫人"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
@@ -1121,9 +994,7 @@
     "甘兴霸",
     "锦帆贼"
    ],
-   "newAliases": [
-    "锦帆贼"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -1156,10 +1027,7 @@
     "德谋",
     "程德谋"
    ],
-   "newAliases": [
-    "德谋",
-    "程德谋"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -1170,10 +1038,7 @@
     "义公",
     "韩义公"
    ],
-   "newAliases": [
-    "义公",
-    "韩义公"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -1184,10 +1049,7 @@
     "公绩",
     "凌公绩"
    ],
-   "newAliases": [
-    "公绩",
-    "凌公绩"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -1198,10 +1060,7 @@
     "文向",
     "徐文向"
    ],
-   "newAliases": [
-    "文向",
-    "徐文向"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -1212,10 +1071,7 @@
     "承渊",
     "丁承渊"
    ],
-   "newAliases": [
-    "承渊",
-    "丁承渊"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -1226,22 +1082,18 @@
     "蛮王孟获",
     "南蛮王"
    ],
-   "newAliases": [
-    "蛮王孟获"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P161",
    "canonical": "祝融夫人",
    "aliases": [
     "祝融夫人"
    ],
-   "newAliases": [
-    "祝融夫人"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
@@ -1252,27 +1104,20 @@
     "华元化",
     "神医华佗"
    ],
-   "newAliases": [
-    "华元化",
-    "神医华佗"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P162",
    "canonical": "于吉",
    "aliases": [
     "于神仙",
     "于道人",
     "于先生"
    ],
-   "newAliases": [
-    "于神仙",
-    "于道人",
-    "于先生"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
@@ -1282,14 +1127,12 @@
     "元放",
     "乌角先生"
    ],
-   "newAliases": [
-    "元放"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": "P026",
+   "id": "P163",
    "canonical": "管辂",
    "aliases": [
     "公明",
@@ -1297,60 +1140,50 @@
     "神卜"
    ],
    "newAliases": [
-    "管公明",
-    "神卜"
+    "公明"
    ],
    "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P164",
    "canonical": "普净",
    "aliases": [
     "普净禅师"
    ],
-   "newAliases": [
-    "普净禅师"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P165",
    "canonical": "李意",
    "aliases": [
     "青城山隐者"
    ],
-   "newAliases": [
-    "青城山隐者"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P166",
    "canonical": "马援",
    "aliases": [
     "伏波将军",
     "伏波将军马援"
    ],
-   "newAliases": [
-    "伏波将军",
-    "伏波将军马援"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P167",
    "canonical": "孟节",
    "aliases": [
     "万安隐者"
    ],
-   "newAliases": [
-    "万安隐者"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
@@ -1362,12 +1195,7 @@
     "汉宁太守",
     "镇南中郎将"
    ],
-   "newAliases": [
-    "师君",
-    "张师君",
-    "汉宁太守",
-    "镇南中郎将"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -1378,9 +1206,7 @@
     "寿成",
     "马寿成"
    ],
-   "newAliases": [
-    "寿成"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -1391,9 +1217,7 @@
     "文约",
     "韩文约"
    ],
-   "newAliases": [
-    "文约"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -1404,95 +1228,74 @@
     "伯瞻",
     "马伯瞻"
    ],
-   "newAliases": [
-    "伯瞻",
-    "马伯瞻"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P168",
    "canonical": "张松",
    "aliases": [
     "永年",
     "张永年"
    ],
-   "newAliases": [
-    "永年",
-    "张永年"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P169",
    "canonical": "孟达",
    "aliases": [
     "子度",
     "孟子度"
    ],
-   "newAliases": [
-    "子度",
-    "孟子度"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P170",
    "canonical": "黄权",
    "aliases": [
     "公衡",
     "黄公衡"
    ],
-   "newAliases": [
-    "公衡",
-    "黄公衡"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P171",
    "canonical": "李严",
    "aliases": [
     "正方",
     "李正方"
    ],
-   "newAliases": [
-    "正方",
-    "李正方"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P172",
    "canonical": "刘巴",
    "aliases": [
     "子初",
     "刘子初"
    ],
-   "newAliases": [
-    "子初",
-    "刘子初"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P173",
    "canonical": "许靖",
    "aliases": [
     "文休",
     "许文休"
    ],
-   "newAliases": [
-    "文休",
-    "许文休"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
@@ -1502,9 +1305,7 @@
     "子仲",
     "糜子仲"
    ],
-   "newAliases": [
-    "糜子仲"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -1515,10 +1316,7 @@
     "子方",
     "糜子方"
    ],
-   "newAliases": [
-    "子方",
-    "糜子方"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -1529,9 +1327,7 @@
     "公祐",
     "孙公祐"
    ],
-   "newAliases": [
-    "孙公祐"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -1542,9 +1338,7 @@
     "宪和",
     "简宪和"
    ],
-   "newAliases": [
-    "简宪和"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -1555,9 +1349,7 @@
     "机伯",
     "伊机伯"
    ],
-   "newAliases": [
-    "伊机伯"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -1568,9 +1360,7 @@
     "季常",
     "马季常"
    ],
-   "newAliases": [
-    "马季常"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -1641,31 +1431,25 @@
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P174",
    "canonical": "张翼",
    "aliases": [
     "伯恭",
     "张伯恭"
    ],
-   "newAliases": [
-    "伯恭",
-    "张伯恭"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P175",
    "canonical": "张嶷",
    "aliases": [
     "伯岐",
     "张伯岐"
    ],
-   "newAliases": [
-    "伯岐",
-    "张伯岐"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
@@ -1697,135 +1481,108 @@
     "希伯",
     "严希伯"
    ],
-   "newAliases": [
-    "希伯",
-    "严希伯"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P176",
    "canonical": "诸葛瞻",
    "aliases": [
     "思远",
     "诸葛思远"
    ],
-   "newAliases": [
-    "思远",
-    "诸葛思远"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P177",
    "canonical": "刘谌",
    "aliases": [
     "北地王"
    ],
-   "newAliases": [
-    "北地王"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P178",
    "canonical": "谯周",
    "aliases": [
     "允南",
     "谯允南"
    ],
-   "newAliases": [
-    "允南",
-    "谯允南"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P179",
    "canonical": "郤正",
    "aliases": [
     "令先",
     "郤令先"
    ],
-   "newAliases": [
-    "令先",
-    "郤令先"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P180",
    "canonical": "秦宓",
    "aliases": [
     "子敕",
     "秦子敕"
    ],
-   "newAliases": [
-    "子敕",
-    "秦子敕"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P181",
    "canonical": "吴懿",
    "aliases": [
     "子远",
     "吴子远"
    ],
    "newAliases": [
-    "子远",
-    "吴子远"
+    "子远"
    ],
-   "inAliasJson": false
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P182",
    "canonical": "吴班",
    "aliases": [
     "元雄",
     "吴元雄"
    ],
-   "newAliases": [
-    "元雄",
-    "吴元雄"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P183",
    "canonical": "李恢",
    "aliases": [
     "德昂",
     "李德昂"
    ],
-   "newAliases": [
-    "德昂",
-    "李德昂"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P184",
    "canonical": "彭羕",
    "aliases": [
     "永言",
     "彭永言"
    ],
-   "newAliases": [
-    "永言",
-    "彭永言"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
@@ -1835,23 +1592,18 @@
     "正礼",
     "刘正礼"
    ],
-   "newAliases": [
-    "正礼",
-    "刘正礼"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P185",
    "canonical": "严白虎",
    "aliases": [
     "严白虎"
    ],
-   "newAliases": [
-    "严白虎"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
@@ -1861,10 +1613,7 @@
     "景兴",
     "王景兴"
    ],
-   "newAliases": [
-    "景兴",
-    "王景兴"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -1875,39 +1624,30 @@
     "子鱼",
     "华子鱼"
    ],
-   "newAliases": [
-    "子鱼",
-    "华子鱼"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P186",
    "canonical": "管宁",
    "aliases": [
     "幼安",
     "管幼安"
    ],
-   "newAliases": [
-    "幼安",
-    "管幼安"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P187",
    "canonical": "邴原",
    "aliases": [
     "根矩",
     "邴根矩"
    ],
-   "newAliases": [
-    "根矩",
-    "邴根矩"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
@@ -1928,25 +1668,19 @@
     "孟卓",
     "张孟卓"
    ],
-   "newAliases": [
-    "孟卓",
-    "张孟卓"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P188",
    "canonical": "张超",
    "aliases": [
     "孟高",
     "张孟高"
    ],
-   "newAliases": [
-    "孟高",
-    "张孟高"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
@@ -1961,17 +1695,14 @@
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P189",
    "canonical": "陈珪",
    "aliases": [
     "汉瑜",
     "陈汉瑜"
    ],
-   "newAliases": [
-    "汉瑜",
-    "陈汉瑜"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
@@ -1981,10 +1712,7 @@
     "宣高",
     "臧宣高"
    ],
-   "newAliases": [
-    "宣高",
-    "臧宣高"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -1995,9 +1723,7 @@
     "伯圭",
     "公孙伯圭"
    ],
-   "newAliases": [
-    "伯圭"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -2008,9 +1734,7 @@
     "叔子",
     "羊叔子"
    ],
-   "newAliases": [
-    "叔子"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -2021,9 +1745,7 @@
     "元凯",
     "杜元凯"
    ],
-   "newAliases": [
-    "元凯"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -2034,181 +1756,143 @@
     "士治",
     "王士治"
    ],
-   "newAliases": [
-    "士治",
-    "王士治"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P190",
    "canonical": "王浑",
    "aliases": [
     "玄冲",
     "王玄冲"
    ],
-   "newAliases": [
-    "玄冲",
-    "王玄冲"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P191",
    "canonical": "张华",
    "aliases": [
     "茂先",
     "张茂先"
    ],
-   "newAliases": [
-    "茂先",
-    "张茂先"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P192",
    "canonical": "孙綝",
    "aliases": [
     "子通",
     "孙子通"
    ],
-   "newAliases": [
-    "子通",
-    "孙子通"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P193",
    "canonical": "孙峻",
    "aliases": [
     "子远",
     "孙子远"
    ],
    "newAliases": [
-    "子远",
-    "孙子远"
+    "子远"
    ],
-   "inAliasJson": false
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P194",
    "canonical": "滕胤",
    "aliases": [
     "承嗣",
     "滕承嗣"
    ],
-   "newAliases": [
-    "承嗣",
-    "滕承嗣"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P195",
    "canonical": "吕据",
    "aliases": [
     "世议",
     "吕世议"
    ],
-   "newAliases": [
-    "世议",
-    "吕世议"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P196",
    "canonical": "朱异",
    "aliases": [
     "季文",
     "朱季文"
    ],
-   "newAliases": [
-    "季文",
-    "朱季文"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P197",
    "canonical": "文钦",
    "aliases": [
     "仲若",
     "文仲若"
    ],
-   "newAliases": [
-    "仲若",
-    "文仲若"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P198",
    "canonical": "文鸯",
    "aliases": [
     "次骞",
     "文次骞",
     "阿鸯"
    ],
-   "newAliases": [
-    "次骞",
-    "文次骞",
-    "阿鸯"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P199",
    "canonical": "毋丘俭",
    "aliases": [
     "仲恭",
     "毋丘仲恭"
    ],
-   "newAliases": [
-    "仲恭",
-    "毋丘仲恭"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P200",
    "canonical": "诸葛诞",
    "aliases": [
     "公休",
     "诸葛公休"
    ],
-   "newAliases": [
-    "公休",
-    "诸葛公休"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P201",
    "canonical": "贾充",
    "aliases": [
     "公闾",
     "贾公闾"
    ],
-   "newAliases": [
-    "公闾",
-    "贾公闾"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
@@ -2218,123 +1902,96 @@
     "元常",
     "钟元常"
    ],
-   "newAliases": [
-    "元常",
-    "钟元常"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P202",
    "canonical": "贾逵",
    "aliases": [
     "梁道",
     "贾梁道"
    ],
-   "newAliases": [
-    "梁道",
-    "贾梁道"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P203",
    "canonical": "何晏",
    "aliases": [
     "平叔",
     "何平叔"
    ],
-   "newAliases": [
-    "平叔",
-    "何平叔"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P204",
    "canonical": "邓飏",
    "aliases": [
     "玄茂",
     "邓玄茂"
    ],
-   "newAliases": [
-    "玄茂",
-    "邓玄茂"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P205",
    "canonical": "丁谧",
    "aliases": [
     "彦靖",
     "丁彦靖"
    ],
-   "newAliases": [
-    "彦靖",
-    "丁彦靖"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P206",
    "canonical": "毕轨",
    "aliases": [
     "昭先",
     "毕昭先"
    ],
-   "newAliases": [
-    "昭先",
-    "毕昭先"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P207",
    "canonical": "李胜",
    "aliases": [
     "公昭",
     "李公昭"
    ],
-   "newAliases": [
-    "公昭",
-    "李公昭"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P208",
    "canonical": "桓范",
    "aliases": [
     "元则",
     "桓元则"
    ],
-   "newAliases": [
-    "元则",
-    "桓元则"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P209",
    "canonical": "辛毗",
    "aliases": [
     "佐治",
     "辛佐治"
    ],
-   "newAliases": [
-    "佐治",
-    "辛佐治"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
@@ -2349,59 +2006,47 @@
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P210",
    "canonical": "司马孚",
    "aliases": [
     "叔达",
     "司马叔达"
    ],
-   "newAliases": [
-    "叔达",
-    "司马叔达"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P211",
    "canonical": "王沈",
    "aliases": [
     "处道",
     "王处道"
    ],
-   "newAliases": [
-    "处道",
-    "王处道"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P212",
    "canonical": "王业",
    "aliases": [
     "长绪",
     "王长绪"
    ],
-   "newAliases": [
-    "长绪",
-    "王长绪"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P213",
    "canonical": "吉平",
    "aliases": [
     "称平",
     "吉称平"
    ],
-   "newAliases": [
-    "称平",
-    "吉称平"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
@@ -2422,9 +2067,7 @@
     "文举",
     "孔文举"
    ],
-   "newAliases": [
-    "文举"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -2440,17 +2083,14 @@
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P214",
    "canonical": "崔琰",
    "aliases": [
     "季珪",
     "崔季珪"
    ],
-   "newAliases": [
-    "季珪",
-    "崔季珪"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
@@ -2465,128 +2105,106 @@
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P215",
    "canonical": "王修",
    "aliases": [
     "叔治",
     "王叔治"
    ],
-   "newAliases": [
-    "叔治",
-    "王叔治"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P216",
    "canonical": "田丰",
    "aliases": [
     "元皓",
     "田元皓"
    ],
-   "newAliases": [
-    "元皓",
-    "田元皓"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P217",
    "canonical": "审配",
    "aliases": [
     "正南",
     "审正南"
    ],
-   "newAliases": [
-    "正南",
-    "审正南"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P218",
    "canonical": "逢纪",
    "aliases": [
     "元图",
     "逢元图"
    ],
-   "newAliases": [
-    "元图",
-    "逢元图"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P219",
    "canonical": "郭图",
    "aliases": [
     "公则",
     "郭公则"
    ],
-   "newAliases": [
-    "公则",
-    "郭公则"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P220",
    "canonical": "许攸",
    "aliases": [
     "子远",
     "许子远"
    ],
    "newAliases": [
-    "子远",
-    "许子远"
+    "子远"
    ],
-   "inAliasJson": false
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P221",
    "canonical": "司马攸",
    "aliases": [
     "大猷",
     "司马大猷"
    ],
-   "newAliases": [
-    "大猷",
-    "司马大猷"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": "P030",
+   "id": "P222",
    "canonical": "孙和",
    "aliases": [
     "子孝",
     "孙子孝"
    ],
    "newAliases": [
-    "孙子孝"
+    "子孝"
    ],
    "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P223",
    "canonical": "孙登",
    "aliases": [
     "子高",
     "孙子高"
    ],
-   "newAliases": [
-    "子高",
-    "孙子高"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   },
   {
    "type": "人物",
@@ -2598,24 +2216,19 @@
     "陈留王",
     "山阳公"
    ],
-   "newAliases": [
-    "山阳公"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
    "type": "人物",
-   "id": null,
+   "id": "P224",
    "canonical": "刘辩",
    "aliases": [
     "少帝",
     "弘农王"
    ],
-   "newAliases": [
-    "少帝",
-    "弘农王"
-   ],
-   "inAliasJson": false
+   "newAliases": [],
+   "inAliasJson": true
   }
  ],
  "nonPerson": [
@@ -4187,7 +3800,7 @@
    ],
    "fragmentOnly": [],
    "organGuard": null,
-   "queryHit": false,
+   "queryHit": true,
    "corpusHit": true,
    "numLike": false
   },
@@ -4283,33 +3896,17 @@
   },
   {
    "type": "器物",
-   "canonical": "青龙偃月刀",
-   "aliases": [
-    "冷艳锯",
-    "青龙刀"
-   ],
-   "rewriteKeys": [
-    "冷艳锯",
-    "青龙刀"
-   ],
-   "fragmentOnly": [],
-   "organGuard": null,
-   "queryHit": true,
-   "corpusHit": true,
-   "numLike": false
-  },
-  {
-   "type": "器物",
    "canonical": "丈八蛇矛",
    "aliases": [
     "丈八点钢矛",
     "蛇矛"
    ],
    "rewriteKeys": [
-    "丈八点钢矛",
+    "丈八点钢矛"
+   ],
+   "fragmentOnly": [
     "蛇矛"
    ],
-   "fragmentOnly": [],
    "organGuard": null,
    "queryHit": true,
    "corpusHit": true,
@@ -4321,10 +3918,10 @@
    "aliases": [
     "画戟"
    ],
-   "rewriteKeys": [
+   "rewriteKeys": [],
+   "fragmentOnly": [
     "画戟"
    ],
-   "fragmentOnly": [],
    "organGuard": null,
    "queryHit": true,
    "corpusHit": true,
@@ -4336,8 +3933,23 @@
    "aliases": [
     "赤兔"
    ],
-   "rewriteKeys": [
+   "rewriteKeys": [],
+   "fragmentOnly": [
     "赤兔"
+   ],
+   "organGuard": null,
+   "queryHit": false,
+   "corpusHit": true,
+   "numLike": false
+  },
+  {
+   "type": "器物",
+   "canonical": "赤兔马",
+   "aliases": [
+    "赤兔（片段侧）"
+   ],
+   "rewriteKeys": [
+    "赤兔（片段侧）"
    ],
    "fragmentOnly": [],
    "organGuard": null,
@@ -4362,14 +3974,17 @@
   },
   {
    "type": "器物",
-   "canonical": "爪黄飞电马",
+   "canonical": "传国玉玺",
    "aliases": [
-    "爪黄飞电"
+    "玉玺",
+    "传国宝"
    ],
    "rewriteKeys": [
-    "爪黄飞电"
+    "传国宝"
    ],
-   "fragmentOnly": [],
+   "fragmentOnly": [
+    "玉玺"
+   ],
    "organGuard": null,
    "queryHit": false,
    "corpusHit": true,
@@ -4379,11 +3994,11 @@
    "type": "器物",
    "canonical": "传国玉玺",
    "aliases": [
-    "玉玺",
+    "玉玺（片段侧）",
     "传国宝"
    ],
    "rewriteKeys": [
-    "玉玺",
+    "玉玺（片段侧）",
     "传国宝"
    ],
    "fragmentOnly": [],
@@ -4424,14 +4039,17 @@
   },
   {
    "type": "器物",
-   "canonical": "铁索",
+   "canonical": "巾帼女衣",
    "aliases": [
-    "连环索"
+    "巾帼",
+    "妇人缟素之服"
    ],
    "rewriteKeys": [
-    "连环索"
+    "妇人缟素之服"
    ],
-   "fragmentOnly": [],
+   "fragmentOnly": [
+    "巾帼"
+   ],
    "organGuard": null,
    "queryHit": false,
    "corpusHit": true,
@@ -4441,11 +4059,11 @@
    "type": "器物",
    "canonical": "巾帼女衣",
    "aliases": [
-    "巾帼",
+    "巾帼（片段侧）",
     "妇人缟素之服"
    ],
    "rewriteKeys": [
-    "巾帼",
+    "巾帼（片段侧）",
     "妇人缟素之服"
    ],
    "fragmentOnly": [],
@@ -4456,14 +4074,14 @@
   },
   {
    "type": "器物",
-   "canonical": "遁甲天书",
+   "canonical": "七星皂幡",
    "aliases": [
-    "天书三卷"
+    "皂幡"
    ],
-   "rewriteKeys": [
-    "天书三卷"
+   "rewriteKeys": [],
+   "fragmentOnly": [
+    "皂幡"
    ],
-   "fragmentOnly": [],
    "organGuard": null,
    "queryHit": false,
    "corpusHit": true,
@@ -4473,10 +4091,10 @@
    "type": "器物",
    "canonical": "七星皂幡",
    "aliases": [
-    "皂幡"
+    "皂幡（片段侧）"
    ],
    "rewriteKeys": [
-    "皂幡"
+    "皂幡（片段侧）"
    ],
    "fragmentOnly": [],
    "organGuard": null,
@@ -4516,14 +4134,14 @@
   },
   {
    "type": "器物",
-   "canonical": "倚天剑",
+   "canonical": "青釭剑",
    "aliases": [
-    "倚天"
+    "青釭"
    ],
-   "rewriteKeys": [
-    "倚天"
+   "rewriteKeys": [],
+   "fragmentOnly": [
+    "青釭"
    ],
-   "fragmentOnly": [],
    "organGuard": null,
    "queryHit": false,
    "corpusHit": true,
@@ -4533,25 +4151,10 @@
    "type": "器物",
    "canonical": "青釭剑",
    "aliases": [
-    "青釭"
+    "青釭（片段侧）"
    ],
    "rewriteKeys": [
-    "青釭"
-   ],
-   "fragmentOnly": [],
-   "organGuard": null,
-   "queryHit": false,
-   "corpusHit": true,
-   "numLike": false
-  },
-  {
-   "type": "器物",
-   "canonical": "雌雄双股剑",
-   "aliases": [
-    "双股剑"
-   ],
-   "rewriteKeys": [
-    "双股剑"
+    "青釭（片段侧）"
    ],
    "fragmentOnly": [],
    "organGuard": null,
@@ -4566,9 +4169,26 @@
     "木牛",
     "流马"
    ],
-   "rewriteKeys": [
+   "rewriteKeys": [],
+   "fragmentOnly": [
     "木牛",
     "流马"
+   ],
+   "organGuard": null,
+   "queryHit": false,
+   "corpusHit": true,
+   "numLike": false
+  },
+  {
+   "type": "器物",
+   "canonical": "木牛流马",
+   "aliases": [
+    "木牛（片段侧）",
+    "流马（片段侧）"
+   ],
+   "rewriteKeys": [
+    "木牛（片段侧）",
+    "流马（片段侧）"
    ],
    "fragmentOnly": [],
    "organGuard": null,
@@ -5182,7 +4802,7 @@
    ],
    "fragmentOnly": [],
    "organGuard": null,
-   "queryHit": false,
+   "queryHit": true,
    "corpusHit": true,
    "numLike": false
   },
@@ -5257,7 +4877,7 @@
    ],
    "fragmentOnly": [],
    "organGuard": null,
-   "queryHit": false,
+   "queryHit": true,
    "corpusHit": true,
    "numLike": true
   },
@@ -5443,14 +5063,14 @@
   },
   {
    "type": "典故",
-   "canonical": "美人计",
+   "canonical": "苦肉计",
    "aliases": [
-    "美人"
+    "苦肉"
    ],
-   "rewriteKeys": [
-    "美人"
+   "rewriteKeys": [],
+   "fragmentOnly": [
+    "苦肉"
    ],
-   "fragmentOnly": [],
    "organGuard": null,
    "queryHit": true,
    "corpusHit": true,
@@ -5460,25 +5080,10 @@
    "type": "典故",
    "canonical": "苦肉计",
    "aliases": [
-    "苦肉"
+    "苦肉（片段侧）"
    ],
    "rewriteKeys": [
-    "苦肉"
-   ],
-   "fragmentOnly": [],
-   "organGuard": null,
-   "queryHit": true,
-   "corpusHit": true,
-   "numLike": false
-  },
-  {
-   "type": "典故",
-   "canonical": "空城计",
-   "aliases": [
-    "空城"
-   ],
-   "rewriteKeys": [
-    "空城"
+    "苦肉（片段侧）"
    ],
    "fragmentOnly": [],
    "organGuard": null,
@@ -5492,10 +5097,10 @@
    "aliases": [
     "就计"
    ],
-   "rewriteKeys": [
+   "rewriteKeys": [],
+   "fragmentOnly": [
     "就计"
    ],
-   "fragmentOnly": [],
    "organGuard": null,
    "queryHit": false,
    "corpusHit": true,
@@ -5507,8 +5112,23 @@
    "aliases": [
     "缓兵"
    ],
-   "rewriteKeys": [
+   "rewriteKeys": [],
+   "fragmentOnly": [
     "缓兵"
+   ],
+   "organGuard": null,
+   "queryHit": false,
+   "corpusHit": true,
+   "numLike": false
+  },
+  {
+   "type": "典故",
+   "canonical": "缓兵计",
+   "aliases": [
+    "缓兵（片段侧）"
+   ],
+   "rewriteKeys": [
+    "缓兵（片段侧）"
    ],
    "fragmentOnly": [],
    "organGuard": null,
@@ -5664,7 +5284,7 @@
    ],
    "fragmentOnly": [],
    "organGuard": null,
-   "queryHit": false,
+   "queryHit": true,
    "corpusHit": true,
    "numLike": false
   },
@@ -6267,19 +5887,19 @@
    "prior": "banned",
    "note": "泛官职裸词（禁入改写键，仅组合词可留）：大都督（周瑜 / 鲁肃 / 吕蒙 / 陆逊）、大将军（多人）、太子、太后、皇后、丞相、相国、司徒、车骑将军、骠骑将军等；组合词（周大都督 / 王司徒 / 董太师）唯一指称可留",
    "occurrences": 547,
-   "windowCount": 528,
+   "windowCount": 525,
    "dist": [
     [
      "P004",
      211
     ],
     [
-     "P005",
-     111
+     "P001",
+     106
     ],
     [
-     "P001",
-     109
+     "P005",
+     95
     ],
     [
      "P002",
@@ -6318,19 +5938,15 @@
      27
     ],
     [
-     "P006",
-     26
-    ],
-    [
-     "P014",
-     26
-    ],
-    [
      "P090",
      26
     ],
     [
      "P012",
+     25
+    ],
+    [
+     "P014",
      25
     ],
     [
@@ -6340,6 +5956,10 @@
     [
      "P036",
      23
+    ],
+    [
+     "P006",
+     22
     ],
     [
      "P028",
@@ -6354,16 +5974,16 @@
      20
     ],
     [
-     "P010",
-     18
-    ],
-    [
      "P008",
      18
     ],
     [
      "P092",
      18
+    ],
+    [
+     "P010",
+     17
     ],
     [
      "P083",
@@ -6380,14 +6000,6 @@
     [
      "P075",
      12
-    ],
-    [
-     "P074",
-     12
-    ],
-    [
-     "P026",
-     11
     ],
     [
      "P003",
@@ -6407,6 +6019,10 @@
     ],
     [
      "P032",
+     10
+    ],
+    [
+     "P026",
      10
     ],
     [
@@ -6434,10 +6050,6 @@
      8
     ],
     [
-     "P030",
-     8
-    ],
-    [
      "P051",
      8
     ],
@@ -6448,6 +6060,22 @@
     [
      "P027",
      8
+    ],
+    [
+     "P168",
+     8
+    ],
+    [
+     "P171",
+     8
+    ],
+    [
+     "P158",
+     8
+    ],
+    [
+     "P030",
+     7
     ],
     [
      "P142",
@@ -6466,8 +6094,8 @@
      7
     ],
     [
-     "P046",
-     6
+     "P175",
+     7
     ],
     [
      "P103",
@@ -6476,10 +6104,6 @@
     [
      "P018",
      6
-    ],
-    [
-     "P041",
-     5
     ],
     [
      "P106",
@@ -6491,6 +6115,18 @@
     ],
     [
      "P016",
+     5
+    ],
+    [
+     "P174",
+     5
+    ],
+    [
+     "P178",
+     5
+    ],
+    [
+     "P169",
      5
     ],
     [
@@ -6510,19 +6146,15 @@
      5
     ],
     [
-     "P022",
-     4
-    ],
-    [
      "P029",
      4
     ],
     [
-     "P101",
+     "P220",
      4
     ],
     [
-     "P047",
+     "P209",
      4
     ],
     [
@@ -6530,7 +6162,7 @@
      4
     ],
     [
-     "P019",
+     "P167",
      4
     ],
     [
@@ -6550,6 +6182,10 @@
      3
     ],
     [
+     "P153",
+     3
+    ],
+    [
      "P102",
      3
     ],
@@ -6562,11 +6198,11 @@
      3
     ],
     [
-     "P060",
+     "P159",
      3
     ],
     [
-     "P113",
+     "P060",
      3
     ],
     [
@@ -6574,7 +6210,27 @@
      3
     ],
     [
+     "P151",
+     3
+    ],
+    [
      "P063",
+     3
+    ],
+    [
+     "P194",
+     3
+    ],
+    [
+     "P161",
+     3
+    ],
+    [
+     "P181",
+     3
+    ],
+    [
+     "P192",
      3
     ],
     [
@@ -6584,6 +6240,10 @@
     [
      "P056",
      3
+    ],
+    [
+     "P022",
+     2
     ],
     [
      "P038",
@@ -6598,19 +6258,23 @@
      2
     ],
     [
+     "P213",
+     2
+    ],
+    [
+     "P155",
+     2
+    ],
+    [
      "P088",
      2
     ],
     [
-     "P115",
+     "P156",
      2
     ],
     [
      "P119",
-     2
-    ],
-    [
-     "P062",
      2
     ],
     [
@@ -6630,7 +6294,31 @@
      2
     ],
     [
+     "P172",
+     2
+    ],
+    [
+     "P166",
+     2
+    ],
+    [
+     "P179",
+     2
+    ],
+    [
      "P071",
+     2
+    ],
+    [
+     "P176",
+     2
+    ],
+    [
+     "P148",
+     2
+    ],
+    [
+     "P193",
      2
     ],
     [
@@ -6642,11 +6330,11 @@
      2
     ],
     [
-     "P045",
+     "P137",
      1
     ],
     [
-     "P137",
+     "P189",
      1
     ],
     [
@@ -6658,7 +6346,23 @@
      1
     ],
     [
+     "P164",
+     1
+    ],
+    [
+     "P217",
+     1
+    ],
+    [
+     "P154",
+     1
+    ],
+    [
      "P096",
+     1
+    ],
+    [
+     "P214",
      1
     ],
     [
@@ -6666,7 +6370,7 @@
      1
     ],
     [
-     "P114",
+     "P019",
      1
     ],
     [
@@ -6675,6 +6379,10 @@
     ],
     [
      "P116",
+     1
+    ],
+    [
+     "P157",
      1
     ],
     [
@@ -6698,11 +6406,39 @@
      1
     ],
     [
+     "P173",
+     1
+    ],
+    [
+     "P180",
+     1
+    ],
+    [
+     "P170",
+     1
+    ],
+    [
      "P009",
      1
     ],
     [
      "P065",
+     1
+    ],
+    [
+     "P182",
+     1
+    ],
+    [
+     "P183",
+     1
+    ],
+    [
+     "P212",
+     1
+    ],
+    [
+     "P163",
      1
     ],
     [
@@ -6718,6 +6454,18 @@
      1
     ],
     [
+     "P195",
+     1
+    ],
+    [
+     "P201",
+     1
+    ],
+    [
+     "P222",
+     1
+    ],
+    [
      "P125",
      1
     ],
@@ -6727,7 +6475,7 @@
     ]
    ],
    "topPid": "P004",
-   "share": 0.3996212121212121,
+   "share": 0.40190476190476193,
    "verdict": "禁入改写键（泛官职裸词）"
   },
   {
@@ -6744,11 +6492,11 @@
     ],
     [
      "P001",
-     189
+     141
     ],
     [
      "P005",
-     147
+     124
     ],
     [
      "P012",
@@ -6763,20 +6511,12 @@
      55
     ],
     [
-     "P072",
-     55
-    ],
-    [
      "P023",
      49
     ],
     [
      "P019",
      45
-    ],
-    [
-     "P046",
-     37
     ],
     [
      "P040",
@@ -6788,7 +6528,7 @@
     ],
     [
      "P006",
-     34
+     30
     ],
     [
      "P004",
@@ -6807,39 +6547,31 @@
      25
     ],
     [
-     "P047",
-     19
+     "P164",
+     23
     ],
     [
      "P073",
      17
     ],
     [
-     "P010",
+     "P030",
      15
     ],
     [
-     "P030",
-     15
+     "P010",
+     13
     ],
     [
      "P024",
      13
     ],
     [
-     "P146",
-     13
-    ],
-    [
-     "P122",
-     11
+     "P169",
+     10
     ],
     [
      "P018",
-     9
-    ],
-    [
-     "P123",
      9
     ],
     [
@@ -6859,24 +6591,12 @@
      7
     ],
     [
-     "P062",
-     7
-    ],
-    [
      "P036",
      6
     ],
     [
      "P147",
      6
-    ],
-    [
-     "P074",
-     6
-    ],
-    [
-     "P079",
-     5
     ],
     [
      "P133",
@@ -6927,14 +6647,6 @@
      4
     ],
     [
-     "P045",
-     3
-    ],
-    [
-     "P078",
-     3
-    ],
-    [
      "P014",
      3
     ],
@@ -6951,11 +6663,19 @@
      3
     ],
     [
+     "P151",
+     3
+    ],
+    [
      "P117",
      3
     ],
     [
      "P063",
+     3
+    ],
+    [
+     "P173",
      3
     ],
     [
@@ -6971,7 +6691,19 @@
      2
     ],
     [
-     "P044",
+     "P216",
+     2
+    ],
+    [
+     "P219",
+     2
+    ],
+    [
+     "P213",
+     2
+    ],
+    [
+     "P160",
      2
     ],
     [
@@ -6979,12 +6711,8 @@
      2
     ],
     [
-     "P107",
-     1
-    ],
-    [
-     "P100",
-     1
+     "P182",
+     2
     ],
     [
      "P013",
@@ -6995,7 +6723,7 @@
      1
     ],
     [
-     "P101",
+     "P155",
      1
     ],
     [
@@ -7008,6 +6736,10 @@
     ],
     [
      "P016",
+     1
+    ],
+    [
+     "P154",
      1
     ],
     [
@@ -7028,6 +6760,10 @@
     ],
     [
      "P070",
+     1
+    ],
+    [
+     "P174",
      1
     ],
     [
@@ -7080,7 +6816,15 @@
      23
     ],
     [
+     "P178",
+     23
+    ],
+    [
      "P091",
+     21
+    ],
+    [
+     "P179",
      21
     ],
     [
@@ -7088,7 +6832,7 @@
      15
     ],
     [
-     "P006",
+     "P174",
      14
     ],
     [
@@ -7102,6 +6846,18 @@
     [
      "P015",
      11
+    ],
+    [
+     "P006",
+     10
+    ],
+    [
+     "P176",
+     10
+    ],
+    [
+     "P171",
+     9
     ],
     [
      "P130",
@@ -7124,6 +6880,14 @@
      7
     ],
     [
+     "P177",
+     7
+    ],
+    [
+     "P201",
+     7
+    ],
+    [
      "P018",
      5
     ],
@@ -7134,6 +6898,10 @@
     [
      "P134",
      5
+    ],
+    [
+     "P169",
+     4
     ],
     [
      "P070",
@@ -7148,6 +6916,10 @@
      4
     ],
     [
+     "P212",
+     4
+    ],
+    [
      "P058",
      4
     ],
@@ -7156,7 +6928,11 @@
      3
     ],
     [
-     "P099",
+     "P175",
+     3
+    ],
+    [
+     "P150",
      3
     ],
     [
@@ -7168,7 +6944,19 @@
      2
     ],
     [
+     "P157",
+     2
+    ],
+    [
      "P069",
+     2
+    ],
+    [
+     "P148",
+     2
+    ],
+    [
+     "P193",
      2
     ],
     [
@@ -7204,6 +6992,10 @@
      1
     ],
     [
+     "P180",
+     1
+    ],
+    [
      "P117",
      1
     ],
@@ -7212,11 +7004,11 @@
      1
     ],
     [
-     "P074",
+     "P012",
      1
     ],
     [
-     "P012",
+     "P159",
      1
     ],
     [
@@ -7224,11 +7016,35 @@
      1
     ],
     [
+     "P181",
+     1
+    ],
+    [
      "P131",
      1
     ],
     [
-     "P019",
+     "P151",
+     1
+    ],
+    [
+     "P200",
+     1
+    ],
+    [
+     "P192",
+     1
+    ],
+    [
+     "P194",
+     1
+    ],
+    [
+     "P195",
+     1
+    ],
+    [
+     "P149",
      1
     ]
    ],
@@ -7249,10 +7065,6 @@
      177
     ],
     [
-     "P074",
-     57
-    ],
-    [
      "P073",
      42
     ],
@@ -7261,16 +7073,20 @@
      41
     ],
     [
-     "P006",
-     32
-    ],
-    [
      "P018",
      31
     ],
     [
      "P003",
      29
+    ],
+    [
+     "P182",
+     29
+    ],
+    [
+     "P006",
+     28
     ],
     [
      "P147",
@@ -7285,8 +7101,8 @@
      19
     ],
     [
-     "P062",
-     17
+     "P170",
+     18
     ],
     [
      "P007",
@@ -7294,10 +7110,6 @@
     ],
     [
      "P083",
-     11
-    ],
-    [
-     "P123",
      11
     ],
     [
@@ -7309,24 +7121,20 @@
      9
     ],
     [
-     "P146",
-     7
-    ],
-    [
      "P145",
      7
     ],
     [
-     "P005",
-     6
+     "P180",
+     7
     ],
     [
      "P053",
      6
     ],
     [
-     "P122",
-     6
+     "P005",
+     5
     ],
     [
      "P060",
@@ -7341,11 +7149,31 @@
      5
     ],
     [
+     "P171",
+     5
+    ],
+    [
+     "P152",
+     4
+    ],
+    [
+     "P165",
+     4
+    ],
+    [
      "P069",
      4
     ],
     [
+     "P172",
+     3
+    ],
+    [
      "P019",
+     3
+    ],
+    [
+     "P160",
      3
     ],
     [
@@ -7357,11 +7185,27 @@
      3
     ],
     [
+     "P173",
+     2
+    ],
+    [
+     "P158",
+     2
+    ],
+    [
      "P035",
      2
     ],
     [
+     "P153",
+     2
+    ],
+    [
      "P099",
+     1
+    ],
+    [
+     "P178",
      1
     ],
     [
@@ -7370,6 +7214,10 @@
     ],
     [
      "P143",
+     1
+    ],
+    [
+     "P169",
      1
     ],
     [
@@ -7391,6 +7239,10 @@
     [
      "P118",
      1
+    ],
+    [
+     "P157",
+     1
     ]
    ],
    "topPid": "P001",
@@ -7402,11 +7254,11 @@
    "source": "官职/爵位类",
    "note": "郡守",
    "occurrences": 176,
-   "windowCount": 173,
+   "windowCount": 172,
    "dist": [
     [
      "P001",
-     45
+     43
     ],
     [
      "P004",
@@ -7414,11 +7266,7 @@
     ],
     [
      "P005",
-     30
-    ],
-    [
-     "P105",
-     19
+     29
     ],
     [
      "P006",
@@ -7461,6 +7309,10 @@
      12
     ],
     [
+     "P188",
+     11
+    ],
+    [
      "P015",
      11
     ],
@@ -7477,7 +7329,15 @@
      10
     ],
     [
+     "P158",
+     10
+    ],
+    [
      "P003",
+     9
+    ],
+    [
+     "P128",
      9
     ],
     [
@@ -7493,7 +7353,15 @@
      8
     ],
     [
+     "P174",
+     8
+    ],
+    [
      "P014",
+     7
+    ],
+    [
+     "P169",
      7
     ],
     [
@@ -7505,24 +7373,12 @@
      6
     ],
     [
-     "P026",
-     6
-    ],
-    [
      "P120",
-     6
-    ],
-    [
-     "P074",
      6
     ],
     [
      "P058",
      6
-    ],
-    [
-     "P046",
-     5
     ],
     [
      "P036",
@@ -7553,15 +7409,15 @@
      4
     ],
     [
-     "P047",
-     4
-    ],
-    [
      "P030",
      4
     ],
     [
-     "P064",
+     "P026",
+     4
+    ],
+    [
+     "P154",
      4
     ],
     [
@@ -7577,6 +7433,18 @@
      4
     ],
     [
+     "P152",
+     4
+    ],
+    [
+     "P181",
+     4
+    ],
+    [
+     "P183",
+     4
+    ],
+    [
      "P071",
      4
     ],
@@ -7585,12 +7453,8 @@
      4
     ],
     [
-     "P107",
-     3
-    ],
-    [
-     "P045",
-     3
+     "P157",
+     4
     ],
     [
      "P038",
@@ -7601,15 +7465,19 @@
      3
     ],
     [
-     "P101",
-     3
-    ],
-    [
-     "P062",
+     "P159",
      3
     ],
     [
      "P060",
+     3
+    ],
+    [
+     "P171",
+     3
+    ],
+    [
+     "P173",
      3
     ],
     [
@@ -7618,6 +7486,10 @@
     ],
     [
      "P075",
+     3
+    ],
+    [
+     "P175",
      3
     ],
     [
@@ -7673,7 +7545,11 @@
      2
     ],
     [
-     "P048",
+     "P185",
+     2
+    ],
+    [
+     "P189",
      2
     ],
     [
@@ -7697,11 +7573,23 @@
      2
     ],
     [
-     "P122",
+     "P170",
+     2
+    ],
+    [
+     "P172",
+     2
+    ],
+    [
+     "P178",
      2
     ],
     [
      "P117",
+     2
+    ],
+    [
+     "P163",
      2
     ],
     [
@@ -7717,23 +7605,39 @@
      2
     ],
     [
+     "P202",
+     2
+    ],
+    [
+     "P182",
+     2
+    ],
+    [
+     "P176",
+     2
+    ],
+    [
      "P056",
      2
     ],
     [
-     "P081",
-     1
-    ],
-    [
-     "P100",
-     1
-    ],
-    [
-     "P078",
+     "P194",
      1
     ],
     [
      "P029",
+     1
+    ],
+    [
+     "P216",
+     1
+    ],
+    [
+     "P220",
+     1
+    ],
+    [
+     "P218",
      1
     ],
     [
@@ -7745,7 +7649,19 @@
      1
     ],
     [
+     "P155",
+     1
+    ],
+    [
      "P095",
+     1
+    ],
+    [
+     "P164",
+     1
+    ],
+    [
+     "P162",
      1
     ],
     [
@@ -7757,19 +7673,15 @@
      1
     ],
     [
-     "P112",
+     "P219",
      1
     ],
     [
-     "P113",
+     "P156",
      1
     ],
     [
-     "P114",
-     1
-    ],
-    [
-     "P140",
+     "P214",
      1
     ],
     [
@@ -7777,7 +7689,19 @@
      1
     ],
     [
+     "P168",
+     1
+    ],
+    [
      "P143",
+     1
+    ],
+    [
+     "P184",
+     1
+    ],
+    [
+     "P180",
      1
     ],
     [
@@ -7789,11 +7713,11 @@
      1
     ],
     [
-     "P072",
+     "P042",
      1
     ],
     [
-     "P042",
+     "P217",
      1
     ],
     [
@@ -7814,7 +7738,7 @@
     ]
    ],
    "topPid": "P001",
-   "share": 0.26011560693641617,
+   "share": 0.25,
    "verdict": "跨主条目"
   },
   {
@@ -7822,7 +7746,7 @@
    "source": "官职/爵位类",
    "note": "前部先锋",
    "occurrences": 161,
-   "windowCount": 157,
+   "windowCount": 161,
    "dist": [
     [
      "P004",
@@ -7830,7 +7754,7 @@
     ],
     [
      "P001",
-     32
+     31
     ],
     [
      "P005",
@@ -7889,7 +7813,7 @@
      10
     ],
     [
-     "P074",
+     "P174",
      10
     ],
     [
@@ -7909,10 +7833,6 @@
      8
     ],
     [
-     "P006",
-     8
-    ],
-    [
      "P014",
      8
     ],
@@ -7929,15 +7849,23 @@
      7
     ],
     [
-     "P026",
-     7
-    ],
-    [
      "P060",
      7
     ],
     [
+     "P182",
+     7
+    ],
+    [
      "P013",
+     6
+    ],
+    [
+     "P026",
+     6
+    ],
+    [
+     "P006",
      6
     ],
     [
@@ -7993,10 +7921,6 @@
      5
     ],
     [
-     "P062",
-     5
-    ],
-    [
      "P018",
      5
     ],
@@ -8006,6 +7930,10 @@
     ],
     [
      "P145",
+     5
+    ],
+    [
+     "P175",
      5
     ],
     [
@@ -8025,19 +7953,11 @@
      4
     ],
     [
-     "P122",
-     4
-    ],
-    [
      "P120",
      4
     ],
     [
      "P116",
-     4
-    ],
-    [
-     "P146",
      4
     ],
     [
@@ -8049,7 +7969,15 @@
      4
     ],
     [
+     "P179",
+     4
+    ],
+    [
      "P055",
+     4
+    ],
+    [
+     "P196",
      4
     ],
     [
@@ -8061,15 +7989,15 @@
      3
     ],
     [
-     "P046",
-     3
-    ],
-    [
      "P025",
      3
     ],
     [
      "P043",
+     3
+    ],
+    [
+     "P155",
      3
     ],
     [
@@ -8093,11 +8021,19 @@
      3
     ],
     [
-     "P072",
+     "P157",
+     3
+    ],
+    [
+     "P158",
      3
     ],
     [
      "P132",
+     3
+    ],
+    [
+     "P169",
      3
     ],
     [
@@ -8109,11 +8045,11 @@
      3
     ],
     [
-     "P047",
+     "P032",
      2
     ],
     [
-     "P032",
+     "P176",
      2
     ],
     [
@@ -8121,11 +8057,27 @@
      2
     ],
     [
-     "P112",
+     "P220",
      2
     ],
     [
-     "P123",
+     "P217",
+     2
+    ],
+    [
+     "P152",
+     2
+    ],
+    [
+     "P163",
+     2
+    ],
+    [
+     "P209",
+     2
+    ],
+    [
+     "P183",
      2
     ],
     [
@@ -8133,23 +8085,11 @@
      2
     ],
     [
-     "P079",
-     1
-    ],
-    [
-     "P080",
-     1
+     "P199",
+     2
     ],
     [
      "P022",
-     1
-    ],
-    [
-     "P105",
-     1
-    ],
-    [
-     "P041",
      1
     ],
     [
@@ -8157,11 +8097,19 @@
      1
     ],
     [
-     "P044",
+     "P034",
      1
     ],
     [
-     "P034",
+     "P154",
+     1
+    ],
+    [
+     "P216",
+     1
+    ],
+    [
+     "P159",
      1
     ],
     [
@@ -8189,14 +8137,6 @@
      1
     ],
     [
-     "P113",
-     1
-    ],
-    [
-     "P114",
-     1
-    ],
-    [
      "P138",
      1
     ],
@@ -8217,6 +8157,10 @@
      1
     ],
     [
+     "P168",
+     1
+    ],
+    [
      "P143",
      1
     ],
@@ -8233,7 +8177,15 @@
      1
     ],
     [
+     "P170",
+     1
+    ],
+    [
      "P063",
+     1
+    ],
+    [
+     "P153",
      1
     ],
     [
@@ -8249,7 +8201,15 @@
      1
     ],
     [
+     "P148",
+     1
+    ],
+    [
      "P085",
+     1
+    ],
+    [
+     "P198",
      1
     ],
     [
@@ -8257,7 +8217,27 @@
      1
     ],
     [
-     "P099",
+     "P197",
+     1
+    ],
+    [
+     "P200",
+     1
+    ],
+    [
+     "P201",
+     1
+    ],
+    [
+     "P149",
+     1
+    ],
+    [
+     "P150",
+     1
+    ],
+    [
+     "P202",
      1
     ],
     [
@@ -8266,7 +8246,7 @@
     ]
    ],
    "topPid": "P004",
-   "share": 0.3184713375796178,
+   "share": 0.3105590062111801,
    "verdict": "跨主条目"
   },
   {
@@ -8275,7 +8255,7 @@
    "prior": "banned",
    "note": "泛官职裸词（禁入改写键，仅组合词可留）：大都督（周瑜 / 鲁肃 / 吕蒙 / 陆逊）、大将军（多人）、太子、太后、皇后、丞相、相国、司徒、车骑将军、骠骑将军等；组合词（周大都督 / 王司徒 / 董太师）唯一指称可留",
    "occurrences": 85,
-   "windowCount": 80,
+   "windowCount": 79,
    "dist": [
     [
      "P015",
@@ -8302,20 +8282,16 @@
      13
     ],
     [
-     "P005",
-     10
-    ],
-    [
      "P057",
      10
     ],
     [
-     "P133",
+     "P005",
      9
     ],
     [
-     "P081",
-     7
+     "P133",
+     9
     ],
     [
      "P083",
@@ -8334,6 +8310,14 @@
      6
     ],
     [
+     "P200",
+     6
+    ],
+    [
+     "P174",
+     6
+    ],
+    [
      "P001",
      5
     ],
@@ -8342,7 +8326,15 @@
      5
     ],
     [
+     "P148",
+     5
+    ],
+    [
      "P129",
+     5
+    ],
+    [
+     "P149",
      5
     ],
     [
@@ -8362,11 +8354,15 @@
      4
     ],
     [
-     "P099",
+     "P153",
      3
     ],
     [
      "P006",
+     3
+    ],
+    [
+     "P157",
      3
     ],
     [
@@ -8382,12 +8378,24 @@
      3
     ],
     [
-     "P019",
+     "P151",
+     3
+    ],
+    [
+     "P201",
+     3
+    ],
+    [
+     "P190",
      3
     ],
     [
      "P127",
      3
+    ],
+    [
+     "P099",
+     2
     ],
     [
      "P104",
@@ -8418,7 +8426,23 @@
      2
     ],
     [
+     "P175",
+     2
+    ],
+    [
+     "P181",
+     2
+    ],
+    [
      "P018",
+     2
+    ],
+    [
+     "P207",
+     2
+    ],
+    [
+     "P199",
      2
     ],
     [
@@ -8430,16 +8454,12 @@
      2
     ],
     [
-     "P078",
-     1
+     "P192",
+     2
     ],
     [
-     "P079",
-     1
-    ],
-    [
-     "P080",
-     1
+     "P179",
+     2
     ],
     [
      "P013",
@@ -8450,7 +8470,7 @@
      1
     ],
     [
-     "P101",
+     "P154",
      1
     ],
     [
@@ -8462,7 +8482,15 @@
      1
     ],
     [
+     "P156",
+     1
+    ],
+    [
      "P036",
+     1
+    ],
+    [
+     "P189",
      1
     ],
     [
@@ -8494,11 +8522,19 @@
      1
     ],
     [
+     "P169",
+     1
+    ],
+    [
      "P084",
      1
     ],
     [
      "P069",
+     1
+    ],
+    [
+     "P182",
      1
     ],
     [
@@ -8514,7 +8550,27 @@
      1
     ],
     [
-     "P030",
+     "P203",
+     1
+    ],
+    [
+     "P204",
+     1
+    ],
+    [
+     "P205",
+     1
+    ],
+    [
+     "P206",
+     1
+    ],
+    [
+     "P223",
+     1
+    ],
+    [
+     "P222",
      1
     ],
     [
@@ -8522,7 +8578,27 @@
      1
     ],
     [
+     "P193",
+     1
+    ],
+    [
+     "P197",
+     1
+    ],
+    [
+     "P198",
+     1
+    ],
+    [
      "P134",
+     1
+    ],
+    [
+     "P178",
+     1
+    ],
+    [
+     "P176",
      1
     ],
     [
@@ -8540,10 +8616,14 @@
     [
      "P056",
      1
+    ],
+    [
+     "P150",
+     1
     ]
    ],
    "topPid": "P015",
-   "share": 0.2375,
+   "share": 0.24050632911392406,
    "verdict": "禁入改写键（泛官职裸词）"
   },
   {
@@ -8555,16 +8635,20 @@
    "windowCount": 74,
    "dist": [
     [
-     "P081",
-     16
-    ],
-    [
-     "P099",
+     "P150",
      16
     ],
     [
      "P012",
      14
+    ],
+    [
+     "P149",
+     10
+    ],
+    [
+     "P224",
+     9
     ],
     [
      "P083",
@@ -8591,7 +8675,15 @@
      6
     ],
     [
+     "P210",
+     6
+    ],
+    [
      "P005",
+     5
+    ],
+    [
+     "P200",
      5
     ],
     [
@@ -8611,8 +8703,8 @@
      4
     ],
     [
-     "P100",
-     3
+     "P148",
+     4
     ],
     [
      "P004",
@@ -8639,7 +8731,7 @@
      3
     ],
     [
-     "P030",
+     "P222",
      3
     ],
     [
@@ -8647,15 +8739,19 @@
      2
     ],
     [
+     "P194",
+     2
+    ],
+    [
+     "P201",
+     2
+    ],
+    [
      "P057",
      2
     ],
     [
-     "P022",
-     2
-    ],
-    [
-     "P048",
+     "P099",
      1
     ],
     [
@@ -8679,7 +8775,39 @@
      1
     ],
     [
+     "P203",
+     1
+    ],
+    [
+     "P208",
+     1
+    ],
+    [
      "P085",
+     1
+    ],
+    [
+     "P198",
+     1
+    ],
+    [
+     "P197",
+     1
+    ],
+    [
+     "P192",
+     1
+    ],
+    [
+     "P178",
+     1
+    ],
+    [
+     "P211",
+     1
+    ],
+    [
+     "P212",
      1
     ],
     [
@@ -8687,7 +8815,7 @@
      1
     ]
    ],
-   "topPid": "P081",
+   "topPid": "P150",
    "share": 0.21621621621621623,
    "verdict": "禁入改写键（泛官职裸词）"
   },
@@ -8697,12 +8825,8 @@
    "prior": "multi",
    "note": "曹操/曹丕 共享头衔",
    "occurrences": 63,
-   "windowCount": 63,
+   "windowCount": 60,
    "dist": [
-    [
-     "P005",
-     63
-    ],
     [
      "P083",
      22
@@ -8710,6 +8834,10 @@
     [
      "P136",
      15
+    ],
+    [
+     "P005",
+     14
     ],
     [
      "P002",
@@ -8733,10 +8861,6 @@
     ],
     [
      "P001",
-     7
-    ],
-    [
-     "P072",
      6
     ],
     [
@@ -8760,6 +8884,10 @@
      4
     ],
     [
+     "P154",
+     4
+    ],
+    [
      "P039",
      4
     ],
@@ -8780,7 +8908,7 @@
      3
     ],
     [
-     "P041",
+     "P153",
      3
     ],
     [
@@ -8812,6 +8940,10 @@
      2
     ],
     [
+     "P152",
+     2
+    ],
+    [
      "P094",
      2
     ],
@@ -8820,15 +8952,23 @@
      2
     ],
     [
+     "P169",
+     2
+    ],
+    [
+     "P209",
+     2
+    ],
+    [
      "P054",
      2
     ],
     [
-     "P062",
+     "P023",
      1
     ],
     [
-     "P023",
+     "P214",
      1
     ],
     [
@@ -8852,6 +8992,10 @@
      1
     ],
     [
+     "P210",
+     1
+    ],
+    [
      "P085",
      1
     ],
@@ -8868,24 +9012,24 @@
      1
     ]
    ],
-   "topPid": "P005",
-   "share": 1,
-   "verdict": "跨主条目（多主条目候选）"
+   "topPid": "P083",
+   "share": 0.36666666666666664,
+   "verdict": "跨主条目"
   },
   {
    "term": "皇帝",
    "source": "官职/爵位类",
    "note": "天子、陛下、至尊",
    "occurrences": 59,
-   "windowCount": 53,
+   "windowCount": 54,
    "dist": [
-    [
-     "P001",
-     20
-    ],
     [
      "P004",
      20
+    ],
+    [
+     "P001",
+     15
     ],
     [
      "P083",
@@ -8896,12 +9040,12 @@
      12
     ],
     [
-     "P099",
+     "P015",
      8
     ],
     [
-     "P015",
-     8
+     "P150",
+     6
     ],
     [
      "P136",
@@ -8920,15 +9064,31 @@
      5
     ],
     [
-     "P006",
-     5
-    ],
-    [
      "P055",
      4
     ],
     [
+     "P006",
+     4
+    ],
+    [
+     "P194",
+     3
+    ],
+    [
      "P051",
+     3
+    ],
+    [
+     "P173",
+     3
+    ],
+    [
+     "P178",
+     3
+    ],
+    [
+     "P157",
      3
     ],
     [
@@ -8952,7 +9112,7 @@
      2
     ],
     [
-     "P081",
+     "P224",
      2
     ],
     [
@@ -8964,11 +9124,15 @@
      2
     ],
     [
+     "P099",
+     2
+    ],
+    [
      "P020",
      2
     ],
     [
-     "P019",
+     "P151",
      2
     ],
     [
@@ -8988,11 +9152,19 @@
      2
     ],
     [
+     "P223",
+     2
+    ],
+    [
      "P065",
      2
     ],
     [
-     "P030",
+     "P210",
+     2
+    ],
+    [
+     "P222",
      2
     ],
     [
@@ -9012,11 +9184,23 @@
      1
     ],
     [
+     "P152",
+     1
+    ],
+    [
      "P003",
      1
     ],
     [
+     "P165",
+     1
+    ],
+    [
      "P067",
+     1
+    ],
+    [
+     "P166",
      1
     ],
     [
@@ -9025,6 +9209,10 @@
     ],
     [
      "P011",
+     1
+    ],
+    [
+     "P169",
      1
     ],
     [
@@ -9052,11 +9240,19 @@
      1
     ],
     [
-     "P101",
+     "P148",
+     1
+    ],
+    [
+     "P149",
      1
     ],
     [
      "P054",
+     1
+    ],
+    [
+     "P201",
      1
     ],
     [
@@ -9072,8 +9268,8 @@
      1
     ]
    ],
-   "topPid": "P001",
-   "share": 0.37735849056603776,
+   "topPid": "P004",
+   "share": 0.37037037037037035,
    "verdict": "跨主条目"
   },
   {
@@ -9081,7 +9277,7 @@
    "source": "官职/爵位类",
    "note": "刺使",
    "occurrences": 56,
-   "windowCount": 47,
+   "windowCount": 51,
    "dist": [
     [
      "P001",
@@ -9096,7 +9292,7 @@
      7
     ],
     [
-     "P005",
+     "P199",
      6
     ],
     [
@@ -9104,7 +9300,15 @@
      6
     ],
     [
+     "P005",
+     5
+    ],
+    [
      "P106",
+     5
+    ],
+    [
+     "P197",
      5
     ],
     [
@@ -9121,6 +9325,10 @@
     ],
     [
      "P109",
+     4
+    ],
+    [
+     "P174",
      4
     ],
     [
@@ -9144,7 +9352,11 @@
      3
     ],
     [
-     "P099",
+     "P188",
+     2
+    ],
+    [
+     "P128",
      2
     ],
     [
@@ -9153,10 +9365,6 @@
     ],
     [
      "P144",
-     2
-    ],
-    [
-     "P064",
      2
     ],
     [
@@ -9184,6 +9392,10 @@
      2
     ],
     [
+     "P207",
+     2
+    ],
+    [
      "P055",
      2
     ],
@@ -9192,23 +9404,15 @@
      2
     ],
     [
+     "P200",
+     2
+    ],
+    [
      "P058",
      2
     ],
     [
-     "P081",
-     1
-    ],
-    [
-     "P100",
-     1
-    ],
-    [
-     "P048",
-     1
-    ],
-    [
-     "P105",
+     "P150",
      1
     ],
     [
@@ -9217,14 +9421,6 @@
     ],
     [
      "P022",
-     1
-    ],
-    [
-     "P046",
-     1
-    ],
-    [
-     "P047",
      1
     ],
     [
@@ -9237,6 +9433,10 @@
     ],
     [
      "P119",
+     1
+    ],
+    [
+     "P099",
      1
     ],
     [
@@ -9268,6 +9468,10 @@
      1
     ],
     [
+     "P162",
+     1
+    ],
+    [
      "P023",
      1
     ],
@@ -9276,11 +9480,15 @@
      1
     ],
     [
+     "P220",
+     1
+    ],
+    [
      "P038",
      1
     ],
     [
-     "P140",
+     "P159",
      1
     ],
     [
@@ -9300,6 +9508,14 @@
      1
     ],
     [
+     "P179",
+     1
+    ],
+    [
+     "P178",
+     1
+    ],
+    [
      "P068",
      1
     ],
@@ -9308,11 +9524,35 @@
      1
     ],
     [
+     "P183",
+     1
+    ],
+    [
      "P130",
      1
     ],
     [
      "P132",
+     1
+    ],
+    [
+     "P208",
+     1
+    ],
+    [
+     "P148",
+     1
+    ],
+    [
+     "P198",
+     1
+    ],
+    [
+     "P201",
+     1
+    ],
+    [
+     "P196",
      1
     ],
     [
@@ -9326,14 +9566,10 @@
     [
      "P127",
      1
-    ],
-    [
-     "P128",
-     1
     ]
    ],
    "topPid": "P001",
-   "share": 0.19148936170212766,
+   "share": 0.17647058823529413,
    "verdict": "跨主条目"
   },
   {
@@ -9345,11 +9581,11 @@
    "windowCount": 42,
    "dist": [
     [
-     "P011",
-     18
+     "P050",
+     13
     ],
     [
-     "P050",
+     "P011",
      13
     ],
     [
@@ -9397,11 +9633,15 @@
      3
     ],
     [
+     "P158",
+     3
+    ],
+    [
      "P012",
      2
     ],
     [
-     "P099",
+     "P150",
      2
     ],
     [
@@ -9429,31 +9669,19 @@
      2
     ],
     [
-     "P056",
+     "P201",
      2
     ],
     [
-     "P081",
-     1
+     "P056",
+     2
     ],
     [
      "P033",
      1
     ],
     [
-     "P048",
-     1
-    ],
-    [
-     "P139",
-     1
-    ],
-    [
      "P022",
-     1
-    ],
-    [
-     "P112",
      1
     ],
     [
@@ -9469,7 +9697,7 @@
      1
     ],
     [
-     "P105",
+     "P173",
      1
     ],
     [
@@ -9482,6 +9710,10 @@
     ],
     [
      "P082",
+     1
+    ],
+    [
+     "P157",
      1
     ],
     [
@@ -9501,11 +9733,31 @@
      1
     ],
     [
-     "P074",
+     "P131",
      1
     ],
     [
-     "P131",
+     "P203",
+     1
+    ],
+    [
+     "P204",
+     1
+    ],
+    [
+     "P205",
+     1
+    ],
+    [
+     "P206",
+     1
+    ],
+    [
+     "P207",
+     1
+    ],
+    [
+     "P148",
      1
     ],
     [
@@ -9517,8 +9769,8 @@
      1
     ]
    ],
-   "topPid": "P011",
-   "share": 0.42857142857142855,
+   "topPid": "P050",
+   "share": 0.30952380952380953,
    "verdict": "禁入改写键（泛官职裸词）"
   },
   {
@@ -9554,11 +9806,27 @@
      6
     ],
     [
+     "P176",
+     5
+    ],
+    [
      "P054",
      4
     ],
     [
+     "P200",
+     4
+    ],
+    [
+     "P179",
+     4
+    ],
+    [
      "P130",
+     3
+    ],
+    [
+     "P201",
      3
     ],
     [
@@ -9570,11 +9838,19 @@
      2
     ],
     [
+     "P174",
+     2
+    ],
+    [
      "P002",
      2
     ],
     [
      "P001",
+     1
+    ],
+    [
+     "P167",
      1
     ],
     [
@@ -9594,15 +9870,23 @@
      1
     ],
     [
+     "P209",
+     1
+    ],
+    [
+     "P157",
+     1
+    ],
+    [
      "P018",
      1
     ],
     [
-     "P074",
+     "P070",
      1
     ],
     [
-     "P070",
+     "P178",
      1
     ],
     [
@@ -9622,7 +9906,27 @@
      1
     ],
     [
-     "P019",
+     "P193",
+     1
+    ],
+    [
+     "P175",
+     1
+    ],
+    [
+     "P194",
+     1
+    ],
+    [
+     "P195",
+     1
+    ],
+    [
+     "P151",
+     1
+    ],
+    [
+     "P192",
      1
     ],
     [
@@ -9687,7 +9991,7 @@
      3
     ],
     [
-     "P041",
+     "P153",
      3
     ],
     [
@@ -9696,6 +10000,10 @@
     ],
     [
      "P002",
+     3
+    ],
+    [
+     "P159",
      3
     ],
     [
@@ -9715,7 +10023,7 @@
      2
     ],
     [
-     "P019",
+     "P151",
      2
     ],
     [
@@ -9747,11 +10055,11 @@
      1
     ],
     [
-     "P044",
+     "P024",
      1
     ],
     [
-     "P024",
+     "P189",
      1
     ],
     [
@@ -9759,7 +10067,15 @@
      1
     ],
     [
-     "P101",
+     "P213",
+     1
+    ],
+    [
+     "P217",
+     1
+    ],
+    [
+     "P220",
      1
     ],
     [
@@ -9796,7 +10112,7 @@
    "source": "官职/爵位类",
    "note": "中常侍",
    "occurrences": 40,
-   "windowCount": 34,
+   "windowCount": 32,
    "dist": [
     [
      "P005",
@@ -9807,24 +10123,12 @@
      8
     ],
     [
-     "P081",
-     6
-    ],
-    [
      "P012",
      5
     ],
     [
-     "P099",
+     "P150",
      3
-    ],
-    [
-     "P079",
-     2
-    ],
-    [
-     "P080",
-     2
     ],
     [
      "P022",
@@ -9843,6 +10147,14 @@
      2
     ],
     [
+     "P224",
+     2
+    ],
+    [
+     "P169",
+     2
+    ],
+    [
      "P004",
      2
     ],
@@ -9855,7 +10167,7 @@
      2
     ],
     [
-     "P078",
+     "P128",
      1
     ],
     [
@@ -9875,7 +10187,31 @@
      1
     ],
     [
+     "P148",
+     1
+    ],
+    [
      "P015",
+     1
+    ],
+    [
+     "P203",
+     1
+    ],
+    [
+     "P204",
+     1
+    ],
+    [
+     "P205",
+     1
+    ],
+    [
+     "P206",
+     1
+    ],
+    [
+     "P207",
      1
     ],
     [
@@ -9884,6 +10220,14 @@
     ],
     [
      "P129",
+     1
+    ],
+    [
+     "P211",
+     1
+    ],
+    [
+     "P212",
      1
     ],
     [
@@ -9908,7 +10252,7 @@
     ]
    ],
    "topPid": "P005",
-   "share": 0.2647058823529412,
+   "share": 0.28125,
    "verdict": "跨主条目"
   },
   {
@@ -9925,15 +10269,15 @@
     ],
     [
      "P005",
-     24
-    ],
-    [
-     "P001",
-     9
+     18
     ],
     [
      "P136",
      8
+    ],
+    [
+     "P001",
+     6
     ],
     [
      "P011",
@@ -9956,8 +10300,8 @@
      4
     ],
     [
-     "P101",
-     3
+     "P150",
+     2
     ],
     [
      "P049",
@@ -9965,10 +10309,6 @@
     ],
     [
      "P010",
-     2
-    ],
-    [
-     "P054",
      2
     ],
     [
@@ -9996,11 +10336,19 @@
      2
     ],
     [
+     "P209",
+     2
+    ],
+    [
+     "P153",
+     2
+    ],
+    [
      "P082",
      2
     ],
     [
-     "P048",
+     "P224",
      1
     ],
     [
@@ -10044,6 +10392,10 @@
      1
     ],
     [
+     "P214",
+     1
+    ],
+    [
      "P085",
      1
     ],
@@ -10052,11 +10404,19 @@
      1
     ],
     [
-     "P128",
+     "P157",
      1
     ],
     [
-     "P081",
+     "P201",
+     1
+    ],
+    [
+     "P054",
+     1
+    ],
+    [
+     "P128",
      1
     ],
     [
@@ -10070,10 +10430,6 @@
     [
      "P013",
      1
-    ],
-    [
-     "P107",
-     1
     ]
    ],
    "topPid": "P099",
@@ -10086,15 +10442,19 @@
    "prior": "banned",
    "note": "泛官职裸词（禁入改写键，仅组合词可留）：大都督（周瑜 / 鲁肃 / 吕蒙 / 陆逊）、大将军（多人）、太子、太后、皇后、丞相、相国、司徒、车骑将军、骠骑将军等；组合词（周大都督 / 王司徒 / 董太师）唯一指称可留",
    "occurrences": 37,
-   "windowCount": 28,
+   "windowCount": 30,
    "dist": [
     [
      "P005",
-     9
+     8
     ],
     [
      "P004",
      7
+    ],
+    [
+     "P148",
+     6
     ],
     [
      "P035",
@@ -10107,10 +10467,6 @@
     [
      "P083",
      5
-    ],
-    [
-     "P101",
-     4
     ],
     [
      "P053",
@@ -10173,8 +10529,8 @@
      2
     ],
     [
-     "P081",
-     1
+     "P199",
+     2
     ],
     [
      "P013",
@@ -10189,11 +10545,27 @@
      1
     ],
     [
+     "P186",
+     1
+    ],
+    [
      "P030",
      1
     ],
     [
      "P031",
+     1
+    ],
+    [
+     "P173",
+     1
+    ],
+    [
+     "P169",
+     1
+    ],
+    [
+     "P157",
      1
     ],
     [
@@ -10210,6 +10582,10 @@
     ],
     [
      "P021",
+     1
+    ],
+    [
+     "P223",
      1
     ],
     [
@@ -10230,7 +10606,7 @@
     ]
    ],
    "topPid": "P005",
-   "share": 0.32142857142857145,
+   "share": 0.26666666666666666,
    "verdict": "禁入改写键（泛官职裸词）"
   },
   {
@@ -10254,16 +10630,16 @@
      8
     ],
     [
-     "P014",
-     6
-    ],
-    [
      "P002",
      5
     ],
     [
      "P052",
      5
+    ],
+    [
+     "P014",
+     4
     ],
     [
      "P006",
@@ -10279,6 +10655,18 @@
     ],
     [
      "P019",
+     2
+    ],
+    [
+     "P168",
+     2
+    ],
+    [
+     "P152",
+     2
+    ],
+    [
+     "P169",
      2
     ],
     [
@@ -10311,6 +10699,18 @@
     ],
     [
      "P012",
+     1
+    ],
+    [
+     "P216",
+     1
+    ],
+    [
+     "P217",
+     1
+    ],
+    [
+     "P219",
      1
     ],
     [
@@ -10350,7 +10750,11 @@
      1
     ],
     [
-     "P111",
+     "P179",
+     1
+    ],
+    [
+     "P183",
      1
     ],
     [
@@ -10358,15 +10762,23 @@
      1
     ],
     [
+     "P170",
+     1
+    ],
+    [
+     "P172",
+     1
+    ],
+    [
+     "P173",
+     1
+    ],
+    [
      "P143",
      1
     ],
     [
-     "P101",
-     1
-    ],
-    [
-     "P146",
+     "P213",
      1
     ],
     [
@@ -10384,15 +10796,11 @@
    "prior": "banned",
    "note": "泛官职裸词（禁入改写键，仅组合词可留）：大都督（周瑜 / 鲁肃 / 吕蒙 / 陆逊）、大将军（多人）、太子、太后、皇后、丞相、相国、司徒、车骑将军、骠骑将军等；组合词（周大都督 / 王司徒 / 董太师）唯一指称可留",
    "occurrences": 34,
-   "windowCount": 33,
+   "windowCount": 32,
    "dist": [
     [
      "P004",
      9
-    ],
-    [
-     "P006",
-     8
     ],
     [
      "P053",
@@ -10403,12 +10811,16 @@
      7
     ],
     [
+     "P223",
+     6
+    ],
+    [
      "P063",
      6
     ],
     [
-     "P022",
-     5
+     "P148",
+     6
     ],
     [
      "P065",
@@ -10423,7 +10835,11 @@
      5
     ],
     [
-     "P030",
+     "P006",
+     5
+    ],
+    [
+     "P222",
      5
     ],
     [
@@ -10447,6 +10863,10 @@
      3
     ],
     [
+     "P022",
+     3
+    ],
+    [
      "P021",
      3
     ],
@@ -10463,12 +10883,8 @@
      3
     ],
     [
-     "P019",
+     "P151",
      3
-    ],
-    [
-     "P081",
-     2
     ],
     [
      "P012",
@@ -10483,6 +10899,10 @@
      2
     ],
     [
+     "P201",
+     2
+    ],
+    [
      "P116",
      2
     ],
@@ -10491,11 +10911,15 @@
      1
     ],
     [
-     "P099",
+     "P150",
      1
     ],
     [
-     "P100",
+     "P173",
+     1
+    ],
+    [
+     "P180",
      1
     ],
     [
@@ -10515,11 +10939,19 @@
      1
     ],
     [
+     "P170",
+     1
+    ],
+    [
      "P147",
      1
     ],
     [
      "P009",
+     1
+    ],
+    [
+     "P171",
      1
     ],
     [
@@ -10535,7 +10967,15 @@
      1
     ],
     [
+     "P177",
+     1
+    ],
+    [
      "P058",
+     1
+    ],
+    [
+     "P174",
      1
     ],
     [
@@ -10548,7 +10988,7 @@
     ]
    ],
    "topPid": "P004",
-   "share": 0.2727272727272727,
+   "share": 0.28125,
    "verdict": "禁入改写键（泛官职裸词）"
   },
   {
@@ -10564,15 +11004,11 @@
     ],
     [
      "P005",
-     8
+     7
     ],
     [
      "P010",
      5
-    ],
-    [
-     "P006",
-     4
     ],
     [
      "P004",
@@ -10581,10 +11017,6 @@
     [
      "P052",
      4
-    ],
-    [
-     "P022",
-     3
     ],
     [
      "P012",
@@ -10599,12 +11031,28 @@
      3
     ],
     [
+     "P006",
+     3
+    ],
+    [
      "P108",
      3
     ],
     [
      "P083",
      3
+    ],
+    [
+     "P022",
+     2
+    ],
+    [
+     "P128",
+     2
+    ],
+    [
+     "P218",
+     2
     ],
     [
      "P032",
@@ -10627,7 +11075,7 @@
      2
     ],
     [
-     "P107",
+     "P170",
      2
     ],
     [
@@ -10641,22 +11089,6 @@
     [
      "P129",
      2
-    ],
-    [
-     "P078",
-     1
-    ],
-    [
-     "P080",
-     1
-    ],
-    [
-     "P100",
-     1
-    ],
-    [
-     "P079",
-     1
     ],
     [
      "P051",
@@ -10679,19 +11111,11 @@
      1
     ],
     [
-     "P105",
-     1
-    ],
-    [
      "P043",
      1
     ],
     [
      "P002",
-     1
-    ],
-    [
-     "P101",
      1
     ],
     [
@@ -10703,11 +11127,23 @@
      1
     ],
     [
+     "P217",
+     1
+    ],
+    [
      "P087",
      1
     ],
     [
+     "P219",
+     1
+    ],
+    [
      "P024",
+     1
+    ],
+    [
+     "P220",
      1
     ],
     [
@@ -10727,6 +11163,22 @@
      1
     ],
     [
+     "P152",
+     1
+    ],
+    [
+     "P173",
+     1
+    ],
+    [
+     "P172",
+     1
+    ],
+    [
+     "P181",
+     1
+    ],
+    [
      "P015",
      1
     ],
@@ -10743,6 +11195,10 @@
      1
     ],
     [
+     "P180",
+     1
+    ],
+    [
      "P117",
      1
     ],
@@ -10755,11 +11211,15 @@
      1
     ],
     [
-     "P074",
+     "P171",
      1
     ],
     [
-     "P128",
+     "P166",
+     1
+    ],
+    [
+     "P192",
      1
     ],
     [
@@ -10784,8 +11244,12 @@
    "windowCount": 23,
    "dist": [
     [
-     "P099",
+     "P150",
      23
+    ],
+    [
+     "P224",
+     7
     ],
     [
      "P011",
@@ -10804,23 +11268,23 @@
      2
     ],
     [
-     "P100",
-     1
-    ],
-    [
-     "P081",
-     1
+     "P099",
+     2
     ],
     [
      "P010",
      1
     ],
     [
-     "P048",
+     "P194",
+     1
+    ],
+    [
+     "P210",
      1
     ]
    ],
-   "topPid": "P099",
+   "topPid": "P150",
    "share": 1,
    "verdict": "跨主条目（同串跨人组）"
   },
@@ -10830,7 +11294,7 @@
    "prior": "banned",
    "note": "泛官职裸词（禁入改写键，仅组合词可留）：大都督（周瑜 / 鲁肃 / 吕蒙 / 陆逊）、大将军（多人）、太子、太后、皇后、丞相、相国、司徒、车骑将军、骠骑将军等；组合词（周大都督 / 王司徒 / 董太师）唯一指称可留",
    "occurrences": 17,
-   "windowCount": 15,
+   "windowCount": 14,
    "dist": [
     [
      "P005",
@@ -10843,10 +11307,6 @@
     [
      "P053",
      4
-    ],
-    [
-     "P101",
-     3
     ],
     [
      "P017",
@@ -10869,27 +11329,15 @@
      2
     ],
     [
+     "P174",
+     2
+    ],
+    [
      "P071",
      2
     ],
     [
      "P011",
-     1
-    ],
-    [
-     "P078",
-     1
-    ],
-    [
-     "P080",
-     1
-    ],
-    [
-     "P100",
-     1
-    ],
-    [
-     "P079",
      1
     ],
     [
@@ -10906,6 +11354,18 @@
     ],
     [
      "P102",
+     1
+    ],
+    [
+     "P219",
+     1
+    ],
+    [
+     "P217",
+     1
+    ],
+    [
+     "P218",
      1
     ],
     [
@@ -10929,6 +11389,10 @@
      1
     ],
     [
+     "P181",
+     1
+    ],
+    [
      "P093",
      1
     ],
@@ -10949,12 +11413,16 @@
      1
     ],
     [
+     "P201",
+     1
+    ],
+    [
      "P126",
      1
     ]
    ],
    "topPid": "P005",
-   "share": 0.26666666666666666,
+   "share": 0.2857142857142857,
    "verdict": "禁入改写键（泛官职裸词）"
   },
   {
@@ -10982,10 +11450,6 @@
      3
     ],
     [
-     "P113",
-     3
-    ],
-    [
      "P144",
      2
     ],
@@ -11006,10 +11470,6 @@
      2
     ],
     [
-     "P006",
-     2
-    ],
-    [
      "P004",
      2
     ],
@@ -11022,15 +11482,7 @@
      1
     ],
     [
-     "P105",
-     1
-    ],
-    [
      "P043",
-     1
-    ],
-    [
-     "P044",
      1
     ],
     [
@@ -11046,15 +11498,15 @@
      1
     ],
     [
+     "P006",
+     1
+    ],
+    [
      "P012",
      1
     ],
     [
      "P089",
-     1
-    ],
-    [
-     "P114",
      1
     ],
     [
@@ -11095,15 +11547,11 @@
      4
     ],
     [
-     "P001",
-     3
-    ],
-    [
      "P028",
      2
     ],
     [
-     "P072",
+     "P001",
      2
     ],
     [
@@ -11116,10 +11564,6 @@
     ],
     [
      "P012",
-     1
-    ],
-    [
-     "P079",
      1
     ],
     [
@@ -11159,10 +11603,6 @@
      1
     ],
     [
-     "P062",
-     1
-    ],
-    [
      "P147",
      1
     ],
@@ -11188,12 +11628,12 @@
      13
     ],
     [
-     "P011",
-     6
-    ],
-    [
      "P005",
      5
+    ],
+    [
+     "P011",
+     4
     ],
     [
      "P049",
@@ -11216,8 +11656,8 @@
      2
     ],
     [
-     "P044",
-     2
+     "P224",
+     1
     ],
     [
      "P022",
@@ -11281,7 +11721,7 @@
    "source": "官职/爵位类",
    "note": "监军使者",
    "occurrences": 13,
-   "windowCount": 10,
+   "windowCount": 13,
    "dist": [
     [
      "P057",
@@ -11300,7 +11740,19 @@
      2
     ],
     [
+     "P152",
+     2
+    ],
+    [
      "P004",
+     2
+    ],
+    [
+     "P199",
+     2
+    ],
+    [
+     "P197",
      2
     ],
     [
@@ -11313,6 +11765,10 @@
     ],
     [
      "P108",
+     1
+    ],
+    [
+     "P170",
      1
     ],
     [
@@ -11340,7 +11796,19 @@
      1
     ],
     [
+     "P175",
+     1
+    ],
+    [
      "P069",
+     1
+    ],
+    [
+     "P181",
+     1
+    ],
+    [
+     "P182",
      1
     ],
     [
@@ -11348,7 +11816,19 @@
      1
     ],
     [
-     "P019",
+     "P200",
+     1
+    ],
+    [
+     "P196",
+     1
+    ],
+    [
+     "P151",
+     1
+    ],
+    [
+     "P176",
      1
     ],
     [
@@ -11357,7 +11837,7 @@
     ]
    ],
    "topPid": "P057",
-   "share": 0.5,
+   "share": 0.38461538461538464,
    "verdict": "跨主条目"
   },
   {
@@ -11394,6 +11874,10 @@
     ],
     [
      "P018",
+     1
+    ],
+    [
+     "P182",
      1
     ],
     [
@@ -11454,6 +11938,10 @@
      4
     ],
     [
+     "P201",
+     3
+    ],
+    [
      "P005",
      3
     ],
@@ -11498,6 +11986,14 @@
      1
     ],
     [
+     "P210",
+     1
+    ],
+    [
+     "P149",
+     1
+    ],
+    [
      "P055",
      1
     ]
@@ -11531,6 +12027,10 @@
      2
     ],
     [
+     "P186",
+     2
+    ],
+    [
      "P040",
      2
     ],
@@ -11551,7 +12051,11 @@
      1
     ],
     [
-     "P101",
+     "P187",
+     1
+    ],
+    [
+     "P214",
      1
     ],
     [
@@ -11580,7 +12084,11 @@
      3
     ],
     [
-     "P099",
+     "P224",
+     2
+    ],
+    [
+     "P150",
      2
     ],
     [
@@ -11604,7 +12112,11 @@
      2
     ],
     [
-     "P048",
+     "P099",
+     1
+    ],
+    [
+     "P157",
      1
     ],
     [
@@ -11648,6 +12160,10 @@
      1
     ],
     [
+     "P149",
+     1
+    ],
+    [
      "P058",
      1
     ]
@@ -11669,19 +12185,27 @@
      9
     ],
     [
+     "P201",
+     6
+    ],
+    [
      "P056",
      5
     ],
     [
-     "P099",
-     4
+     "P150",
+     3
     ],
     [
      "P005",
-     4
+     3
     ],
     [
      "P055",
+     2
+    ],
+    [
+     "P221",
      2
     ],
     [
@@ -11690,6 +12214,10 @@
     ],
     [
      "P015",
+     1
+    ],
+    [
+     "P099",
      1
     ]
    ],
@@ -11715,10 +12243,6 @@
     ],
     [
      "P005",
-     3
-    ],
-    [
-     "P047",
      2
     ],
     [
@@ -11726,11 +12250,27 @@
      2
     ],
     [
+     "P174",
+     2
+    ],
+    [
+     "P178",
+     2
+    ],
+    [
      "P004",
      2
     ],
     [
-     "P046",
+     "P155",
+     1
+    ],
+    [
+     "P219",
+     1
+    ],
+    [
+     "P217",
      1
     ],
     [
@@ -11738,7 +12278,23 @@
      1
     ],
     [
+     "P171",
+     1
+    ],
+    [
+     "P183",
+     1
+    ],
+    [
+     "P180",
+     1
+    ],
+    [
      "P091",
+     1
+    ],
+    [
+     "P169",
      1
     ],
     [
@@ -11778,7 +12334,7 @@
      1
     ],
     [
-     "P072",
+     "P182",
      1
     ],
     [
@@ -11818,6 +12374,10 @@
      1
     ],
     [
+     "P201",
+     1
+    ],
+    [
      "P053",
      1
     ]
@@ -11851,7 +12411,11 @@
      1
     ],
     [
-     "P074",
+     "P171",
+     1
+    ],
+    [
+     "P166",
      1
     ],
     [
@@ -11871,6 +12435,10 @@
      1
     ],
     [
+     "P179",
+     1
+    ],
+    [
      "P057",
      1
     ]
@@ -11885,11 +12453,11 @@
    "prior": "none",
    "note": "规范形:刘辩",
    "occurrences": 8,
-   "windowCount": 7,
+   "windowCount": 8,
    "dist": [
     [
-     "P099",
-     4
+     "P224",
+     8
     ],
     [
      "P011",
@@ -11900,8 +12468,12 @@
      3
     ],
     [
-     "P048",
-     1
+     "P150",
+     3
+    ],
+    [
+     "P099",
+     2
     ],
     [
      "P010",
@@ -11916,20 +12488,28 @@
      1
     ]
    ],
-   "topPid": "P099",
-   "share": 0.5714285714285714,
-   "verdict": "跨主条目"
+   "topPid": "P224",
+   "share": 1,
+   "verdict": "跨主条目（多主条目候选）"
   },
   {
    "term": "皇太后",
    "source": "官职/爵位类",
    "note": "太后",
    "occurrences": 7,
-   "windowCount": 5,
+   "windowCount": 6,
    "dist": [
     [
-     "P099",
+     "P150",
      2
+    ],
+    [
+     "P224",
+     2
+    ],
+    [
+     "P194",
+     1
     ],
     [
      "P004",
@@ -11960,12 +12540,20 @@
      1
     ],
     [
+     "P148",
+     1
+    ],
+    [
      "P133",
+     1
+    ],
+    [
+     "P203",
      1
     ]
    ],
-   "topPid": "P099",
-   "share": 0.4,
+   "topPid": "P150",
+   "share": 0.3333333333333333,
    "verdict": "跨主条目"
   },
   {
@@ -11985,7 +12573,7 @@
      3
     ],
     [
-     "P005",
+     "P149",
      2
     ],
     [
@@ -11998,6 +12586,14 @@
     ],
     [
      "P010",
+     1
+    ],
+    [
+     "P005",
+     1
+    ],
+    [
+     "P148",
      1
     ],
     [
@@ -12039,8 +12635,12 @@
    "prior": "none",
    "note": "规范形:马援",
    "occurrences": 6,
-   "windowCount": 5,
+   "windowCount": 6,
    "dist": [
+    [
+     "P166",
+     6
+    ],
     [
      "P004",
      3
@@ -12052,6 +12652,10 @@
     [
      "P070",
      2
+    ],
+    [
+     "P189",
+     1
     ],
     [
      "P005",
@@ -12082,13 +12686,17 @@
      1
     ],
     [
+     "P194",
+     1
+    ],
+    [
      "P067",
      1
     ]
    ],
-   "topPid": "P004",
-   "share": 0.6,
-   "verdict": "跨主条目"
+   "topPid": "P166",
+   "share": 1,
+   "verdict": "跨主条目（多主条目候选）"
   },
   {
    "term": "琅琊王",
@@ -12115,11 +12723,19 @@
      2
     ],
     [
-     "P030",
+     "P148",
      1
     ],
     [
-     "P019",
+     "P223",
+     1
+    ],
+    [
+     "P222",
+     1
+    ],
+    [
+     "P151",
      1
     ],
     [
@@ -12135,11 +12751,19 @@
      1
     ],
     [
+     "P192",
+     1
+    ],
+    [
      "P053",
      1
     ],
     [
      "P057",
+     1
+    ],
+    [
+     "P190",
      1
     ]
    ],
@@ -12164,10 +12788,6 @@
      3
     ],
     [
-     "P001",
-     2
-    ],
-    [
      "P015",
      2
     ],
@@ -12176,11 +12796,15 @@
      2
     ],
     [
-     "P004",
+     "P001",
      1
     ],
     [
-     "P005",
+     "P173",
+     1
+    ],
+    [
+     "P004",
      1
     ],
     [
@@ -12206,11 +12830,19 @@
    "prior": "single",
    "note": "语料内大概率唯一、待统计复核（低风险）：明帝、齐王、琅琊王、景帝、宣王、温侯、晋王、文王、武侯、后主、先主、昭烈帝、魏武帝、晋武帝、归命侯、安乐公、北地王等",
    "occurrences": 5,
-   "windowCount": 4,
+   "windowCount": 5,
    "dist": [
+    [
+     "P177",
+     5
+    ],
     [
      "P053",
      4
+    ],
+    [
+     "P178",
+     2
     ],
     [
      "P089",
@@ -12221,7 +12853,7 @@
      1
     ]
    ],
-   "topPid": "P053",
+   "topPid": "P177",
    "share": 1,
    "verdict": "唯一指称候选"
   },
@@ -12246,7 +12878,15 @@
      1
     ],
     [
+     "P194",
+     1
+    ],
+    [
      "P067",
+     1
+    ],
+    [
+     "P166",
      1
     ],
     [
@@ -12343,6 +12983,10 @@
      1
     ],
     [
+     "P157",
+     1
+    ],
+    [
      "P108",
      1
     ]
@@ -12380,6 +13024,10 @@
      1
     ],
     [
+     "P157",
+     1
+    ],
+    [
      "P133",
      1
     ],
@@ -12396,7 +13044,19 @@
      1
     ],
     [
+     "P169",
+     1
+    ],
+    [
+     "P149",
+     1
+    ],
+    [
      "P055",
+     1
+    ],
+    [
+     "P210",
      1
     ],
     [
@@ -12408,7 +13068,7 @@
      1
     ],
     [
-     "P030",
+     "P222",
      1
     ],
     [
@@ -12441,11 +13101,43 @@
      3
     ],
     [
+     "P148",
+     3
+    ],
+    [
+     "P203",
+     2
+    ],
+    [
+     "P204",
+     2
+    ],
+    [
+     "P207",
+     2
+    ],
+    [
+     "P205",
+     2
+    ],
+    [
+     "P206",
+     2
+    ],
+    [
      "P002",
      1
     ],
     [
+     "P164",
+     1
+    ],
+    [
      "P017",
+     1
+    ],
+    [
+     "P149",
      1
     ],
     [
@@ -12510,6 +13202,10 @@
      1
     ],
     [
+     "P170",
+     1
+    ],
+    [
      "P147",
      1
     ],
@@ -12518,7 +13214,7 @@
      1
     ],
     [
-     "P123",
+     "P174",
      1
     ],
     [
@@ -12600,6 +13296,10 @@
      1
     ],
     [
+     "P185",
+     1
+    ],
+    [
      "P001",
      1
     ],
@@ -12616,11 +13316,11 @@
      1
     ],
     [
-     "P136",
+     "P162",
      1
     ],
     [
-     "P064",
+     "P136",
      1
     ],
     [
@@ -12645,11 +13345,11 @@
    "windowCount": 4,
    "dist": [
     [
-     "P022",
+     "P128",
      4
     ],
     [
-     "P128",
+     "P022",
      2
     ],
     [
@@ -12661,7 +13361,7 @@
      1
     ],
     [
-     "P105",
+     "P188",
      1
     ],
     [
@@ -12677,11 +13377,15 @@
      1
     ],
     [
+     "P192",
+     1
+    ],
+    [
      "P129",
      1
     ]
    ],
-   "topPid": "P022",
+   "topPid": "P128",
    "share": 1,
    "verdict": "跨主条目（多主条目候选）"
   },
@@ -12732,18 +13436,10 @@
     ],
     [
      "P011",
-     4
-    ],
-    [
-     "P139",
-     1
+     2
     ],
     [
      "P022",
-     1
-    ],
-    [
-     "P112",
      1
     ],
     [
@@ -12765,10 +13461,6 @@
     [
      "P005",
      1
-    ],
-    [
-     "P105",
-     1
     ]
    ],
    "topPid": "P050",
@@ -12784,15 +13476,27 @@
    "windowCount": 3,
    "dist": [
     [
+     "P149",
+     3
+    ],
+    [
      "P083",
      3
     ],
     [
      "P055",
      3
+    ],
+    [
+     "P210",
+     2
+    ],
+    [
+     "P148",
+     1
     ]
    ],
-   "topPid": "P083",
+   "topPid": "P149",
    "share": 1,
    "verdict": "跨主条目（多主条目候选）"
   },
@@ -12817,10 +13521,6 @@
      2
     ],
     [
-     "P005",
-     1
-    ],
-    [
      "P015",
      1
     ],
@@ -12837,11 +13537,15 @@
      1
     ],
     [
+     "P201",
+     1
+    ],
+    [
      "P053",
      1
     ],
     [
-     "P099",
+     "P150",
      1
     ]
    ],
@@ -12858,7 +13562,11 @@
    "windowCount": 3,
    "dist": [
     [
-     "P099",
+     "P224",
+     3
+    ],
+    [
+     "P150",
      3
     ],
     [
@@ -12872,11 +13580,15 @@
     [
      "P011",
      1
+    ],
+    [
+     "P099",
+     1
     ]
    ],
-   "topPid": "P099",
+   "topPid": "P224",
    "share": 1,
-   "verdict": "唯一指称候选"
+   "verdict": "跨主条目（多主条目候选）"
   },
   {
    "term": "宣王",
@@ -12903,11 +13615,15 @@
      1
     ],
     [
-     "P099",
+     "P150",
      1
     ],
     [
      "P056",
+     1
+    ],
+    [
+     "P221",
      1
     ],
     [
@@ -12916,6 +13632,10 @@
     ],
     [
      "P005",
+     1
+    ],
+    [
+     "P201",
      1
     ]
    ],
@@ -12937,6 +13657,14 @@
     ],
     [
      "P054",
+     1
+    ],
+    [
+     "P178",
+     1
+    ],
+    [
+     "P179",
      1
     ],
     [
@@ -12976,11 +13704,15 @@
      1
     ],
     [
-     "P005",
+     "P006",
      1
     ],
     [
-     "P006",
+     "P173",
+     1
+    ],
+    [
+     "P152",
      1
     ],
     [
@@ -13033,7 +13765,11 @@
    "windowCount": 2,
    "dist": [
     [
-     "P019",
+     "P192",
+     2
+    ],
+    [
+     "P151",
      2
     ],
     [
@@ -13041,9 +13777,9 @@
      1
     ]
    ],
-   "topPid": "P019",
+   "topPid": "P192",
    "share": 1,
-   "verdict": "唯一指称候选"
+   "verdict": "跨主条目（多主条目候选）"
   },
   {
    "term": "景王",
@@ -13066,11 +13802,15 @@
      2
     ],
     [
-     "P099",
+     "P150",
      1
     ],
     [
      "P056",
+     1
+    ],
+    [
+     "P221",
      1
     ],
     [
@@ -13079,6 +13819,10 @@
     ],
     [
      "P005",
+     1
+    ],
+    [
+     "P201",
      1
     ]
    ],
@@ -13175,10 +13919,6 @@
     [
      "P043",
      1
-    ],
-    [
-     "P044",
-     1
     ]
    ],
    "topPid": "P005",
@@ -13235,10 +13975,6 @@
      2
     ],
     [
-     "P005",
-     1
-    ],
-    [
      "P136",
      1
     ],
@@ -13247,7 +13983,15 @@
      1
     ],
     [
+     "P209",
+     1
+    ],
+    [
      "P035",
+     1
+    ],
+    [
+     "P153",
      1
     ],
     [
@@ -13256,6 +14000,10 @@
     ],
     [
      "P083",
+     1
+    ],
+    [
+     "P201",
      1
     ],
     [
@@ -13303,6 +14051,18 @@
     [
      "P055",
      1
+    ],
+    [
+     "P210",
+     1
+    ],
+    [
+     "P149",
+     1
+    ],
+    [
+     "P148",
+     1
     ]
    ],
    "topPid": "P055",
@@ -13318,6 +14078,18 @@
    "windowCount": 1,
    "dist": [
     [
+     "P210",
+     1
+    ],
+    [
+     "P149",
+     1
+    ],
+    [
+     "P201",
+     1
+    ],
+    [
      "P054",
      1
     ],
@@ -13330,11 +14102,11 @@
      1
     ],
     [
-     "P099",
+     "P150",
      1
     ]
    ],
-   "topPid": "P054",
+   "topPid": "P210",
    "share": 1,
    "verdict": "唯一指称候选"
   },
@@ -13346,6 +14118,10 @@
    "occurrences": 1,
    "windowCount": 1,
    "dist": [
+    [
+     "P201",
+     1
+    ],
     [
      "P128",
      1
@@ -13359,7 +14135,7 @@
      1
     ]
    ],
-   "topPid": "P128",
+   "topPid": "P201",
    "share": 1,
    "verdict": "唯一指称候选"
   },
@@ -13434,6 +14210,10 @@
      1
     ],
     [
+     "P148",
+     1
+    ],
+    [
      "P133",
      1
     ]
@@ -13459,11 +14239,15 @@
      1
     ],
     [
+     "P201",
+     1
+    ],
+    [
      "P056",
      1
     ],
     [
-     "P099",
+     "P150",
      1
     ],
     [
@@ -13522,6 +14306,10 @@
     ],
     [
      "P091",
+     1
+    ],
+    [
+     "P181",
      1
     ],
     [
