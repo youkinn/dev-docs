@@ -171,6 +171,7 @@ tool#1 sango/sango_novel_search caller=server stage=fastpath success ms=63 diag=
 | 字段 | 判读 |
 |------|------|
 | `stage` | `classify` = auto 路由的无 tools 轻量分类轮；`generation` = 生成轮；`fallback` = 引用校验兜底结论归纳轮 |
+| `stage` = `novel_boundary_check` | 演义域句-片段重叠门边界语义复核（bug-00032/33/34 起）：仅「重叠 < 0.5 待裁叙述句」触发，`responseSummary` 即 supported / unsupported 判定；正常样本不出现该 stage |
 | `seq` | 同 `stage` 多条 = **重试**（当前实现为「空答案变参重试」）；不同 `stage` = 正常多轮 |
 | `finishReason` | `stop` 正常；`length` = 被 `max_tokens` 截断（思考 token 吃满即空答案）；`tool_calls` = 模型要求调工具（A011 后生成轮已无 tool-use 循环，出现即异常） |
 | `cachedTokens` | 接近 `promptTokens` = 提示词缓存命中；骤降 = 缓存失效（提示词改动） |
@@ -399,3 +400,4 @@ node scripts/probe/trace-export.mjs --list <chunkId>                # 反查 chu
 | 2026-09-25 | §7 F 精简：剔除 chunkId 批量导出（负责人试跑后拍板：5000 行不可取）；只留 traceId 单条导出 + `--list <chunkId>` 反查列 traceId；chunkId 批量勾选下载归页面轨 | 负责人 + Coco | 冒烟：traceId 465 行/35 KB；`--list` 65 命中列前 10 条 |
 | 2026-09-25 | §7 F 明确取数优先级：快照文件 → `--list` 反查 → 只读直连查表（小结果集 + 输出护栏） | 负责人（确认够用）+ Coco（落口径） | — |
 | 2026-09-26 | §2.1 证据源地图补 `llmCalls.requestSummary / responseSummary`（生成轮入参含注入片段全文 + 模型原始输出含指针）；「日志系统看不到」清单删除注入文本、改为可经 summary 查 | A016 验收三票排查（bug-00032/33/34）实测发现旧口径不符 | 四 trace（c549084b / ca7d9c6a / 67119582 / 275551c3）实取 responseSummary 与 final 对照，护栏误裁定案 |
+| 2026-09-26 | 步骤 4 判 LLM 明细补 `stage=novel_boundary_check`：演义域重叠门边界语义复核，仅低重叠待裁叙述句触发、responseSummary 即判定、正常样本不出现 | bug-00032/33/34 修复（护栏重叠门改边界复核）随 hu/feat-A016_term-normalization a121557 合入需求分支 | 小胡全量测试 348/348 绿（mock 两路，零真实 LLM 调用） |
