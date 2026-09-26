@@ -20,6 +20,7 @@
 | feat-A014 | 标签体系评审与使用边界（删四类事件标签、索引剥壳、保留死亡意图与 0.1 通路、校验校准） | mcp-server | 已归档 | 2026-09-24 |
 | feat-A015 | 三国演义 RAG 回归标准集 | dev-docs, mcp-server, mcp-web | 已归档 | 2026-09-25 |
 | feat-A016 | 术语口径统一（别名 / 换说法归一化 + query 改写） | mcp-server, mcp-orchestrator | 定稿 | 2026-09-25 |
+| feat-A017 | 草稿台（traceId 注入实验 + 手动生成） | mcp-orchestrator, mcp-web | 定稿 | 2026-09-27 |
 | feat-A999 | 长期文档与仓库维护（不上线、不归档；仅 Coco 文档提交用） | dev-docs | 草稿 | — |
 
 > feat-A009 依赖顺序：feat-A008（已归档）→ bug-00010（已修复）→ feat-A009（2026-09-21 定稿，前置已解除，可开工）。
