@@ -30,7 +30,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '.
 const CFG = {
   stdSet: process.env.STD_SET || path.join(ROOT, 'docs', 'sango-rag-regression-benchmark_v0.1.md'),
   logsDb: process.env.LOGS_DB || 'D:\\workplace\\mcp-orchestrator\\data\\logs.db',
-  aliasJson: process.env.ALIAS_JSON || 'D:\\workplace\\mcp-server\\sango\\data\\alias.json',
+  aliasJson: process.env.ALIAS_JSON || 'D:\\workplace\\mcp-server\\sango\\data\\entity-table.json',
   materialMd: process.env.MATERIAL_MD || path.join(ROOT, 'docs', 'sango-entity-normalization.md'),
   corpusDir: process.env.CORPUS_DIR || 'D:\\workplace\\mcp-server\\sango\\data\\corpus\\sanguo-yanyi',
   outDir: process.env.OUT_DIR || path.join(ROOT, 'test', 'term-diff', 'report'),
@@ -79,9 +79,15 @@ export function loadOnlineQueries(dbPath) {
   }
 }
 
-/** alias.json（人名别名 → PID）。 */
+/** alias 来源（A016 起：entity-table.json 人物行，别名 → PID；alias.json 已退役）。 */
 export function loadAlias(json) {
-  return JSON.parse(json);
+  const tbl = JSON.parse(json);
+  const map = {};
+  for (const r of tbl.rows ?? []) {
+    if (r.type !== '人物' || !r.id) continue;
+    for (const a of [r.canonical, ...(r.aliases ?? [])]) if (a && !(a in map)) map[a] = r.id;
+  }
+  return map;
 }
 
 /** 素材底稿：章节 → rows（规范形 | 别名1、别名2…）；「疑似跨主条目词」节 → bullets。 */
@@ -567,6 +573,9 @@ function main() {
   };
   writeFileSync(path.join(CFG.outDir, 'feat-A016-entity-diff-data.json'), JSON.stringify(data, null, 1), 'utf8');
 
+/** bug-00036 逐键裁决：真子串键移出改写键、仅作片段侧素材（与 merge-entity-table.mjs 对齐，防重跑把裁决洗掉）。 */
+const BUG36_FRAGMENT_ONLY = new Set(['赤兔', '玉玺', '木牛', '流马', '画戟', '蛇矛', '青釭', '皂幡', '巾帼', '就计', '苦肉', '缓兵']);
+
   // ---------- 表起草（交付老陈：表设计 / 表合并输入） ----------
   const draftGroups = groups
     .filter((g) => g.type !== '人物')
@@ -574,7 +583,7 @@ function main() {
       const q = queryHits.find((h) => h.canonical === g.canonical && h.type === g.type);
       const c = corpusHits.find((x) => x.canonical === g.canonical);
       const organ = typeLabel(g.type) === '身体' ? ambiguous.find((a) => g.aliases.includes(a.term) || g.canonical === a.term) : null;
-      const fragOnly = g.aliases.filter((a) => a.length === 1 || (organ && organ.bad.some(([k]) => k === a)));
+      const fragOnly = g.aliases.filter((a) => a.length === 1 || (organ && organ.bad.some(([k]) => k === a)) || BUG36_FRAGMENT_ONLY.has(a));
       const rewriteKeys = g.aliases.filter((a) => a.length >= 2 && !fragOnly.includes(a));
       return {
         type: typeLabel(g.type),
