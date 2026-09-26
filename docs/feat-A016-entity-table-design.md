@@ -164,6 +164,7 @@ type 枚举（12 值，= 表起草实际取值）：`人物` / `地名` / `战�
 | `canonOf`：PID → 规范名（df 选名）| 取消；`canonToRow`：规范形 → `{ type, id, aliases, fragmentOnly, organGuard, note }`（人物行 id 承载 PID）|
 | `aliasPattern`（长度降序 alternation，全局替换）| 沿用（构造自 keyToCanon 键集）|
 | — | `fragmentKeys`：fragmentOnly 全表并集（索引构建期双写扩展）|
+| — | `keyExtensions`：改写键 → 表内已知词（任意行 canonical / aliases / rewriteKeys）中「更长含该键」词及偏移；邻接延伸检查用（bug-00036，替换前防 canonical 二次扩张）|
 | — | `bannedRewriteKeys`：Set（policy，加载校验）|
 | — | `guards`：ambiguityGuard 明细（审计 / organGuard 引用）|
 | — | `normVersion` / `rewriteKeyCount`：诊断、工具响应、缓存换代共用（接口 §3.3 / §5）|
@@ -174,7 +175,7 @@ type 枚举（12 值，= 表起草实际取值）：`人物` / `地名` / `战�
 ## 8. 校验清单与维护流程
 
 加载校验（接口 §1.6 违规降级口径：告警 + 剔键，不拒全表）：
-1. `meta.schemaVersion == 1`；2. canonical 在 type 内唯一；3. rewriteKeys ⊆ aliases 且与 fragmentOnly 互斥；4. rewriteKeys 无单字（len==1）；5. rewriteKeys ∩ bannedRewriteKeys 为空；6. rewriteKeys 全表唯一（无跨行重复键）；7. 人物行 id 非空且全局唯一；8. canonical 不出现在任何行的 rewriteKeys / fragmentOnly。
+1. `meta.schemaVersion == 1`；2. canonical 在 type 内唯一；3. rewriteKeys ⊆ aliases 且与 fragmentOnly 互斥；4. rewriteKeys 无单字（len==1）；5. rewriteKeys ∩ bannedRewriteKeys 为空；6. rewriteKeys 全表唯一（无跨行重复键）；7. 人物行 id 非空且全局唯一；8. canonical 不出现在任何行的 rewriteKeys / fragmentOnly；9.（键排斥规则，bug-00036）rewriteKeys 不得是表内他行 canonical 的真子串——跨行子串改写目标歧义（如 遁甲 同时 ⊂奇门遁甲 / ⊂遁甲天书），告警 + 剔键（K4）；本行 canonical 子串短式经逐键裁决登记后可保留，替换时靠邻接延伸检查兜底。
 
 维护流程（表内容变更全程）：
 改素材底稿（如需）→ 重跑 `test/term-diff/term-diff.mjs`（零 LLM）→ 表合并（R1–R14）→ normVersion 换代 → 提交入库 → 部署重启 sango（索引重建，接口 §2.5）→ 编排侧 CACHE_VERSION 换代（接口 §4.5）→ 回测（验收 5 / 6）。
@@ -182,7 +183,7 @@ type 枚举（12 值，= 表起草实际取值）：`人物` / `地名` / `战�
 验证方式（实现轮自查）：
 - 启动日志：`[sango] entity-table loaded: rows={n} keys={k} normVersion={v}`；
 - 合并断言样例：`五关斩六将` ∈ 过五关斩六将行 rewriteKeys；`甘露元年` ∉ 任何 rewriteKeys；`子明` / `公明` / `子孝` / `子远` ∉ 任何 aliases；`天子` ∉ 任何 rewriteKeys；人物行 id 无重复且 73 个新增行已续号；
-- 行为断言（接口 §6 验证方式）：`normalize('五关斩六将') === '过五关斩六将'`、`normalize('云长') === '关羽'`、`normalize('右目') === '右眼'`、`normalize('天子') === '天子'`。
+- 行为断言（接口 §6 验证方式）：`normalize('五关斩六将') === '过五关斩六将'`、`normalize('云长') === '关羽'`、`normalize('右目') === '右眼'`、`normalize('天子') === '天子'`；bug-00036 追加：`normalize('长坂坡') === '长坂坡'`（邻接延伸检查防扩张）、`normalize('博望之战') === '博望坡之战'`（独立语境照常改写）、`normalize('赤兔') === '赤兔'` / `normalize('遁甲') === '遁甲'`（移出改写键恒等）、`normalize('出仕') === '出山'`（或式 canonical 规范）。
 
 ## 9. 风险与已知约束
 
@@ -195,3 +196,7 @@ type 枚举（12 值，= 表起草实际取值）：`人物` / `地名` / `战�
 ## 10. 边界（不做）
 
 - 不做实体库建设 / LLM 参与 / 注入与权重调整（见接口 §7）；bug-00031 冲突组不进表（R5）；referentVerdicts 明细（dist / share 语料归属）不复制进执行表，以统计报告为据；章回类本期不入表（§2.2 说明）。
+
+## 维护记录
+
+- 2026-09-26：bug-00036 修订——§7 内存结构增 `keyExtensions`（邻接延伸检查索引）；§8 校验清单增检查 9（跨行 canonical 真子串键 K4 剔键）；§8 行为断言增 bug-00036 样例。逐键裁决记录见 `bugs/bug-00036-entity-table-key-substring-collision.md`（Coco 定案，老陈实施）。

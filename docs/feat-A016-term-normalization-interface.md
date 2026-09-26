@@ -49,7 +49,7 @@
 ### 1.6 加载失败与违规降级（裁定）
 
 - 文件缺失 / JSON 损坏 / 结构非法 / 有效行数 0 → stderr 告警 `[sango] entity-table 加载失败：{原因}，降级为不做归一化`，normalize 退化为恒等，检索与工具继续工作——与现行 alias.json 失败口径逐条一致。
-- 表内违规键（命中 policy.bannedRewriteKeys / 单字 / 跨行重复键）→ 告警并剔除该键（不拒绝全表、不崩溃），其余键照常生效。理由：白名单表宁降级不可崩，违规即数据缺欠，告警留痕供排查。
+- 表内违规键（命中 policy.bannedRewriteKeys / 单字 / 跨行重复键 / 跨行 canonical 真子串键（K4，bug-00036））→ 告警并剔除该键（不拒绝全表、不崩溃），其余键照常生效。理由：白名单表宁降级不可崩，违规即数据缺欠，告警留痕供排查。
 - 检索侧与工具侧共用同一加载实例（同进程同模块），降级行为同时生效，不产生口径分裂。
 
 ## 2. 检索侧契约
@@ -58,7 +58,7 @@
 
 - 新增 `sango/src/normalize/entity-table.ts`：加载表 → 建「改写键 → 规范形」替换映射 + 校验 + normVersion；导出 `loadEntityTable(dataDir)`、`normalize(text)`、`rewriteKeyCount`、`normVersion`。
 - SangoIndex 与 `sango_query_embed` 共用同一实例（进程内单例）——编排侧不另写归一化实现（防 D4 口径分裂）。
-- 替换算法沿用现有结构：改写键按长度降序构造 alternation 正则，全局替换 `text.replace(pattern, m => keyToCanon.get(m))`（最长匹配口径不变）。
+- 替换算法沿用现有结构：改写键按长度降序构造 alternation 正则，全局替换（最长匹配口径不变）；替换前做**邻接延伸检查**（bug-00036）：键命中处若与邻接字符能延伸为表内已知词（任意行 canonical / aliases / rewriteKeys 中最长命中）则不替换该键——防 canonical 原文被真子串键二次扩张（长坂坡 不再变成 长坂坡坡），独立语境改写不受影响（博望之战 → 博望坡之战）。
 - 现行 loadAliases 私有结构（pidOf / canonOf / aliasPattern）废弃；人物 PID 信息改由表行 id 承载，死亡类 / 人物标签逻辑复用入口不变（表设计 §7）。
 
 ### 2.2 query 改写必须在 embed 之前（硬约束）
@@ -185,3 +185,7 @@
 - 「语料未出现」词保留为改写键：无歧义证据亦无词面证据，语料扩展后需重跑核查。
 - 焦点校验改原文口径（§4.4）：若实测发现回归，另开 bug 处理，不阻塞本期。
 - 过归一化误匹配：白名单 + 漏召回测样例兜底（验收 5）。
+
+## 维护记录
+
+- 2026-09-26：bug-00036 定案修订——§1.6 违规键清单增「跨行 canonical 真子串键（K4）」；§2.1 替换算法增「邻接延伸检查」（防真子串键二次扩张 canonical）。机制与数据裁决以 `bugs/bug-00036-entity-table-key-substring-collision.md` 与 `docs/sango-entity-normalization.md`「键排斥规则」节为准（Coco 定案，老陈实施）。
