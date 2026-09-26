@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-09-26T03:44:54.527Z",
+ "generatedAt": "2026-09-26T12:20:59.632Z",
  "note": "表起草（Coco），供老陈表设计 / 表合并使用；行 = type + id(PID) + 规范形 + 别名列表；冲突组 bug-00031 不进表；疑似跨主条目词以 referentVerdicts 判定为准；身体器官类以 organGuard 禁入口径为准（单字/歧义短语禁入，安全短语可收）。",
  "person": [
   {
@@ -224,12 +224,9 @@
    "id": "P151",
    "canonical": "孙亮",
    "aliases": [
-    "子明",
     "会稽王"
    ],
-   "newAliases": [
-    "子明"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -284,12 +281,9 @@
    "id": "P019",
    "canonical": "吕蒙",
    "aliases": [
-    "子明",
     "吕子明"
    ],
-   "newAliases": [
-    "子明"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -628,12 +622,9 @@
    "id": "P026",
    "canonical": "徐晃",
    "aliases": [
-    "公明",
     "徐公明"
    ],
-   "newAliases": [
-    "公明"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -685,12 +676,9 @@
    "id": "P030",
    "canonical": "曹仁",
    "aliases": [
-    "子孝",
     "曹子孝"
    ],
-   "newAliases": [
-    "子孝"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -1135,13 +1123,10 @@
    "id": "P163",
    "canonical": "管辂",
    "aliases": [
-    "公明",
     "管公明",
     "神卜"
    ],
-   "newAliases": [
-    "公明"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -1543,12 +1528,9 @@
    "id": "P181",
    "canonical": "吴懿",
    "aliases": [
-    "子远",
     "吴子远"
    ],
-   "newAliases": [
-    "子远"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -1797,12 +1779,9 @@
    "id": "P193",
    "canonical": "孙峻",
    "aliases": [
-    "子远",
     "孙子远"
    ],
-   "newAliases": [
-    "子远"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -2163,12 +2142,9 @@
    "id": "P220",
    "canonical": "许攸",
    "aliases": [
-    "子远",
     "许子远"
    ],
-   "newAliases": [
-    "子远"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -2187,12 +2163,9 @@
    "id": "P222",
    "canonical": "孙和",
    "aliases": [
-    "子孝",
     "孙子孝"
    ],
-   "newAliases": [
-    "子孝"
-   ],
+   "newAliases": [],
    "inAliasJson": true
   },
   {
@@ -2441,10 +2414,10 @@
    "aliases": [
     "博望"
    ],
-   "rewriteKeys": [
+   "rewriteKeys": [],
+   "fragmentOnly": [
     "博望"
    ],
-   "fragmentOnly": [],
    "organGuard": null,
    "queryHit": false,
    "corpusHit": true,
@@ -2456,10 +2429,10 @@
    "aliases": [
     "长坂"
    ],
-   "rewriteKeys": [
+   "rewriteKeys": [],
+   "fragmentOnly": [
     "长坂"
    ],
-   "fragmentOnly": [],
    "organGuard": null,
    "queryHit": true,
    "corpusHit": true,
@@ -2602,11 +2575,12 @@
     "金凤台"
    ],
    "rewriteKeys": [
-    "铜雀",
     "玉龙台",
     "金凤台"
    ],
-   "fragmentOnly": [],
+   "fragmentOnly": [
+    "铜雀"
+   ],
    "organGuard": null,
    "queryHit": false,
    "corpusHit": true,
@@ -2753,14 +2727,14 @@
   },
   {
    "type": "战役",
-   "canonical": "桃园结义",
+   "canonical": "桃园三结义",
    "aliases": [
     "桃园之盟",
-    "三结义"
+    "桃园结义"
    ],
    "rewriteKeys": [
     "桃园之盟",
-    "三结义"
+    "桃园结义"
    ],
    "fragmentOnly": [],
    "organGuard": null,
@@ -5862,15 +5836,13 @@
   },
   {
    "type": "登场",
-   "canonical": "出仕/出山",
+   "canonical": "出山",
    "aliases": [
     "出仕",
-    "出山",
     "入仕"
    ],
    "rewriteKeys": [
     "出仕",
-    "出山",
     "入仕"
    ],
    "fragmentOnly": [],
