@@ -1,8 +1,8 @@
-# FEAT-A018: 重排模型评估与接入（D2 v2）
+# FEAT-A030: 重排模型评估与接入（D2 v2）
 
 > 只记需求本身：讨论过程、拍板记录、待定项清单等过程性内容不进文档（2026-09-22 约定，见 `AGENTS.md` 基本原则 5）。
 
-> 特性号：FEAT-A018
+> 特性号：FEAT-A030
 > 状态：草稿
 > 作者：Coco
 > 涉及项目：mcp-server
@@ -69,11 +69,11 @@
 
 ## 分支计划
 
-- mcp-server：`chen/feat-A018_reranker`（需求分支 `coco/feat-A018_reranker`）
-- dev-docs：`coco/feat-A018_reranker`
+- mcp-server：`chen/feat-A030_reranker`（需求分支 `coco/feat-A030_reranker`）
+- dev-docs：`coco/feat-A030_reranker`
 
 ## 故事号（Coco 生产）
 
 | 故事号 | 内容 | 负责人 | 状态 |
 |--------|------|--------|------|
-| story-A018-01 | 重排模型 v2：探针结论 → 选型 → 接入 → 评测（top≤5 / 定点 / 延迟） | Coco + 老陈 | 待开工 |
+| story-A030-01 | 重排模型 v2：探针结论 → 选型 → 接入 → 评测（top≤5 / 定点 / 延迟） | Coco + 老陈 | 待开工 |

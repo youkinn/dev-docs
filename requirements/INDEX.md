@@ -21,6 +21,11 @@
 | feat-A015 | 三国演义 RAG 回归标准集 | dev-docs, mcp-server, mcp-web | 已归档 | 2026-09-25 |
 | feat-A016 | 术语口径统一（别名 / 换说法归一化 + query 改写） | mcp-server, mcp-orchestrator | 定稿 | 2026-09-25 |
 | feat-A017 | 草稿台（traceId 注入实验 + 手动生成） | mcp-orchestrator, mcp-web | 已归档 | 2026-09-27 |
+| feat-A018 | 事件表 + 事件名桥（白话事件召回 + 组内闭环注入，BL-031 立项） | mcp-server, mcp-orchestrator | 草稿 | — |
+| feat-A019 | 意图判定评估（轻量 LLM vs 并入分类轮 vs 规则兜底） | mcp-orchestrator | 草稿 | — |
+| feat-A020 | 注入呈现优化（叙事序生产化 / 截断统计 / 预算评估） | mcp-orchestrator, mcp-web | 草稿 | — |
+| feat-A021 | 概括型问句专项（A2 独立问题域：语义检索 / 答案抽取评估） | mcp-server, mcp-orchestrator | 草稿 | — |
+| feat-A030 | 重排模型评估与接入（原 A018/A021 挪号，依赖池覆盖探针） | mcp-server | 草稿 | — |
 | feat-A999 | 长期文档与仓库维护（不上线、不归档；仅 Coco 文档提交用） | dev-docs | 草稿 | — |
 
 > feat-A009 依赖顺序：feat-A008（已归档）→ bug-00010（已修复）→ feat-A009（2026-09-21 定稿，前置已解除，可开工）。
