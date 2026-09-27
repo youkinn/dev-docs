@@ -8,6 +8,10 @@ const outPath = path.join(__dirname, 'first-pass.md');
 
 const tags = JSON.parse(fs.readFileSync(tagsPath, 'utf8'));
 
+// 二审修正（2026-09-28 负责人核实原文）：tags event.json 个别标签事实/回号有误，派生时覆盖
+const DROP_KEYS = new Set(['022|刘岱之死', '022|王忠之死']); // 两人 022 被擒未死（023 免死），非死亡事件
+const HUI_OVERRIDE = { '039|刘琦登场': '035', '059|张松登场': '060' }; // 刘琦首出 035；张松 060 才报名
+
 // 1. tags 派生 L3（逐 chunk 展开，一行一(回,事件)，不做跨回）
 const derived = new Map();
 const byDeath = new Map(), byBirth = new Map();
@@ -23,11 +27,14 @@ for (const [chunkId, val] of Object.entries(tags)) {
     person = person.replace(/(之死|登场)$/, '');
     const eventName = isDeath ? `${person}之死` : `${person}登场`;
     const ask = isDeath ? `${person}是怎么死的？` : `${person}是什么时候出场的？`;
-    const key = `${hui}|${eventName}`;
-    if (!derived.has(key)) derived.set(key, `| ${hui} | ${eventName} | ${ask} | L3 | tags:event.json |`);
+    const origKey = `${hui}|${eventName}`;
+    if (DROP_KEYS.has(origKey)) continue;
+    const effHui = HUI_OVERRIDE[origKey] || hui;
+    const key = `${effHui}|${eventName}`;
+    if (!derived.has(key)) derived.set(key, `| ${effHui} | ${eventName} | ${ask} | L3 | tags:event.json |`);
     const bucket = isDeath ? byDeath : byBirth;
     if (!bucket.has(person)) bucket.set(person, new Set());
-    bucket.get(person).add(hui);
+    bucket.get(person).add(effHui);
   }
 }
 
