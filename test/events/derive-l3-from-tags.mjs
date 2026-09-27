@@ -42,6 +42,7 @@ for (const row of lines.filter((l) => /^\| \d{3} \|/.test(l))) {
   if (t === 'L1' || t === 'L2') { keep.push(row); continue; }
   if (t === 'L3') {
     const name = p[2];
+    if (/补录/.test(p[5] || '')) { keep.push(row); continue; }
     const isBirth = /登场|出场/.test(name);
     const isDeath = !isBirth && /死|亡|故|殁|薨|杀|授首/.test(name);
     const hit = [...(isDeath ? byDeath : isBirth ? byBirth : [])].filter(([person]) => name.includes(person));
