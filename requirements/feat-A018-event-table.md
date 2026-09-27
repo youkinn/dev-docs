@@ -119,3 +119,4 @@
 |------|------|--------|
 | 2026-09-28 | 构建链修订：初审材料不再使用外部免费 AI（产物证实偷工减料、已弃用），改由 Coco 在项目链路内生成（构建期 LLM 调用按原则 14 报备登记）；任务包改名 `test/events/first-pass-spec.md`，删除外部 AI 提示词 `prompt.md` | 负责人 |
 | 2026-09-28 | aliases 落库粒度拍板：三层口径——指称层进表 / 问法骨架检索侧配置 / 真实问法样本进探针池（本节「aliases 落库粒度」） | 负责人 |
+| 2026-09-28 | 表结构与接口文档对齐：顶层 rows[]、行增 exampleQuestion（示例问法）/ crossChapter?（跨回登记）、meta.normVersion（8 位内容 hash）、meta.corpusChunkCount（漂移信号）；落表分层 L1=90 / L2=151 / L3=467（tags 全量派生，宁多勿漏），原文「400–600 / L3≈150–250」为早期估算，按初審任务书（first-pass-spec.md）分层全集口径执行 | Coco（量级口径负责人待复核） |
