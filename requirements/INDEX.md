@@ -21,7 +21,7 @@
 | feat-A015 | 三国演义 RAG 回归标准集 | dev-docs, mcp-server, mcp-web | 已归档 | 2026-09-25 |
 | feat-A016 | 术语口径统一（别名 / 换说法归一化 + query 改写） | mcp-server, mcp-orchestrator | 定稿 | 2026-09-25 |
 | feat-A017 | 草稿台（traceId 注入实验 + 手动生成） | mcp-orchestrator, mcp-web | 已归档 | 2026-09-27 |
-| feat-A018 | 事件表 + 事件名桥（白话事件召回 + 组内闭环注入，BL-031 立项） | mcp-server, mcp-orchestrator | 草稿 | — |
+| feat-A018 | 事件表 + 事件名桥（白话事件召回 + 组内闭环注入，BL-031 立项） | mcp-server, mcp-orchestrator | 定稿 | 2026-09-28 |
 | feat-A019 | 意图判定评估（轻量 LLM vs 并入分类轮 vs 规则兜底） | mcp-orchestrator | 草稿 | — |
 | feat-A020 | 注入呈现优化（叙事序生产化 / 截断统计 / 预算评估） | mcp-orchestrator, mcp-web | 草稿 | — |
 | feat-A021 | 概括型问句专项（A2 独立问题域：语义检索 / 答案抽取评估） | mcp-server, mcp-orchestrator | 草稿 | — |
