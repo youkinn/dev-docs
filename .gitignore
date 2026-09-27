@@ -8,3 +8,9 @@ docs/handoff-*.md
 /test/standard-set/results/
 # 本地运行产物（在 dev-docs 目录下跑总台代码会生成 data/logs.db 副本）：不入库
 /data/
+
+# feat-A016 口径差异统计：脚本与落档报告入库，统计大文件不入库
+!/test/term-diff/
+!/test/term-diff/**
+# A016 统计数据大文件：仅本机留存，不入库
+/test/term-diff/report/feat-A016-entity-diff-data.json
