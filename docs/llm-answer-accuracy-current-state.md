@@ -101,7 +101,7 @@ HTTP /api/chat
 - **A015 回归标准集 = 唯一回归锚（2026-09-25 归档）**：实际 **120 题、12 类 × 10**（人物 / 地名 / 战役 / 典故 / 器物 / 身体部位 / 问法归一 / 官职·爵位 / 数字称谓 / 事件关系 / 死亡 / 拒答）；需求文档记「11 类 × 110」为早期口径，实测以 120 为准（差异待登记）；逐题原文核验；执行 = `test/standard-set/feat-A015-verify.mjs` 薄壳 → sango `POST /dev/benchmark/run`（判定单一实现）。
 - 基线（快照 `test/standard-set/results/feat-A015-2026-09-27-2135.*`）：top5 通过 **73/120（60.8%）**、兜底 6–10 共 9、未命中 38；重灾区 = 官职·爵位 20%（未命中 6）/ 拒答 20%（未命中 7）/ 器物·身体部位 50%（各未命中 5）。
 - 口径（负责人 2026-09-28）：A015 为验收标准；2400 问集仅作问题画像；题量不足可扩充（A015 已归档冻结，扩充走新特性号，不碰归档文档）。
-- 2400 问画像：`test/cls2400.json` / `answerable2400.json` / `entity2400.json`；`recall-classify-900.mjs` 仍为旧字面 2-gram 口径（bug-00008 未修，画像读数有偏）。
+- 2400 问画像：`test/cls2400.json` / `answerable2400.json` / `entity2400.json`；`recall-classify-900.mjs` 仍为旧字面 2-gram 口径（bug-00008 已关闭：结论基于当时代码与当时标准，当前不适用）。
 - 回归脚本（零 LLM）：`mcp-orchestrator/scripts/probe/recall-bench.mjs`（V0~V3 检索配置 @1/@3/@5、主案例「孙权遣人向关羽求亲」、注入窗口截断率）、verify-injection-window.mjs / chunk-sweep.mjs / h2-faithfulness.mjs / build-poison-corpus.mjs。
 - server 校验脚本：verify-embed-parity.mjs / verify-vector-fallback.mjs / verify_mcp.js / verify-tag-files.mjs（A014 已合入 main）。
 - 基准集缺陷：bug-00035——基准集 v0.1 无 A016 归一化覆盖题（通过率恒 60%，归一化收益测不出），已打回待整改。
@@ -111,7 +111,7 @@ HTTP /api/chat
 | Bug | INDEX 状态 | main / 分支事实 | 判定 |
 |---|---|---|---|
 | bug-00003 召回质量 | 待修复 | 检索侧：实体表单表 + A016 query 改写（rewriteKey / fragmentOnly）+ A014 剥壳 / 死亡意图 death_age + 真向量 + 多路 0.6/0.3/0.1 均落地 main；剩余 MIN_COSINE Step4 + 评测口径（bug-00035 / 00007 / 00008） | 保持待修复，标题描述已落后 |
-| bug-00007 / 00008 评测口径 | 待修复 | 2400 问集仅画像用途（负责人 2026-09-28：以 A015 120 题为验收标准）；字面正则对概括型仍失效 | 降级为画像口径，关闭与否待负责人定 |
+| bug-00007 / 00008 评测口径 | 已关闭（2026-09-28） | 结论基于当时代码与当时标准，当前不适用 | 负责人口径关闭 |
 | bug-00022 题库并列候选 | 待修复 | 提示层已含「仅含义相同才答」，结构性保障未做 | 保持待修复 |
 | bug-00023 主宾反转 | 待修复 | 生成轮 prompt 事件结构方向校验已合入（PR #20）；检索侧结构性前提校验未做 | 保持待修复 |
 | bug-00024 渲染不一致 | 待修复 | 在途分支 `hu/bug-00024-00025_answer-assembly`（未合入） | 保持待修复 |
@@ -147,7 +147,7 @@ HTTP /api/chat
 4. 缓存门禁扩展：bug-00028 支撑校验不通过也不写缓存。
 5. bug-00024 排序稳定性排查 + bug-00025 输出层剥离 / 渲染层安全网（在途分支 `hu/bug-00024-00025_answer-assembly`）。
 6. 窗口锚点按 A016 规范形复测（§9.2 古文拆名场景，2026-09-19 实证结论在 A016 后是否仍成立未复跑）。
-7. 画像口径：`recall-classify-900.mjs` 旧字面 2-gram（bug-00008），2400 问画像读数有偏。
+7. 画像口径：`recall-classify-900.mjs` 旧字面 2-gram（bug-00008 已关闭：基于当时代码与标准，当前不适用），2400 问画像读数仅参考。
 
 ## 维护记录
 
