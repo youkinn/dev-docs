@@ -14,3 +14,6 @@ docs/handoff-*.md
 !/test/term-diff/**
 # A016 统计数据大文件：仅本机留存，不入库
 /test/term-diff/report/feat-A016-entity-diff-data.json
+
+# AI 初审任务包：入库跟踪
+!/test/events/
