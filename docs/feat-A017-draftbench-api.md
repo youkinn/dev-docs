@@ -43,6 +43,7 @@ Base：mcp-orchestrator 根（与 `/api/v1/logs*` 同级）。
 | POST | `/api/chat`（扩展，§3.2） | 草稿台手动发送（来源标记 + 请求级覆盖 + 清单） | 生产生成 / 校验管线同源 |
 | GET | `/api/v1/draftbench/records` | 草稿台记录列表（仅草稿台，时间倒序） | 草稿台发送记录（§4.3 新落库） |
 | GET | `/api/v1/draftbench/records/:traceId` | 记录详情 = 载入（清单 + 本次参数）+ 差异三态 + 结果，供继续编辑 | 同上 |
+| DELETE | `/api/v1/draftbench/records/:traceId` | 物理删除该条草稿台发送记录（仅草稿台行；日志链路保留） | 同上（§3.6） |
 | GET | `/api/v1/logs`（改造） | 新增 `source` 筛选，**缺省仅生产** | `request_logs` |
 | GET | `/api/v1/logs/:traceId`（改造） | 详情 `log` 新增 `source` 字段 | `request_logs` |
 
@@ -171,6 +172,13 @@ Base：mcp-orchestrator 根（与 `/api/v1/logs*` 同级）。
 - `GET /api/v1/logs/:traceId` 详情 `log` 新增 `source` 同口径；草稿台 traceId 详情复用既有分析视图（答案 / 引用 / LLM 调用 / 工具明细 / 缓存判定，`cache` 对草稿台恒 null——草稿台不查缓存）。
 - `GET /api/v1/logs/token-stats` 与统计类接口同口径新增 `source` 筛选：缺省仅生产、非法值 400（同 §3.5 文案）；默认仅生产（§10 决策 3）。
 
+### 3.6 DELETE `/api/v1/draftbench/records/:traceId` —— 物理删除发送记录
+
+- `traceId` 格式非法 → `400 { code:400, message:'traceId 格式非法' }`；不是草稿台记录（或不存在）→ `404 { code:404, message:'草稿台记录不存在' }`。
+- 成功 `200 data`：`{ "deleted": true }`。
+- **物理删除范围（不可恢复）**：仅删除 `draftbench_records` 中该 `traceId` 一行；**同 traceId 的日志链路不删**（`request_logs` / `llm_call_logs` / `tool_retrieval_logs` 等属全局日志体系，一律保留）——删除后日志页「来源=草稿台」的该 `request_logs` 记录仍按正常日志展示（来源筛选 / 详情 / token 统计不受影响），仅草稿台记录列表 / 详情不再可见、无法再载入继续编辑。
+- 删除动作即时生效、无回收站；30 天轮转口径不变（§10 决策 5），删除与轮转相互独立。
+
 ## 4. 数据契约（字段级）
 
 ### 4.1 发送清单 `chunks[]` 校验
@@ -216,6 +224,7 @@ Base：mcp-orchestrator 根（与 `/api/v1/logs*` 同级）。
 - 弹框操作流（≤5 步）：输入 traceId → `GET /api/v1/draftbench/trace/:traceId` 拉取（左栏只读源，展示回目 / 段位 / 原文预览 / 注入标记）→ 构造右栏发送清单（左拖右添加 / 右内拖拽排序 / 右侧手增与移除）→ 发送确认弹框（query 可编辑、片段数、总字数、本次参数一次过目，默认值 = `params` 带出值）→ `POST /api/chat` 发送 → **发送成功弹框就此结束**：不做结果内联展示、不做差异对比视图；可轻提示「已发送，可在日志页 来源=草稿台 查看」；发送后本次记录与正常日志完全一致，在日志页按正常日志查看（2026-09-27 需求修订口径）。
 - 无需用户拼接 chunkId：chunkId 由清单携带（验收 5）。原文核对复用既有 `SangoChapterReader`（`chapter` 必填 + `chunkId` 定位，feat-A010 契约）；左栏 `preview / segFrom / segTo` 由接口携带（§10 决策 2），弹框内直接可读，点条目跳 `SangoChapterReader` 看整回。
 - 记录与复现：弹框内 `GET /api/v1/draftbench/records` 列表（时间 / traceId / query / 本次参数 / 片段数 / 结果）；点击行 → `GET /api/v1/draftbench/records/:traceId` 载入（回填编辑框继续编辑，结果可回读）；「查看记录」跳日志页（来源=草稿台）详情，复用既有日志页分析视图（`fetchLogDetail` + `RetrievalDiagnosticsPanel`；草稿台行 `cache` 恒 null 时卡片不渲染，已有空态）。页面不消费 `diff` 字段（2026-09-27 需求修订：不做结果对比视图；`diff` 保留供 CLI / 审核）。
+- 记录表格行内「删除」（负责人验收第 11 条）：确认后调 `DELETE /api/v1/draftbench/records/:traceId`（§3.6），成功移除该行；失败按返回 `message` 提示（404 即记录已不存在，同样移除该行）。删除仅影响草稿台记录，日志页该 traceId 照常展示。
 - 前端新增 `client.ts` 类型与函数（`fetchDraftbenchTrace / fetchDraftbenchRecords / fetchDraftbenchRecordDetail` + `DraftbenchTrace / DraftbenchRecord / DraftbenchDiff` 等，字段逐字对齐 §3）；发送复用 `sendChatMessage` 通道扩展 payload（`source / chunks / params`）。
 - 无新增 vite 代理（草稿台接口走既有 `/api` → `http://localhost:3000`）。CLI 不归页面。
 
@@ -271,3 +280,7 @@ npm run dev   # vite，日志页 / 草稿台弹框，/api 代理到 3000
 - 不做程序自动 / 批量 LLM 调用；不做失败模式回归集管理（traceId 即用例天然沉淀）。
 - 不改 `sango` 检索 / 切片 / 评分工具本身；不新增 sango 侧接口（§10 决策 2：仅 orchestrator 侧组合既有通道）。
 - 不动 `route_source` 枚举与既有日志字段语义；历史行（无来源列）一律按 production 展示。
+
+## 维护记录
+
+- 2026-09-27：新增 §3.6 DELETE `/api/v1/draftbench/records/:traceId`（物理删除仅草稿台记录、日志链路保留；404 / 200 契约），§5 记录表格增「删除」操作；拍板：负责人（验收第 11 条）
