@@ -56,36 +56,34 @@
 
 ### 2.1 归一化实现（单一模块）
 
-- 新增 `sango/src/normalize/entity-table.ts`：加载表 → 建「改写键 → 规范形」替换映射 + 校验 + normVersion；导出 `loadEntityTable(dataDir)`、`normalize(text)`、`rewriteKeyCount`、`normVersion`。
+- 新增 `sango/src/normalize/entity-table.ts`：加载表 → 建「改写键 → 规范形」映射 + 校验 + normVersion；导出 `loadEntityTable(dataDir)`、`normalize(text)`、`rewriteKeyCount`、`normVersion`。
 - SangoIndex 与 `sango_query_embed` 共用同一实例（进程内单例）——编排侧不另写归一化实现（防 D4 口径分裂）。
-- 替换算法沿用现有结构：改写键按长度降序构造 alternation 正则，全局替换（最长匹配口径不变）；替换前做**邻接延伸检查**（bug-00036）：键命中处若与邻接字符能延伸为表内已知词（任意行 canonical / aliases / rewriteKeys 中最长命中）则不替换该键——防 canonical 原文被真子串键二次扩张（长坂坡 不再变成 长坂坡坡），独立语境改写不受影响（博望之战 → 博望坡之战）。
+- 替换算法（供缓存侧与诊断用）：改写键按长度降序构造 alternation 正则；替换前做**邻接延伸检查**（bug-00036）。
+- **改写职责拆分（09-29 定）**：`normalize()` 只服务两个消费方——① 缓存侧编码（§3.2 不变）；② 「双写扩展」诊断（§5：只报告键命中，不改写输入）。**检索侧（query 与语料 token）一律取原文、不做替换**，等价写法由索引侧双写覆盖（§2.3）。
 - 现行 loadAliases 私有结构（pidOf / canonOf / aliasPattern）废弃；人物 PID 信息改由表行 id 承载，死亡类 / 人物标签逻辑复用入口不变（表设计 §7）。
+### 2.2 检索侧不改写 query；缓存侧保留规范形编码（09-29 定）
 
-### 2.2 query 改写必须在 embed 之前（硬约束）
+- `search(query)`：query **原文**入 BM25 / 向量 / 标签 / 事件桥；不产生 normalized ≠ raw（`query.normalized` ≡ 原文）。
+- 缓存侧不变：`sango_query_embed` 仍先 `normalize(query)` 再编码（§3.2）——缓存键内部口径，换说法与规范形仍合并同一条（验收 4 不变）。
+- `docs[].text` 恒保留原文；检索 token = 原文 token + 索引侧双写扩展（§2.3）。
+- 本节取代原「query 改写必须在 embed 之前」硬约束（feat-A016 原案）。理由（bug-00046 实测）：替换把判别性词面换成高频本名（伏龙 df 11 → 诸葛亮 df 146，锦马超 1 → 马超 215），证据段名次由第 1 掉到第 4、落入排序运气区；并与事件桥 alias 原文口径错位，「X登场」族 160/708 组 alias 永不命中。
+### 2.3 索引侧双写（rewriteKeys 与 fragmentOnly 同口径；09-29 定）
 
-- `search(query)` 固定顺序：`normalized = normalize(query)` → `tokenize(normalized)` 供 BM25 → `embedQuery(normalized)` 供向量路。embedding 输入必须是改写后文本（现状路径已如此，本契约固化顺序为硬约束）。
-- 换说法（`五关斩六将` → `过五关斩六将`、`千里走单骑` → `过五关斩六将`）、人物字号（`云长` → `关羽`）、身体方位（`右目` → `右眼`）等全部经 rewriteKeys 替换。
-- `docs[].text` 恒保留原文；归一化只作用于索引 token、query 侧与标签侧（现状不变）。
-
-### 2.3 片段侧同义素材（fragmentOnly，索引侧双写）
-
-- fragmentOnly 不进替换集、不参与 query 改写；用途 = 索引侧双写扩展：建 postings 时，片段文本命中 fragmentOnly 短语处追加写入其规范形的 token（原文 token 保留，不改 docs[].text、不覆盖）。
-- 双写只增倒排条目，不改文档长度（BM25 的 dl 仍取原文 token 数，不重算）。
-- 目的：query 用规范形 / 通用说法可词法命中含口语写法的片段（如 query「死亡」命中含「自刎」的片段），同时杜绝歧义词改写 query 的误伤（如「天子」不改写为「皇帝」）。
-- 已知约束：被双写的规范形 token 的 df 略升，属可接受偏差，不追平。
-
+- 建 postings 时，语料原文命中的 `rewriteKeys` 与 `fragmentOnly` 键**一律双写**：原文 token 保留 + 命中处追加其规范形 token（不替换、不覆盖；`docs[].text` 恒原文）。
+- 双写只增倒排条目，不改文档长度（BM25 的 dl 仍取原文 token 数，不重算）；规范形 token 的 df 略升，属可接受偏差。
+- 实测收益（bug-00046，真索引）：`伏龙指的是谁` 证据段 `0035:c0005` 名次 **第 4 → 第 1**（接入重排后第 2）；`锦马超指的是谁` 的 `0065:c0006`（「人言锦马超，名不虚传」）回到第 2；换说法（`诸葛亮是谁`）召回不变。
+- `fragmentOnly` 语义不变：白名单 / 歧义词只做双写，不进 query 改写（本口径下 query 侧本就不改写）。
 ### 2.4 标签侧与共享实体标签多挂
 
-- 标签三路召回机制不变：标签文本先 normalize（替换 rewriteKeys）再入 tagPostings；原始标签文本由 tagTextsByDoc 保留供 hitLabels。
+- 标签三路召回机制不变；**标签侧与语料同口径**：标签原文 token + 其规范形 token 双写（原「先 normalize 再入 tagPostings」的替换口径作废）；原始标签文本仍由 tagTextsByDoc 保留供 hitLabels。
 - 跨主条目词（fragmentOnly，如文帝 / 陈留王 / 魏王）不进改写键，但按 referentVerdicts 的 dist / topPid 做「共享实体标签多挂」：同一标签词挂在多个候选主条目上，经标签倒排第三路召回（复用 tagPostings，不新增召回路），与原文直配双轨并行（需求表设计约束）。
 - 标签内容如何多挂在标签建设轮细化；本契约承诺机制入口与数据依据（referentVerdicts），不承诺标签内容清单。
 
 ### 2.5 索引重跑要求
 
 - 表变更 → 重启 sango 进程即重建 postings / df / 标签倒排（内存态，无落盘索引）。
-- 向量 bin（`data/vectors/sanguo-yanyi.bin`）以原文嵌入（现状），本期不重跑。理由：向量侧归一化需离线全量重嵌 2344 chunk，且非任何验收项前置；query 侧在改写后文本上编码已满足验收 3。若后续把归一化引入向量侧，另立课题。
-- recall-bench / 评测 runner 与检索共用同一 normalize 实现（维持「检索实现与评测口径一致」既有契约；表指定规范形后依 §1.3 同步）。
-
+- 向量 bin（`data/vectors/sanguo-yanyi.bin`）由 `scripts/build_vectors.py` 以 **chunk 原文**嵌入（现状）；检索侧改回原文后，向量路成为「原文 query ↔ 原文语料」同口径（比改前更一致）→ **本期无需重跑向量**。若日后把等价写法引入向量侧，另立课题。
+- recall-bench / 评测 runner 与检索共用同一实现（维持「检索实现与评测口径一致」既有契约）。
 ### 2.6 键约束落地（检索侧执行五条）
 
 | # | 约束 | 落地 |
@@ -107,6 +105,7 @@
 
 - 工具内部：`query` → `normalize(query)`（entity-table 实例，rewriteKeys 替换）→ `embedQuery(normalized)` → 返回向量。
 - 归一化落在 mcp-server 的 `sango/src/normalize/entity-table.ts`（与检索共用同一实例）；工具注册处注入该实例（沿用现有 embedFn 注入模式，测试可注入假实现）。
+- 本工具是**唯一保留 normalize 的检索侧消费方**（检索已不改写，§2.2）：缓存键按规范形口径构造，与检索输入口径解耦。
 
 ### 3.3 出参（扩展）
 
@@ -150,21 +149,26 @@
 
 | 字段 | 现状 | 新语义 |
 |---|---|---|
-| `query.normalized` | alias.json 人名替换后文本（df 选名） | 表 rewriteKeys 替换后文本，人名与换说法同一口径。示例：raw `五关斩六将…` → `过五关斩六将…`；raw `夏侯惇的右目是怎么瞎的` → `…右眼…`；raw `云长…` → `关羽…` |
+| `query.normalized` | alias.json 人名替换后文本（df 选名） | **≡ 用户原文**（检索侧不改写，09-29 定）；改写明细语义下移到 `query.expansionHits` |
 | `env.aliasCount` | 别名 PID 数（pidOf.size） | 表内 rewriteKeys 总数（含人物与非人物）；表加载失败为 0。最终值以启动加载日志为准 |
-| `query.rewrites` | （新增，test-1921） | query 侧实际改写命中明细：`[{ from, to }]`，from = 原文片段、to = 规范形，按替换发生顺序排列；邻接延伸检查保护未替换的键不计入；fragmentOnly 键不在 query 侧替换、不计入；无改写为 `[]` |
+| `query.rewrites` | （新增，test-1921） | **恒 `[]`**（检索侧不再替换；字段保留，兼容历史消费方）|
+| `query.expansionHits` | （新增，09-29） | query 原文中命中可双写键（rewriteKeys 并集）的词 → 规范形：`[{ from, to }]`；语义 = 「该词在语料侧已按等价写法双写覆盖」，**不改写检索输入**；无命中为 `[]` |
 | `env.normVersion` | （新增，test-1921） | 表 meta.normVersion（内容 hash）；表加载失败降级为空串，与 aliasCount=0 同口径 |
 | `hitLabels` | 命中标签原始文本 | 取值语义不变（原始标签文本）；补充：跨主条目词经共享实体标签多挂命中后，同一标签词可能出现在多个主条目标签命中里，判定仍以原始标签文本为准 |
 
 - 追溯：sango 启动 stderr 打印 `[sango] entity-table loaded: rows={n} keys={rewriteKeyCount} normVersion={v}`；请求级排查结合该日志与 cache_logs.version_tag 对照表版本。
-- 页面口径（test-1921）：日志页「召回漏斗」头部在「语料 chunk」前新增「归一化改写」环节，显示 `query.rewrites` 命中数并标注「embed 前」；检索诊断 Query 区展示改写明细（原文片段 → 规范形），无改写显示「无改写」。方案见 docs/feat-A016-normalization-observability.md
+- 页面口径（test-1921，**09-29 修订**）：
+  - 漏斗「归一化改写」环节更名「索引双写扩展」，value = `query.expansionHits` 命中数；tooltip 改为「等价写法在索引侧双写覆盖，问句未被改写」。
+  - Query 区展示 `from → to` 并标注「未改写问句、仅索引侧等价覆盖」；无命中显示「无扩展」。
+  - 历史 trace 兼容（前端必做）：旧 trace 只有 `query.rewrites`、`normalized != raw` → 按旧口径渲染「归一化改写」；新 trace `rewrites=[]` + `normalized == raw` + 有 `expansionHits` → 按新口径渲染；两者不得混用标签。
+  - Query 区不再重复展示「检索用文本」与原文的同一串（`normalized == raw` 时隐藏该行或标注「与原文一致」）。
 
 ## 6. 验收映射
 
 | 验收 | 落点 |
 |---|---|
 | 2 表文件落地、双侧读取同一份表 | §1.1 / §2.1 / §3 |
-| 3 query embed 前改写，换说法与规范形 top10 证据段一致 | §2.2 / §2.3 |
+| 3 换说法与规范形 top10 证据段一致（**口径修订 09-29**：检索侧不改写、由索引双写覆盖；修订文字待负责人确认）| §2.2 / §2.3 |
 | 4 缓存键归一化，换说法与规范形命中同一缓存条目 | §3 / §4.2 |
 | 5 漏召回测（过五关斩六将 与 五关斩六将 top10 同证据段） | §2.3 双侧替换 + 表行「过五关斩六将」 |
 | 6 人名规范形口径切换不回退 | §1.3 / §2.5（重启重建）+ recall-bench 同基线复跑，华雄 / 刘备定点不倒车 |
@@ -175,10 +179,13 @@
 - 样例断言：`normalize('五关斩六将') === '过五关斩六将'`、`normalize('云长') === '关羽'`、`normalize('右目') === '右眼'`、`normalize('天子') === '天子'`（fragmentOnly 不替换）；
 - 缓存：同义两问先后各一次，cache_logs 显示第二次命中（一次 LLM 调用）；
 - recall-bench 同基线复跑。
+- 新增断言：`search('“伏龙”指的是谁')` 证据段 `0035:c0005` 名次 = 第 1（重排关）/ 前 3（重排开）；`query.normalized === raw` 且 `query.rewrites === []`；
+- 新增断言：`matchEvents` 对 `刘备出场` / `刘备首次登场` 非空（事件桥 alias 口径恢复）；
+- 前端：新老 trace 渲染分支各一例（旧 trace 显示「归一化改写」、新 trace 显示「索引双写扩展」）。
 
 ## 7. 边界（不做）
 
-- 不改注入策略与检索权重（A020 / A014 范畴）；不引入 LLM 参与改写；不建大规模实体库（白名单式，只映射已确认条目）。
+- 不改注入策略与检索权重（A020 / A014 范畴）；不引入 LLM 参与改写；不建大规模实体库（白名单式，只映射已确认条目）。 另（09-29 定）：不改写 query；向量侧不做等价写法双写（§2.5）。
 - 不做向量侧归一化（§2.5 理由）；不给缓存侧新增接口（换代复用 A013 §1.6）；bug-00031 冲突词（子明 / 公明 / 子孝 / 子远）不进表。
 
 ## 8. 已知约束与风险
@@ -193,3 +200,4 @@
 
 - 2026-09-26：bug-00036 定案修订——§1.6 违规键清单增「跨行 canonical 真子串键（K4）」；§2.1 替换算法增「邻接延伸检查」（防真子串键二次扩张 canonical）。机制与数据裁决以 `bugs/bug-00036-entity-table-key-substring-collision.md` 与 `docs/sango-entity-normalization.md`「键排斥规则」节为准（Coco 定案，老陈实施）。
 - 2026-09-26：test-1921 增补——§5 增加 `query.rewrites` / `env.normVersion` 字段 + 「召回漏斗头部标注归一化改写环节」页面口径（负责人拍板并入 A016，Coco 定案；实现分布与验证见 docs/feat-A016-normalization-observability.md）
+- 2026-09-29：口径修订（bug-00046 定案）——检索侧不再改写 query、`rewriteKeys` 与 `fragmentOnly` 同为索引侧双写；缓存侧（§3）保留规范形编码；diagnostics 改写明细改为 `expansionHits`；向量无需重跑；前端新老 trace 渲染分支与漏斗环节更名。Coco。
