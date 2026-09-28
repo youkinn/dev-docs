@@ -44,7 +44,7 @@ HTTP /api/chat
 - 三层判定 `L1 前端标签 → L2 关键词 → L3 高置信题库识别（仅 auto）`；天气分支已下线；`RouteTarget = fengyunsanguo | sango-novel | auto`。
 - 域锁定后走快路径预调（caller=server，stage ∈ fastpath / l3 / classify）；生成轮请求体**不带工具定义**，模型只见注入内容。
 - 兜底结论提示 `CITATION_FALLBACK_CONCLUSION_PROMPT`：「按原文，」一句话结论，只依据片段。
-- 生成轮温度：调用点缺省 = 思考 + 0.7；重试 / 二选一判定关闭思考 + temperature 0（bug-00018 口径）；草稿台本次参数可覆盖 temperature（A017）。
+- 生成轮温度：调用点缺省 = 思考 + 0.1（2026-09-28 负责人拍板 0.7→0.1，server/cli/draftbench 同源）；重试 / 二选一判定关闭思考 + temperature 0（bug-00018 口径）；草稿台本次参数可覆盖 temperature（A017）。
 
 ## 4. 检索层（`mcp-server/sango`）
 
@@ -154,4 +154,6 @@ HTTP /api/chat
 | 日期 | 变更 | 拍板 |
 |---|---|---|
 | 2026-09-24 | 初版：以 main HEAD（orch e1c5267 / server b3d31c5）盘点全链路代码事实，登记过期点与在途分支 | 负责人 |
+| 2026-09-28 | 第 2 版：锚点刷新（orch c68ac97 / server 946ff4c / web 6b47865）；同步 A014（剥壳 / death_age / verify-tag-files）、A015（benchmark 接口 + 120 题基线 60.8%）、A016（实体表单表 / rewriteKey-fragmentOnly / normVersion / 双侧归一化 / 诊断 rewrites）、A017（草稿台）、复核预算 1 与引语豁免（bug-00039/40）、bug-00030~42 状态对照、评测口径（A015 唯一回归锚） | 负责人（2026-09-28 指示更新）+ Coco（盘点） |
+| 2026-09-28 | 生成轮默认温度 0.7→0.1（bug-00044 随票；chat 链路 server.ts DEFAULT_TEMPERATURE + agent/cli/draftbench 同源；复核与重试 temperature 0 不变） | 负责人（2026-09-28 拍板） |
 | 2026-09-28 | 第 2 版：锚点刷新（orch c68ac97 / server 946ff4c / web 6b47865）；同步 A014（剥壳 / death_age / verify-tag-files）、A015（benchmark 接口 + 120 题基线 60.8%）、A016（实体表单表 / rewriteKey-fragmentOnly / normVersion / 双侧归一化 / 诊断 rewrites）、A017（草稿台）、复核预算 1 与引语豁免（bug-00039/40）、bug-00030~42 状态对照、评测口径（A015 唯一回归锚） | 负责人（2026-09-28 指示更新）+ Coco（盘点） |
