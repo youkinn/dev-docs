@@ -211,6 +211,23 @@ export interface RetrievalEventHitGroup {
 
 - 可选新增枚举值 `'event'`：该候选同时属某命中事件组（来源标记，便于漏斗核对）；其余字段与语义不变。老消费方（前端）零影响（宽容展示未知枚举值；如不宽容按 A016 增字段先例前端同步展示）。
 
+### 5.4 `timing.rerank` 与 `rerank` 诊断（test-2031 提测反馈补可观测）
+
+- **阶段链口径**：规则序并池（多路候选合并 + 事件路并池增强查询重排 + 规则排序）→ 取窗之前；保证区（死亡意图 ∪ L3 锚点）不参与池重排；事件路增强查询重排计入 `timing.merge`，**不含** cross-encoder 重排。
+- `RetrievalDiagnosticsTiming` 增 `rerank: number | null`：cross-encoder 池内重排段耗时（毫秒）；未接入打分器 / 窗口内无参与候选 / 跳过时为 null（与 merge 互斥分段，合并后 `merge + rerank ≈ 原 merge`）。
+- `RetrievalDiagnostics` 增顶层 `rerank: RetrievalRerankDiagnostics`（老字段不动；空结果早退 / 无命中路径也产出默认值，`enabled` 如实反映是否接入打分器）：
+
+| 字段 | 类型 | 语义 |
+|------|------|------|
+| enabled | boolean | 本请求是否接入重排打分器（装配层注入且权重可用） |
+| window | number | 重排窗口（规则序后前 N 名进重排；`SANGO_RERANKER_WINDOW` 覆盖，默认 50） |
+| considered | number | 实际参与重排条数（窗口内非保证区） |
+| skippedPinned | number | 因在保证区置顶（死亡意图 ∪ L3 锚点）而跳过重排条数 |
+| applied | boolean | 是否按重排分实际改写池序 |
+| reason | string \| null | 未重排的中文原因；applied=true 时为 null。取值：未接入重排打分器 / 窗口内无参与候选 / 重排打分异常 / 重排分数非法 |
+
+- 每请求一行 `[sango]` 中文日志（console.error）：窗口 / 参与 / 跳过置顶 / 耗时 / 结果（生效或跳过 + 原因）。
+
 ## 6. mcp-orchestrator 契约
 
 **结论：不需要 hu 分支。** 默认无契约变化。依赖的三条现状（均已存在，不改动）：
@@ -271,6 +288,7 @@ export interface RetrievalEventHitGroup {
 
 | 日期 | 改动 | 拍板人 |
 |------|------|--------|
+| 2026-09-28 | §5.4 补检索重排可观测契约：timing.rerank 独立分段（merge 收窄为不含 cross-encoder 重排）+ 顶层 rerank 诊断（enabled / window / considered / skippedPinned / applied / reason），保证区不参与、事件路增强查询重排计入 merge | 负责人（test-2031 提测反馈） |
 | 2026-09-28 | §3.4 回测读数入档：A015 快照 feat-A015-2026-09-28-0519 top5=73/120（60.83%，基线 60.8% 达标，四类逐类零倒退）；桥对 top5 装配变化 0 题（构造免疫实测成立）；top6–10 变化 23 题（事件组占位），示例「赤壁之战发生在哪里」答案段 rank20(miss)→rank6(tail)；事件表加载实测 rows=708 aliases=1638 chunkRefs=8205 normVersion=ab25ac91 无漂移告警 | Coco |
 | 2026-09-28 | 需求变更：契约重写——L1/L2 取消无分插槽与「整组进注入」，改整组并池 + 增强查询（事件名）BM25 重排自然取窗；L3 死亡/登场改标签位点锚定 ±N（回测定档 v1 ±1）置顶保证区（并入死亡意图通道、不参与池重排）；第二路召回兜底删除；A015 改实测门并与 A030 合并提测验收 | 负责人 |
 | 2026-09-28 | 契约澄清：并池合并口径——三路候选与事件组 chunk 按 doc 下标并集去重、无来源配额，合并池硬上限 120 兜底；池内重排与三路同公式（0.6 / 0.3 / 0.1），唯一变化 = bm25Norm 按增强查询重算、cosine / tag 不变、增强作用于全池、事件组无独立加分项；截断在重排后（top50 为 A030 cross-encoder 输入；A030 本期必接，接入前过渡期直接取窗） | 负责人 |

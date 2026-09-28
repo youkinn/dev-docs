@@ -163,6 +163,7 @@ tool#1 sango/sango_novel_search caller=server stage=fastpath success ms=63 diag=
 - **`queueWait` 显著** → 串行队列被前一请求占住（`/api/chat` 与 `/api/sango/random` **共用同一队列**）；并发下第二条必然等待
 - **`llm` 占大头** → 模型侧；配合 `cachedTokens` 判断是否缓存未命中
 - **`tool` 占大头** → MCP 子进程（演义检索 / 题库状态机）
+- **`tool` 大且检索诊断 `rerank.applied=true`** → 含 cross-encoder 重排段，看 `timing.rerank`（步骤 6）
 - **`frontend` 大而 `server` 小** → 网络或前端渲染
 - **余量 `server − queueWait − llm − tool`** → 总台自身（拼接 / 组装 / 序列化），明显偏大才可疑
 
@@ -212,6 +213,8 @@ $g=$d.toolCalls[0].diagnostics
 "query: raw=$($g.query.raw) | normalized=$($g.query.normalized)"
 $g.candidates|%{"  #$($_.rank) $($_.chunkId) ch$($_.chapter) final=$($_.finalScore) bm25n=$($_.bm25Norm) cos=$($_.cosine) label=$($_.labelHit) src=$($_.sources -join '+') inj=$($_.injected) cited=$($_.cited)"}
 "nextRank: $(if($g.nextRank){"#$($g.nextRank.rank) $($g.nextRank.chunkId) final=$($g.nextRank.finalScore) gap=$($g.nextRank.gapToTopN)"}else{'null'})"
+"timing: bm25=$($g.timing.bm25) vector=$($g.timing.vector) label=$($g.timing.label) merge=$($g.timing.merge) rerank=$($g.timing.rerank)"
+"rerank: enabled=$($g.rerank.enabled) window=$($g.rerank.window) considered=$($g.rerank.considered) skippedPinned=$($g.rerank.skippedPinned) applied=$($g.rerank.applied) reason=$($g.rerank.reason)"
 ```
 
 判读：
@@ -229,8 +232,17 @@ $g.candidates|%{"  #$($_.rank) $($_.chunkId) ch$($_.chapter) final=$($_.finalSco
 | `deathIntent.detected` / `pinned` | 死亡意图是否生效 / 是否置顶 |
 | `truncated=true` + `truncatedCount` | 诊断超 64 KB 预算被截断 |
 | `diagnostics=null` | 非检索工具（正常）/ 诊断落库旁路丢失 |
+| `timing.merge` | 多路召回合并 + 事件路并池增强查询重排 + 规则排序（**不含** cross-encoder 重排） |
+| `timing.rerank` | cross-encoder 池内重排段耗时；`null` = 该段未执行（未接入打分器 / 窗口内无参与候选，看 `rerank.reason` 区分） |
+| `rerank.enabled=false` | 本请求未接入重排打分器（装配层未注入 / 权重缺失）：`reason=未接入重排打分器` |
+| `rerank.applied=false` | 池序未按重排分改写：`reason` = `未接入重排打分器` / `窗口内无参与候选` / `重排打分异常` / `重排分数非法` |
+| `rerank.considered` / `rerank.skippedPinned` | 实际参与重排条数 / 因保证区置顶（死亡意图 ∪ L3 锚点）跳过条数 |
+| `rerank.window` | 重排窗口（规则序后前 N 名进重排；`SANGO_RERANKER_WINDOW` 覆盖，默认 50） |
+| `rerank` 字段缺失 | 老版本 sango（本期可观测之前）产出的诊断 |
 
 分数复算：`finalScore = 0.3 × bm25Norm + 0.6 × (cosine+1)/2 + 0.1 × labelHit`，三项均在 `[0,1]`，`null` 项按 0 计。
+
+重排阶段口径：重排发生在规则序并池之后、取窗之前；保证区（死亡意图 ∪ L3 锚点）按承诺不参与池重排；事件路的增强查询重排计入 `timing.merge`，不在 `timing.rerank` 内。
 
 ### 步骤 7 · 核对路由
 
@@ -401,3 +413,4 @@ node scripts/probe/trace-export.mjs --list <chunkId>                # 反查 chu
 | 2026-09-25 | §7 F 明确取数优先级：快照文件 → `--list` 反查 → 只读直连查表（小结果集 + 输出护栏） | 负责人（确认够用）+ Coco（落口径） | — |
 | 2026-09-26 | §2.1 证据源地图补 `llmCalls.requestSummary / responseSummary`（生成轮入参含注入片段全文 + 模型原始输出含指针）；「日志系统看不到」清单删除注入文本、改为可经 summary 查 | A016 验收三票排查（bug-00032/33/34）实测发现旧口径不符 | 四 trace（c549084b / ca7d9c6a / 67119582 / 275551c3）实取 responseSummary 与 final 对照，护栏误裁定案 |
 | 2026-09-26 | 步骤 4 判 LLM 明细补 `stage=novel_boundary_check`：演义域重叠门边界语义复核，仅低重叠待裁叙述句触发、responseSummary 即判定、正常样本不出现 | bug-00032/33/34 修复（护栏重叠门改边界复核）随 hu/feat-A016_term-normalization a121557 合入需求分支 | 小胡全量测试 348/348 绿（mock 两路，零真实 LLM 调用） |
+| 2026-09-28 | 检索诊断补重排读数：步骤 3 归因规则补「`tool` 大且 `rerank.applied=true` → 看 `timing.rerank`」；步骤 6 补 `timing.rerank` 与 `rerank` 明细（enabled / window / considered / skippedPinned / applied / reason）判读，并写清阶段口径（规则序并池之后、取窗之前；保证区不参与；事件路增强查询重排计入 merge） | feat-A018 提测反馈（`test/feat-A018/test-2031.md` 测试项 1：重排缺可观测），负责人放行修正 | 随 story-A018-01 变更：mcp-server 单测 + 日志页真浏览器复测 |
