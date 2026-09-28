@@ -56,7 +56,7 @@
 
 ### 2.1 归一化实现（单一模块）
 
-- 新增 `sango/src/normalize/entity-table.ts`：加载表 → 建「改写键 → 规范形」映射 + 校验 + normVersion；导出 `loadEntityTable(dataDir)`、`normalize(text)`、`rewriteKeyCount`、`normVersion`。
+- 新增 `sango/src/normalize/entity-table.ts`：加载表 → 建「改写键 → 规范形」映射 + 校验 + normVersion；导出 `loadEntityTable(dataDir)`、`normalize(text)`、`collectExpansions(text)`（索引侧双写扩展命中，§2.3 / §5）、`rewriteKeyCount`、`normVersion`。
 - SangoIndex 与 `sango_query_embed` 共用同一实例（进程内单例）——编排侧不另写归一化实现（防 D4 口径分裂）。
 - 替换算法（供缓存侧与诊断用）：改写键按长度降序构造 alternation 正则；替换前做**邻接延伸检查**（bug-00036）。
 - **改写职责拆分（09-29 定）**：`normalize()` 只服务两个消费方——① 缓存侧编码（§3.2 不变）；② 「双写扩展」诊断（§5：只报告键命中，不改写输入）。**检索侧（query 与语料 token）一律取原文、不做替换**，等价写法由索引侧双写覆盖（§2.3）。
@@ -66,6 +66,7 @@
 - `search(query)`：query **原文**入 BM25 / 向量 / 标签 / 事件桥；不产生 normalized ≠ raw（`query.normalized` ≡ 原文）。
 - 缓存侧不变：`sango_query_embed` 仍先 `normalize(query)` 再编码（§3.2）——缓存键内部口径，换说法与规范形仍合并同一条（验收 4 不变）。
 - `docs[].text` 恒保留原文；检索 token = 原文 token + 索引侧双写扩展（§2.3）。
+- **词典人名匹配口径（09-29 实测补充）**：死亡 / 登场人名词典的人名匹配取「query 原文 ∪ 原文命中键的规范形」，仅用于词典成员判定与置顶（否则别名问法如「云长怎么死的」丢失置顶）；**不并入词法 token 集**（等权并集实测更差，见 §8）。
 - 本节取代原「query 改写必须在 embed 之前」硬约束（feat-A016 原案）。理由（bug-00046 实测）：替换把判别性词面换成高频本名（伏龙 df 11 → 诸葛亮 df 146，锦马超 1 → 马超 215），证据段名次由第 1 掉到第 4、落入排序运气区；并与事件桥 alias 原文口径错位，「X登场」族 160/708 组 alias 永不命中。
 ### 2.3 索引侧双写（rewriteKeys 与 fragmentOnly 同口径；09-29 定）
 
@@ -143,7 +144,7 @@
 
 - 缓存键 = 归一化后文本的 embedding；规范形口径（表）变化即键空间变化。
 - 换代机制复用 A013 §1.6，不加新接口：`CACHE_VERSION` 换代（范围含 normVersion）；lookup 发现条目 `versionTag != CACHE_VERSION` → 全量清除一次 + console.warn；新写入条目带当前版本。
-- version_tag 建议形如 `${CACHE_VERSION}-${normVersion}`（示例口径，由总台实现轮定稿）；表变更部署 = 重启 sango（§2.5）+ 编排侧 CACHE_VERSION 换代；`cache_logs` 不清（审计保留）。
+- version_tag 实际实现 = `CACHE_VERSION` 常量（`mcp-orchestrator/src/cache.ts:15`），**未拼 normVersion**（09-29 实测口径订正；原「示例形 `${CACHE_VERSION}-${normVersion}`」未实现）；表变更部署 = 重启 sango（§2.5）+ 编排侧手动 CACHE_VERSION 换代；漏换代时键空间不自动区分（登记 §8）；`cache_logs` 不清（审计保留）。
 
 ## 5. diagnostics 字段语义变更（表结构不变）
 
@@ -195,9 +196,13 @@
 - 「语料未出现」词保留为改写键：无歧义证据亦无词面证据，语料扩展后需重跑核查。
 - 焦点校验改原文口径（§4.4）：若实测发现回归，另开 bug 处理，不阻塞本期。
 - 过归一化误匹配：白名单 + 漏召回测样例兜底（验收 5）。
+- 检索侧不改写 query 的代价（09-29 实测）：只含规范形写法的文档 / 标签不再被别名问句命中 → 云长写法集 top≤10 12→10（−2）；A015 同基线 top10 由 127→158（净升），但有 12 项掉出 top10（清单见 `test/standard-set/results/feat-A015-bug-00046-baseline-diff.json`，归属待负责人拍板）。
+- 已排除方案：检索侧等权并集（原文 ∪ 规范形全量并入词法 / 标签 / 事件桥）实测更差（云长写法集 12→5、伏龙守卫 r1→r2），不作本期实现（证据 `test/standard-set/results/feat-A016-variantV-measurement.json`）。
+- 缓存 version_tag 未拼 normVersion（§4.5）：表换代而未手动递增 CACHE_VERSION 时键空间不自动区分，靠部署纪律兜底。
 
 ## 维护记录
 
 - 2026-09-26：bug-00036 定案修订——§1.6 违规键清单增「跨行 canonical 真子串键（K4）」；§2.1 替换算法增「邻接延伸检查」（防真子串键二次扩张 canonical）。机制与数据裁决以 `bugs/bug-00036-entity-table-key-substring-collision.md` 与 `docs/sango-entity-normalization.md`「键排斥规则」节为准（Coco 定案，老陈实施）。
 - 2026-09-26：test-1921 增补——§5 增加 `query.rewrites` / `env.normVersion` 字段 + 「召回漏斗头部标注归一化改写环节」页面口径（负责人拍板并入 A016，Coco 定案；实现分布与验证见 docs/feat-A016-normalization-observability.md）
 - 2026-09-29：口径修订（bug-00046 定案）——检索侧不再改写 query、`rewriteKeys` 与 `fragmentOnly` 同为索引侧双写；缓存侧（§3）保留规范形编码；diagnostics 改写明细改为 `expansionHits`；向量无需重跑；前端新老 trace 渲染分支与漏斗环节更名；需求文档 `requirements/feat-A016-term-normalization.md` 同批同步（标题 / 目标 / 验收 3、6、8 / 接口影响 / 技术要点 / 任务表 / 故事号）。Coco。
+- 2026-09-29（实现批）：§2.1 导出清单补 `collectExpansions`；§2.2 补词典人名匹配口径（原文 ∪ 规范形，仅词典判定）；§4.5 version_tag 订正为实际实现（CACHE_VERSION 未拼 normVersion）；§8 登记单向双写代价、排除等权并集、缓存版本风险。Coco。

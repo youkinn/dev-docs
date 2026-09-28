@@ -84,7 +84,7 @@
 |------|------|------|
 | 实体表 | 仅 1 行通用概念行（canonical 人物首次登场）+ 1 行 出山；**无按人条目** | 这行的 rewriteKeys 就是问句被改坏与桥失效的来源 |
 | events.json（A018）| 「X登场」族 **134 组**（alias 刘备登场 / 刘备出场 / 刘备首次登场，含 exampleQuestion「刘备是什么时候出场的」），chunk 引用 394 | alias 与 query 口径不一致 → 实测 matchEvents 全空（接了线没通电）|
-| 标签 `tags/event.json` | 「人物之生-X登场」**96 条** | 被 `sango-index.ts:471` 剥壳、语义让给事件桥 |
+| 标签 `tags/event.json` | 「人物之生-X登场」**135 条**（09-29 实测订正，原记 96 条） | 被 `sango-index.ts:471` 剥壳、语义让给事件桥 |
 
 - 冗余关系：134 组事件里 **133 组**与「人物之生」标签落在同一 chunk（394 个 chunk 引用中 219 带该标签）。
 - 定性：**不存在白写的垃圾数据**。现状下 134 组事件属「死重」（接了线但口径不通、不产效果）；口径修好后，「X出场 / X首次登场」这类词面走事件桥直接命中，任意问法（如「X第一次出场」）走 `birthByPerson 结构路。
@@ -113,3 +113,11 @@
 - 2026-09-29：二稿——按负责人「先怀疑验证方法、再定序」的要求补真索引四组 A/B（口径 × 重排），改定根因排序为「口径为根、重排为放大器」；补充登场「照死亡同款」结构路落点；修正池子规模指标的表述。Coco。
 - 2026-09-29（定案）：负责人拍板方向——① 登场照死亡同款（`birthByPerson` 词典 + 登场意图 + 置顶），删实体表登场行 rewriteKeys；② query 侧不再改写、索引侧 rewriteKeys 改双写；③ events.json 134 组保留不动。任务拆分由 Coco 出、老陈实现、小叶改诊断口径、小胡验缓存透传。
 - 2026-09-29（口径补充）：① 重排（bug-00045）不列为本票前置、挂起待自然消解；② events.json 134 组本次不动、待登场类置顶生效后作收尾清理。Coco。
+- 2026-09-29（实现批，老陈）：sango 侧落地——检索侧不改写（
+ormalized ≡ raw、ewrites ≡ []、新增 xpansionHits）；索引侧 / 标签侧双写（新增 collectExpansions，原文 token 保留 + 命中处追加规范形、dl 不重算）；登场结构路（irthByPerson 135 条 + matchBirthIntent 并入既有 pinDocs 保证区）；实体表登场行删 rewriteKeys；
+ormVersion b93c5ca9→5252f5bc。门禁 build exit 0 / test 102/102。读数：伏龙  035:c0005 重排关 r1、开 r2；锦马超  065:c0006 r2；matchEvents('刘备出场')/('刘备首次登场') → E00105；登场置顶「刘备第一次出场是什么时候」→  001:c0007；华雄 / 刘备 4 定点两模式不倒车；云长写法集 top≤10 12→10（−2）；A015 同基线 top5 113→140、top10 127→158，12 项掉出 top10（口径②，证据 	est/standard-set/results/feat-A015-bug-00046-baseline-diff.json）。
+- 2026-09-29（方案裁决）：检索侧等权并集（变体 V）实测更差——云长写法集 12→5、伏龙守卫 r1→r2，排除；实验开关与脚本已回退，证据留 	est/standard-set/results/feat-A016-variantV-measurement.json。Coco。
+- 2026-09-29（前端，小叶）：mcp-web 诊断面板四处口径落地（漏斗更名「索引双写扩展」/ 展示 xpansionHits / 
+ormalized == raw 隐藏「检索用文本」/ 新老 trace 渲染分支）；真浏览器 headless 实测三例（新 trace 有扩展 value=2、新 trace 无扩展、旧 trace 仍「归一化改写」），截图 D:\workplace\bug-00046-evidence\1~3*.png；mcp-web test 136/136、lint / build exit 0。
+- 2026-09-29（缓存侧透传验证，小胡）：换说法与规范形命中同一缓存条目（cache_logs id=123 hit=0 → id=124 hit=1、similarity 1.0、第二问 0 次 LLM）；ersion_tag = A016-2026-09-26-1（= CACHE_VERSION，未拼 normVersion，接口 §4.5 已按实际订正）；焦点校验无回归；编排侧零改动。
+- 2026-09-29（待拍板）：① 验收 3 判据措辞（「top10 集合相同」→「同一证据段两侧命中 + 交集 ≥9/10」）；② 单向双写代价归属（云长写法集 −2、A015 12 项掉出 top10）。未拍板前需求文档不改。

@@ -50,7 +50,7 @@ HTTP /api/chat
 
 - 语料 schema v2（`src/types.ts`）：`CorpusChunk` 最小检索单元，250 字目标 / 400 字硬上限、可跨段；`Quote` 引语冗余表（qid/文本/offset/speaker）。
 - **实体表单表（A016，PR #16）**：`data/entity-table.json` 单一数据源（alias.json 已退役）；行 = 类型 + ID（人名沿用 PID）+ 规范形 + 别名列表；统一实现 `sango/src/normalize/entity-table.ts`，索引侧 / query 侧 / 标签侧 / `sango_query_embed` 共用，编排侧不另写（口径零漂移）。
-- 键分两类：`rewriteKey`（query 与索引侧替换为规范形）与 `fragmentOnly`（片段侧双写扩展素材，不进改写键；接口 §2.3 双写，tf 按命中处数计）；跨主条目词（文帝 / 陈留王 / 魏王等）不做改写键，按 `referentVerdicts` 的 dist/topPid 做「共享实体标签多挂」。**表缺失时 normalize 退化为恒等**。
+- 键分两类（09-29 bug-00046 定案后）：`rewriteKey` 与 `fragmentOnly` 同为**索引侧 / 标签侧双写键**（语料原文 token 保留 + 命中处追加规范形 token，tf 按命中处数计；检索侧不再替换 query）；跨主条目词（文帝 / 陈留王 / 魏王等）不做改写键，按 `referentVerdicts` 的 dist/topPid 做「共享实体标签多挂」。**表缺失时 normalize 退化为恒等**。
 - `env.normVersion`：实体表与判定换代时递增（当前 `b93c5ca9`，bug-00041 关公改回 rewriteKey 后）；检索与缓存共用，缓存产物版本含 normVersion 范围（`cache.ts` 注释，A016 §4.5），换版须清缓存。
 - 检索融合：多路召回（BM25 + BGE-M3 向量 + 标签）加权重排 `0.6/0.3/0.1` 不变（2026-09-19 定参）；`MIN_COSINE=0.3` 仍为哈希向量时代死路值（`sango-index.ts:60` 注释 Step 4 待重定，**未做**）。
 - 向量：BGE-M3 1024 维（`src/embed/bge-m3-encoder.ts` + `data/vectors/sanguo-yanyi.bin`）；检索与缓存判定同一空间。
@@ -59,14 +59,14 @@ HTTP /api/chat
 - **评测执行接口（A015，`sango/src/benchmark/` 五模块）**：parser / matcher / runner / snapshot / server；`POST /dev/benchmark/run`（dev 门控，`SANGO_DEV_HTTP_PORT=8787`，`npm run dev`）；判定逻辑只存一份，dev-docs `test/standard-set/feat-A015-verify.mjs` 为薄壳调用同一入口。
 - 工具契约：
   - `sango_novel_search`：limit 默认 5 / 上限 20；出参结构化 JSON（`chapter`/`title`/`quotes{offset,len}`）；空命中返回 `未召回任何原文段落`；请求带 `_meta.traceId` 才产诊断。
-  - `sango_query_embed`（A013 内部工具）：query → base64-float32-le 1024 维；A016 起 **embed 前做同一归一化改写 + normVersion**（换说法与规范形共享缓存条目，防 D4 口径分裂）；仅供缓存判定，模型不可见、不产诊断。
+  - `sango_query_embed`（A013 内部工具）：query → base64-float32-le 1024 维；A016 起 **embed 前做同一归一化（替换口径，仅缓存侧）+ normVersion**（换说法与规范形共享缓存条目，防 D4 口径分裂）；仅供缓存判定，模型不可见、不产诊断。
   - `sango_novel_chapter`（A010）：整回读取（含 prev/next）。
-- 检索诊断（`_meta.diagnostics`）：bm25Norm / cosine 全精度、hitLabels、分阶段 timing（A013-03）+ **A016 归一化明细**（`query.rewrites` + `env.normVersion`，验收 8）。
+- 检索诊断（`_meta.diagnostics`）：bm25Norm / cosine 全精度、hitLabels、分阶段 timing（A013-03）+ **A016 索引双写扩展明细**（`query.expansionHits` + `env.normVersion`；`query.normalized ≡ raw`、`query.rewrites ≡ []`，09-29 bug-00046，验收 8）。
 
 ## 5. 注入层（`mcp-orchestrator/src/citation.ts`）
 
 - 常量（2026-09-20 注入策略定稿）：`INJECT_FRAGMENT_LIMIT=10`；`INJECT_HEAD_GUARANTEE=5`（前 5 段整段保底、不裁剪、不占预算）；`INJECT_TOTAL_BUDGET=2000` 字（超预算丢整段、**绝不段内裁剪**）；`INJECT_TAIL_FALLBACK_ENABLED=true`（第 6–10 段预算兜底，检索侧提升后退出）；`MAX_MODEL_QUOTE_LENGTH=30`。
-- 窗口锚点用稀有度排序 `rankKeyAnchors`（key 长度降序）；2026-09-19 实证锚点截断是注入窗口丢答案句的根因之一，A016 改写后是否改变命中面**未复测**（见 §13 待办 6）。
+- 窗口锚点用稀有度排序 `rankKeyAnchors`（key 长度降序）；2026-09-19 实证锚点截断是注入窗口丢答案句的根因之一，A016 改写后是否改变命中面未复测——09-29 bug-00046 定案后检索侧不再改写 query，该待办自然消解。
 - 草稿台路径（A017）：`draftbench:N` 显式片段注入，合成 chunkMeta（片段序 == 清单序，topK 截断保序），本次参数覆盖 temperature / disableThinking。
 
 ## 6. 生成层（`mcp-orchestrator/src/agent.ts`）
@@ -93,7 +93,7 @@ HTTP /api/chat
 ## 9. 观测（`mcp-orchestrator/src/storage/logs.ts` / `trace.ts` / `recallDiagnostics.ts`）
 
 - traceId 贯穿 HTTP → MCP 调用 → 日志明细；`llm_call_logs` 记 attempt / reasoning_tokens / input_breakdown / max_tokens / **temperature 实参**；`tool_call_logs` 记 caller（model/server）+ stage（l3 / fastpath / classify / generation）；`cache_logs` 记命中判定与灰色区。
-- 检索诊断回传 bm25Norm / cosine 全精度、hitLabels、分阶段 timing；A016 增 `query.rewrites` + `env.normVersion`（归一化改写明细）。
+- 检索诊断回传 bm25Norm / cosine 全精度、hitLabels、分阶段 timing；A016 增 `query.expansionHits` + `env.normVersion`（索引双写扩展明细；`query.normalized ≡ raw`、`query.rewrites ≡ []`，09-29 bug-00046）。
 - A017 草稿台（`src/api/v1/draftbench.ts`）：traceId 拉取链路 / 手动发送 / 记录与 diff / 物理删除。
 
 ## 10. 评测
@@ -110,7 +110,7 @@ HTTP /api/chat
 
 | Bug | INDEX 状态 | main / 分支事实 | 判定 |
 |---|---|---|---|
-| bug-00003 召回质量 | 待修复 | 检索侧：实体表单表 + A016 query 改写（rewriteKey / fragmentOnly）+ A014 剥壳 / 死亡意图 death_age + 真向量 + 多路 0.6/0.3/0.1 均落地 main；剩余 MIN_COSINE Step4 + 评测口径（bug-00035 / 00007 / 00008） | 保持待修复，标题描述已落后 |
+| bug-00003 召回质量 | 待修复 | 检索侧：实体表单表 + A016 索引侧双写（rewriteKey / fragmentOnly，检索侧不改写 query）+ A014 剥壳 / 死亡意图 death_age + 真向量 + 多路 0.6/0.3/0.1 均落地 main；剩余 MIN_COSINE Step4 + 评测口径（bug-00035 / 00007 / 00008） | 保持待修复，标题描述已落后 |
 | bug-00007 / 00008 评测口径 | 已关闭（2026-09-28） | 结论基于当时代码与当时标准，当前不适用 | 负责人口径关闭 |
 | bug-00022 题库并列候选 | 待修复 | 提示层已含「仅含义相同才答」，结构性保障未做 | 保持待修复 |
 | bug-00023 主宾反转 | 待修复 | 生成轮 prompt 事件结构方向校验已合入（PR #20）；检索侧结构性前提校验未做 | 保持待修复 |
@@ -127,7 +127,7 @@ HTTP /api/chat
 | bug-00039 复核无上限 | 已修复（09-26） | 复核预算 = 1，MAX_BOUNDARY_REVIEWS 删除 | 已闭环 |
 | bug-00040 护栏响应翻倍 | 已修复（09-26） | 引语片段句豁免复核 | 已闭环 |
 | bug-00041 关公改写键 | 已修复（09-26） | normVersion b93c5ca9，recall-bench top10/miss/定点零回退 | 已闭环 |
-| bug-00042 改写键双写 | 待修复 | rewriteKey 替换 query 后原文词身不保留 → 严格 top5 口径 2 题回退（4→6 / 5→7）；双写契约待设计（表设计 §2.2 / 接口 §2.3） | 待设计，见 §13 |
+| bug-00042 改写键双写 | 待修复（09-29 复测未闭环） | rewriteKey 双写已随 bug-00046 落地（§II 实体表节）；严格 top5 口径 2 题 1/2 修复——地名#1 回 r5、官职#10 仍 r6（证据 test/standard-set/results/feat-A015-bug-00046-baseline-diff.json） | 待复评 |
 
 ## 12. 在途分支（未合入 main，本地核验）
 
@@ -142,7 +142,7 @@ HTTP /api/chat
 ## 13. 已知待办（main 注释 / 文档明确标注）
 
 1. `MIN_COSINE` 按真向量分布重定（Step 4，`sango-index.ts:60` 注释仍标死路值 0.3）。
-2. **bug-00042 改写键双写契约**：rewriteKey 替换 query 的同时保留原文词身索引（表设计 §2.2 / 接口 §2.3 变更 + 索引重跑 + recall-bench 回测）。
+2. **bug-00042 收尾复评**：双写契约已随 bug-00046 落地（09-29），剩余 1 题（官职#10 r6）与重排开关翻转同源，转 A030 重排侧一并复评。
 3. bug-00035 基准集整改：按 A015 扩充 / 补归一化覆盖题（负责人 2026-09-28：扩充走新特性号）。
 4. 缓存门禁扩展：bug-00028 支撑校验不通过也不写缓存。
 5. bug-00024 排序稳定性排查 + bug-00025 输出层剥离 / 渲染层安全网（在途分支 `hu/bug-00024-00025_answer-assembly`）。
@@ -154,6 +154,6 @@ HTTP /api/chat
 | 日期 | 变更 | 拍板 |
 |---|---|---|
 | 2026-09-24 | 初版：以 main HEAD（orch e1c5267 / server b3d31c5）盘点全链路代码事实，登记过期点与在途分支 | 负责人 |
-| 2026-09-28 | 第 2 版：锚点刷新（orch c68ac97 / server 946ff4c / web 6b47865）；同步 A014（剥壳 / death_age / verify-tag-files）、A015（benchmark 接口 + 120 题基线 60.8%）、A016（实体表单表 / rewriteKey-fragmentOnly / normVersion / 双侧归一化 / 诊断 rewrites）、A017（草稿台）、复核预算 1 与引语豁免（bug-00039/40）、bug-00030~42 状态对照、评测口径（A015 唯一回归锚） | 负责人（2026-09-28 指示更新）+ Coco（盘点） |
+| 2026-09-29 | 第 3 版（bug-00046 实现批）：A016 检索侧不改写 query / 索引与标签侧双写 / 诊断 `expansionHits`（`normalized ≡ raw`、`rewrites ≡ []`）/ 登场结构路（`birthByPerson` 135 条）/ 实体表登场行删 rewriteKeys（normVersion 5252f5bc）；A015 同基线 top5 113→140、top10 127→158（12 项掉出 top10，待拍板归属）；bg-00042 复测 1/2、bug-00045 复测未自然消解转 A030 | Coco |
 | 2026-09-28 | 生成轮默认温度 0.7→0.1（bug-00044 随票；chat 链路 server.ts DEFAULT_TEMPERATURE + agent/cli/draftbench 同源；复核与重试 temperature 0 不变） | 负责人（2026-09-28 拍板） |
-| 2026-09-28 | 第 2 版：锚点刷新（orch c68ac97 / server 946ff4c / web 6b47865）；同步 A014（剥壳 / death_age / verify-tag-files）、A015（benchmark 接口 + 120 题基线 60.8%）、A016（实体表单表 / rewriteKey-fragmentOnly / normVersion / 双侧归一化 / 诊断 rewrites）、A017（草稿台）、复核预算 1 与引语豁免（bug-00039/40）、bug-00030~42 状态对照、评测口径（A015 唯一回归锚） | 负责人（2026-09-28 指示更新）+ Coco（盘点） |
+| 2026-09-29 | 第 3 版（bug-00046 实现批）：A016 检索侧不改写 query / 索引与标签侧双写 / 诊断 `expansionHits`（`normalized ≡ raw`、`rewrites ≡ []`）/ 登场结构路（`birthByPerson` 135 条）/ 实体表登场行删 rewriteKeys（normVersion 5252f5bc）；A015 同基线 top5 113→140、top10 127→158（12 项掉出 top10，待拍板归属）；bg-00042 复测 1/2、bug-00045 复测未自然消解转 A030 | Coco |
