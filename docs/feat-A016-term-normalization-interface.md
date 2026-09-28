@@ -168,7 +168,7 @@
 | 验收 | 落点 |
 |---|---|
 | 2 表文件落地、双侧读取同一份表 | §1.1 / §2.1 / §3 |
-| 3 换说法与规范形 top10 证据段一致（**口径修订 09-29**：检索侧不改写、由索引双写覆盖；修订文字待负责人确认）| §2.2 / §2.3 |
+| 3 换说法与规范形 top10 证据段一致（**口径修订 09-29**：检索侧不改写、由索引双写覆盖；需求文档已同步）| §2.2 / §2.3 |
 | 4 缓存键归一化，换说法与规范形命中同一缓存条目 | §3 / §4.2 |
 | 5 漏召回测（过五关斩六将 与 五关斩六将 top10 同证据段） | §2.3 双侧替换 + 表行「过五关斩六将」 |
 | 6 人名规范形口径切换不回退 | §1.3 / §2.5（重启重建）+ recall-bench 同基线复跑，华雄 / 刘备定点不倒车 |
@@ -200,4 +200,4 @@
 
 - 2026-09-26：bug-00036 定案修订——§1.6 违规键清单增「跨行 canonical 真子串键（K4）」；§2.1 替换算法增「邻接延伸检查」（防真子串键二次扩张 canonical）。机制与数据裁决以 `bugs/bug-00036-entity-table-key-substring-collision.md` 与 `docs/sango-entity-normalization.md`「键排斥规则」节为准（Coco 定案，老陈实施）。
 - 2026-09-26：test-1921 增补——§5 增加 `query.rewrites` / `env.normVersion` 字段 + 「召回漏斗头部标注归一化改写环节」页面口径（负责人拍板并入 A016，Coco 定案；实现分布与验证见 docs/feat-A016-normalization-observability.md）
-- 2026-09-29：口径修订（bug-00046 定案）——检索侧不再改写 query、`rewriteKeys` 与 `fragmentOnly` 同为索引侧双写；缓存侧（§3）保留规范形编码；diagnostics 改写明细改为 `expansionHits`；向量无需重跑；前端新老 trace 渲染分支与漏斗环节更名。Coco。
+- 2026-09-29：口径修订（bug-00046 定案）——检索侧不再改写 query、`rewriteKeys` 与 `fragmentOnly` 同为索引侧双写；缓存侧（§3）保留规范形编码；diagnostics 改写明细改为 `expansionHits`；向量无需重跑；前端新老 trace 渲染分支与漏斗环节更名；需求文档 `requirements/feat-A016-term-normalization.md` 同批同步（标题 / 目标 / 验收 3、6、8 / 接口影响 / 技术要点 / 任务表 / 故事号）。Coco。
