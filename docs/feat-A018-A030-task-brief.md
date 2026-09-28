@@ -1,0 +1,37 @@
+# 任务书：feat-A018 事件侧改造 + feat-A030 重排接入（合并交付）
+
+> 交付对象：老陈（mcp-server / sango）；故事号 story-A018-01 / story-A030-01；日期 2026-09-28。
+> 口径唯一来源：`requirements/feat-A018-event-table.md`（验收 4/5，需求变更后）与 `docs/feat-A018-event-table-interface.md`（接口契约）。口径冲突以需求文档为准；契约疑问先问 Coco，不得自行改接口 / 字段。
+
+## 1. 开发顺序与依赖
+
+1. **Coco 前置（数据，零 LLM）**：L3 行 chunkIds 重建为「标签位点段 ±N」（v1 N=1，N 为档位常量留回测口）+ verify-events 扩展。老陈的 L3 置顶实现依赖此数据。
+2. **老陈 A018 事件侧**（`chen/feat-A018_event-table` 分支继续）：
+   a. 并池：L1/L2 命中组全部有效 chunk 并入候选池——doc 下标并集去重、无来源配额；组 chunk 用全语料预计算 bm25Norm / cosine 按同公式出初始分（零新增计算）；合并池硬上限 120，超限按重排分裁。
+   b. 删除 `assembleTopK` 事件组插槽分支与「三路 combined 空 → 事件组自 rank 1 起」第二路召回兜底（并池后 combined 恒含组 chunk，兜底成为孤儿代码）。
+   c. 增强查询重排：增强查询 = normalized + canonical 事件名（多组命中取优先级最高组）+ 命中 alias；重跑 BM25 重算全池 bm25Norm 分量，按原 0.6/0.3/0.1 公式全池重排（cosine / tag 分量不变；cosine 不重编码；零新增 LLM）。
+   d. L3 锚点置顶：锚点段 ±N 小位点组（2-5 段）并入现有死亡意图置顶通道（`sango-index.ts` deathHits 两级排序，死因/遗言/年龄意图分型不变），进保证区、不参与池重排。
+   e. eventHit 诊断按新语义（placedCount / placedChunkIds），candidates `sources` 'event' 标记保留。
+3. **老陈 A030**（`chen/feat-A030_reranker` 分支）：池覆盖探针结论（A015 T1-c0；未就绪用定点样例人工估值）→ cross-encoder 选型 / 接入（规则重排后 top50 → 10）→ 评测（top≤5 不低于无重排基线 / 定点华雄·刘备不倒车 / 延迟 P50 / P95 预算内）。
+4. **回测**（老陈跑、Coco 复核；批量跑分按原则 4 报备负责人放行）：A015 基线复跑 + bridge on/off 对照 + L3 档位 ±1/±2/±3 对照 + 事件问法证据进窗率。
+5. **提测**：A018 + A030 随批提测验收（A018 验收 5 含 A030 验收项）。
+
+## 2. 验收标准（A018 侧）
+
+- `npm test` 75/75 全绿 + 新增用例且命名清晰：并池去重 / 池上限、增强查询重排（「赤壁之战发生在哪里」答案段进窗）、多组命中、L3 锚点置顶（不入重排）、删除插槽后非事件请求输出与现状逐字节一致。
+- 定点自查（traceId）：温酒斩华雄 / 三英战吕布 / 草船借箭 / 空城计——`eventHit.groups` 非空、`placedChunkIds` 与期望回区间吻合、编排侧注入视图可见。
+- 实测门：整体 top5 ≥ 60.8% 基线 + 事件类逐类不倒退 + bridge on/off 对照事件问法 top5 证据命中率提升。
+
+## 3. 红线
+
+- 运行期零新增 LLM 调用（原有生成 1 次 / 复核 ≤1 次预算不变）；cosine 不重编码。
+- `sango_novel_search` 出参结构不变（entries 字段一字不动）；诊断只增 eventHit；mcp-orchestrator 默认零契约变化（§6 触发条件不满足则不动 hu 分支）。
+- 不改 chunk / 向量 / 语料（零重建）、不改注入策略。
+- 文档与代码同票同步：实现轮涉及契约口径变化先问 Coco，落地后在接口文档维护记录补一行。
+
+## 4. 交付产物（结构化摘要）
+
+- 变更文件清单 + 每文件改动要点与行数。
+- 测试结果（全量 + 新增用例清单）。
+- 未解决问题 / 契约偏差（先问 Coco）。
+- 不回传文件内容。
