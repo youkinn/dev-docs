@@ -244,6 +244,8 @@ $g.candidates|%{"  #$($_.rank) $($_.chunkId) ch$($_.chapter) final=$($_.finalSco
 
 重排阶段口径：重排发生在规则序并池之后、取窗之前；保证区（死亡意图 ∪ L3 锚点）按承诺不参与池重排；事件路的增强查询重排计入 `timing.merge`，不在 `timing.rerank` 内。
 
+**重排怎么开 / 怎么关**：改 `mcp-server/sango/.env`（本地文件、不入库）里的 `SANGO_RERANKER=on|off`（默认 `off`，行为与无重排基线逐字节一致）。改完**必须重启 mcp-server** 才生效——提测链路由 orchestrator spawn 子进程（`node <sango>/dist/index.js`），只重启 web 或刷新页面无效。启用态要连带写 A030 锁定档位（`SANGO_RERANKER_WINDOW=20` / `_MAX_TOKENS=128` / `_BATCH=16` / `_INTRA_THREADS=8`），否则默认档位实测 P50 ≈ 4.6s / P95 ≈ 5.0s（远超 P95 ≤ 1000ms 预算）；权重目录默认 `sango/data/models/bge-reranker-base`，缺失时自动退回规则序并在 `rerank.reason` 写明。`on` 仅代表「接入重排」，不等于 A030 验收通过。
+
 ### 步骤 7 · 核对路由
 
 | `domain` 读数 | 实际走法 |
@@ -414,3 +416,4 @@ node scripts/probe/trace-export.mjs --list <chunkId>                # 反查 chu
 | 2026-09-26 | §2.1 证据源地图补 `llmCalls.requestSummary / responseSummary`（生成轮入参含注入片段全文 + 模型原始输出含指针）；「日志系统看不到」清单删除注入文本、改为可经 summary 查 | A016 验收三票排查（bug-00032/33/34）实测发现旧口径不符 | 四 trace（c549084b / ca7d9c6a / 67119582 / 275551c3）实取 responseSummary 与 final 对照，护栏误裁定案 |
 | 2026-09-26 | 步骤 4 判 LLM 明细补 `stage=novel_boundary_check`：演义域重叠门边界语义复核，仅低重叠待裁叙述句触发、responseSummary 即判定、正常样本不出现 | bug-00032/33/34 修复（护栏重叠门改边界复核）随 hu/feat-A016_term-normalization a121557 合入需求分支 | 小胡全量测试 348/348 绿（mock 两路，零真实 LLM 调用） |
 | 2026-09-28 | 检索诊断补重排读数：步骤 3 归因规则补「`tool` 大且 `rerank.applied=true` → 看 `timing.rerank`」；步骤 6 补 `timing.rerank` 与 `rerank` 明细（enabled / window / considered / skippedPinned / applied / reason）判读，并写清阶段口径（规则序并池之后、取窗之前；保证区不参与；事件路增强查询重排计入 merge） | feat-A018 提测反馈（`test/feat-A018/test-2031.md` 测试项 1：重排缺可观测），负责人放行修正 | 随 story-A018-01 变更：mcp-server 单测 + 日志页真浏览器复测 |
+| 2026-09-28 | 步骤 6 补「重排怎么开 / 怎么关」：`sango/.env` 的 `SANGO_RERANKER=on|off`（默认 off）+ 改后必须重启 mcp-server（链路由 orchestrator spawn 子进程）+ 启用态需带 A030 锁定档位（否则默认档位 P50≈4.6s / P95≈5.0s 超预算） | 负责人要求「自己就能开停、不用每次找开发」 | 老陈 plain `node dist/index.js` 两态启动日志实测 + 真检索 rerank 读数 |

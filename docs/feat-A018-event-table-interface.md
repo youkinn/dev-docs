@@ -228,6 +228,17 @@ export interface RetrievalEventHitGroup {
 
 - 每请求一行 `[sango]` 中文日志（console.error）：窗口 / 参与 / 跳过置顶 / 耗时 / 结果（生效或跳过 + 原因）。
 
+### 5.5 重排开关（`SANGO_RERANKER` env，自助启用）
+
+- 装配层按 `sango/.env` 的 `SANGO_RERANKER` 决定是否接入 cross-encoder 重排（`--env-file-if-exists=.env` 加载，Node v22 内置，无 dotenv 依赖）：
+  - `on` → 接入 `createDataRerankScorer()`；权重 / 分词器缺失 → 不接入、走既有降级（不抛错），启动日志写明原因；
+  - 未设 / `off` / 其他值 → 不接入，行为与默认基线逐字节一致（不改动提测基线）。
+- **口径约束（必读）**：
+  - `on` 只代表「接入重排」，**不等于 A030 验收通过**——定点不倒车（华雄 / 刘备）/ 拒答#5 结论仍待复评；
+  - 默认 `off`，测试与既有快照不受影响；
+  - 改 `sango/.env` 后需**重启 mcp-server** 生效。
+- 调参：`SANGO_RERANKER_DIR`（换权重目录）/ `SANGO_RERANKER_WINDOW`（重排窗口，默认 50）/ 推理档位见 `src/search/reranker.ts` 顶部说明。
+
 ## 6. mcp-orchestrator 契约
 
 **结论：不需要 hu 分支。** 默认无契约变化。依赖的三条现状（均已存在，不改动）：
@@ -288,6 +299,7 @@ export interface RetrievalEventHitGroup {
 
 | 日期 | 改动 | 拍板人 |
 |------|------|--------|
+| 2026-09-28 | §5.5 补重排开关口径：SANGO_RERANKER env 自助启用（默认 off 不改基线；on 仅代表「接入重排」、不等于 A030 验收通过，定点不倒车 / 拒答#5 仍待复评；改 .env 需重启生效） | 负责人 |
 | 2026-09-28 | §5.4 补检索重排可观测契约：timing.rerank 独立分段（merge 收窄为不含 cross-encoder 重排）+ 顶层 rerank 诊断（enabled / window / considered / skippedPinned / applied / reason），保证区不参与、事件路增强查询重排计入 merge | 负责人（test-2031 提测反馈） |
 | 2026-09-28 | §3.4 回测读数入档：A015 快照 feat-A015-2026-09-28-0519 top5=73/120（60.83%，基线 60.8% 达标，四类逐类零倒退）；桥对 top5 装配变化 0 题（构造免疫实测成立）；top6–10 变化 23 题（事件组占位），示例「赤壁之战发生在哪里」答案段 rank20(miss)→rank6(tail)；事件表加载实测 rows=708 aliases=1638 chunkRefs=8205 normVersion=ab25ac91 无漂移告警 | Coco |
 | 2026-09-28 | 需求变更：契约重写——L1/L2 取消无分插槽与「整组进注入」，改整组并池 + 增强查询（事件名）BM25 重排自然取窗；L3 死亡/登场改标签位点锚定 ±N（回测定档 v1 ±1）置顶保证区（并入死亡意图通道、不参与池重排）；第二路召回兜底删除；A015 改实测门并与 A030 合并提测验收 | 负责人 |
