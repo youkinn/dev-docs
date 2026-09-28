@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
+import { L3_ANCHOR_OVERRIDES, buildTagAnchorIndex, lookupTagAnchors, buildL3AnchorGroup } from './l3-anchor-overrides.mjs';
 
 // verify-events.mjs —— A018 事件表硬校验（验收 1；校验口径与老陈接口文档 §1.5 V1–V7 对齐）
 // 用法：node test/events/verify-events.mjs
@@ -22,10 +23,12 @@ const meta = table.meta || {};
 const rows = table.rows || [];
 
 const corpusChunks = new Set();
+const chunkCountByHui = new Map();
 for (let h = 1; h <= 120; h++) {
   const hui = String(h).padStart(3, '0');
   const doc = JSON.parse(fs.readFileSync(path.join(CORPUS_DIR, hui + '.json'), 'utf8'));
   for (const c of doc.chunks || []) corpusChunks.add(c.id);
+  chunkCountByHui.set(hui, (doc.chunks || []).length);
 }
 
 const entity = JSON.parse(fs.readFileSync(ENTITY_PATH, 'utf8'));
@@ -110,6 +113,38 @@ for (const [k, v] of crossRecords) {
   const hit = rows.find((r) => (r.eventId || '').startsWith('E' + k.split('|')[0]) && r.eventName === k.split('|')[1]);
   if (!hit) errors.push('V6: gap 跨回记录 ' + k + '（' + v + '）在事件表中无对应行');
 }
+
+// ---- V8 L3 锚点结构（验收 4 数据侧：锚点 ±N 小位点组；口径 = rebuild-l3-anchors.mjs）----
+const tagsRaw = JSON.parse(fs.readFileSync(path.join(MCP_SERVER_ROOT, 'data/corpus/tags/event.json'), 'utf8'));
+const tagAnchors = buildTagAnchorIndex(tagsRaw);
+const anchorRecords = new Map();
+const anchorSection = gapText.split('### L3 锚点人工核证')[1] || '';
+for (const line of anchorSection.split(/\r?\n/)) {
+  const m = line.match(/^\|\s*(E\d{5})\s*\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|/);
+  if (m) anchorRecords.set(m[1], m[3].trim());
+}
+const l3Rows = rows.filter((r) => r.type === 'L3');
+let l3AnchorOk = 0;
+for (const r of l3Rows) {
+  const hui = /^E(\d{3})/.exec(r.eventId)?.[1];
+  let anchors = lookupTagAnchors(tagAnchors, hui, r.eventName);
+  let viaOverride = false;
+  if (!anchors) {
+    anchors = L3_ANCHOR_OVERRIDES[r.eventId] || null;
+    viaOverride = !!anchors;
+  }
+  if (viaOverride) {
+    const rec = anchorRecords.get(r.eventId);
+    if (!rec) errors.push(`V8: L3 人工锚点 ${r.eventId} ${r.eventName} 缺 gap.md「L3 锚点人工核证」记录`);
+    else if (!rec.includes(anchors[0])) errors.push(`V8: L3 人工锚点 ${r.eventId} gap.md 记录「${rec}」与脚本「${anchors[0]}」不一致`);
+  }
+  if (!anchors) { errors.push(`V8: L3 ${r.eventId} ${r.eventName} 无锚点（tags 未覆盖且无人工登记）`); continue; }
+  const expected = buildL3AnchorGroup(anchors, chunkCountByHui.get(hui) || 0);
+  if (JSON.stringify(expected) !== JSON.stringify(r.chunkIds)) {
+    errors.push(`V8: L3 ${r.eventId} ${r.eventName} chunkIds 非「锚点±N」结构（期望 ${expected.join(',')}，实际 ${r.chunkIds.join(',')}）`);
+  } else l3AnchorOk++;
+}
+console.log(`L3 锚点结构: ${l3AnchorOk}/${l3Rows.length} 行校验通过`);
 
 // ---- 全集完整性 ----
 const firstPassRows = fs.readFileSync(FIRST_PASS, 'utf8').split(/\r?\n/).filter((l) => /^\|\s*\d{3}\s*\|/.test(l)).length;
