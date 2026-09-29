@@ -3,8 +3,9 @@
  *
  * story-A015-02 起，判定逻辑收敛到 mcp-server sango/src/benchmark/ 单模块（契约见
  * docs/feat-A015-benchmark-api.md §1：判定逻辑只存一份，禁止两份实现漂移）。本脚本不再
- * 内嵌解析 / 匹配 / 判定，改为调用 sango 本地 dev 接口 POST /dev/benchmark/run
- * （与页面「执行」同一入口），快照由服务端落盘。
+ * 内嵌解析 / 匹配 / 判定，改为调用 sango 本地 dev 接口（与页面「执行」同一入口）；快照由服务端落盘。
+ * bug-00049 B 案起接口异步化：POST /dev/benchmark/run 收 202 拿 runId → 轮询 GET /dev/benchmark/run-status
+ * 到 done/failed（3–5 秒一次，不做进度）→ GET /dev/benchmark/snapshot?runId= 取 summary 打印。
  *
  * 前置：先启动 sango dev 服务（加载语料 + 向量约 12 秒）：
  *   cd D:\workplace\mcp-server\sango && npm run dev
@@ -38,21 +39,48 @@ const CATEGORY_LABEL = {
 
 async function main() {
   const port = process.env.SANGO_DEV_HTTP_PORT || String(DEFAULT_PORT);
-  const url = `http://127.0.0.1:${port}/dev/benchmark/run`;
+  const api = `http://127.0.0.1:${port}/dev/benchmark`;
+
+  // 1) 触发 run（异步 job）：202 拿 runId；已在跑 → 409（message=benchmark already running），一律非 0 退出。
   let res;
   try {
-    res = await fetch(url, { method: 'POST', headers: { 'content-type': 'application/json' } });
+    res = await fetch(`${api}/run`, { method: 'POST', headers: { 'content-type': 'application/json' } });
   } catch (err) {
-    console.error(`[feat-A015] 无法连接 sango dev 服务 ${url}：${err?.message ?? err}`);
+    console.error(`[feat-A015] 无法连接 sango dev 服务 ${api}/run：${err?.message ?? err}`);
     console.error('[feat-A015] 请先按文件头注释启动 dev 服务，或检查 SANGO_DEV_HTTP_PORT。');
     process.exit(1);
   }
   const body = await res.json().catch(() => null);
-  if (!res.ok || !body || body.code !== 200) {
-    console.error(`[feat-A015] 执行失败（HTTP ${res.status}）：${body?.message ?? '未知错误'}`);
+  if (res.status !== 202 || !body?.data?.runId) {
+    console.error(`[feat-A015] 触发失败（HTTP ${res.status}）：${body?.message ?? '未知错误'}`);
     process.exit(1);
   }
-  const { runId, summary } = body.data;
+  const runId = body.data.runId;
+
+  // 2) 轮询 run-status 到 done / failed（3–5 秒一次，不做进度）；超时同样非 0 退出。
+  const deadline = Date.now() + 20 * 60 * 1000;
+  for (;;) {
+    if (Date.now() > deadline) {
+      console.error(`[feat-A015] 轮询超时（runId=${runId}，state=running）`);
+      process.exit(1);
+    }
+    await new Promise((resolve) => setTimeout(resolve, 4000));
+    const status = await fetch(`${api}/run-status`).then((r) => r.json().catch(() => null));
+    const state = status?.data?.state;
+    if (state === 'done') break;
+    if (state === 'failed') {
+      console.error(`[feat-A015] run 失败（runId=${runId}）：${status.data.error ?? '未知错误'}`);
+      process.exit(1);
+    }
+  }
+
+  // 3) 按 runId 取快照 summary（明细与落盘仍在服务端）。
+  const snap = await fetch(`${api}/snapshot?runId=${encodeURIComponent(runId)}`).then((r) => r.json().catch(() => null));
+  const summary = snap?.data?.summary;
+  if (!summary) {
+    console.error(`[feat-A015] 读取快照失败（runId=${runId}）：${snap?.message ?? '未知错误'}`);
+    process.exit(1);
+  }
   const pct = (n, d) => `${((n / d) * 100).toFixed(1)}%`;
   console.log(`# FEAT-A015 回归测试结果（${runId.slice('feat-A015-'.length)}）`);
   console.log(`> 引擎 SangoIndex（向量+BM25+标签融合，limit=${summary.engine?.inferLimit ?? 50}）；零 LLM；判对 = 证据段进 top5，6–10 兜底，其余未命中。`);

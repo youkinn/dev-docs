@@ -31,12 +31,14 @@ Base：`http://127.0.0.1:{port}/dev/benchmark`
 
 | 方法 | 路径 | 入参 | 出参 `data` |
 |---|---|---|---|
-| POST | `/dev/benchmark/run` | 无 body | `{ runId, summary, results }`（同步返回，执行中页面等待） |
+| POST | `/dev/benchmark/run` | 无 body | `202 { runId, state: 'running' }`（bug-00049 B 案：异步 job，立即返回，不再同步等待） |
+| GET | `/dev/benchmark/run-status` | — | `{ state: 'running'\|'done'\|'failed'\|'idle', runId, elapsedMs?, error? }`（内存态，只保留最近一次 job） |
 | GET | `/dev/benchmark/latest` | — | 最近一次快照 `{ runId, time, summary, results }`；无快照时 `data: null` |
 | GET | `/dev/benchmark/history` | — | 快照列表 `[ { runId, time, summary } ]`（不含 results，按时间倒序） |
 | GET | `/dev/benchmark/snapshot` | `runId` | 该次快照 `{ runId, time, summary, results }`；无快照 `data: null` |
 
-- `POST run`：评测集文件缺失 / 解析失败 → `500 { code:500, message }`（message 含路径）；已在执行中收到新请求 → `409 { code:409, message:'benchmark already running', data:{ runId } }`（页面执行按钮禁用兜底，正常不会触发）。
+- `POST run`（bug-00049 B 案：异步 job）：触发即回 `202 { runId, state: 'running' }`，不等 run 结束；已在执行中收到新请求 → `409 { code:409, message:'benchmark already running', data:{ runId: <在跑的那个> } }`（沿用单飞，页面执行按钮禁用兜底）。runId 仍在启动时生成，格式不变。
+- `GET run-status`（bug-00049 B 案：轮询）：`state` 取值——`running`（在跑，无 `elapsedMs`）/ `done`（`elapsedMs` = 该次 `summary.elapsedMs`，口径同 §4）/ `failed`（`error` 为摘要文本，不含大段堆栈）/ `idle`（无在跑且无最近记录，`runId: null`）。内存态、单进程、只保留最近一次 job，重启即丢；评测集缺失 / 解析失败等 run 内错误经此回 `failed`，不再由 POST 返回。**不做进度百分比**（负责人 2026-09-29 拍板）。
 - `GET snapshot`：runId 不存在 → `404 { code:404, message }`。
 - **原文查看不需要新接口**：候选 chunkId 格式 `{source}:{回号4位零补}:c{回内序号4位零补}`（例 `sanguo-yanyi:0085:c0011`），前端解析出回号后复用前厅既有 `SangoChapterReader`（`chapter` 必填 + `chunkId` 选填定位高亮，feat-A010 契约）。若实现中发现该组件无法按 chunkId 定位，向 Coco 报备后再补只读 chunk 原文入口。
 - `GET /dev/benchmark/snapshot` 为需求验收 8「可切换查看任意一次历史执行」的直接支撑（history 只回摘要，明细按 runId 拉取），属契约落实而非接口范围扩张。
@@ -47,7 +49,9 @@ Base：`http://127.0.0.1:{port}/dev/benchmark`
 
 JSON 顶层：`{ summary, results }`
 
-- `summary`：`{ tool, version, time, benchmark, engine, total, top5, tail, miss, top3, top10, inPool50, noAnchorCount, noAnchor, category, runId }`；`category` = `{ 类别名: { total, top5, tail, miss } }`；`runId = feat-A015-YYYY-MM-DD-HHMM`。
+- `summary`：`{ tool, version, time, benchmark, engine, total, top5, tail, miss, top3, top10, inPool50, noAnchorCount, noAnchor, category, runId, rerank, elapsedMs }`；`category` = `{ 类别名: { total, top5, tail, miss } }`；`runId = feat-A015-YYYY-MM-DD-HHMM`。
+- `summary.rerank`（test-2241 第 5 项新增；**dev server 扩展字段，老快照无此键 → 前端显示「—」**）：`{ mode: 'on'|'off', wired: boolean, window: number, maxTokens: number, batch: number, intraThreads: number|null }`。口径：`mode` = `SANGO_RERANKER` 原始取值归一（仅 `'on'` 为 on，未设 / 其它值一律 off）；`wired` = 本次 run 是否真的接入 cross-encoder 打分器（权重缺失退回规则序时为 false）；`window` = 实际生效窗口（`sango-index.ts` `rerankWindowSize()`，非 .env 原文）；`maxTokens` / `batch` / `intraThreads` = `resolveRerankTuning()` 生效值（含默认回落；`intraThreads` 未设 → null）。
+- `summary.elapsedMs`（test-2241 第 5 项新增；**dev server 扩展字段，老快照无此键 → 前端显示「—」**）：本次 run 服务端计时（毫秒；run 开始 → 逐题检索判分结束，不含落盘与 HTTP 传输）；同为 `GET run-status` done 态 `elapsedMs` 的来源。
 - `results[]`（单题）：`{ id: "类别#序号", question, answer, evidence, textAnchors[], titleAnchors[], chapterRefs[], rank /* 0=未召回 */, status: 'top5'|'tail'|'miss', hit: { id /* chunkId */, chapter, title, text } | null, candidates: [ { id, chapter, title } ] /* top50 候选，页面列候选与点 chunkId 看原文 */ }`。
 - `summary.md` 沿用 CLI 模板：引擎/判分口径头 + 「十三段模板 COPY」类别表 + 兜底（rank 6–10）列表 + 未命中（>10 / 未召回）列表。
 
@@ -83,8 +87,11 @@ npm run dev   # 构建 + SANGO_DEV_HTTP_PORT=8787 + node dist/index.js（加载�
 - **票号：bug-00047**（性质=**需求追加**；随票同批 test-2031 第 6 项剩余三条；实现已落地、待负责人验收）。来源：负责人 test-2031 第 9 项（`test/feat-A018/test-2031.md`）；归属 **FEAT-A015**（该特性 2026-09-25 已归档，需求文档按归档红线不改，本项作为其归档后新增能力的备忘落此处）。
 - 口径（负责人 2026-09-29 拍板）：**纯前端实现，后端零改动** —— 复用既有 GET /dev/benchmark/history（快照列表）与 GET /dev/benchmark/snapshot?runId=（{ summary, results } 逐项 id / question / rank / status）；只比较**题量一致**的快照（题量不一致不做比较）；展示逐项名次升降 / 入榜出榜与类别计数变化。
 - 交互（test-2031 原始需求）：历史快照列表末尾加操作列，点击弹出选择「与哪条历史快照比较」，结果需一眼看出变化。
+- **test-2241 第 5 项**（历史快照加「是否开启重排」列 + 「本次耗时」列；负责人 2026-09-29 拍板 **A 案**：两项随快照落盘、前端只读快照 / 历史接口，不读当前 env）：后端只增字段 `summary.rerank` / `summary.elapsedMs`（契约见 §4），前端按字段具名取用即可；老快照无这两个字段时显示「—」。与 bug-00049 B 案同轮落地，不拆轮、不做进度条。
+- **bug-00049 B 案**（负责人 2026-09-29 拍板）：`POST /dev/benchmark/run` 异步化——立即 `202` + `GET /dev/benchmark/run-status` 轮询到 `done` / `failed`；单飞 `409` 语义与 runId 生成口径不变，不做进度百分比。契约见 §3。
 
 ## 维护记录
 
 - 2026-09-25 提测验收调整同步：汇总列改「类别 / 总题数 / 通过数 / 失败数 / Top5命中数 / 通过率」；明细字段口径改「序号 / 问题 / 参考答案 / 期望命中 / 排名 / 状态」；候选交互改「查看」按钮 + 候选弹框（短 id + 回目，点条目开原文）；页面分「类别汇总」「图表」两标签页，标签选择跨刷新持久化；sango 启动脚本由 `npm run dev:benchmark` 更名 `npm run dev`（负责人拍板），§7 与 CLI 头注同步；通过率趋势 hover 摘要卡 + 首跑基线虚线；历史表分页 5 条/页、当前行绿色高亮替代「当前」标签；类别分布三色（语义不变）— Coco
 - 2026-09-29：新增 §9 备忘（历史快照比较功能，纯前端 / 后端零改动；归属 FEAT-A015 归档后新增，需求文档按红线不动）；移除文末误留的 `*** End Patch` 补丁标记。Coco。
+- 2026-09-29：test-2241 第 5 项（历史快照加「是否开启重排」+「本次耗时」两列，随快照落盘）与 bug-00049 B 案（run 接口异步化 + run-status 轮询，不做进度）合并落地：§3 接口清单改异步形态并补 `/run-status` 与 state 取值，§4 补 `summary.rerank` / `summary.elapsedMs`，§9 备忘追加两条，文末维护记录合并一行（均负责人 2026-09-29 拍板）。老陈。
