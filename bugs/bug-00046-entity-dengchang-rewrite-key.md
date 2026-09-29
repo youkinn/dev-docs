@@ -121,3 +121,9 @@ ormVersion b93c5ca9→5252f5bc。门禁 build exit 0 / test 102/102。读数：�
 ormalized == raw 隐藏「检索用文本」/ 新老 trace 渲染分支）；真浏览器 headless 实测三例（新 trace 有扩展 value=2、新 trace 无扩展、旧 trace 仍「归一化改写」），截图 D:\workplace\bug-00046-evidence\1~3*.png；mcp-web test 136/136、lint / build exit 0。
 - 2026-09-29（缓存侧透传验证，小胡）：换说法与规范形命中同一缓存条目（cache_logs id=123 hit=0 → id=124 hit=1、similarity 1.0、第二问 0 次 LLM）；ersion_tag = A016-2026-09-26-1（= CACHE_VERSION，未拼 normVersion，接口 §4.5 已按实际订正）；焦点校验无回归；编排侧零改动。
 - 2026-09-29（待拍板）：① 验收 3 判据措辞（「top10 集合相同」→「同一证据段两侧命中 + 交集 ≥9/10」）；② 单向双写代价归属（云长写法集 −2、A015 12 项掉出 top10）。未拍板前需求文档不改。
+
+### 验收 3 现状（负责人 2026-09-29 裁定：不改口径，只说明现状并备注待修复）
+
+- 需求 equirements/feat-A016-term-normalization.md 验收 3 原文要求「换说法与规范形检索结果一致（**top10 证据段集合相同**）」。检索侧不再改写 query 后，两问 token 天然不同、集合相等不再成立：实测同一证据段  018:c0014 两侧 top10 均命中、**交集 9/10**。
+- 裁定：**不把验收口径改弱**（不改成「交集 ≥9/10」），把「集合相等不成立」如实说明并**备注待修复**；后续处理方式（补召回 / 改口径需负责人拍板）待定，本票内不放宽。
+- 现状读数口径：sango/scripts/verify-a016-retrieval.mjs 的 ok3 暂以「证据段两侧命中 + 交集 ≥9/10」输出，属临时读数口径，待验收 3 定论后回收。
