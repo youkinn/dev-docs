@@ -51,17 +51,18 @@ Base：`http://127.0.0.1:{port}/dev/benchmark`
 
 JSON 顶层：`{ summary, results }`
 
-- `summary`：`{ tool, version, time, benchmark, engine, total, top5, tail, miss, top3, top10, inPool50, noAnchorCount, noAnchor, category, runId, rerank, elapsedMs }`；`category` = `{ 类别名: { total, top5, tail, miss } }`；`runId = feat-A015-YYYY-MM-DD-HHMM`。
+- `summary`：`{ tool, version, time, benchmark, engine, total, judged, top5, tail, miss, top3, top10, inPool50, noAnchorCount, noAnchor, category, runId, rerank, elapsedMs }`；`judged = total - noAnchorCount`（bug-00052：无锚题单列、不进通过率分母，通过率分母一律用 `judged`；老快照无此键 → 前端显示「—」）；`category` = `{ 类别名: { total, top5, tail, miss } }`（不含无锚题）；`runId = feat-A015-YYYY-MM-DD-HHMM`。
 - `summary.rerank`（test-2241 第 5 项新增；**dev server 扩展字段，老快照无此键 → 前端显示「—」**）：`{ mode: 'on'|'off', wired: boolean, window: number, maxTokens: number, batch: number, intraThreads: number|null }`。口径：`mode` = `SANGO_RERANKER` 原始取值归一（仅 `'on'` 为 on，未设 / 其它值一律 off）；`wired` = 本次 run 是否真的接入 cross-encoder 打分器（权重缺失退回规则序时为 false）；`window` = 实际生效窗口（`sango-index.ts` `rerankWindowSize()`，非 .env 原文）；`maxTokens` / `batch` / `intraThreads` = `resolveRerankTuning()` 生效值（含默认回落；`intraThreads` 未设 → null）。
 - `summary.elapsedMs`（test-2241 第 5 项新增；**dev server 扩展字段，老快照无此键 → 前端显示「—」**）：本次 run 服务端计时（毫秒；run 开始 → 逐题检索判分结束，不含落盘与 HTTP 传输）；同为 `GET run-status` done 态 `elapsedMs` 的来源。
-- `results[]`（单题）：`{ id: "类别#序号", question, answer, evidence, textAnchors[], titleAnchors[], chapterRefs[], rank /* 0=未召回 */, status: 'top5'|'tail'|'miss', hit: { id /* chunkId */, chapter, title, text } | null, candidates: [ { id, chapter, title } ] /* top50 候选，页面列候选与点 chunkId 看原文 */ }`。
+- `results[]`（单题）：`{ id: "类别#序号", question, answer, evidence, textAnchors[], titleAnchors[], chapterRefs[], rank /* 0=未召回 */, status: 'top5'|'tail'|'miss'|'noAnchor', noAnchor /* bug-00052：无有效证据锚 → 不参与判分、单列；有锚题恒 false */, hit: { id /* chunkId */, chapter, title, text } | null, candidates: [ { id, chapter, title } ] /* top50 候选；无锚题为 [] */ }`。
 - `summary.md` 沿用 CLI 模板：引擎/判分口径头 + 「十三段模板 COPY」类别表 + 兜底（rank 6–10）列表 + 未命中（>10 / 未召回）列表。
 
 ## 5. 页面（mcp-web，小叶）
 
 - 路由 `/benchmark` → `views/BenchmarkView.vue`，导航菜单入口。
 - Vite dev 代理新增 `/sango-bench` → `http://127.0.0.1:8787`（`vite.config.ts`）；页面基址 `VITE_BENCHMARK_API_BASE` 默认 `/sango-bench`（不硬编码后端地址）。
-- 汇总表列：类别 / 总题数 / 通过数 / 失败数 / Top5命中数 / 通过率；口径：通过数 = 命中数 = `summary.top5`、失败数 = `summary.tail + summary.miss`、通过率 = `top5 / total`。
+- 汇总表列：类别 / 总题数 / 未参与评分 / 可判题数 / 通过数 / 失败数 / Top5命中数 / 通过率；口径：通过数 = `summary.top5`、失败数 = `summary.tail + summary.miss`、通过率 = `top5 / judged`（bug-00052：无锚题单列、不进通过率分母；整体用 `summary.judged` / `summary.noAnchorCount`，类别行零锚数由 `results[].noAnchor` 计数）。
+- 明细：无锚题整行灰显 + 状态列「未参与评分」标签、排名列显示「—」；有锚题行为不变。
 - 「执行」按钮：点击调 `POST run`，执行中禁用并展示等待态，异常展示 `message`。
 - 类别行可展开：该类别每题明细（序号 1–110 / 问题 / 参考答案 / 期望命中 / 排名 / 状态）+ 「召回列表」列「查看」按钮打开召回列表弹框（全部候选：短 chunkId 去 {source}: 前缀 + 回目），点条目打开 `SangoChapterReader` 定位原文核对。
 - 历史快照列表：`GET history`（runId / 时间 / 摘要），点击切换表格 / 展开明细 / 图表为该次数据（`GET snapshot`；列表 5 条/页分页，当前快照行绿色高亮）；通过率趋势折线按 runId 依次展示历史整体对比（hover 摘要卡 + 首次执行基线虚线）。
