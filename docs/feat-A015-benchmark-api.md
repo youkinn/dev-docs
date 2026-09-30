@@ -61,7 +61,8 @@ JSON 顶层：`{ summary, results }`
 
 - 路由 `/benchmark` → `views/BenchmarkView.vue`，导航菜单入口。
 - Vite dev 代理新增 `/sango-bench` → `http://127.0.0.1:8787`（`vite.config.ts`）；页面基址 `VITE_BENCHMARK_API_BASE` 默认 `/sango-bench`（不硬编码后端地址）。
-- 汇总表列：类别 / 总题数 / 未参与评分 / 可判题数 / 通过数 / 失败数 / Top5命中数 / 通过率；口径：通过数 = `summary.top5`、失败数 = `summary.tail + summary.miss`、通过率 = `top5 / judged`（bug-00052：无锚题单列、不进通过率分母；整体用 `summary.judged` / `summary.noAnchorCount`，类别行零锚数由 `results[].noAnchor` 计数）。
+- 汇总表列：类别 / 总题数 / 通过数 / 失败数 / Top5命中数 / 未参与评分 / 通过率；口径：通过数 = `summary.top5`、失败数 = `summary.tail + summary.miss`、通过率 = `top5 / judged`（bug-00052：无锚题单列、不进通过率分母；整体用 `summary.judged`，类别行 judged = total − 零锚数；「可判题数」不单列）。
+- 顶部当前快照标签：`通过 x/judged` / `兜底` / `未命中`（不显示未参与评分标签）。
 - 明细：无锚题整行灰显 + 状态列「未参与评分」标签、排名列显示「—」；有锚题行为不变。
 - 「执行」按钮：点击调 `POST run`，执行中禁用并展示等待态，异常展示 `message`。
 - 类别行可展开：该类别每题明细（序号 1–110 / 问题 / 参考答案 / 期望命中 / 排名 / 状态）+ 「召回列表」列「查看」按钮打开召回列表弹框（全部候选：短 chunkId 去 {source}: 前缀 + 回目），点条目打开 `SangoChapterReader` 定位原文核对。
