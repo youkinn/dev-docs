@@ -10,7 +10,7 @@
 
 ## 概述
 
-给 sango 检索链路加「召回可解释」诊断：总台在 `transport.callTool` 转发 `tools/call` 时向请求 `params._meta` 注入 `traceId`（SDK 1.30.0 已验可行）；sango 检索工具返回时在 `result._meta.diagnostics` 回传结构化诊断（召回漏斗数字 / 候选分数表 / query 处理链 / 环境与降级 / 死亡意图）；总台在落 `result_summary` 前剥离诊断、回填「注入视图 / 被引用」口径后单独落新表 `tool_retrieval_logs`；`GET /api/v1/logs/:traceId` 的工具明细增 `diagnostics` 字段暴露。**`content` 出参契约不变，诊断全程不进模型上下文。**
+给 sango 检索链路加「召回可解释」诊断：总台在 `transport.callTool` 转发 `tools/call` 时向请求 `params._meta` 注入 `traceId`（SDK 1.30.0 已验可行）；sango 检索工具返回时在 `result._meta.diagnostics` 回传结构化诊断（召回漏斗数字 / 候选分数表 / query 处理链 / 环境与降级 / 死亡意图 / 登场意图）；总台在落 `result_summary` 前剥离诊断、回填「注入视图 / 被引用」口径后单独落新表 `tool_retrieval_logs`；`GET /api/v1/logs/:traceId` 的工具明细增 `diagnostics` 字段暴露。**`content` 出参契约不变，诊断全程不进模型上下文。**
 
 诊断面向两个基准：
 - 基准 1（结果对不对）：给定 traceId 能看出参全貌（不被 8000 截断）、条数 / 耗时 / 状态、top-N 是否命中答案段、第 N+1 名差多少分、answer 与 citations 是否与召回自洽。
@@ -120,6 +120,11 @@ sango 检索工具（`sango_novel_search`）成功时，在响应 `result._meta.
           "detected": false,
           "pinned": false,
           "chunkIds": []
+        },
+        "birthIntent": {
+          "detected": false,
+          "pinned": false,
+          "chunkIds": []
         }
       }
     }
@@ -141,6 +146,7 @@ sango 检索工具（`sango_novel_search`）成功时，在响应 `result._meta.
 | `candidates` | array | 候选分数表，按**最终返回序**（死亡意图置顶优先，组内按 `finalScore` 降序；与工具出参、`rank` 同序），**≤20 条**（基准 2-②） |
 | `nextRank` | object \| null | 第 N+1 名（未进 top-N），候选不足为 null（基准 1-④） |
 | `deathIntent` | object | 死亡意图判定与置顶（基准 2-⑤） |
+| `birthIntent` | object | 登场意图判定与置顶（人物首次登场类问法；历史 trace 无该字段，前端容错不展示） |
 
 **`query`：**
 
@@ -198,6 +204,14 @@ sango 检索工具（`sango_novel_search`）成功时，在响应 `result._meta.
 |------|------|------|
 | `detected` | boolean | 是否判定死亡意图 |
 | `pinned` | boolean | 是否触发置顶 |
+| `chunkIds` | string[] | 被置顶的候选 chunkId；未置顶为 `[]` |
+
+**`birthIntent`（与 `deathIntent` 同构）：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `detected` | boolean | 是否判定登场意图（出场 / 登场 / 出世 / 首次登场 / 第一次出场 等问法） |
+| `pinned` | boolean | 是否触发置顶（birthByPerson 人名词典强命中） |
 | `chunkIds` | string[] | 被置顶的候选 chunkId；未置顶为 `[]` |
 
 **计分口径（供复算最终分，接口已回传参与计算的两个分量 `bm25Norm` 与 `cosine`）：**
@@ -298,7 +312,8 @@ result_summary = summarizeJson(summary);   // 不含 _meta.diagnostics
       { "rank": 1, "chunkId": "sanguo-yanyi:0073:c0007", "chapter": 73, "title": "玄德进位汉中王　云长攻拔襄阳郡", "bm25": 12.34, "cosine": 0.812, "labelHit": true, "finalScore": 0.92, "sources": ["lexical", "vector"], "injected": true, "cited": true }
     ],
     "nextRank": { "rank": 11, "chunkId": "sanguo-yanyi:0074:c0012", "chapter": 74, "title": "庞令明抬榇决死战　关云长放水淹七军", "bm25": 3.10, "cosine": 0.451, "labelHit": false, "finalScore": 0.51, "sources": ["vector"], "injected": false, "cited": false, "gapToTopN": 0.19 },
-    "deathIntent": { "detected": false, "pinned": false, "chunkIds": [] }
+    "deathIntent": { "detected": false, "pinned": false, "chunkIds": [] },
+    "birthIntent": { "detected": false, "pinned": false, "chunkIds": [] }
   }
 }
 ```
@@ -308,7 +323,7 @@ result_summary = summarizeJson(summary);   // 不含 _meta.diagnostics
 ## 五、截断口径（硬约束 3）
 
 - **预算**：诊断 JSON 序列化后 UTF-8 字节数 ≤ **64 KB**（`Buffer.byteLength`）。
-- **截断次序**（按优先级从后往前丢，保住头部关键信息）：① `candidates` 尾部（从 rank 大往小丢，保头部名次）；② `nextRank`；③ `deathIntent.chunkIds`（保留 `detected` / `pinned`）。`query` / `env` / `funnel` 恒保留。
+- **截断次序**（按优先级从后往前丢，保住头部关键信息）：① `candidates` 尾部（从 rank 大往小丢，保头部名次）；② `nextRank`；③ `deathIntent.chunkIds` / `birthIntent.chunkIds`（保留 `detected` / `pinned`）。`query` / `env` / `funnel` 恒保留。
 - **标记**：截断后 `truncated=true`、`truncatedCount` = 被丢弃的候选条数；落库原样存截断后的 JSON。
 - **正常预期**：top20 候选（无文本、含回目）实测约 5–10 KB，64 KB 是安全网，正常不触发。
 - **stdio 上限（10 MB，不可降级）**：MCP stdio `ReadBuffer` 单条 JSON-RPC 消息上限 10 MB，超限**抛错并关闭连接**（协议层硬错误，不是降级路径）。64 KB 预算远低于该上限，保证诊断载荷永不触碰；**未来放宽载荷必须先评审**，禁止无预算放开。
@@ -340,6 +355,7 @@ result_summary = summarizeJson(summary);   // 不含 _meta.diagnostics
 | query 处理链 | `diagnostics.query` | `raw` → `normalized` → `tokens`（chip 展示） |
 | 环境与降级 | `diagnostics.env` | scheme / chunk 数 / alias 条数 / dim；`degradedBm25Only=true` 红色告警「已降级纯 BM25」 |
 | 死亡意图 | `diagnostics.deathIntent` | `detected && pinned` 提示置顶 chunkId 列表 |
+| 登场意图 | `diagnostics.birthIntent` | 与死亡意图同款：`detected && pinned` 提示置顶 chunkId 列表（蓝系区分） |
 | 自洽提示（前端现算） | `data.log.citations` + `diagnostics` | citations 数组条数 vs `funnel.cited` 不一致 → 黄条「引用与召回不自洽」；被引用候选（`cited=true`）不在 top-N → 红条提示。深度自洽（answer 人名校验等）由服务端既有引用硬校验负责，面板只呈现 |
 | 无诊断 | `diagnostics === null` | 显示「该调用无检索诊断」（非检索工具 / 未透传 / 旁路丢失） |
 
