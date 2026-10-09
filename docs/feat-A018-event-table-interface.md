@@ -158,7 +158,7 @@ query(raw)
 ### 3.4 事件路不加权重（不弱加权）
 
 - 事件组 chunk 不通过权重加法提权（需求 §14 教训：0.1 权重被量纲吃掉、名存实亡；权重提到 ≥0.3 量级即等效置顶、破坏池内排序可比性）；L1/L2 提权 = §3.3 并池 + 增强查询重排，L3 = 锚点置顶（唯一答案 case 的排序覆盖）。**增强查询重排与三路合并共用同一加权公式（0.6·cos + 0.3·bm25 + 0.1·tag）**：唯一变化 = bm25Norm 按增强查询重算，cosine / tag 分量逐项不变，增强作用于全池，事件组无独立加分项——全池同一把尺子。
-- **实测校准意图**：回测对照 bridge on/off——事件问法证据进窗率（top5 / 窗口内）+ displaced 自然候选清单与相关性；读数记入本文档「维护记录」。若重排后组 chunk 仍难进窗，下一位为组内证据定位（组内 BM25 top-k 先行），另行评估、不阻塞本期。
+- **实测校准意图**：回测对照 bridge on/off——事件问法证据进窗率（top5 / 窗口内）+ displaced 自然候选清单与相关性；读数随验收结论登记。若重排后组 chunk 仍难进窗，下一位为组内证据定位（组内 BM25 top-k 先行），另行评估、不阻塞本期。
 - **问法骨架（检索侧配置，不进表）本期仅落地「增强查询」形态**：事件名并入查询重排（§3.3④）；疑问句模板「组织改写 / 召回」仍不做（§9），覆盖扩张由覆盖率 KPI 驱动。
 
 ## 4. 变体多路合并 topK 契约（与现有合并的交互）
@@ -210,6 +210,7 @@ export interface RetrievalEventHitGroup {
 ### 5.3 `candidates[].sources` 扩展
 
 - 可选新增枚举值 `'event'`：该候选同时属某命中事件组（来源标记，便于漏斗核对）；其余字段与语义不变。老消费方（前端）零影响（宽容展示未知枚举值；如不宽容按 A016 增字段先例前端同步展示）。
+- 再增可选枚举值 `'allusion'`：该候选同时属某命中典故组（与 `'event'` 同机制）。来源列展示「典故」标签，鼠标移入显示命中典故名（同事件处理）。
 
 ### 5.4 `timing.rerank` 与 `rerank` 诊断（test-2031 提测反馈补可观测）
 
@@ -239,6 +240,37 @@ export interface RetrievalEventHitGroup {
   - 改 `sango/.env` 后需**重启 mcp-server** 生效。
 - 调参：`SANGO_RERANKER_DIR`（换权重目录）/ `SANGO_RERANKER_WINDOW`（重排窗口，默认 50）/ 推理档位见 `src/search/reranker.ts` 顶部说明。
 
+### 5.6 `_meta.diagnostics` 增 `allusionHit`（典故表诊断，镜像 eventHit）
+
+```ts
+export interface RetrievalAllusionHitDiagnostics {
+  /** 典故路是否生效；false = 典故表缺失 / 加载失败 / 整表漂移降级（此时 groups 恒 []）。事件路不受影响。 */
+  degraded: boolean;
+  /** 典故表 meta.normVersion；未加载为空串。 */
+  normVersion: string;
+  /** 命中典故组数；0 = 未命中典故路。 */
+  groupCount: number;
+  /** 命中组明细，按组优先级（命中 alias 长度降序，同长 allusionId 升序）。 */
+  groups: RetrievalAllusionHitGroup[];
+}
+export interface RetrievalAllusionHitGroup {
+  allusionId: string;
+  allusionName: string;
+  /** 本组命中的 alias（归一化后 query 中子串命中者，组内最长）。 */
+  matchedAlias: string;
+  /** 组内有效 chunk 引用总数（漂移剔除后）。 */
+  groupSize: number;
+  /** 实际进出参条目的典故组 chunk 数（重排后自然进窗，= placedChunkIds.length）。 */
+  placedCount: number;
+  /** 进出参条目的典故组 chunkId（按重排后出参序）。 */
+  placedChunkIds: string[];
+}
+```
+
+- 与 eventHit 同机制：典故表经事件桥同机制加载匹配、命中组并池重排；典故加载失败只降级典故路（`degraded=true`），事件路不受影响。
+- 空结果早退路径同样产出 allusionHit（未命中时 degraded / normVersion 仍可读，groups 空）。
+- 诊断体积有界（placedChunkIds ≤ limit，既有 enforceDiagnosticsBudget 64 KB 预算兜底）。
+
 ## 6. mcp-orchestrator 契约
 
 **结论：不需要 hu 分支。** 默认无契约变化。依赖的三条现状（均已存在，不改动）：
@@ -261,7 +293,7 @@ export interface RetrievalEventHitGroup {
 - **通过口径**：整体 `summary.top5 ≥ 0.608`（基线 60.8%）；**事件类逐类不倒退**——`summary.category` 中「战役 / 典故 / 事件关系 / 死亡」四类各自 top5 命中数 ≥ 同基线快照（`feat-A015-*.json`）对应类别值；tail / miss 记录留档对比。
 - **实测门（2026-09-28 需求变更，取代构造免疫）**：非事件命中请求结构与现状逐字节一致；事件命中请求 top5 由并池重排 / L3 置顶改变，回归以实测为准——整体不倒车 + 事件类逐类不倒退 + bridge on/off 对照（事件问法 top5 证据命中率）。
 - 事件类定点自查（实现轮）：`温酒斩华雄` / `三英战吕布` / `草船借箭` / `空城计` 等 traceId 请求：`eventHit.groups` 非空、`placedChunkIds` 与期望回区间吻合、编排侧注入视图（`[片段N]`）可核对事件组 chunk 在列。
-- **L3 档位定档**：回测对照锚点 ±1 / ±2 / ±3 三档（证据进窗率 + 保证区占用 + 叙事完整性），v1 默认 ±1，定档结果记入本文档「维护记录」。
+- **L3 档位定档**：回测对照锚点 ±1 / ±2 / ±3 三档（证据进窗率 + 保证区占用 + 叙事完整性），v1 默认 ±1，定档结果随验收结论登记。
 - **A030 合并验收（需求变更 2026-09-28）**：本期随 A030 一并提测验收——池覆盖探针、cross-encoder 重排 50→10 接入、top≤5 不低于无重排基线、定点（华雄 / 刘备）不倒车、延迟预算（P50 / P95）。
 
 ## 9. 边界（不做）

@@ -79,6 +79,7 @@ for (const r of rows) {
       if (typeof a !== 'string' || a.length < 2) errors.push(r.eventId + ': V3 alias「' + a + '」长度 < 2');
       if (inRow.has(a)) errors.push(r.eventId + ': V3 行内 alias 重复「' + a + '」');
       inRow.add(a);
+      if (a !== r.eventName && a.length < r.eventName.length && r.eventName.includes(a)) errors.push(r.eventId + ': V3 alias「' + a + '」为规范名真子串（不要放进来）');
       if (globalAliases.has(a)) {
         const pair = [globalAliases.get(a), r.eventId].sort().join(' / ');
         const dupKey = pair;
@@ -147,6 +148,48 @@ for (const r of l3Rows) {
 console.log(`L3 锚点结构: ${l3AnchorOk}/${l3Rows.length} 行校验通过`);
 
 // ---- 全集完整性 ----
+// ---- V9 典故表（allusions.json）结构校验（验收 7：典故表单管）----
+const ALLUSIONS_FILE = path.join(MCP_SERVER_ROOT, 'data/corpus/allusions.json');
+if (!fs.existsSync(ALLUSIONS_FILE)) {
+  errors.push('V9: allusions.json 缺失');
+} else {
+  const at = JSON.parse(fs.readFileSync(ALLUSIONS_FILE, 'utf8'));
+  const arows = at.rows || [];
+  if (arows.length < 10) errors.push('V9: 典故表行数过少 ' + arows.length);
+  const eventsAliasSet = new Set();
+  for (const r of rows) for (const a of r.aliases || []) eventsAliasSet.add(a);
+  const seenAId = new Set();
+  for (const r of arows) {
+    const rid = r.eventId || '?';
+    if (!/^AL\d{4}$/.test(rid)) errors.push('V9: 典故 eventId 非法 ' + rid);
+    else if (seenAId.has(rid)) errors.push('V9: 典故 eventId 重复 ' + rid);
+    seenAId.add(rid);
+    if (!r.eventName) errors.push(rid + ': V9 eventName 为空');
+    if (!Array.isArray(r.aliases) || r.aliases.length === 0) errors.push(rid + ': V9 aliases 为空');
+    else {
+      const inRow = new Set();
+      for (const a of r.aliases) {
+        if (typeof a !== 'string' || a.length < 2) errors.push(rid + ': V9 alias「' + a + '」长度 < 2');
+        if (inRow.has(a)) errors.push(rid + ': V9 行内 alias 重复「' + a + '」');
+        inRow.add(a);
+        if (a !== r.eventName && a.length < (r.eventName || '').length && r.eventName.includes(a)) errors.push(rid + ': V9 alias「' + a + '」为规范名真子串');
+        if (rewriteKeys.has(a)) errors.push('V9: 典故 alias「' + a + '」与实体表 rewriteKeys 冲突（' + rid + '）');
+      }
+    }
+    if (!Array.isArray(r.chunkIds) || r.chunkIds.length === 0) errors.push(rid + ': V9 chunkIds 为空');
+    else for (const cid of r.chunkIds) if (!corpusChunks.has(cid)) errors.push('V9: 典故 chunkId 不存在 ' + cid + '（' + rid + '）');
+  }
+  const seenAAlias = new Map();
+  for (const r of arows) for (const a of r.aliases || []) {
+    if (seenAAlias.has(a)) errors.push('V9: 典故表跨行 alias 重复「' + a + '」（' + seenAAlias.get(a) + ' / ' + r.eventId + '）');
+    else seenAAlias.set(a, r.eventId);
+  }
+  for (const a of seenAAlias.keys()) {
+    if (eventsAliasSet.has(a)) warnings.push('V9: 典故 alias「' + a + '」与事件表跨表重复');
+  }
+  console.log('典故表:', arows.length, '行（验收 7）');
+}
+
 const firstPassRows = fs.readFileSync(FIRST_PASS, 'utf8').split(/\r?\n/).filter((l) => /^\|\s*\d{3}\s*\|/.test(l)).length;
 const total = rows.length;
 // 分层全集口径（初审任务书 first-pass-spec.md：L1≈90 / L2≈150 / L3≈480，宁多勿漏），总量 ≥ 400 即合规

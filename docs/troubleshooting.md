@@ -4,7 +4,7 @@
 > **维护责任人：Coco** —— 本手册的准确性由 Coco 负责；它不是一次性文档，随架构与日志契约演进而持续完善。
 > 依据：已定稿需求文档（`requirements/`）+ 代码实现；**只写已实测 / 已确认的口径**，不确定的内容一律放 `docs/troubleshooting-notes.md`。
 > 更新触发（出现即改，不等提醒，见 `AGENTS.md` 第 8 条）：日志字段 / `log_type` / 工具 / 入口埋点 / 路由层 / 诊断结构 / 链路阶段有增删改；新增或退役服务与端口。
-> 更新纪律：**改前先用真实数据实测取证**（不凭代码推理）；每次改动记入文末「维护记录」。
+> 更新纪律：**改前先用真实数据实测取证**（不凭代码推理）；文档只描述当前状态，变更以排查笔记 / git 历史留痕。
 
 ---
 
@@ -399,21 +399,3 @@ node scripts/probe/trace-export.mjs --list <chunkId>                # 反查 chu
 - **汇报格式**（第 7 条）：现象 + 根因层 + 证据读数 + 后续动作；文档变更只报路径，不复述内容
 
 ---
-
-## 10. 维护记录
-
-| 日期 | 变更 | 触发来源 | 验证方式 |
-|------|------|----------|----------|
-| 2026-09-22 | 初版：链路与埋点覆盖面、排查流程（步骤 0–9）、怎么判、现象 → 先看哪个读数、命令速查、读数陷阱、闭环口径 | 负责人要求：用现有日志系统规范化排查流程 | 总台 :3000 + 日志页 :8001 在线，全部命令以真实 trace 实测（样本 `f21dd6be-27c1-45dc-aa84-7da74e33d78a`） |
-| 2026-09-22 | 会过期的内容（bug 号结论、已知问题对照、经验阈值）移出到 `docs/troubleshooting-notes.md`；`§N` 引用改为节名 | 负责人：本手册必须准确、不误导；唯一可信是需求文档 | 逐节复核引用与节名 |
-| 2026-09-24 | LLM 明细新增 `stage=novel_support_check`（演义域生成轮后的引用支撑复核轮，bug-00028 长期机制）；拒答口径：复核判不支撑 / `uncertain` / 解析失败重试后仍失败 → 答案「演义中未涉及」+ 空引用、`funnel.cited=0` | bug-00028 定稿设计 `docs/novel-answer-support-check.md` | 全量测试 349 绿 + 真实 trace 实测 |
-| 2026-09-24 | 撤销 `novel_support_check` 复核轮 stage（负责人否决二次 LLM 调用，成本 / 延迟翻倍）；演义域改为单轮生成 + 结构保险丝（生成轮通用语义指令 + 句-片段文本重叠结构门），拒答口径不变，见 `docs/novel-answer-support-check.md` 新版 | bug-00028 设计改版 | 全量测试绿 + 三例 trace 复测 |
-| 2026-09-25 | §7 增补 F「整链路快照导出」：`scripts/probe/trace-export.mjs <chunkId|traceId>`（mcp-orchestrator）只读导出全字段 JSON 快照；排查改直接分析快照文件，不再逐条走同流程；日志页「一键导出」交付后与脚本同构 | 负责人拍板双轨机制（自查轨即刻可用 / 页面轨供团队成员） | 脚本实测：`sanguo-yanyi:0050:c0011` 命中 65 条链路导出成功 |
-| 2026-09-25 | §7 F 执行人修正：导出由负责人执行、Coco 不自跑（token 控制）；体量：1 条 trace ≈ 500 行；Coco 收到文件按需取字段、不整读 | 负责人拍板 | 负责人实测体量后确认 |
-| 2026-09-25 | §7 F 补护栏：默认只导前 10 条命中链路（`--limit N` / `--all` 覆盖）；相对输出路径固定落 `data/trace-exports/`；终端报行数/KB 与扫描行数 | 负责人（防 3W 行大文件）+ Coco（实现） | `node --check` + `--limit 1` 冒烟：65 命中→1 条、465 行/35 KB |
-| 2026-09-25 | §7 F 精简：剔除 chunkId 批量导出（负责人试跑后拍板：5000 行不可取）；只留 traceId 单条导出 + `--list <chunkId>` 反查列 traceId；chunkId 批量勾选下载归页面轨 | 负责人 + Coco | 冒烟：traceId 465 行/35 KB；`--list` 65 命中列前 10 条 |
-| 2026-09-25 | §7 F 明确取数优先级：快照文件 → `--list` 反查 → 只读直连查表（小结果集 + 输出护栏） | 负责人（确认够用）+ Coco（落口径） | — |
-| 2026-09-26 | §2.1 证据源地图补 `llmCalls.requestSummary / responseSummary`（生成轮入参含注入片段全文 + 模型原始输出含指针）；「日志系统看不到」清单删除注入文本、改为可经 summary 查 | A016 验收三票排查（bug-00032/33/34）实测发现旧口径不符 | 四 trace（c549084b / ca7d9c6a / 67119582 / 275551c3）实取 responseSummary 与 final 对照，护栏误裁定案 |
-| 2026-09-26 | 步骤 4 判 LLM 明细补 `stage=novel_boundary_check`：演义域重叠门边界语义复核，仅低重叠待裁叙述句触发、responseSummary 即判定、正常样本不出现 | bug-00032/33/34 修复（护栏重叠门改边界复核）随 hu/feat-A016_term-normalization a121557 合入需求分支 | 小胡全量测试 348/348 绿（mock 两路，零真实 LLM 调用） |
-| 2026-09-28 | 检索诊断补重排读数：步骤 3 归因规则补「`tool` 大且 `rerank.applied=true` → 看 `timing.rerank`」；步骤 6 补 `timing.rerank` 与 `rerank` 明细（enabled / window / considered / skippedPinned / applied / reason）判读，并写清阶段口径（规则序并池之后、取窗之前；保证区不参与；事件路增强查询重排计入 merge） | feat-A018 提测反馈（`test/feat-A018/test-2031.md` 测试项 1：重排缺可观测），负责人放行修正 | 随 story-A018-01 变更：mcp-server 单测 + 日志页真浏览器复测 |
-| 2026-09-28 | 步骤 6 补「重排怎么开 / 怎么关」：`sango/.env` 的 `SANGO_RERANKER=on|off`（默认 off）+ 改后必须重启 mcp-server（链路由 orchestrator spawn 子进程）+ 启用态需带 A030 锁定档位（否则默认档位 P50≈4.6s / P95≈5.0s 超预算） | 负责人要求「自己就能开停、不用每次找开发」 | 老陈 plain `node dist/index.js` 两态启动日志实测 + 真检索 rerank 读数 |
