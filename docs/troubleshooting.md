@@ -59,7 +59,7 @@ Invoke-WebRequest http://localhost:3000/health -UseBasicParsing
 | 总台进程 stdout | 埋点旁路失败、MCP 连接告警、未捕获异常（`Failed to process request:`）、启动 / 退出 | 运行总台的终端窗口 —— **不落盘，重启即丢** |
 | 浏览器 DevTools | 前端异常、请求 / 响应原文、真实 UI 表现 | Network / Console（UI 类问题必用，第 11 条） |
 | 直连 DB | 接口未暴露的字段、原始行、跨表 join | 「命令速查」的「D. 直连日志库」 |
-| `llmCalls.requestSummary / responseSummary` | 生成轮完整入参（**含注入片段全文**）与模型**原始输出**（含 `[Qn]` / `[片段N]` 指针） | 步骤 1 命令取 `llmCalls`；值为 JSON 字符串（`[{type,text}]`）。判「自律拒答 vs 护栏误裁」必须看这里（2026-09-26 实录） |
+| `llmCalls.requestSummary / responseSummary` | 生成轮完整入参（**含注入片段全文**）与模型**原始输出**（含 `[片段N]` 指针） | 步骤 1 命令取 `llmCalls`；值为 JSON 字符串（`[{type,text}]`）。判「自律拒答 vs 护栏误裁」必须看这里（2026-09-26 实录） |
 
 日志系统**看不到**的：前端异常、思考文本、错误栈、代码 / 语料版本、`sessionId`（注入片段全文与模型原始输出可经 `requestSummary` / `responseSummary` 查——旧口径「注入文本不可见」作废）。缺证据时的登记与补数建议见 `docs/troubleshooting-notes.md`。
 

@@ -48,7 +48,7 @@ HTTP /api/chat
 
 ## 4. 检索层（`mcp-server/sango`）
 
-- 语料 schema v2（`src/types.ts`）：`CorpusChunk` 最小检索单元，250 字目标 / 400 字硬上限、可跨段；`Quote` 引语冗余表（qid/文本/offset/speaker）。
+- 语料 schema v2（`src/types.ts`）：`CorpusChunk` 最小检索单元，250 字目标 / 400 字硬上限、可跨段。
 - **实体表单表（A016，PR #16）**：`data/entity-table.json` 单一数据源（alias.json 已退役）；行 = 类型 + ID（人名沿用 PID）+ 规范形 + 别名列表；统一实现 `sango/src/normalize/entity-table.ts`，索引侧 / query 侧 / 标签侧 / `sango_query_embed` 共用，编排侧不另写（口径零漂移）。
 - 键分两类（09-29 bug-00046 定案后）：`rewriteKey` 与 `fragmentOnly` 同为**索引侧 / 标签侧双写键**（语料原文 token 保留 + 命中处追加规范形 token，tf 按命中处数计；检索侧不再替换 query）；跨主条目词（文帝 / 陈留王 / 魏王等）不做改写键，按 `referentVerdicts` 的 dist/topPid 做「共享实体标签多挂」。**表缺失时 normalize 退化为恒等**。
 - `env.normVersion`：实体表与判定换代时递增（当前 `b93c5ca9`，bug-00041 关公改回 rewriteKey 后）；检索与缓存共用，缓存产物版本含 normVersion 范围（`cache.ts` 注释，A016 §4.5），换版须清缓存。
@@ -58,7 +58,7 @@ HTTP /api/chat
 - 标签：`data/corpus/tags/{duel,event,story}.json` 仍在；A014 索引剥壳（`tagPostings` 只入库剥离类型信息的文本）+ event.json 四类与 stray 校准；「人物之封」标签类别曾添加后**撤销**（bug-00037 复盘：撤后答案段跌出 top50、检索侧无噪声解法，验收 6 改基线 6，拒答由编排层护栏承接）；`verify-tag-files.mjs` 静态校验已合入 main（3502 项断言）。
 - **评测执行接口（A015，`sango/src/benchmark/` 五模块）**：parser / matcher / runner / snapshot / server；`POST /dev/benchmark/run`（dev 门控，`SANGO_DEV_HTTP_PORT=8787`，`npm run dev`）；判定逻辑只存一份，dev-docs `test/standard-set/feat-A015-verify.mjs` 为薄壳调用同一入口。
 - 工具契约：
-  - `sango_novel_search`：limit 默认 5 / 上限 20；出参结构化 JSON（`chapter`/`title`/`quotes{offset,len}`）；空命中返回 `未召回任何原文段落`；请求带 `_meta.traceId` 才产诊断。
+  - `sango_novel_search`：limit 默认 5 / 上限 20；出参结构化 JSON（`id`/`text`/`chapter`/`title`/`type`/`segFrom`/`segTo`）；空命中返回 `未召回任何原文段落`；请求带 `_meta.traceId` 才产诊断。
   - `sango_query_embed`（A013 内部工具）：query → base64-float32-le 1024 维；A016 起 **embed 前做同一归一化（替换口径，仅缓存侧）+ normVersion**（换说法与规范形共享缓存条目，防 D4 口径分裂）；仅供缓存判定，模型不可见、不产诊断。
   - `sango_novel_chapter`（A010）：整回读取（含 prev/next）。
 - 检索诊断（`_meta.diagnostics`）：bm25Norm / cosine 全精度、hitLabels、分阶段 timing（A013-03）+ **A016 索引双写扩展明细**（`query.expansionHits` + `env.normVersion`；`query.normalized ≡ raw`、`query.rewrites ≡ []`，09-29 bug-00046，验收 8）。
@@ -80,7 +80,7 @@ HTTP /api/chat
 - 引用硬校验结构门 → 通过渲染 / 不通过兜底 / 确无内容拒答「演义中未涉及」+ `citations: []`。
 - bug-00028（PR #22，merge `e1c5267`）：支撑护栏（引用不支撑→拒答/裁剪）+ 句-片段重叠门（阈值 0.5 / ngram 2）+ 三条语义指令并入生成轮提示词。
 - A016 演进（`a121557` 起，bug-00032 / 33 / 34）：重叠门改「低重叠待裁 → 边界 LLM 语义支撑复核」。
-- **复核预算收窄（bug-00039 / 40，2026-09-26）**：低重叠候选只复核 `bestOverlap` 最高 1 句（并列取先现），其余直接 unsupported 裁剪；引语片段句豁免复核（不进候选、不裁剪、不占预算）；孤儿常量 `MAX_BOUNDARY_REVIEWS` 已删；「纯指针无正文」句不进复核候选，裁剪后仅剩指针 / 正文为空 → 拒答 + `citations: []`。
+- **复核预算收窄（bug-00039 / 40，2026-09-26）**：低重叠候选只复核 `bestOverlap` 最高 1 句（并列取先现），其余直接 unsupported 裁剪；孤儿常量 `MAX_BOUNDARY_REVIEWS` 已删；「纯指针无正文」句不进复核候选，裁剪后仅剩指针 / 正文为空 → 拒答 + `citations: []`。
 - LLM 调用预算（负责人 2026-09-26 定案）：域锁定正常 ≤1 次、极限 ≤2 次（生成 + 1 次复核）；自由模型极限 = 分类 + 生成 + 复核 3 次（已报备例外）；3 次以上默认打回。
 
 ## 8. 缓存层（`mcp-orchestrator/src/cache.ts` + `agent.ts` 接线）

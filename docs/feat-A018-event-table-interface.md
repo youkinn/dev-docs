@@ -173,7 +173,7 @@ query(raw)
 
 ### 5.1 sango_novel_search 出参结构不变
 
-- entries 仍为裸 JSON 数组的 `SearchEntry[]`，字段（id / text / chapter / title / type / segFrom / segTo / quoteBalanced / quotes）一字不动；事件组 chunk 以普通条目出现，无新增条目字段。
+- entries 仍为裸 JSON 数组的 `SearchEntry[]`，字段（id / text / chapter / title / type / segFrom / segTo）一字不动；事件组 chunk 以普通条目出现，无新增条目字段。
 - diagnostics 只随 `result._meta.diagnostics` 回传（traceId 请求时），`content` 不受影响（A009 既有口径）；编排侧不透明透传（recallDiagnostics 零改动，§6）。
 
 ### 5.2 `_meta.diagnostics` 增 `eventHit`（新增顶层字段，老字段不动）

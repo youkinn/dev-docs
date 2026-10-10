@@ -288,7 +288,7 @@ GET /api/v1/logs?domain=sango-novel&logType=chat&pageNo=1&pageSize=20
 1. **模型可见工具白名单落地方式** → **结论**：总台常量白名单 + 装配处过滤（§4.2），后台 HTTP 直调不受影响（§2.4）；不采用独立调用通道（多一套链路、无收益）。
 2. **`citation.text` 匹配定位** → `includes` 精确匹配，同回两 chunk 文本完全相同落到第一处；匹配不到停正文顶部（需求已定口径）。
 3. **数据量（25~38KB / 回）** → 整回一次返回、不分页；前端按回缓存兜住并发打开。
-4. **卡片角标未入契约（已知约束）** → 记明：回答正文 `¹` 由总台渲染（`citation.ts:482 renderAnswerWithCitations`），引用卡片左上角 `¹` 由前厅复算（`WeatherView.vue:52 buildCitationGroups` 按 `toSuperscript(index+1)`），总台不下发该字段、`citations[]` 契约无角标字段，两边靠复算对齐；阅读器弹框内不渲染引用角标。如需修另开票。
+4. **卡片角标未入契约（已知约束）** → 记明：回答正文不再有引用角标（`answer` 剥离 `[片段N]` 指针、无上标，feat-A006），引用卡片左上角 `¹` 由前厅复算（`WeatherView.vue:52 buildCitationGroups` 按 `toSuperscript(index+1)`），总台不下发该字段、`citations[]` 契约无角标字段；阅读器弹框内不渲染引用角标。如需修另开票。
 5. **工具出参相对需求表扩展 `prev/next`** → **Coco 已确认（2026-09-22）**，契约以 §3.1 为准；需求文档「接口影响」表由 Coco 同步。
 
 ## 待落实细节

@@ -23,7 +23,7 @@
 | `/api/chat` 响应 | `data = { answer, citations }`；`citations[] = { text, chapter?, title? }`，无引用恒 `[]`；错误 500「处理请求失败，请稍后重试」/ 503「工具服务暂不可用，请稍后重试」（503 仅 `ToolExecutionError`） |
 | 生成温度 | 生成轮缺省 `temperature ?? 0.1`（`src/agent.ts` `callOnce`）；分类轮 `disableThinking` 同缺省 0.1；引用复核轮固定 `temperature: 0`（管线内建，非可覆盖项） |
 | 注入常量 | `INJECT_FRAGMENT_LIMIT = 10`、`INJECT_HEAD_GUARANTEE = 5`、`INJECT_TOTAL_BUDGET = 2000`（字）、`INJECT_TAIL_FALLBACK_ENABLED = true`（`src/citation.ts`） |
-| 检索 | 生产快路径调 `sango_novel_search`（`source: 'sanguo-yanyi'`, `limit: 10`；sango 侧 `MAX_LIMIT = 20`），50 路向量候选 + BM25 + 标签合并；出参条目 `{ id, text, chapter, title, type, segFrom, segTo, quoteBalanced, quotes[] }`，`quotes[] = { offset, len }` 瘦身（bug-00010） |
+| 检索 | 生产快路径调 `sango_novel_search`（`source: 'sanguo-yanyi'`, `limit: 10`；sango 侧 `MAX_LIMIT = 20`），50 路向量候选 + BM25 + 标签合并；出参条目 `{ id, text, chapter, title, type, segFrom, segTo }` |
 | 检索诊断落库 | 工具出参 `_meta.diagnostics`（sango 产出）→ orchestrator 回填 `candidates[].injected / cited`、`funnel.injected / cited` → 落 `tool_retrieval_logs.diagnostics`（键 `trace_id, seq, diagnostics, created_at`）；`tools/call` 在 trace 上下文内才产出诊断 |
 | `tool_retrieval_logs.diagnostics` | `{ truncated, truncatedCount, query{raw,normalized,rewrites?,tokens}, env{...}, funnel{corpusChunks,lexicalHits,vectorTop50,labelHits,mergedCandidates,topN,injected,cited}, timing{bm25,vector,label,merge}, candidates[], nextRank, deathIntent }`；`candidates[]` ≤20 条，含 `chunkId / rank / chapter / title / bm25 / cosine / labelHit / hitLabels? / finalScore / sources / injected / cited`；**不放 chunk 原文与段位**（64KB 预算，只放结构化小数据） |
 | 主表 `request_logs` | `log_type('chat'/'quiz')`、`user_input`、`domain`、`status`、`response_code`、`error_message`、t1–t6 时间戳、`answer`、`citations`、`route_source`（label/keyword/vector/classify/free）、`created_at`；保留期 30 天（`DEFAULT_RETENTION_DAYS = 30`，轮转 / 清库会删除旧行） |
@@ -106,7 +106,7 @@ Base：mcp-orchestrator 根（与 `/api/v1/logs*` 同级）。
 | `chunks` | array | draftbench 必填 | — | 1..20 条；每项 `{ chunkId?: string; text: string; chapter?: number; title?: string }`；`text` 非空且 ≤2000 字；非法 → 400（明细见 §4.1）；空数组 → 400 `'发送清单不能为空'`（验收 4）。仅 `source='draftbench'` 合法，否则 400 |
 | `params` | object | 否 | 缺省 = 生产常量（§3.1 `params` 同口径） | `{ temperature?: number ∈ [0,1]; topK?: integer 1..20; guarantee?: integer 0..topK; budget?: integer ≥1 }`；非法 → 400 明细。仅 `source='draftbench'` 合法，否则 400 |
 
-- 服务端分发：`source='draftbench'` 时走草稿台管线——**不检索**（不经 `sango_novel_search`）、**不查缓存、不写缓存**（内存判定与 cache_logs 均跳过；理由：同 query 命中生产缓存会返回缓存答案，使注入实验失真；草稿台结果也不得污染生产缓存条目），其余复用生产 sango-novel 域生成 / 校验管线同源实现：`buildInjectionView(清单, query)`（服务端重编号 `[片段N]` / `⟨Qn⟩`、引语还原）→ 生成轮 LLM（`temperature` 覆盖生效；有注入即 `disableThinking`，同生产口径）→ `applyNovelCitationGuard`（引用校验 / 结构保险丝）→ 渲染 `answer + citations`。清单空文本片段不进注入视图（同生产空条目跳过口径）。
+- 服务端分发：`source='draftbench'` 时走草稿台管线——**不检索**（不经 `sango_novel_search`）、**不查缓存、不写缓存**（内存判定与 cache_logs 均跳过；理由：同 query 命中生产缓存会返回缓存答案，使注入实验失真；草稿台结果也不得污染生产缓存条目），其余复用生产 sango-novel 域生成 / 校验管线同源实现：`buildInjectionView(清单, query)`（服务端重编号 `[片段N]`）→ 生成轮 LLM（`temperature` 覆盖生效；有注入即 `disableThinking`，同生产口径）→ `applyNovelCitationGuard`（引用校验 / 结构保险丝）→ 渲染 `answer + citations`。清单空文本片段不进注入视图（同生产空条目跳过口径）。
 - `params` 与 `chunks` 的对应：`topK` 取代 `INJECT_FRAGMENT_LIMIT` 作截断上限（`chunks.slice(0, topK)`）；`guarantee` 取代保底段数；`budget` 取代总预算；尾段预算丢失整段、不段内裁剪（生产注入策略语义不变）。
 - 成功 `200 data`：
 
@@ -212,7 +212,7 @@ Base：mcp-orchestrator 根（与 `/api/v1/logs*` 同级）。
 
 ### 4.4 差异三态（一致 / 缺失 / 多余）口径
 
-- **判定在服务端生成管线内完成**（单一实现点，CLI 与页面同源）：引用校验渲染期已知每个引用（`citations`）归属的注入片段（`[片段N]` 编号 / 引语 `⟨Qn⟩` → 片段映射，feat-A006 渲染链路），无需事后文本比对，无跨片段文本歧义。
+- **判定在服务端生成管线内完成**（单一实现点，CLI 与页面同源）：引用校验渲染期已知每个引用（`citations`）归属的注入片段（`[片段N]` 编号 → 片段映射，feat-A006 渲染链路），无需事后文本比对，无跨片段文本歧义。
 - `diff.consistent: number[]`：发送清单中被结果引用（citations 归属）的条目序号（1 基，对应 `chunks` 下标 + 1）。
 - `diff.missing: number[]`：清单中未被引用的条目序号。
 - `diff.extra: Citation[]`：结果引用但不属于清单的引用。**正常恒空**（引用硬校验保证引文逐字来自注入片段；兜底 / 复核片段也取自清单）——非空即异常信号（模型违规引用 / 渲染失配），页面高亮警示、CLI 打 `!` 标注，不作静默吞掉。

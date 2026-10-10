@@ -94,9 +94,9 @@ feat-A009 让后台能看到「召回了哪几条、分数怎么算」，但**�
 - **剪贴板不依赖部署协议**：`navigator.clipboard` 只在 https / localhost 可用，前端实现降级（`document.execCommand('copy')` + 临时 textarea 兜底），http / https 都能复制；是否上 https 属部署议题，不在本特性
 - **A4 观感**：固定 210mm 纸宽 + 长纸滚动，不做真实分页；底部区域显隐由 `showFooter` 控制，纯前端行为（无接口变更）
 - **语料 schema v2**（`chunks[]`），阅读器片段号取 chunkId 尾段（`c0021`），不展示段号
-- **页面上有三套「号」，不要混**：
-  - 回答**正文**里的 `¹` = 总台渲染（`citation.ts:482 renderAnswerWithCitations`，`agent.ts:608` 调用），编号 = 该片段在回答里首次出现的顺序，只在本条回答内有效
-  - 引用**卡片左上角**的 `¹` = 前厅复算（`WeatherView.vue:52` 渲染 `badge`，`buildCitationGroups()` 按 `toSuperscript(index + 1)`），总台不下发该字段、契约里没有 —— 两边靠复算对齐，属已知约束
+- **页面上有多套「号」，不要混**：
+  - 回答**正文**不再有引用角标（`answer` 剥离 `[片段N]` 指针、无上标，feat-A006）
+  - 引用**卡片左上角**的 `¹` = 前厅复算（`WeatherView.vue:52` 渲染 `badge`，`buildCitationGroups()` 按 `toSuperscript(index + 1)`），总台不下发该字段、契约里没有 —— 前厅自复算，属已知约束
   - 语料的号 = `chunkId` 尾段、段号 `segFrom/segTo`、`quotes[].qid`（Q1/Q2，工具出参已不带，只回 `offset/len`）
   - 阅读器的片段号与上述三套都无关，弹框内不渲染引用角标
 

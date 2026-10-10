@@ -99,7 +99,7 @@
 POST /api/chat（①–⑤ 各域示例）：
 
 ```json
-{ "code": 200, "data": { "answer": "关羽在曹操军中得知刘备下落，随即告辞北行[Q2]。" }, "message": "" }
+{ "code": 200, "data": { "answer": "关羽在曹操军中得知刘备下落，随即告辞北行[片段2]。" }, "message": "" }
 { "code": 200, "data": { "answer": "元让" }, "message": "" }
 { "code": 200, "data": { "answer": "题库未收录该题，请换个问法" }, "message": "" }
 { "code": 200, "data": { "answer": "你好，有什么可以帮你的？" }, "message": "" }
