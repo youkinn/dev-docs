@@ -31,7 +31,7 @@ const stamp = (d = new Date()) => {
 
 /** 汇总一组题：hit@k 为累计口径（组内首段进 top-k 即计）；cover@5 = top5 命中组内段数 / min(5, 组大小)。 */
 function summarize(list) {
-  const s = { total: 0, hit5: 0, hit10: 0, hit50: 0, miss: 0, noBridge: 0, missNoBridge: 0, dropped: 0, sumHits5: 0, sumCap5: 0 };
+  const s = { total: 0, hit5: 0, hit10: 0, hit50: 0, miss: 0, eventBridge: 0, allusionBridge: 0, noBridge: 0, missNoBridge: 0, dropped: 0, sumHits5: 0, sumCap5: 0 };
   for (const r of list) {
     s.total++;
     if (r.firstRank >= 1 && r.firstRank <= 5) s.hit5++;
@@ -39,6 +39,8 @@ function summarize(list) {
     if (r.firstRank >= 1) s.hit50++;
     else s.miss++;
     if (!r.bridgeHit) s.noBridge++;
+    if (r.eventBridgeHit) s.eventBridge++;
+    if (r.allusionBridgeHit) s.allusionBridge++;
     if (r.firstRank === 0) {
       if (r.bridgeHit) s.dropped++;
       else s.missNoBridge++;
@@ -122,6 +124,8 @@ async function main() {
       hit50: firstRank >= 1,
       bridgeGroups,
       bridgeHit: bridgeGroups > 0,
+      eventBridgeHit: (diagnostics?.eventHit?.groupCount ?? 0) > 0,
+      allusionBridgeHit: (diagnostics?.allusionHit?.groupCount ?? 0) > 0,
       top10Ids: entries.slice(0, 10).map((e) => e.id),
     });
   }
@@ -163,7 +167,8 @@ async function main() {
     table(byBucket, '分档'),
     '',
     `合计 ${all.total} 题：hit@5 ${all.hit5} / hit@10 ${all.hit10} / hit@50 ${all.hit50} / 未进池 ${all.miss}（桥未命中 ${all.missNoBridge}、并池后掉窗 ${all.dropped}），通过率 ${pct(all.hit10Rate)}，cover@5 ${pct(all.cover5)}。`,
-    `桥命中 ${all.total - all.noBridge}/${all.total}（${pct((all.total - all.noBridge) / all.total)}）：桥未命中的题多由常规三路召回进窗，故桥命中率与召回率须分开读。`,
+    `事件桥 ${all.eventBridge}/${all.total}（${pct(all.eventBridge / all.total)}）。`,
+    `典故桥 ${all.allusionBridge}/${all.total}（${pct(all.allusionBridge / all.total)}）；桥未命中的题多由常规三路召回进窗，故桥命中率与召回率须分开读。`,
     '',
     '## 分类别',
     '',
@@ -183,7 +188,8 @@ async function main() {
   fs.writeFileSync(mdPath, md, 'utf8');
 
   console.log(`事件 / 典故组召回：${all.total} 题，hit@10 ${all.hit10}（${pct(all.hit10Rate)}），hit@5 ${all.hit5}，hit@50 ${all.hit50}，未进池 ${all.miss}（桥未命中 ${all.missNoBridge} / 掉窗 ${all.dropped}），cover@5 ${pct(all.cover5)}`);
-  console.log(`  桥命中 ${all.total - all.noBridge}/${all.total}（${pct((all.total - all.noBridge) / all.total)}）`);
+  console.log(`  事件桥 ${all.eventBridge}/${all.total}（${pct(all.eventBridge / all.total)}）`);
+  console.log(`  典故桥 ${all.allusionBridge}/${all.total}（${pct(all.allusionBridge / all.total)}）`);
   for (const [k, v] of Object.entries(byBucket)) console.log(`  ${k}: hit@10 ${v.hit10}/${v.total}（${pct(v.hit10Rate)}）`);
   if (compare) console.log(`环比 ${compare.prevFile}：退化 ${compare.regressed.length} / 改善 ${compare.improved.length}`);
   console.log(`落盘 ${jsonPath}（${fs.statSync(jsonPath).size} 字节）+ ${path.basename(mdPath)}`);
