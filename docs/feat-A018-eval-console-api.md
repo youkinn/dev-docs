@@ -68,7 +68,9 @@ Base：`http://127.0.0.1:{port}/dev/benchmark`
 | `engine` | object | `{ sango, indexN, inferLimit: 50 }` |
 | `total` | number | 题数 |
 | `hit5` / `hit10` / `hit50` / `miss` | number | 组内首段分别进 1-5 / 6-10 / 11-50 / 未进池（=0） |
-| `noBridge` | number | 桥未命中题数（`bridgeHit=false`） |
+| `eventBridge` | number | 事件桥命中题数（诊断 `eventHit.groupCount > 0`） |
+| `allusionBridge` | number | 典故桥命中题数（诊断 `allusionHit.groupCount > 0`） |
+| `noBridge` | number | 两桥皆未命中题数（`bridgeHit=false`） |
 | `missNoBridge` | number | 未进池且桥未命中（归因：桥未命中） |
 | `dropped` | number | 未进池但桥已命中（归因：并池后掉窗） |
 | `sumHits5` / `sumCap5` | number | cover@5 分子 / 分母累计 |
@@ -91,8 +93,10 @@ Base：`http://127.0.0.1:{port}/dev/benchmark`
 | `firstRank` | number | 组内段最小排名（0 = 未进 50 路池） |
 | `hits5` / `hits10` | number | top5 / top10 命中组内段数 |
 | `hit5` / `hit10` / `hit50` | boolean | 组命中标志（firstRank 落在各档） |
-| `bridgeGroups` | number | 事件 / 典故名桥命中组数（`eventHit.groupCount + allusionHit.groupCount`） |
-| `bridgeHit` | boolean | `bridgeGroups > 0` |
+| `bridgeGroups` | number | 事件 / 典故名桥命中组数并集（`eventHit.groupCount + allusionHit.groupCount`） |
+| `bridgeHit` | boolean | 桥命中并集（`bridgeGroups > 0` = `eventBridgeHit || allusionBridgeHit`） |
+| `eventBridgeHit` | boolean | 事件名桥命中（诊断 `eventHit.groupCount > 0`） |
+| `allusionBridgeHit` | boolean | 典故名桥命中（诊断 `allusionHit.groupCount > 0`） |
 | `chunkIds` | string[] | 该题判分组（评测集原值，页面可展示组内段） |
 | `top10Ids` | string[] | 池内前 10 候选 chunkId（= `poolIds` 前 10） |
 | `poolIds` | string[] | 50 路池有序 chunkId（下标 +1 = 池内名次）；「原文」弹框据此展示组内段在池中的位置；老快照缺此字段 → 页面降级只列 `top10Ids` |
@@ -108,23 +112,24 @@ Base：`http://127.0.0.1:{port}/dev/benchmark`
 - `firstRank` = 组内段最小排名；0 = 未进返回窗口。
 - `cover@5` = top5 命中组内段数 / `min(5, segCount)`；汇总 = `Σhits5 / Σmin(5, segCount)`。
 - `status` = `hit5`（1-5）/ `hit10`（6-10）/ `hit50`（11-50）/ `miss`（0）。
-- `bridgeHit` = `search()` 诊断 `eventHit.groupCount + allusionHit.groupCount > 0`；未进池按 bridgeHit 分「桥未命中（missNoBridge）」与「并池后掉窗（dropped）」两类计数。
+- 桥命中拆两列：`eventBridgeHit` = 诊断 `eventHit.groupCount > 0`（事件名桥），`allusionBridgeHit` = `allusionHit.groupCount > 0`（典故名桥）；汇总按题数计 `eventBridge` / `allusionBridge`。并集 `bridgeHit` = 两桥之一命中；`noBridge` = 两桥皆未命中。
+- 未进池归因仍用并集 `bridgeHit`：桥未命中（missNoBridge）/ 并池后掉窗（dropped）两类计数。
 - 检索：逐题 `index.search(question, 50, { diagnostics: true })`；零 LLM。
-- 主判据：`cover@5` + 未进池（含桥命中率分列）；`hit@10` 作「不得下降」红线。
+- 主判据：`cover@5` + 未进池；桥命中率分「事件桥 / 典故桥」两列展示（并集桥命中率不作考核）；`hit@10` 作「不得下降」红线。
 
 ## 6. 与 A015 契约的关系与兼容口径
 
 - 兼容：无 `setId` 的 `POST run` / `latest` / `history` / `snapshot` 语义与 A015 一致（标准集、`feat-A015` runId、老快照可读）；`POST run` 的 202 响应新增 `data.setId` 为超集字段，不破坏老调用方。
 - 老快照与新字段互相兼容：锚集 summary 无 `setId` / `judge` / `evalSetMeta` / `byBucket` 等组集字段；组集 summary 恒含 `judge:'group'` + `setId`。前端判定快照所属集：按 runId 前缀（`feat-A018-` → 组集）或下拉选中集上下文；缺字段一律显示「—」。
 - 判定逻辑单一来源：锚 = `runner.ts`（A015），组 = `group-runner.ts`（A018），快照读写共用 `snapshot.ts`。
-- 探针为组判分口径参考实现；sango `group-runner.ts` 与探针同口径（仅快照信封按本文 §4，探针不改）。
+- 探针为组判分口径参考实现；sango `group-runner.ts` 与探针同口径（仅快照信封按本文 §4，探针落盘文件名 / 目录不变）。
 
 ## 7. 前端映射要点（mcp-web，小叶）
 
 - 评测集下拉：`GET /dev/benchmark/sets` → id / name / judge；选中后本次页面上下文带 `setId`。
 - 执行：`POST run` body `{ setId }`；`run-status` 轮询（沿用 A015）；下拉切换集时 history / latest 带 `setId` 重拉。
-- 汇总：`judge=anchor` 沿用 A015 汇总；`judge=group` 读 summary 的 `hit5 / hit10 / hit50 / miss`、`cover5`、`hit10Rate`、`noBridge`、`missNoBridge`、`dropped`、`byCategory`、`byBucket`；主判据列 cover@5 与未进池（桥命中率分列），hit@10 作红线。
-- 明细：组集行展示 question / category / status / firstRank / hits5 / hits10 / cover（单题可算 `hits5 / min(5, segCount)`）/ bridgeHit；「原文」列点「查看」开弹框：按 `poolIds` 列出池内有序列表（名次 + 回目 + 片段，组内段高亮），点行 → SangoChapterReader（沿用 A015 chunkId 解析口径）；老快照缺 `poolIds` 只列 `top10Ids`。
+- 汇总：`judge=anchor` 沿用 A015 汇总；`judge=group` 读 summary 的 `hit5 / hit10 / hit50 / miss`、`cover5`、`hit10Rate`、`eventBridge`、`allusionBridge`、`noBridge`、`missNoBridge`、`dropped`、`byCategory`、`byBucket`；主判据列 cover@5 与未进池，桥命中率分「事件桥命中率（eventBridge/total）/ 典故桥命中率（allusionBridge/total）」两列，hit@10 作红线。
+- 明细：组集行展示 question / category / status / firstRank / hits5 / hits10 / cover（单题可算 `hits5 / min(5, segCount)`）/ 事件桥（eventBridgeHit）/ 典故桥（allusionBridgeHit）；「原文」列点「查看」开弹框：按 `poolIds` 列出池内有序列表（名次 + 回目 + 片段，组内段高亮），点行 → SangoChapterReader（沿用 A015 chunkId 解析口径）；老快照缺 `poolIds` 只列 `top10Ids`。
 - 历史环比：复用既有比较弹框（bug-00047）；组集比较字段用 `status@firstRank`（只比较题量一致的快照）。
 - 缺字段兜底：老快照 / 异集快照缺失字段一律显示「—」。
 - 路由 / 代理沿用 A015 §5（`/sango-bench`）。
