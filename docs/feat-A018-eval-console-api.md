@@ -94,7 +94,8 @@ Base：`http://127.0.0.1:{port}/dev/benchmark`
 | `bridgeGroups` | number | 事件 / 典故名桥命中组数（`eventHit.groupCount + allusionHit.groupCount`） |
 | `bridgeHit` | boolean | `bridgeGroups > 0` |
 | `chunkIds` | string[] | 该题判分组（评测集原值，页面可展示组内段） |
-| `top10Ids` | string[] | top10 候选 chunkId（页面点开原文核对，沿用 A015 的 SangoChapterReader 定位口径） |
+| `top10Ids` | string[] | 池内前 10 候选 chunkId（= `poolIds` 前 10） |
+| `poolIds` | string[] | 50 路池有序 chunkId（下标 +1 = 池内名次）；「原文」弹框据此展示组内段在池中的位置；老快照缺此字段 → 页面降级只列 `top10Ids` |
 
 ### summary.md（组集）
 
@@ -123,7 +124,7 @@ Base：`http://127.0.0.1:{port}/dev/benchmark`
 - 评测集下拉：`GET /dev/benchmark/sets` → id / name / judge；选中后本次页面上下文带 `setId`。
 - 执行：`POST run` body `{ setId }`；`run-status` 轮询（沿用 A015）；下拉切换集时 history / latest 带 `setId` 重拉。
 - 汇总：`judge=anchor` 沿用 A015 汇总；`judge=group` 读 summary 的 `hit5 / hit10 / hit50 / miss`、`cover5`、`hit10Rate`、`noBridge`、`missNoBridge`、`dropped`、`byCategory`、`byBucket`；主判据列 cover@5 与未进池（桥命中率分列），hit@10 作红线。
-- 明细：组集行展示 question / category / status / firstRank / hits5 / hits10 / cover（单题可算 `hits5 / min(5, segCount)`）/ bridgeHit；`top10Ids` → SangoChapterReader 打开原文（沿用 A015 chunkId 解析口径）。
+- 明细：组集行展示 question / category / status / firstRank / hits5 / hits10 / cover（单题可算 `hits5 / min(5, segCount)`）/ bridgeHit；「原文」列点「查看」开弹框：按 `poolIds` 列出池内有序列表（名次 + 回目 + 片段，组内段高亮），点行 → SangoChapterReader（沿用 A015 chunkId 解析口径）；老快照缺 `poolIds` 只列 `top10Ids`。
 - 历史环比：复用既有比较弹框（bug-00047）；组集比较字段用 `status@firstRank`（只比较题量一致的快照）。
 - 缺字段兜底：老快照 / 异集快照缺失字段一律显示「—」。
 - 路由 / 代理沿用 A015 §5（`/sango-bench`）。
