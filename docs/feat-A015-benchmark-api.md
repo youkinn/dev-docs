@@ -57,6 +57,9 @@ JSON 顶层：`{ summary, results }`
 - `results[]`（单题）：`{ id: "类别#序号", question, answer, evidence, textAnchors[], titleAnchors[], chapterRefs[], rank /* 0=未召回 */, status: 'top5'|'tail'|'miss'|'noAnchor', noAnchor /* bug-00052：无有效证据锚 → 不参与判分、单列；有锚题恒 false */, hit: { id /* chunkId */, chapter, title, text } | null, candidates: [ { id, chapter, title } ] /* top50 候选；无锚题为 [] */ }`。
 - `summary.md` 沿用 CLI 模板：引擎/判分口径头 + 「十三段模板 COPY」类别表 + 兜底（rank 6–10）列表 + 未命中（>10 / 未召回）列表。
 
+- `summary.chapterTop5` 与 `category[cat].chapterTop5`（bug-00063 新增；**dev server 扩展字段，老快照无此键 → 前端按 0 兜底**）：期望回目（`chapterRefs`）进候选 top5 的题数（回级命中口径）；`noAnchor` 题不计入。
+- `results[].chapterRank`（bug-00063 新增；同上，老快照按 0 兜底）：该题 `chapterRefs` 在候选池（top50）中最早出现的名次（1 起）；未出现 / `chapterRefs` 空 = 0；多回取最早。与段级 `rank` 并列：`rank` 是证据段名次，`chapterRank` 是回级名次。
+
 ## 5. 页面（mcp-web，小叶）
 
 - 路由 `/benchmark` → `views/BenchmarkView.vue`，导航菜单入口。
@@ -69,6 +72,8 @@ JSON 顶层：`{ summary, results }`
 - 历史快照列表：`GET history`（runId / 时间 / 摘要），点击切换表格 / 展开明细 / 图表为该次数据（`GET snapshot`；列表 5 条/页分页，当前快照行绿色高亮）；通过率趋势折线按 runId 依次展示历史整体对比（hover 摘要卡 + 首次执行基线虚线）。
 - 筛选下拉：全部 / top5（rank 1–5）/ top10（rank 6–10）/ top10+（rank>10 或未召回，rank=0 归此类）；筛选后明细与图表跟随变化。
 - 图表用 echarts（已有依赖，CacheView 先例）：类别 ×（通过 / 兜底 / 未命中）堆叠柱状图 + 整体通过率；点击柱 / 图例联动展开对应类别明细；跟随当前选中快照。
+
+- 汇总表并列「回级命中」列 = `category[cat].chapterTop5`（表尾合计 `summary.chapterTop5`）；明细并列「回名次」列 = `chapterRank`（0 显示「未进池」）；顶部当前快照标签追加「回级命中 x」（= `summary.chapterTop5`）；老快照缺字段按 0 兜底（bug-00063）。
 
 ## 6. 验收映射（需求验收 6–9）
 
