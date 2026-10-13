@@ -67,3 +67,4 @@
 | bug-00058 | A018 事件/典故表 chunkIds 漏段（gold 不完整）：段位定位只扫 first-pass 登记回号（缺跨回）+ 同回关键词漏段 → 事件类 hit@5 失真（三让徐州 / 凤仪亭 / 武侯锦囊斩魏延 / 败走麦城）。修复口径见 bugs/bug-00058-event-chunkids-incomplete.md | dev-docs, mcp-server | feat-A018 | 已修复 | 2026-10-13 |
 | bug-00059 | A015 标准集判分证据锚跨回误命中（召回弹框定位错回 + 过判）。修复＝正文锚匹配限定证据列回次（chapterRefs），引文普遍含「……」故不做强/弱锚拆分；附带发现 3 处证据列回号与语料不符（人物#17/官职#8/官职#20）。详见 bugs/bug-00059-anchor-cross-chapter-mismatch.md | mcp-server, dev-docs | feat-A015 | 已修复 | 2026-10-13 |
 | bug-00060 | 评测台历史快照比较方向与配色：当前快照恒在左、目标在右，**delta = 当前 − 目标**，正绿负红（原为 delta = 目标 − 当前，当前通过数比目标少 1 却显 `+1` 绿，通过 / 未命中两列整号相反）；同票修比较弹框开合页面横向抖动（自加 body 滚动锁覆盖既有滚动条槽位口径）。详见 bugs/bug-00060-compare-direction-color.md | mcp-web | feat-A015 | 已修复 | 2026-10-13 |
+| bug-00061 | A015 标准集证据段语义核验：兜底 21 + 未命中 50 逐条核验，仅「地名#2」证据锚指错（引文取第38回出山谶诗代第104回归天正文）致假未命中，已按语料订正回第104回（订正后 rank 1 通过）；其余 70 条证据段正确、属真实检索缺口。详见 bugs/bug-00061-benchmark-evidence-semantic-audit.md | dev-docs | feat-A015 | 已修复 | 2026-10-13 |
