@@ -19,7 +19,7 @@
 | 文件 | 职责 |
 |---|---|
 | `benchmark/parser.ts` | 解析评测集 md：`## 类别` 小节 + `\| # \| 问题 \| 标准答案 \| 证据 \|` 表格行；「十二/十三」小节不计题（结构契约见评测集文件头部） |
-| `benchmark/matcher.ts` | 证据锚匹配：正文优先、回目锚限回次之；中文标点归一化；长锚失配回退短语（≥4 字）——与 `dev-docs/test/standard-set/feat-A015-verify.mjs` 现行逻辑同口径移植，禁止另起炉灶 |
+| `benchmark/matcher.ts` | 证据锚匹配（bug-00059 起限回）：① 正文匹配（引号原文锚 + 句读 ≥4 字短语，归一化子串）**限定证据列回号** `chapterRefs`（无回号则不限回）→ ② 回目锚匹配（限回）→ ③ 无回目锚时正文锚（≥4 字）回退匹配任意回目；中文标点归一化。判定逻辑单点维护，禁止另起炉灶 |
 | `benchmark/runner.ts` | 逐题 `SangoIndex.search(question, 50)` + 判定 top5/tail/miss + 类别汇总；串行执行（并发由 server 层挡） |
 | `benchmark/snapshot.ts` | 快照 JSON + summary md 落盘（格式见 §4，与 CLI 产物同构） |
 | `benchmark/server.ts` | HTTP 路由（`node:http` 原生，零新增依赖） |
