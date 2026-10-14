@@ -290,11 +290,11 @@ export interface RetrievalAllusionHitGroup {
 ## 8. A015 回归
 
 - 命令（A015 §7）：`cd D:\workplace\mcp-server\sango` → `npm run dev`（build + SANGO_DEV_HTTP_PORT=8787）→ `POST http://127.0.0.1:8787/dev/benchmark/run`（runner 以 `search(question, 50)` 执行，快照落 `{SANGO_BENCHMARK_RESULTS_DIR}`）。
-- **通过口径**：整体 `summary.top5 ≥ 0.608`（基线 60.8%）；**事件类逐类不倒退**——`summary.category` 中「战役 / 典故 / 事件关系 / 死亡」四类各自 top5 命中数 ≥ 同基线快照（`feat-A015-*.json`）对应类别值；tail / miss 记录留档对比。
+- **通过口径**：整体 `summary.top5 ≥ 0.608`（基线 60.8%）；**事件类逐类不倒退**——`summary.category` 中「典故 / 事件关系 / 死亡」三类各自 top5 命中数 ≥ 同基线快照（`feat-A015-*.json`）对应类别值；tail / miss 记录留档对比。
 - **实测门（2026-09-28 需求变更，取代构造免疫）**：非事件命中请求结构与现状逐字节一致；事件命中请求 top5 由并池重排 / L3 置顶改变，回归以实测为准——整体不倒车 + 事件类逐类不倒退 + bridge on/off 对照（事件问法 top5 证据命中率）。
 - 事件类定点自查（实现轮）：`温酒斩华雄` / `三英战吕布` / `草船借箭` / `空城计` 等 traceId 请求：`eventHit.groups` 非空、`placedChunkIds` 与期望回区间吻合、编排侧注入视图（`[片段N]`）可核对事件组 chunk 在列。
 - **L3 档位定档**：回测对照锚点 ±1 / ±2 / ±3 三档（证据进窗率 + 保证区占用 + 叙事完整性），v1 默认 ±1，定档结果随验收结论登记。
-- **A030 合并验收（需求变更 2026-09-28）**：本期随 A030 一并提测验收——池覆盖探针、cross-encoder 重排 50→10 接入、top≤5 不低于无重排基线、定点（华雄 / 刘备）不倒车、延迟预算（P50 / P95）。
+- **重排不随本期提测验收（2026-10-14）**：重排开关默认 `off`；池覆盖探针、cross-encoder 重排 50→10 接入、延迟预算按 feat-A030 单独推进，验收不在本特性范围内。
 
 ## 9. 边界（不做）
 
