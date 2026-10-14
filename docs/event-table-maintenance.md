@@ -4,8 +4,8 @@
 
 ## 参与对象
 
-- 表：`mcp-server/sango/data/corpus/events.json`（708 条，normVersion 换代 = 补录发布，重启进程生效）。
-- 构建链：`dev-docs/test/events/build-events.mjs`（初审产物 → 段位定位 → 落表）→ `verify-events.mjs`（V1–V7 硬校验）。
+- 表：`mcp-server/sango/data/corpus/events.json`（714 条，normVersion 换代 = 补录发布，重启进程生效）。
+- 构建链：`dev-docs/test/events/build-events.mjs`（初审产物 → 段位定位 → 落表）→ `verify-events.mjs`（V1–V9 硬校验）。
 - 问法池：`mcp-server/sango/data/event-question-pool.json`（真实问法原样进池，**只进池不进表**）。
 
 ## 缺口来源（登记触发）
