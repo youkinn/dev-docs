@@ -244,7 +244,7 @@ $g.candidates|%{"  #$($_.rank) $($_.chunkId) ch$($_.chapter) final=$($_.finalSco
 
 重排阶段口径：重排发生在规则序并池之后、取窗之前；保证区（死亡意图 ∪ L3 锚点）按承诺不参与池重排；事件路的增强查询重排计入 `timing.merge`，不在 `timing.rerank` 内。
 
-**重排怎么开 / 怎么关**：改 `mcp-server/sango/.env`（本地文件、不入库）里的 `SANGO_RERANKER=on|off`（默认 `off`，行为与无重排基线逐字节一致）。改完**必须重启 mcp-server** 才生效——提测链路由 orchestrator spawn 子进程（`node <sango>/dist/index.js`），只重启 web 或刷新页面无效。启用态要连带写 A030 锁定档位（`SANGO_RERANKER_WINDOW=20` / `_MAX_TOKENS=128` / `_BATCH=16` / `_INTRA_THREADS=8`），否则默认档位实测 P50 ≈ 4.6s / P95 ≈ 5.0s（远超 P95 ≤ 1000ms 预算）；权重目录默认 `sango/data/models/bge-reranker-base`，缺失时自动退回规则序并在 `rerank.reason` 写明。`on` 仅代表「接入重排」，不等于 A030 验收通过。
+**重排怎么开 / 怎么关**：改 `mcp-server/sango/.env`（本地文件、不入库）里的 `SANGO_RERANKER=on|off`（默认 `off`，行为与无重排基线逐字节一致）。改完**必须重启 mcp-server** 才生效——提测链路由 orchestrator spawn 子进程（`node <sango>/dist/index.js`），只重启 web 或刷新页面无效。启用态要连带写 A030 锁定档位（`SANGO_RERANKER_WINDOW=20` / `_MAX_TOKENS=128` / `_BATCH=16` / `_INTRA_THREADS=8`），否则默认档位实测 P50 ≈ 4.6s / P95 ≈ 5.0s（远超 P95 ≤ 1000ms 预算）；权重目录默认 `sango/data/models/bge-reranker-base`，缺失时自动退回规则序并在 `rerank.reason` 写明。重排本期不接（负责人 2026-10-14：窗口 50 / 30 / 20 / 10 对照，窗口越大召回质量越差）；`on` 仅供本地对照实验。
 
 ### 步骤 7 · 核对路由
 
