@@ -92,9 +92,19 @@ const out = {
   rows,
 };
 
-fs.mkdirSync(path.dirname(OUT), { recursive: true });
-fs.writeFileSync(OUT, `${JSON.stringify(out, null, 1)}\n`, 'utf8');
-
 console.log(`评测集题数 ${rows.length}（${count(rows, (r) => r.category)}）`);
 console.log(`分档 ${count(rows, (r) => bucket(r.segCount))}；跨回 ${rows.filter((r) => r.crossChapter).length}`);
-console.log(`落盘 ${OUT}（${fs.statSync(OUT).size} 字节）`);
+
+const writeSet = (file, data) => {
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  fs.writeFileSync(file, `${JSON.stringify(data, null, 1)}\n`, 'utf8');
+  console.log(`落盘 ${file}（${fs.statSync(file).size} 字节）`);
+};
+
+writeSet(OUT, out);
+if (!process.argv[2]) {
+  writeSet(path.resolve(path.dirname(OUT), 'eval-set-standard-name.json'), {
+    meta: { ...out.meta, variant: 'standard-name', note: 'question = eventName（标准名直接提问）' },
+    rows: rows.map((r) => ({ ...r, question: r.eventName })),
+  });
+}
