@@ -18,7 +18,7 @@ function loadCorpus() {
   const map = new Map();
   for (const name of fs.readdirSync(dir).filter((n) => n.endsWith('.json')).sort()) {
     const ch = readJson(path.join(dir, name));
-    for (const c of ch.chunks ?? []) map.set(c.id, { chapter: ch.chapter, title: ch.title });
+    for (const c of ch.chunks ?? []) map.set(c.chunk_id, { chapter: ch.chapter, title: ch.title });
   }
   return map;
 }

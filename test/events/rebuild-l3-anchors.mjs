@@ -17,11 +17,11 @@ const tagsRaw = JSON.parse(fs.readFileSync(TAGS_PATH, 'utf8'));
 const rows = table.rows || [];
 const tagAnchors = buildTagAnchorIndex(tagsRaw);
 
-const chunkCountByHui = new Map();
+const chunkIdsByHui = new Map();
 for (let h = 1; h <= 120; h++) {
   const hui = String(h).padStart(3, '0');
   const doc = JSON.parse(fs.readFileSync(path.join(CORPUS_DIR, hui + '.json'), 'utf8'));
-  chunkCountByHui.set(hui, (doc.chunks || []).length);
+  chunkIdsByHui.set(hui, (doc.chunks || []).map((c) => c.chunk_id));
 }
 
 let changed = 0;
@@ -36,7 +36,7 @@ for (const r of rows) {
     if (anchors) overridden++;
   }
   if (!anchors) { missing.push(`${r.eventId} ${r.eventName}`); continue; }
-  const group = buildL3AnchorGroup(anchors, chunkCountByHui.get(hui) || 0);
+  const group = buildL3AnchorGroup(anchors, chunkIdsByHui.get(hui) || []);
   if (JSON.stringify(group) !== JSON.stringify(r.chunkIds)) {
     r.chunkIds = group;
     changed++;

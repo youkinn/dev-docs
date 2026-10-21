@@ -1,20 +1,39 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 // L3 行锚点人工核证（tags 未覆盖 / 回号纠正行的机器口径；gap.md「L3 锚点人工核证」为人工留痕）
-// 键 = eventId；值 = 锚点段 chunkId 数组（标签位点段，重建时按 L3_ANCHOR_N 前后扩展）
+// 键 = eventId；值 = 锚点段 chunkId 数组（标签位点段，重建时按回内块序 ±L3_ANCHOR_N 扩展）
 export const L3_ANCHOR_OVERRIDES = {
-  'E02402': ['sanguo-yanyi:0024:c0003'], // 董承之死：曹操既杀了董承等众人
-  'E03303': ['sanguo-yanyi:0033:c0016'], // 二袁授首：公孙康伏刀斧手斩袁尚袁熙，木匣送易州
-  'E03507': ['sanguo-yanyi:0035:c0009'], // 刘琦登场：刘表使长子刘琦（tags 039 误标，首出 035）
-  'E05803': ['sanguo-yanyi:0058:c0006'], // 钟进被杀：庞德一刀斩钟进于马下
-  'E06004': ['sanguo-yanyi:0060:c0001'], // 张松登场：益州别驾张松字永年（tags 059 误标，060 才报名）
-  'E06103': ['sanguo-yanyi:0061:c0012'], // 张纮病故：人报长史张纮辞疾回家，今已病故
-  'E09103': ['sanguo-yanyi:0091:c0018'], // 马超病故：孔明「马孟起病故，吾甚惜之」
-  'E10402': ['sanguo-yanyi:0104:c0007'], // 李严病死：李严闻之，亦大哭病死
-  'E10603': ['sanguo-yanyi:0106:c0013'], // 曹叡之死：睿执司马懿手托孤（病危）；c0014 谥/葬高平陵
-  'E11103': ['sanguo-yanyi:0111:c0012'], // 孙峻病亡：此时东吴丞相孙峻病亡，从弟孙綝辅政
+  'E02402': ['sanguo-yanyi:0024:p0005:c01'], // 董承之死：曹操既杀了董承等众人
+  'E03303': ['sanguo-yanyi:0033:p0018:c01'], // 二袁授首：公孙康伏刀斧手斩袁尚袁熙，木匣送易州
+  'E03507': ['sanguo-yanyi:0035:p0006:c01'], // 刘琦登场：刘表使长子刘琦（tags 039 误标，首出 035）
+  'E05803': ['sanguo-yanyi:0058:p0006:c01'], // 钟进被杀：庞德一刀斩钟进于马下
+  'E06004': ['sanguo-yanyi:0060:p0001:c01'], // 张松登场：益州别驾张松字永年（tags 059 误标，060 才报名）
+  'E06103': ['sanguo-yanyi:0061:p0012:c01'], // 张纮病故：人报长史张纮辞疾回家，今已病故
+  'E09103': ['sanguo-yanyi:0091:p0017:c02'], // 马超病故：孔明「马孟起病故，吾甚惜之」
+  'E10402': ['sanguo-yanyi:0104:p0010:c01'], // 李严病死：李严闻之，亦大哭病死
+  'E10603': ['sanguo-yanyi:0106:p0008:c02'], // 曹叡之死：睿执司马懿手托孤（病危段；谥/葬段不计）
+  'E11103': ['sanguo-yanyi:0111:p0009:c01'], // 孙峻病亡：此时东吴丞相孙峻病亡，从弟孙綝辅政
 };
 
 /** 锚点 ±N 档位常量（v1 = 1，回测口；接口 §3.3 ② N ∈ 1..3）。 */
 export const L3_ANCHOR_N = 1;
+
+const ENTITY_PATH = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../../mcp-server/sango/data/entity-table.json');
+
+/** 人物别称 -> 规范名（tags 值用规范名，L3 事件名可能用别称，如 少帝 -> 刘辩）。 */
+export const PERSON_ALIAS_TO_CANON = (() => {
+  const map = new Map();
+  const table = JSON.parse(fs.readFileSync(ENTITY_PATH, 'utf8'));
+  for (const r of table.rows || []) {
+    if (r.type !== '人物') continue;
+    for (const w of [r.canonical, ...(r.aliases || []), ...(r.rewriteKeys || [])]) {
+      if (w && !map.has(w)) map.set(w, r.canonical);
+    }
+  }
+  return map;
+})();
 
 const L3_MARKER = /^(.+?)(之死|病死|病故|病亡|被杀|被斩|被诛|遇害|之亡|之薨|授首|登场)$/;
 const PERSON_NORM = { '叡': '睿' };
@@ -47,25 +66,28 @@ export function lookupTagAnchors(index, hui, eventName) {
   const suffix = isDeath ? 'D' : 'B';
   const hit = index.get(`${hui}|${person}|${suffix}`);
   if (hit && hit.length) return hit;
-  const norm = person.split('').map((c) => PERSON_NORM[c] || c).join('');
-  const hitNorm = index.get(`${hui}|${norm}|${suffix}`);
+  const folded = person.split('').map((c) => PERSON_NORM[c] || c).join('');
+  const canon = PERSON_ALIAS_TO_CANON.get(folded);
+  if (!canon || canon === person) return null;
+  const hitNorm = index.get(`${hui}|${canon}|${suffix}`);
   return hitNorm && hitNorm.length ? hitNorm : null;
 }
 
-/** 锚点 ±N 小位点组（凸包；超 5 段从边裁非锚点、保锚点；结果 2-5 段，同回）。 */
-export function buildL3AnchorGroup(anchors, chapterChunkCount) {
+/** 锚点 ±N 小位点组（回内块序口径；凸包；超 5 段从边裁非锚点、保锚点；结果 2-5 段，同回）。 */
+export function buildL3AnchorGroup(anchors, chapterChunkIds) {
   const N = L3_ANCHOR_N;
-  const hui = anchors[0].split(':')[1];
+  const posOf = new Map(chapterChunkIds.map((cid, i) => [cid, i + 1]));
   const poss = new Set();
   for (const a of anchors) {
-    const p = Number(a.split(':c')[1]);
+    const p = posOf.get(a);
+    if (!p) continue;
     for (let d = -N; d <= N; d++) poss.add(p + d);
   }
-  const arr = [...poss].filter((p) => p >= 1 && p <= chapterChunkCount).sort((a, b) => a - b);
-  const anchorSet = new Set(anchors.map((a) => Number(a.split(':c')[1])));
+  const arr = [...poss].filter((p) => p >= 1 && p <= chapterChunkIds.length).sort((a, b) => a - b);
+  const anchorSet = new Set(anchors.map((a) => posOf.get(a)).filter((p) => p));
   while (arr.length > 5) {
     if (!anchorSet.has(arr[0])) arr.shift();
     else arr.pop();
   }
-  return arr.map((p) => `sanguo-yanyi:${hui}:c${String(p).padStart(4, '0')}`);
+  return arr.map((p) => chapterChunkIds[p - 1]);
 }

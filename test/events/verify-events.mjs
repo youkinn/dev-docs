@@ -23,12 +23,12 @@ const meta = table.meta || {};
 const rows = table.rows || [];
 
 const corpusChunks = new Set();
-const chunkCountByHui = new Map();
+const chunkIdsByHui = new Map();
 for (let h = 1; h <= 120; h++) {
   const hui = String(h).padStart(3, '0');
   const doc = JSON.parse(fs.readFileSync(path.join(CORPUS_DIR, hui + '.json'), 'utf8'));
-  for (const c of doc.chunks || []) corpusChunks.add(c.id);
-  chunkCountByHui.set(hui, (doc.chunks || []).length);
+  for (const c of doc.chunks || []) corpusChunks.add(c.chunk_id);
+  chunkIdsByHui.set(hui, (doc.chunks || []).map((c) => c.chunk_id));
 }
 
 const entity = JSON.parse(fs.readFileSync(ENTITY_PATH, 'utf8'));
@@ -140,7 +140,7 @@ for (const r of l3Rows) {
     else if (!rec.includes(anchors[0])) errors.push(`V8: L3 人工锚点 ${r.eventId} gap.md 记录「${rec}」与脚本「${anchors[0]}」不一致`);
   }
   if (!anchors) { errors.push(`V8: L3 ${r.eventId} ${r.eventName} 无锚点（tags 未覆盖且无人工登记）`); continue; }
-  const expected = buildL3AnchorGroup(anchors, chunkCountByHui.get(hui) || 0);
+  const expected = buildL3AnchorGroup(anchors, chunkIdsByHui.get(hui) || []);
   if (JSON.stringify(expected) !== JSON.stringify(r.chunkIds)) {
     errors.push(`V8: L3 ${r.eventId} ${r.eventName} chunkIds 非「锚点±N」结构（期望 ${expected.join(',')}，实际 ${r.chunkIds.join(',')}）`);
   } else l3AnchorOk++;
