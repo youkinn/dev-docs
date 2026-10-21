@@ -18,3 +18,9 @@ docs/handoff-*.md
 
 # AI 初审任务包：入库跟踪
 !/test/events/
+
+# 底本抓取工具链的辅文产物（文前辅文，不入语料、不入库；重建见 scripts/douban-sanguo/）
+docs/front-matter.txt
+
+# Python 工具字节码缓存：不入库
+__pycache__/
