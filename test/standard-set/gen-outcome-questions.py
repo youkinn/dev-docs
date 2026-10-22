@@ -27,7 +27,7 @@ TAGS = os.path.join(MCP, 'sango/data/corpus/tags/event.json')
 ENTITY_TABLE = os.path.join(MCP, 'sango/data/entity-table.json')
 WRITE = '--write' in sys.argv
 
-# 新旧底本校订用字 + 异体字折叠（与 test/rebase/migrate-anchors.py 同口径，仅匹配期用）
+# 新旧底本校订用字 + 异体字折叠（与 scripts/rebase/migrate-anchors.py 同口径，仅匹配期用）
 MATCH_VARIANTS = str.maketrans({'馀': '余', '邰': '郃', '毌': '毋', '麴': '麹', '祎': '袆', '顒': '颙', '听': '昕'})
 EXTRA_FORMS = {'司马徽': ['水镜', '德操'], '徐庶': ['单福', '元直'], '姜叙母': ['叙之母', '叙母']}
 DEATH_WORDS = re.compile('(死|杀|病|亡|故|薨|崩|殒|卒|斩|诛|剁|缢|刎|自刎|授首|遇害|杖毙)')
