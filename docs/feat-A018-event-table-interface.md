@@ -3,7 +3,7 @@
 > 用途：老陈按此实现 mcp-server 检索侧事件表加载、事件名桥、L1/L2 候选池并池重排与 L3 锚点置顶；表结构同时供 Coco 落表与 verify-events.mjs 校验。
 > 契约定稿人：Coco；契约变更先问 Coco，不得自行改接口 / 字段。
 > 需求依据：`requirements/feat-A018-event-table.md`（已定稿，口径唯一来源）。
-> 前置契约：feat-A016（归一化 / entity-table 改写位点）、feat-A009（diagnostics 形状与透传）、feat-A015（dev benchmark runner / 回归基线）、feat-A004（语料 schema v2 / chunk.id 规则）。
+> 前置契约：feat-A016（归一化 / entity-table 改写位点）、feat-A009（diagnostics 形状与透传）、feat-A015（dev benchmark runner / 回归基线）、feat-A004（语料 schema v2 / chunk_id 规则）。
 > 故事号：story-A018-01。日期：2026-09-28。
 
 ## 0. 范围
@@ -37,7 +37,7 @@ rows 列定义：
 | `eventId` | string | 是 | 行内唯一、跨行不重复（verify「无重复」项）；稳定标识，仅供诊断 / 缺口清单引用，实现不解析其格式（建议 Coco 定 E 序列）。 |
 | `eventName` | string | 是 | 规范形，非空；与实体表命名单一口径（实体表管「怎么写」：写法与 entity-table canonical 同源；新增事件名须同步实体表，需求风险节）。 |
 | `aliases` | string[] | 是 | 指称层名词性说法（白话别名 / 典故变体）。长度 ≥ 2（单字禁入，对齐 entity-table K1）；行内去重；**跨行全局唯一**（同一说法不属两组）；**与实体表任意行 rewriteKeys 无交集**（verify「aliases 与实体表改写键不冲突」）。桥键之一（§3.2：桥键 = 规范名 ∪ 有效 aliases）。 |
-| `chunkIds` | string[] | 是 | 只列段、不判对错；均须为语料 chunk.id（主键口径 §1.3）；运行时按事件内序重排（§1.3），表内顺序不承诺。 |
+| `chunkIds` | string[] | 是 | 只列段、不判对错；均须为语料 chunk_id（主键口径 §1.3）；运行时按事件内序重排（§1.3），表内顺序不承诺。 |
 | `type` | 'L1' \| 'L2' \| 'L3' | 是 | L1 专名事件 / L2 情节单元 / L3 死亡·登场。桥不按 type 分流，仅作诊断与验收记录。 |
 | `characters` | string[] | 否 | 人物（建议实体表 canonical 规范形）；本期桥与检索不消费，仅元数据备用。 |
 | `exampleQuestion` | string | 否 | 需求明确「每行只留一条示例问法供理解与验收」；桥与检索不消费。 |
@@ -54,7 +54,7 @@ rows 列定义：
 
 ### 1.3 主键与事件内序
 
-- 主键 = chunk.id（`{source}:{回号4位零补}:c{回内序号4位零补}`；需求 §13.6 裁决：不用语料行号）。
+- 主键 = `chunk_id`（`{source}:{回号4位零补}:p{段号4位零补}:c{块序2位零补}`；需求 §13.6 裁决：不用语料行号）。
 - **事件内序** = chunk 在原文出现顺序 = (chapter 升序, 回内 c 序号升序)。跨回事件按回号升序拼接。运行时统一按该序重排（防御乱序）：L3 锚点 ±N 前后扩展按该序取段；L1/L2 并池后进窗由池内重排决定，不再按事件序取子集。
 - 跨回事件（chunkIds 覆盖 > 1 回）须有复核记录（verify V6，验收 1）。
 
@@ -164,7 +164,7 @@ query(raw)
 ## 4. 变体多路合并 topK 契约（与现有合并的交互）
 
 - 三路候选、加权分公式、归一化、死亡置顶、`funnel.mergedCandidates`、`nextRank` / `gapToTopN` 口径全部不变。
-- 桥改变池构成与排序：L1/L2 命中组 chunk 并入候选池（封顶 50），池内按增强查询重算 BM25 后重排；L3 置顶进保证区（既有 deathHits 两级排序通道）。无「事件组插槽」概念。
+- 桥改变池构成与排序：L1/L2 命中组 chunk 并入候选池（三路各 ≤50、合并池上限 120），池内按增强查询重算 BM25 后重排；L3 置顶进保证区（既有 deathHits 两级排序通道）。无「事件组插槽」概念。
 - `diagnostics.candidates[]` 按重排后的池序计算（事件命中请求）；非事件请求下 candidates 数据与现状逐字节一致（强回归性质）。
 - **candidates[].rank 语义**：最终出参序 = 重排后池序前 limit（L3 置顶段经保证区排序并入），可由 candidates + eventHit 完全重建；rank 与最终出参序不一致只出现在事件命中请求。
 - 事件组并池与置顶的计数不进「召回漏斗」（漏斗只描述三路召回），由 eventHit 承载（§5.2）。

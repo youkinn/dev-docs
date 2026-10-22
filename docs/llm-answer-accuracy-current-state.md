@@ -55,10 +55,10 @@ HTTP /api/chat
 - 检索融合：多路召回（BM25 + BGE-M3 向量 + 标签）加权重排 `0.6/0.3/0.1` 不变（2026-09-19 定参）；`MIN_COSINE=0.3` 仍为哈希向量时代死路值（`sango-index.ts:60` 注释 Step 4 待重定，**未做**）。
 - 向量：BGE-M3 1024 维（`src/embed/bge-m3-encoder.ts` + `data/vectors/sanguo-yanyi.bin`）；检索与缓存判定同一空间。
 - 死亡意图（`src/search/intent.ts`）：纯规则（7 类 pattern + `DEATH_GATE`），A014 补 `death_age` 年龄问法（死的时候多少岁 / 享年 / 卒年），置顶集合并入遗言段（刘备之死段 0085:c0011 rank11→top10）；判定失败只退回普通排序。
-- 标签：`data/corpus/tags/{duel,event,story}.json` 仍在；A014 索引剥壳（`tagPostings` 只入库剥离类型信息的文本）+ event.json 四类与 stray 校准；「人物之封」标签类别曾添加后**撤销**（bug-00037 复盘：撤后答案段跌出 top50、检索侧无噪声解法，验收 6 改基线 6，拒答由编排层护栏承接）；`verify-tag-files.mjs` 静态校验已合入 main（3502 项断言）。
+- 标签：`data/corpus/tags/{duel,event}.json` 仍在；A014 索引剥壳（`tagPostings` 只入库剥离类型信息的文本）+ event.json 仅生 / 死两类与 stray 校准；「人物之封」标签类别曾添加后**撤销**（bug-00037 复盘：撤后答案段跌出 top50、检索侧无噪声解法，验收 6 改基线 6，拒答由编排层护栏承接）；`verify-tag-files.mjs` 静态校验已合入 main（1462 项断言）。
 - **评测执行接口（A015，`sango/src/benchmark/` 五模块）**：parser / matcher / runner / snapshot / server；`POST /dev/benchmark/run`（dev 门控，`SANGO_DEV_HTTP_PORT=8787`，`npm run dev`）；判定逻辑只存一份，dev-docs `test/standard-set/feat-A015-verify.mjs` 为薄壳调用同一入口。
 - 工具契约：
-  - `sango_novel_search`：limit 默认 5 / 上限 20；出参结构化 JSON（`id`/`text`/`chapter`/`title`/`type`/`segFrom`/`segTo`）；空命中返回 `未召回任何原文段落`；请求带 `_meta.traceId` 才产诊断。
+  - `sango_novel_search`：limit 默认 5 / 上限 20；出参结构化 JSON（`chunk_id`/`parent_id`/`seq_in_parent`/`type`/`role`/`text`/`char_count` + 回级 `chapter`/`title`；成组块另有 `group_id`）；空命中返回 `未召回任何原文段落`；请求带 `_meta.traceId` 才产诊断。
   - `sango_query_embed`（A013 内部工具）：query → base64-float32-le 1024 维；A016 起 **embed 前做同一归一化（替换口径，仅缓存侧）+ normVersion**（换说法与规范形共享缓存条目，防 D4 口径分裂）；仅供缓存判定，模型不可见、不产诊断。
   - `sango_novel_chapter`（A010）：整回读取（含 prev/next）。
 - 检索诊断（`_meta.diagnostics`）：bm25Norm / cosine 全精度、hitLabels、分阶段 timing（A013-03）+ **A016 索引双写扩展明细**（`query.expansionHits` + `env.normVersion`；`query.normalized ≡ raw`、`query.rewrites ≡ []`，09-29 bug-00046，验收 8）。
