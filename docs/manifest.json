@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-14T08:59:00.760Z",
+ "generatedAt": "2026-10-22T02:52:45.953Z",
  "sources": [
   {
    "aid": "155370967",
@@ -25,7 +25,7 @@
  ],
  "counts": {
   "chapters": 120,
-  "paragraphs": 2129,
+  "paragraphs": 2128,
   "notes": 576,
   "bodyChars": 591870
  },
@@ -489,7 +489,7 @@
   {
    "no": 77,
    "title": "第七十七回 玉泉山关公显圣 洛阳城曹操感神",
-   "paragraphs": 21,
+   "paragraphs": 20,
    "chars": 4410
   },
   {
@@ -752,8 +752,8 @@
   }
  ],
  "files": {
-  "三国演义.txt": "948237245a6e9b549d203120d15387bf5ad223b3176ce505cac449136645423a",
-  "sanguo-annotations.json": "2cd65ae99c581f3abeaaf36975b1a3ad13826f91bd532e58276efbb1025d5dff",
+  "三国演义.txt": "1311d946fff7c5e9f47c47c5aaf1d62284b733e40f5f9ac4affd4d901ad95392",
+  "sanguo-annotations.json": "69d52ee597aa6e26ce1aef3e414590d45708b6989d2d72205c4224b41c879293",
   "front-matter.txt": "25f48a91f232d0d23319cf7ef788e726d235ebe3d0dc3eba6db45537f682d328"
  }
 }

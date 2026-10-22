@@ -28,7 +28,7 @@
 | `rows` | array | 执行数据：eventId / eventName / aliases[] / chunkIds[] / type / characters[]? / exampleQuestion? |
 
 - `normVersion` = rows 段规范化序列化的 8 位内容 hash（不含 meta 与 generatedAt），公式与 entity-table 同口径；表内容变更即换代（每次批次补录 = 新版本发布）。
-- `corpusChunkCount` = 落表时语料 chunk 总数（当前 2344），语料重建漂移检测读数之一（§1.4、§2.3）。
+- `corpusChunkCount` = 落表时语料 chunk 总数（当前 2289），语料重建漂移检测读数之一（§1.4、§2.3）。
 
 rows 列定义：
 
