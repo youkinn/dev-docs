@@ -290,7 +290,7 @@ export interface RetrievalAllusionHitGroup {
 ## 8. A015 回归
 
 - 命令（A015 §7）：`cd D:\workplace\mcp-server\sango` → `npm run dev`（build + SANGO_DEV_HTTP_PORT=8787）→ `POST http://127.0.0.1:8787/dev/benchmark/run`（runner 以 `search(question, 50)` 执行，快照落 `{SANGO_BENCHMARK_RESULTS_DIR}`）。
-- **通过口径**：整体 `summary.top5 ≥ 0.608`（基线 60.8%）；**事件类逐类不倒退**——`summary.category` 中「典故 / 事件关系 / 死亡」三类各自 top5 命中数 ≥ 同基线快照（`feat-A015-*.json`）对应类别值；tail / miss 记录留档对比。
+- **通过口径**：整体 `summary.top5 ≥ 0.775`（换代后基线 162/209 = 77.5%，快照 `feat-A015-2026-10-22-0923`）；**事件类逐类不倒退**——`summary.category` 中「典故 / 事件关系 / 死亡」三类各自 top5 命中数 ≥ 同基线对应值（17 / 10 / 30）；tail / miss 记录留档对比。
 - **实测门（2026-09-28 需求变更，取代构造免疫）**：非事件命中请求结构与现状逐字节一致；事件命中请求 top5 由并池重排 / L3 置顶改变，回归以实测为准——整体不倒车 + 事件类逐类不倒退 + bridge on/off 对照（事件问法 top5 证据命中率）。
 - 事件类定点自查（实现轮）：`温酒斩华雄` / `三英战吕布` / `草船借箭` / `空城计` 等 traceId 请求：`eventHit.groups` 非空、`placedChunkIds` 与期望回区间吻合、编排侧注入视图（`[片段N]`）可核对事件组 chunk 在列。
 - **L3 档位定档**：回测对照锚点 ±1 / ±2 / ±3 三档（证据进窗率 + 保证区占用 + 叙事完整性），v1 默认 ±1，定档结果随验收结论登记。
@@ -311,7 +311,7 @@ export interface RetrievalAllusionHitGroup {
 | 需求验收 | 落点 |
 |---|---|
 | 4 事件名桥 + 并池重排 + L3 锚点置顶（L1/L2 整组并池重排自然取窗；L3 位点锚定 ±N 置顶保证区） | §1、§2、§3、§6 |
-| 5 A015 同基线回归不倒车（top5 ≥ 60.8%，事件类逐类不倒退） | §8 |
+| 5 A015 同基线回归不倒车（top5 ≥ 77.5%（162/209），事件类逐类不倒退） | §8 |
 | 6 运行时链路零新增 LLM | §7 |
 | 1 表结构与 verify 校验（chunkIds 存在 / eventName 非空 / aliases 不冲突 / 无重复 / 跨回复核） | §1.2、§1.5（校验口径供 verify-events.mjs 与加载共用） |
 | 长期机制（事件表 norm 版本化 + 语料重建漂移检测） | §1.4、§2.3 |

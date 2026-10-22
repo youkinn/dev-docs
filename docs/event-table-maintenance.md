@@ -25,7 +25,7 @@
    - 缺定位（事件在但 chunk 空）：改 `build-events.mjs` 人工关键词表 `KW_OVERRIDE`；
    - 缺指称（命中但问法不中）：事件行 aliases 加指称词，或检索侧问法骨架（如果期已实现）。
 3. **校验**：重跑 `node test/events/build-events.mjs` + `node test/events/verify-events.mjs`（V1–V7 全过）。
-4. **回归**：`npm run dev` + `POST /dev/benchmark/run`——整体 top5 ≥ 60.8%，事件类（战役 / 典故 / 事件关系 / 死亡）逐类不倒退（需求验收 #5 顺带门）。
+4. **回归**：`npm run dev` + `POST /dev/benchmark/run`——整体 top5 ≥ 当前 A015 基线（162/209 = 77.5%），事件类（典故 / 事件关系 / 死亡）逐类不倒退（需求验收 #5 顺带门）。
 5. **发布**：events.json 更新（meta.normVersion 由脚本重算换代）+ 重启进程生效；`event-coverage-probe` 下月报告口径自动衔接新版本。
 
 ## 缺口清单登记模板（gap.md 长期回流节）
