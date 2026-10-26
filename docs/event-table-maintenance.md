@@ -4,7 +4,7 @@
 
 ## 参与对象
 
-- 表：`mcp-server/sango/data/corpus/events.json`（714 条，normVersion 换代 = 补录发布，重启进程生效）。
+- 表：`mcp-server/sango/data/corpus/events.json`（715 条，normVersion 换代 = 补录发布，重启进程生效）。
 - 构建链：`dev-docs/test/events/build-events.mjs`（初审产物 → 段位定位 → 落表）→ `verify-events.mjs`（V1–V9 硬校验）。
 - 问法池：`mcp-server/sango/data/event-question-pool.json`（真实问法原样进池，**只进池不进表**）。
 
@@ -32,7 +32,7 @@
 
 | 回号 | 事件名 | 来源 | 状态 | 处理 |
 |------|--------|------|------|------|
-| 017 | 阎象登场 | tags 存疑（原文无此词） | 待核 | 核证 tags 源数据后补 |
+| 017 | 阎象登场 | tags 标注核证（换代后正文回 017 含「阎象」） | 已落表 | 无需补录 |
 
 状态流转：待核 → 已核（并入 first-pass.md / KW_OVERRIDE / aliases）→ 已落表；长期不成立者关闭（注明口径取代理由）。
 
