@@ -1,0 +1,3725 @@
+{
+ "description": "A015 主标准集「出场 / 死亡」备选题库：基准表每类保留 30 题，其余题目在此留存。",
+ "source": "mcp-server/sango/data/corpus/tags/event.json",
+ "birth": [
+  {
+   "num": 31,
+   "question": "俞涉首次登场是在哪一回",
+   "answer": "第5回",
+   "evidence": "第5回：“袁术背后转出骁将俞涉曰”",
+   "name": "俞涉",
+   "chunk_id": "sanguo-yanyi:0005:p0016:c01",
+   "how": "人名"
+  },
+  {
+   "num": 32,
+   "question": "潘凤最早出现在哪一回",
+   "answer": "第5回",
+   "evidence": "第5回：“吾有上将潘凤，可斩华雄”",
+   "name": "潘凤",
+   "chunk_id": "sanguo-yanyi:0005:p0016:c01",
+   "how": "人名"
+  },
+  {
+   "num": 33,
+   "question": "方悦初次出场是在哪一回",
+   "answer": "第5回",
+   "evidence": "第5回：“匡视之，乃河内名将方悦”",
+   "name": "方悦",
+   "chunk_id": "sanguo-yanyi:0005:p0020:c01",
+   "how": "人名"
+  },
+  {
+   "num": 34,
+   "question": "武安国首次登场是在哪一回",
+   "answer": "第5回",
+   "evidence": "第5回：“北海太守孔融部将武安国，使铁锤飞马而出”",
+   "name": "武安国",
+   "chunk_id": "sanguo-yanyi:0005:p0021:c01",
+   "how": "人名"
+  },
+  {
+   "num": 35,
+   "question": "穆顺最早出现在哪一回",
+   "answer": "第5回",
+   "evidence": "第5回：“上党太守张杨部将穆顺，出马挺枪迎战，被吕布手起一戟，刺于马下”",
+   "name": "穆顺",
+   "chunk_id": "sanguo-yanyi:0005:p0021:c01",
+   "how": "人名"
+  },
+  {
+   "num": 36,
+   "question": "公孙越初次出场是在哪一回",
+   "answer": "第7回",
+   "evidence": "第7回：“却说公孙瓒知袁绍已据冀州，遣弟公孙越来见绍”",
+   "name": "公孙越",
+   "chunk_id": "sanguo-yanyi:0007:p0003:c01",
+   "how": "人名"
+  },
+  {
+   "num": 37,
+   "question": "赵云首次登场是在哪一回",
+   "answer": "第7回",
+   "evidence": "第7回：“某乃常山真定人也，姓赵名云，字子龙”",
+   "name": "赵云",
+   "chunk_id": "sanguo-yanyi:0007:p0004:c01",
+   "how": "人名"
+  },
+  {
+   "num": 38,
+   "question": "孙权最早出现在哪一回",
+   "answer": "第7回",
+   "evidence": "第7回：“次子名权，字仲谋”",
+   "name": "孙权",
+   "chunk_id": "sanguo-yanyi:0007:p0011:c01",
+   "how": "人名"
+  },
+  {
+   "num": 39,
+   "question": "孙策初次出场是在哪一回",
+   "answer": "第7回",
+   "evidence": "第7回：“皆吴夫人所生：长子名策，字伯符”",
+   "name": "孙策",
+   "chunk_id": "sanguo-yanyi:0007:p0011:c01",
+   "how": "人名"
+  },
+  {
+   "num": 40,
+   "question": "桓阶首次登场是在哪一回",
+   "answer": "第7回",
+   "evidence": "第7回：“军吏桓阶出曰：某与刘表有旧”",
+   "name": "桓阶",
+   "chunk_id": "sanguo-yanyi:0007:p0014:c01",
+   "how": "人名"
+  },
+  {
+   "num": 41,
+   "question": "貂蝉最早出现在哪一回",
+   "answer": "第8回",
+   "evidence": "第8回：“允潜步窥之，乃府中歌伎貂蝉也”",
+   "name": "貂蝉",
+   "chunk_id": "sanguo-yanyi:0008:p0004:c01",
+   "how": "人名"
+  },
+  {
+   "num": 42,
+   "question": "刘范初次出场是在哪一回",
+   "answer": "第10回",
+   "evidence": "第10回：“结连侍中马宇、谏议大夫种邵、左中郎将刘范三人为内应”",
+   "name": "刘范",
+   "chunk_id": "sanguo-yanyi:0010:p0002:c01",
+   "how": "人名"
+  },
+  {
+   "num": 43,
+   "question": "种邵首次登场是在哪一回",
+   "answer": "第10回",
+   "evidence": "第10回：“结连侍中马宇、谏议大夫种邵、左中郎将刘范三人为内应”",
+   "name": "种邵",
+   "chunk_id": "sanguo-yanyi:0010:p0002:c01",
+   "how": "人名"
+  },
+  {
+   "num": 44,
+   "question": "韩遂最早出现在哪一回",
+   "answer": "第10回",
+   "evidence": "第10回：“人报西凉太守马腾、并州刺史韩遂二将引军十馀万，杀奔长安来”",
+   "name": "韩遂",
+   "chunk_id": "sanguo-yanyi:0010:p0002:c01",
+   "how": "人名"
+  },
+  {
+   "num": 45,
+   "question": "马宇初次出场是在哪一回",
+   "answer": "第10回",
+   "evidence": "第10回：“结连侍中马宇、谏议大夫种邵、左中郎将刘范三人为内应”",
+   "name": "马宇",
+   "chunk_id": "sanguo-yanyi:0010:p0002:c01",
+   "how": "人名"
+  },
+  {
+   "num": 46,
+   "question": "马腾首次登场是在哪一回",
+   "answer": "第10回",
+   "evidence": "第10回：“人报西凉太守马腾、并州刺史韩遂二将引军十馀万，杀奔长安来”",
+   "name": "马腾",
+   "chunk_id": "sanguo-yanyi:0010:p0002:c01",
+   "how": "人名"
+  },
+  {
+   "num": 47,
+   "question": "马超最早出现在哪一回",
+   "answer": "第10回",
+   "evidence": "第10回：“字孟起，年方十七岁，英勇无敌”",
+   "name": "马超",
+   "chunk_id": "sanguo-yanyi:0010:p0003:c01",
+   "how": "人名"
+  },
+  {
+   "num": 48,
+   "question": "刘晔初次出场是在哪一回",
+   "answer": "第10回",
+   "evidence": "第10回：“淮南成德人，姓刘，名晔，字子阳”",
+   "name": "刘晔",
+   "chunk_id": "sanguo-yanyi:0010:p0007:c01",
+   "how": "人名"
+  },
+  {
+   "num": 49,
+   "question": "吕虔首次登场是在哪一回",
+   "answer": "第10回",
+   "evidence": "第10回：“一个是武城人，姓吕，名虔，字子恪”",
+   "name": "吕虔",
+   "chunk_id": "sanguo-yanyi:0010:p0007:c01",
+   "how": "人名"
+  },
+  {
+   "num": 50,
+   "question": "毛玠最早出现在哪一回",
+   "answer": "第10回",
+   "evidence": "第10回：“乃陈留平邱人，姓毛，名玠，字孝先”",
+   "name": "毛玠",
+   "chunk_id": "sanguo-yanyi:0010:p0007:c01",
+   "how": "人名"
+  },
+  {
+   "num": 51,
+   "question": "满宠初次出场是在哪一回",
+   "answer": "第10回",
+   "evidence": "第10回：“一个是山阳昌邑人，姓满名宠，字伯宁”",
+   "name": "满宠",
+   "chunk_id": "sanguo-yanyi:0010:p0007:c01",
+   "how": "人名"
+  },
+  {
+   "num": 52,
+   "question": "程昱首次登场是在哪一回",
+   "answer": "第10回",
+   "evidence": "第10回：“彧曰：乃东郡东阿人，姓程，名昱，字仲德”",
+   "name": "程昱",
+   "chunk_id": "sanguo-yanyi:0010:p0007:c01",
+   "how": "人名"
+  },
+  {
+   "num": 53,
+   "question": "荀彧最早出现在哪一回",
+   "answer": "第10回",
+   "evidence": "第10回：“乃颍川颍阴人，姓荀，名彧，字文若，荀绲之子也，旧事袁绍”",
+   "name": "荀彧",
+   "chunk_id": "sanguo-yanyi:0010:p0007:c01",
+   "how": "人名"
+  },
+  {
+   "num": 54,
+   "question": "荀攸初次出场是在哪一回",
+   "answer": "第10回",
+   "evidence": "第10回：“字公达，海内名士，曾拜黄门侍郎，后弃官归乡”",
+   "name": "荀攸",
+   "chunk_id": "sanguo-yanyi:0010:p0007:c01",
+   "how": "人名"
+  },
+  {
+   "num": 55,
+   "question": "郭嘉首次登场是在哪一回",
+   "answer": "第10回",
+   "evidence": "第10回：“名嘉，字奉孝，乃当今贤士”",
+   "name": "郭嘉",
+   "chunk_id": "sanguo-yanyi:0010:p0007:c01",
+   "how": "人名"
+  },
+  {
+   "num": 56,
+   "question": "于禁最早出现在哪一回",
+   "answer": "第10回",
+   "evidence": "第10回：“又有一将引军数百人来投曹操，乃泰山巨平人，姓于，名禁，字文则”",
+   "name": "于禁",
+   "chunk_id": "sanguo-yanyi:0010:p0008:c01",
+   "how": "人名"
+  },
+  {
+   "num": 57,
+   "question": "典韦初次出场是在哪一回",
+   "answer": "第10回",
+   "evidence": "第10回：“操曰：此古之恶来也”",
+   "name": "典韦",
+   "chunk_id": "sanguo-yanyi:0010:p0008:c01",
+   "how": "人名"
+  },
+  {
+   "num": 58,
+   "question": "曹嵩首次登场是在哪一回",
+   "answer": "第10回",
+   "evidence": "第10回：“乃遣泰山太守应劭，往瑯琊郡取父曹嵩”",
+   "name": "曹嵩",
+   "chunk_id": "sanguo-yanyi:0010:p0009:c01",
+   "how": "人名"
+  },
+  {
+   "num": 59,
+   "question": "陶谦最早出现在哪一回",
+   "answer": "第10回",
+   "evidence": "第10回：“太守陶谦，字恭祖，为人温厚纯笃，向欲结纳曹操，正无其由”",
+   "name": "陶谦",
+   "chunk_id": "sanguo-yanyi:0010:p0009:c01",
+   "how": "人名"
+  },
+  {
+   "num": 60,
+   "question": "边让初次出场是在哪一回",
+   "answer": "第10回",
+   "evidence": "第10回：“当有九江太守边让，与陶谦交厚，闻知徐州有难”",
+   "name": "边让",
+   "chunk_id": "sanguo-yanyi:0010:p0011:c01",
+   "how": "人名"
+  },
+  {
+   "num": 61,
+   "question": "糜竺首次登场是在哪一回",
+   "answer": "第11回",
+   "evidence": "第11回：“乃东海朐县人，姓糜名竺，字子仲”",
+   "name": "糜竺",
+   "chunk_id": "sanguo-yanyi:0011:p0001:c01",
+   "how": "人名"
+  },
+  {
+   "num": 62,
+   "question": "陈登最早出现在哪一回",
+   "answer": "第11回",
+   "evidence": "第11回：“乃广陵人，姓陈名登，字元龙”",
+   "name": "陈登",
+   "chunk_id": "sanguo-yanyi:0011:p0001:c01",
+   "how": "人名"
+  },
+  {
+   "num": 63,
+   "question": "孔融初次出场是在哪一回",
+   "answer": "第11回",
+   "evidence": "第11回：“字文举，鲁国曲阜人也，孔子二十世孙”",
+   "name": "孔融",
+   "chunk_id": "sanguo-yanyi:0011:p0002:c01",
+   "how": "人名"
+  },
+  {
+   "num": 64,
+   "question": "太史慈首次登场是在哪一回",
+   "answer": "第11回",
+   "evidence": "第11回：“对曰：某东莱黄县人也，复姓太史名慈，字子义”",
+   "name": "太史慈",
+   "chunk_id": "sanguo-yanyi:0011:p0004:c01",
+   "how": "人名"
+  },
+  {
+   "num": 65,
+   "question": "张辽最早出现在哪一回",
+   "answer": "第11回",
+   "evidence": "第11回：“两边摆开八员健将：第一个雁门马邑人，姓张，名辽，字文远”",
+   "name": "张辽",
+   "chunk_id": "sanguo-yanyi:0011:p0015:c01",
+   "how": "人名"
+  },
+  {
+   "num": 66,
+   "question": "臧霸初次出场是在哪一回",
+   "answer": "第11回",
+   "evidence": "第11回：“第二个泰山华阴人，姓臧，名霸，字宣高”",
+   "name": "臧霸",
+   "chunk_id": "sanguo-yanyi:0011:p0015:c01",
+   "how": "人名"
+  },
+  {
+   "num": 67,
+   "question": "许褚首次登场是在哪一回",
+   "answer": "第12回",
+   "evidence": "第12回：“我乃谯国谯县人也，姓许名褚，字仲康”",
+   "name": "许褚",
+   "chunk_id": "sanguo-yanyi:0012:p0009:c01",
+   "how": "人名"
+  },
+  {
+   "num": 68,
+   "question": "审配最早出现在哪一回",
+   "answer": "第13回",
+   "evidence": "第13回：“谋士审配进曰：吕布，豺虎也，若得兖州”",
+   "name": "审配",
+   "chunk_id": "sanguo-yanyi:0013:p0002:c01",
+   "how": "人名"
+  },
+  {
+   "num": 69,
+   "question": "杨奉初次出场是在哪一回",
+   "answer": "第13回",
+   "evidence": "第13回：“骑都尉杨奉谏曰：今郭汜未除，而杀天使，则汜兴兵有名”",
+   "name": "杨奉",
+   "chunk_id": "sanguo-yanyi:0013:p0010:c02",
+   "how": "人名"
+  },
+  {
+   "num": 70,
+   "question": "宋果首次登场是在哪一回",
+   "answer": "第13回",
+   "evidence": "第13回：“谓宋果曰：吾等出生入死，身冒矢石”",
+   "name": "宋果",
+   "chunk_id": "sanguo-yanyi:0013:p0011:c01",
+   "how": "人名"
+  },
+  {
+   "num": 71,
+   "question": "徐晃最早出现在哪一回",
+   "answer": "第13回",
+   "evidence": "第13回：“徐晃当先出马”",
+   "name": "徐晃",
+   "chunk_id": "sanguo-yanyi:0013:p0013:c01",
+   "how": "人名"
+  },
+  {
+   "num": 72,
+   "question": "董承初次出场是在哪一回",
+   "answer": "第13回",
+   "evidence": "第13回：“那人来见天子，乃国戚董承也”",
+   "name": "董承",
+   "chunk_id": "sanguo-yanyi:0013:p0013:c01",
+   "how": "人名"
+  },
+  {
+   "num": 73,
+   "question": "董昭首次登场是在哪一回",
+   "answer": "第14回",
+   "evidence": "第14回：“董昭曰：此乃李傕旧将杨奉，与白波帅韩暹，因明公来此”",
+   "name": "董昭",
+   "chunk_id": "sanguo-yanyi:0014:p0007:c01",
+   "how": "人名"
+  },
+  {
+   "num": 74,
+   "question": "纪灵最早出现在哪一回",
+   "answer": "第14回",
+   "evidence": "第14回：“乃使上将纪灵起兵十万，杀奔徐州”",
+   "name": "纪灵",
+   "chunk_id": "sanguo-yanyi:0014:p0017:c01",
+   "how": "人名"
+  },
+  {
+   "num": 75,
+   "question": "曹豹初次出场是在哪一回",
+   "answer": "第14回",
+   "evidence": "第14回：“城上有曹豹军报知曹豹，豹上城看之”",
+   "name": "曹豹",
+   "chunk_id": "sanguo-yanyi:0014:p0019:c01",
+   "how": "人名"
+  },
+  {
+   "num": 76,
+   "question": "吕范首次登场是在哪一回",
+   "answer": "第15回",
+   "evidence": "第15回：“吕范曰：只恐袁公路不肯借兵”",
+   "name": "吕范",
+   "chunk_id": "sanguo-yanyi:0015:p0005:c01",
+   "how": "人名"
+  },
+  {
+   "num": 77,
+   "question": "周瑜最早出现在哪一回",
+   "answer": "第15回",
+   "evidence": "第15回：“乃庐江舒城人，姓周，名瑜，字公瑾”",
+   "name": "周瑜",
+   "chunk_id": "sanguo-yanyi:0015:p0006:c01",
+   "how": "人名"
+  },
+  {
+   "num": 78,
+   "question": "张昭初次出场是在哪一回",
+   "answer": "第15回",
+   "evidence": "第15回：“一人乃彭城张昭，字子布”",
+   "name": "张昭",
+   "chunk_id": "sanguo-yanyi:0015:p0006:c01",
+   "how": "人名"
+  },
+  {
+   "num": 79,
+   "question": "张纮首次登场是在哪一回",
+   "answer": "第15回",
+   "evidence": "第15回：“一人乃广陵张纮，字子纲”",
+   "name": "张纮",
+   "chunk_id": "sanguo-yanyi:0015:p0006:c01",
+   "how": "人名"
+  },
+  {
+   "num": 80,
+   "question": "朱治最早出现在哪一回",
+   "answer": "第15回",
+   "evidence": "第15回：“遂引军马，带领朱治、吕范，旧将程普、黄盖、韩当等”",
+   "name": "朱治",
+   "chunk_id": "sanguo-yanyi:0015:p0006:c01",
+   "how": "人名"
+  },
+  {
+   "num": 81,
+   "question": "刘繇初次出场是在哪一回",
+   "answer": "第15回",
+   "evidence": "第15回：“却说刘繇字正礼，东莱牟平人也，亦是汉室宗亲，太尉刘宠之侄”",
+   "name": "刘繇",
+   "chunk_id": "sanguo-yanyi:0015:p0007:c01",
+   "how": "人名"
+  },
+  {
+   "num": 82,
+   "question": "周泰首次登场是在哪一回",
+   "answer": "第15回",
+   "evidence": "第15回：“引程普、黄盖、韩当、蒋钦、周泰等共十三骑，出寨上岭”",
+   "name": "周泰",
+   "chunk_id": "sanguo-yanyi:0015:p0008:c01",
+   "how": "人名"
+  },
+  {
+   "num": 83,
+   "question": "蒋钦最早出现在哪一回",
+   "answer": "第15回",
+   "evidence": "第15回：“引程普、黄盖、韩当、蒋钦、周泰等共十三骑，出寨上岭”",
+   "name": "蒋钦",
+   "chunk_id": "sanguo-yanyi:0015:p0008:c01",
+   "how": "人名"
+  },
+  {
+   "num": 84,
+   "question": "陈武初次出场是在哪一回",
+   "answer": "第15回",
+   "evidence": "第15回：“却说孙策又得陈武为辅，其人身长七尺，面黄睛赤”",
+   "name": "陈武",
+   "chunk_id": "sanguo-yanyi:0015:p0011:c01",
+   "how": "人名"
+  },
+  {
+   "num": 85,
+   "question": "严白虎首次登场是在哪一回",
+   "answer": "第15回",
+   "evidence": "第15回：“时有严白虎，自称东吴德王，据吴郡”",
+   "name": "严白虎",
+   "chunk_id": "sanguo-yanyi:0015:p0015:c01",
+   "how": "人名"
+  },
+  {
+   "num": 86,
+   "question": "王朗最早出现在哪一回",
+   "answer": "第15回",
+   "evidence": "第15回：“会稽太守王朗，欲引兵救白虎”",
+   "name": "王朗",
+   "chunk_id": "sanguo-yanyi:0015:p0017:c01",
+   "how": "人名"
+  },
+  {
+   "num": 87,
+   "question": "华佗初次出场是在哪一回",
+   "answer": "第15回",
+   "evidence": "第15回：“此人乃沛国谯郡人，姓华，名佗，字元化”",
+   "name": "华佗",
+   "chunk_id": "sanguo-yanyi:0015:p0019:c01",
+   "how": "人名"
+  },
+  {
+   "num": 88,
+   "question": "董袭首次登场是在哪一回",
+   "answer": "第15回",
+   "evidence": "第15回：“帐下董袭曰：某曾与海寇相持，身遭数枪”",
+   "name": "董袭",
+   "chunk_id": "sanguo-yanyi:0015:p0019:c01",
+   "how": "人名"
+  },
+  {
+   "num": 89,
+   "question": "虞翻最早出现在哪一回",
+   "answer": "第15回",
+   "evidence": "第15回：“某曾与海寇相持，身遭数枪，得会稽一个贤郡吏虞翻荐一医者”",
+   "name": "虞翻",
+   "chunk_id": "sanguo-yanyi:0015:p0019:c01",
+   "how": "人名"
+  },
+  {
+   "num": 90,
+   "question": "杨大将初次出场是在哪一回",
+   "answer": "第15回",
+   "evidence": "第15回：“急聚长史杨大将，都督张勋、纪灵、桥蕤”",
+   "name": "杨大将",
+   "chunk_id": "sanguo-yanyi:0015:p0020:c01",
+   "how": "人名"
+  },
+  {
+   "num": 91,
+   "question": "韩胤首次登场是在哪一回",
+   "answer": "第16回",
+   "evidence": "第16回：“即日遣韩胤为媒，赍礼物往徐州求亲”",
+   "name": "韩胤",
+   "chunk_id": "sanguo-yanyi:0016:p0008:c01",
+   "how": "人名"
+  },
+  {
+   "num": 92,
+   "question": "张绣最早出现在哪一回",
+   "answer": "第16回",
+   "evidence": "第16回：“济侄张绣统其众，用贾诩为谋士，结连刘表，屯兵宛城”",
+   "name": "张绣",
+   "chunk_id": "sanguo-yanyi:0016:p0013:c01",
+   "how": "人名"
+  },
+  {
+   "num": 93,
+   "question": "邹氏初次出场是在哪一回",
+   "answer": "第16回",
+   "evidence": "第16回：“妇答曰：妾乃张济之妻邹氏也”",
+   "name": "邹氏",
+   "chunk_id": "sanguo-yanyi:0016:p0014:c01",
+   "how": "人名"
+  },
+  {
+   "num": 94,
+   "question": "王则首次登场是在哪一回",
+   "answer": "第16回",
+   "evidence": "第16回：“且说王则赍诏至徐州，布迎接入府，开读诏书——封布为平东将军”",
+   "name": "王则",
+   "chunk_id": "sanguo-yanyi:0016:p0018:c01",
+   "how": "人名"
+  },
+  {
+   "num": 95,
+   "question": "阎象最早出现在哪一回",
+   "answer": "第17回",
+   "evidence": "第17回：“主簿阎象曰：不可”",
+   "name": "阎象",
+   "chunk_id": "sanguo-yanyi:0017:p0001:c01",
+   "how": "人名"
+  },
+  {
+   "num": 96,
+   "question": "李通初次出场是在哪一回",
+   "answer": "第18回",
+   "evidence": "第18回：“封之为建功侯，守汝南西界，以防表、绣，李通拜谢而去”",
+   "name": "李通",
+   "chunk_id": "sanguo-yanyi:0018:p0005:c01",
+   "how": "人名"
+  },
+  {
+   "num": 97,
+   "question": "刘安首次登场是在哪一回",
+   "answer": "第19回",
+   "evidence": "第19回：“到一家投宿，其家一少年出拜，问其姓名，乃猎户刘安也”",
+   "name": "刘安",
+   "chunk_id": "sanguo-yanyi:0019:p0002:c01",
+   "how": "人名"
+  },
+  {
+   "num": 98,
+   "question": "郑玄最早出现在哪一回",
+   "answer": "第22回",
+   "evidence": "第22回：“融叹曰：得我学之秘者，惟郑玄一人耳”",
+   "name": "郑玄",
+   "chunk_id": "sanguo-yanyi:0022:p0002:c01",
+   "how": "人名"
+  },
+  {
+   "num": 99,
+   "question": "沮授初次出场是在哪一回",
+   "answer": "第22回",
+   "evidence": "第22回：“谋士沮授曰：制胜之策”",
+   "name": "沮授",
+   "chunk_id": "sanguo-yanyi:0022:p0003:c01",
+   "how": "人名"
+  },
+  {
+   "num": 100,
+   "question": "田丰首次登场是在哪一回",
+   "answer": "第22回",
+   "evidence": "第22回：“谋士田丰曰：兵起连年，百姓疲弊，仓廪无积”",
+   "name": "田丰",
+   "chunk_id": "sanguo-yanyi:0022:p0003:c01",
+   "how": "人名"
+  },
+  {
+   "num": 101,
+   "question": "郭图最早出现在哪一回",
+   "answer": "第22回",
+   "evidence": "第22回：“谋士郭图曰：非也”",
+   "name": "郭图",
+   "chunk_id": "sanguo-yanyi:0022:p0003:c01",
+   "how": "人名"
+  },
+  {
+   "num": 102,
+   "question": "荀谌初次出场是在哪一回",
+   "answer": "第22回",
+   "evidence": "第22回：“忽许攸、荀谌自外而入”",
+   "name": "荀谌",
+   "chunk_id": "sanguo-yanyi:0022:p0003:c02",
+   "how": "人名"
+  },
+  {
+   "num": 103,
+   "question": "祢衡首次登场是在哪一回",
+   "answer": "第23回",
+   "evidence": "第23回：“年二十四，字正平，淑质贞亮”",
+   "name": "祢衡",
+   "chunk_id": "sanguo-yanyi:0023:p0003:c01",
+   "how": "人名"
+  },
+  {
+   "num": 104,
+   "question": "吉平最早出现在哪一回",
+   "answer": "第23回",
+   "evidence": "第23回：“吉平辞去，承留住，二人共饮”",
+   "name": "吉平",
+   "chunk_id": "sanguo-yanyi:0023:p0014:c01",
+   "how": "人名"
+  },
+  {
+   "num": 105,
+   "question": "廖化初次出场是在哪一回",
+   "answer": "第27回",
+   "evidence": "第27回：“吾本襄阳人，姓廖，名化，字元俭”",
+   "name": "廖化",
+   "chunk_id": "sanguo-yanyi:0027:p0003:c01",
+   "how": "人名"
+  },
+  {
+   "num": 106,
+   "question": "周仓首次登场是在哪一回",
+   "answer": "第28回",
+   "evidence": "第28回：“元绍曰：此必周仓也”",
+   "name": "周仓",
+   "chunk_id": "sanguo-yanyi:0028:p0004:c01",
+   "how": "人名"
+  },
+  {
+   "num": 107,
+   "question": "关平最早出现在哪一回",
+   "answer": "第28回",
+   "evidence": "第28回：“次子关平，学武”",
+   "name": "关平",
+   "chunk_id": "sanguo-yanyi:0028:p0012:c01",
+   "how": "人名"
+  },
+  {
+   "num": 108,
+   "question": "许贡初次出场是在哪一回",
+   "answer": "第29回",
+   "evidence": "第29回：“大叫曰：我等是许贡家客”",
+   "name": "许贡",
+   "chunk_id": "sanguo-yanyi:0029:p0004:c01",
+   "how": "人名"
+  },
+  {
+   "num": 109,
+   "question": "于吉首次登场是在哪一回",
+   "answer": "第29回",
+   "evidence": "第29回：“左右曰：有于神仙者，今从楼下过”",
+   "name": "于吉",
+   "chunk_id": "sanguo-yanyi:0029:p0007:c01",
+   "how": "人名"
+  },
+  {
+   "num": 110,
+   "question": "鲁肃最早出现在哪一回",
+   "answer": "第29回",
+   "evidence": "第29回：“瑜曰：姓鲁，名肃，字子敬”",
+   "name": "鲁肃",
+   "chunk_id": "sanguo-yanyi:0029:p0015:c01",
+   "how": "人名"
+  },
+  {
+   "num": 111,
+   "question": "张郃初次出场是在哪一回",
+   "answer": "第30回",
+   "evidence": "第30回：“左右排列着张郃、高览、韩猛、淳于琼等诸将，旌旗节钺”",
+   "name": "张郃",
+   "chunk_id": "sanguo-yanyi:0030:p0002:c01",
+   "how": "人名"
+  },
+  {
+   "num": 112,
+   "question": "许攸首次登场是在哪一回",
+   "answer": "第30回",
+   "evidence": "第30回：“行不上三十里，被袁军捉住，缚见谋士许攸”",
+   "name": "许攸",
+   "chunk_id": "sanguo-yanyi:0030:p0008:c01",
+   "how": "人名"
+  },
+  {
+   "num": 113,
+   "question": "司马徽最早出现在哪一回",
+   "answer": "第35回",
+   "evidence": "第35回：“吾师复姓司马，名徽，字德操”",
+   "name": "司马徽",
+   "chunk_id": "sanguo-yanyi:0035:p0002:c01",
+   "how": "人名"
+  },
+  {
+   "num": 114,
+   "question": "刘琦初次出场是在哪一回",
+   "answer": "第35回",
+   "evidence": "第35回：“使长子刘琦同孙乾至玄德处请罪”",
+   "name": "刘琦",
+   "chunk_id": "sanguo-yanyi:0035:p0006:c01",
+   "how": "人名"
+  },
+  {
+   "num": 115,
+   "question": "徐庶首次登场是在哪一回",
+   "answer": "第35回",
+   "evidence": "第35回：“单福曰：适使君所乘之马”",
+   "name": "徐庶",
+   "chunk_id": "sanguo-yanyi:0035:p0009:c01",
+   "how": "人名"
+  },
+  {
+   "num": 116,
+   "question": "刘封最早出现在哪一回",
+   "answer": "第36回",
+   "evidence": "第36回：“遂使寇封拜玄德为父，改名刘封”",
+   "name": "刘封",
+   "chunk_id": "sanguo-yanyi:0036:p0005:c01",
+   "how": "人名"
+  },
+  {
+   "num": 117,
+   "question": "诸葛亮初次出场是在哪一回",
+   "answer": "第38回",
+   "evidence": "第38回：“又立了一个时辰，孔明才醒，口吟诗曰”",
+   "name": "诸葛亮",
+   "chunk_id": "sanguo-yanyi:0038:p0002:c01",
+   "how": "人名"
+  },
+  {
+   "num": 118,
+   "question": "陆逊首次登场是在哪一回",
+   "answer": "第38回",
+   "evidence": "第38回：“吴郡陆逊字伯言，琅琊徐盛字文向，东郡潘璋字文珪”",
+   "name": "陆逊",
+   "chunk_id": "sanguo-yanyi:0038:p0011:c01",
+   "how": "人名"
+  },
+  {
+   "num": 119,
+   "question": "徐氏最早出现在哪一回",
+   "answer": "第38回",
+   "evidence": "第38回：“徐氏先召孙、傅二人，伏于密室帏幕之中”",
+   "name": "徐氏",
+   "chunk_id": "sanguo-yanyi:0038:p0014:c02",
+   "how": "人名"
+  },
+  {
+   "num": 120,
+   "question": "甘宁初次出场是在哪一回",
+   "answer": "第38回",
+   "evidence": "第38回：“告权曰：某把龙湫水口，忽有黄祖部将甘宁来降”",
+   "name": "甘宁",
+   "chunk_id": "sanguo-yanyi:0038:p0017:c01",
+   "how": "人名"
+  },
+  {
+   "num": 121,
+   "question": "司马懿首次登场是在哪一回",
+   "answer": "第39回",
+   "evidence": "第39回：“自以丞相兼之，以毛玠为东曹掾，崔琰为西曹掾，司马懿为文学掾”",
+   "name": "司马懿",
+   "chunk_id": "sanguo-yanyi:0039:p0006:c01",
+   "how": "人名"
+  },
+  {
+   "num": 122,
+   "question": "夏侯兰最早出现在哪一回",
+   "answer": "第39回",
+   "evidence": "第39回：“于禁、李典、夏侯兰、韩浩为副将，领兵十万，直抵博望城”",
+   "name": "夏侯兰",
+   "chunk_id": "sanguo-yanyi:0039:p0006:c01",
+   "how": "人名"
+  },
+  {
+   "num": 123,
+   "question": "韩浩初次出场是在哪一回",
+   "answer": "第39回",
+   "evidence": "第39回：“于禁、李典、夏侯兰、韩浩为副将，领兵十万，直抵博望城”",
+   "name": "韩浩",
+   "chunk_id": "sanguo-yanyi:0039:p0006:c01",
+   "how": "人名"
+  },
+  {
+   "num": 124,
+   "question": "魏延首次登场是在哪一回",
+   "answer": "第41回",
+   "evidence": "第41回：“身长八尺，面如重枣，乃义阳人也，姓魏，名延，字文长”",
+   "name": "魏延",
+   "chunk_id": "sanguo-yanyi:0041:p0004:c01",
+   "how": "人名"
+  },
+  {
+   "num": 125,
+   "question": "庞统最早出现在哪一回",
+   "answer": "第47回",
+   "evidence": "第47回：“答曰：姓庞，名统，字士元”",
+   "name": "庞统",
+   "chunk_id": "sanguo-yanyi:0047:p0009:c01",
+   "how": "人名"
+  },
+  {
+   "num": 126,
+   "question": "马良初次出场是在哪一回",
+   "answer": "第52回",
+   "evidence": "第52回：“眉间有白毛，名良，字季常”",
+   "name": "马良",
+   "chunk_id": "sanguo-yanyi:0052:p0004:c01",
+   "how": "人名"
+  },
+  {
+   "num": 127,
+   "question": "黄忠首次登场是在哪一回",
+   "answer": "第53回",
+   "evidence": "第53回：“姓黄，名忠，字汉升，是刘表帐下中郎将，与刘表之侄刘磐共守长沙”",
+   "name": "黄忠",
+   "chunk_id": "sanguo-yanyi:0053:p0002:c01",
+   "how": "人名"
+  },
+  {
+   "num": 128,
+   "question": "马岱最早出现在哪一回",
+   "answer": "第57回",
+   "evidence": "第57回：“马腾兄子马岱谏曰：曹操心怀叵测，叔父若往”",
+   "name": "马岱",
+   "chunk_id": "sanguo-yanyi:0057:p0022:c01",
+   "how": "人名"
+  },
+  {
+   "num": 129,
+   "question": "庞德初次出场是在哪一回",
+   "answer": "第58回",
+   "evidence": "第58回：“乃帐前心腹校尉，姓庞，名德，字令明”",
+   "name": "庞德",
+   "chunk_id": "sanguo-yanyi:0058:p0003:c01",
+   "how": "人名"
+  },
+  {
+   "num": 130,
+   "question": "张松首次登场是在哪一回",
+   "answer": "第60回",
+   "evidence": "第60回：“乃益州别驾，姓张，名松，字永年”",
+   "name": "张松",
+   "chunk_id": "sanguo-yanyi:0060:p0001:c01",
+   "how": "人名"
+  },
+  {
+   "num": 131,
+   "question": "杨修最早出现在哪一回",
+   "answer": "第60回",
+   "evidence": "第60回：“乃太尉杨彪之子杨修，字德祖”",
+   "name": "杨修",
+   "chunk_id": "sanguo-yanyi:0060:p0003:c01",
+   "how": "人名"
+  },
+  {
+   "num": 132,
+   "question": "孟达初次出场是在哪一回",
+   "answer": "第60回",
+   "evidence": "第60回：“松有心腹契友二人法正、孟达”",
+   "name": "孟达",
+   "chunk_id": "sanguo-yanyi:0060:p0010:c02",
+   "how": "人名"
+  },
+  {
+   "num": 133,
+   "question": "法正首次登场是在哪一回",
+   "answer": "第60回",
+   "evidence": "第60回：“松有心腹契友二人法正、孟达”",
+   "name": "法正",
+   "chunk_id": "sanguo-yanyi:0060:p0010:c02",
+   "how": "人名"
+  },
+  {
+   "num": 134,
+   "question": "黄权最早出现在哪一回",
+   "answer": "第60回",
+   "evidence": "第60回：“视其人，乃西阆中巴人，姓黄，名权，字公衡”",
+   "name": "黄权",
+   "chunk_id": "sanguo-yanyi:0060:p0012:c01",
+   "how": "人名"
+  },
+  {
+   "num": 135,
+   "question": "王累初次出场是在哪一回",
+   "answer": "第60回",
+   "evidence": "第60回：“璋视之，乃帐前从事官王累也”",
+   "name": "王累",
+   "chunk_id": "sanguo-yanyi:0060:p0012:c02",
+   "how": "人名"
+  },
+  {
+   "num": 136,
+   "question": "严颜首次登场是在哪一回",
+   "answer": "第63回",
+   "evidence": "第63回：“却说严颜在巴郡，闻刘璋差法正请玄德入川，拊心而叹曰”",
+   "name": "严颜",
+   "chunk_id": "sanguo-yanyi:0063:p0018:c01",
+   "how": "人名"
+  },
+  {
+   "num": 137,
+   "question": "左慈最早出现在哪一回",
+   "answer": "第68回",
+   "evidence": "第68回：“贫道乃魏王乡中故人，姓左，名慈，字元放”",
+   "name": "左慈",
+   "chunk_id": "sanguo-yanyi:0068:p0015:c01",
+   "how": "人名"
+  },
+  {
+   "num": 138,
+   "question": "管辂初次出场是在哪一回",
+   "answer": "第69回",
+   "evidence": "第69回：“芝曰：管辂字公明，平原人也”",
+   "name": "管辂",
+   "chunk_id": "sanguo-yanyi:0069:p0003:c02",
+   "how": "人名"
+  },
+  {
+   "num": 139,
+   "question": "姜维首次登场是在哪一回",
+   "answer": "第92回",
+   "evidence": "第92回：“乃天水冀人也，姓姜名维，字伯约”",
+   "name": "姜维",
+   "chunk_id": "sanguo-yanyi:0092:p0012:c01",
+   "how": "人名"
+  },
+  {
+   "num": 140,
+   "question": "邓艾最早出现在哪一回",
+   "answer": "第107回",
+   "evidence": "第107回：“姓邓，名艾，字士载，幼年失父，素有大志，但见高山大泽，辄窥度指画”",
+   "name": "邓艾",
+   "chunk_id": "sanguo-yanyi:0107:p0016:c01",
+   "how": "人名"
+  },
+  {
+   "num": 141,
+   "question": "钟会初次出场是在哪一回",
+   "answer": "第107回",
+   "evidence": "第107回：“乃颍川长社人，姓钟，名会，字士季，太傅钟繇之子”",
+   "name": "钟会",
+   "chunk_id": "sanguo-yanyi:0107:p0016:c01",
+   "how": "人名"
+  }
+ ],
+ "death": [
+  {
+   "num": 31,
+   "question": "伍琼死在哪一回",
+   "answer": "第6回",
+   "evidence": "第6回：“只见二人望车而揖，视之，乃尚书周毖、城门校尉伍琼也”",
+   "name": "伍琼",
+   "chunk_id": "sanguo-yanyi:0006:p0003:c02",
+   "how": "人名"
+  },
+  {
+   "num": 32,
+   "question": "周毖在哪一回身亡",
+   "answer": "第6回",
+   "evidence": "第6回：“只见二人望车而揖，视之，乃尚书周毖、城门校尉伍琼也”",
+   "name": "周毖",
+   "chunk_id": "sanguo-yanyi:0006:p0003:c02",
+   "how": "人名"
+  },
+  {
+   "num": 33,
+   "question": "徐荣之死见于哪一回",
+   "answer": "第6回",
+   "evidence": "第6回：“惇刺徐荣于马下，杀散馀兵”",
+   "name": "徐荣",
+   "chunk_id": "sanguo-yanyi:0006:p0007:c03",
+   "how": "人名+死词"
+  },
+  {
+   "num": 34,
+   "question": "公孙越死在哪一回",
+   "answer": "第7回",
+   "evidence": "第7回：“乱箭射死公孙越”",
+   "name": "公孙越",
+   "chunk_id": "sanguo-yanyi:0007:p0003:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 35,
+   "question": "严纲在哪一回身亡",
+   "answer": "第7回",
+   "evidence": "第7回：“不知心腹，令其另领一军在后，遣大将严纲为先锋”",
+   "name": "严纲",
+   "chunk_id": "sanguo-yanyi:0007:p0005:c01",
+   "how": "人名"
+  },
+  {
+   "num": 36,
+   "question": "麴义之死见于哪一回",
+   "answer": "第7回",
+   "evidence": "第7回：“被麹义拍马舞刀，斩于马下”",
+   "name": "麴义",
+   "chunk_id": "sanguo-yanyi:0007:p0005:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 37,
+   "question": "张虎死在哪一回",
+   "answer": "第7回",
+   "evidence": "第7回：“一个是江夏张虎，一个是襄阳陈生”",
+   "name": "张虎",
+   "chunk_id": "sanguo-yanyi:0007:p0011:c02",
+   "how": "人名"
+  },
+  {
+   "num": 38,
+   "question": "陈生在哪一回身亡",
+   "answer": "第7回",
+   "evidence": "第7回：“一个是江夏张虎，一个是襄阳陈生”",
+   "name": "陈生",
+   "chunk_id": "sanguo-yanyi:0007:p0011:c02",
+   "how": "人名"
+  },
+  {
+   "num": 39,
+   "question": "吕公之死见于哪一回",
+   "answer": "第7回",
+   "evidence": "第7回：“问谁敢突围而出，健将吕公应声愿往”",
+   "name": "吕公",
+   "chunk_id": "sanguo-yanyi:0007:p0013:c01",
+   "how": "人名"
+  },
+  {
+   "num": 40,
+   "question": "孙坚死在哪一回",
+   "answer": "第7回",
+   "evidence": "第7回：“却说孙坚分兵四面，围住襄阳攻打”",
+   "name": "孙坚",
+   "chunk_id": "sanguo-yanyi:0007:p0013:c01",
+   "how": "人名"
+  },
+  {
+   "num": 41,
+   "question": "张温在哪一回身亡",
+   "answer": "第8回",
+   "evidence": "第8回：“张温结连袁术，欲图害我，因使人寄书来，错下在吾儿奉先处”",
+   "name": "张温",
+   "chunk_id": "sanguo-yanyi:0008:p0003:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 42,
+   "question": "董卓之死见于哪一回",
+   "answer": "第9回",
+   "evidence": "第9回：“董卓摆列仪从入朝，忽见一道人，青袍白巾，手执长竿”",
+   "name": "董卓",
+   "chunk_id": "sanguo-yanyi:0009:p0010:c01",
+   "how": "人名"
+  },
+  {
+   "num": 43,
+   "question": "李儒死在哪一回",
+   "answer": "第9回",
+   "evidence": "第9回：“却说当下吕布大呼曰：助卓为虐者，皆李儒也”",
+   "name": "李儒",
+   "chunk_id": "sanguo-yanyi:0009:p0012:c01",
+   "how": "人名"
+  },
+  {
+   "num": 44,
+   "question": "董旻在哪一回身亡",
+   "answer": "第9回",
+   "evidence": "第9回：“卓弟董旻、侄董璜皆斩首号令”",
+   "name": "董旻",
+   "chunk_id": "sanguo-yanyi:0009:p0013:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 45,
+   "question": "董璜之死见于哪一回",
+   "answer": "第9回",
+   "evidence": "第9回：“卓弟董旻、侄董璜皆斩首号令”",
+   "name": "董璜",
+   "chunk_id": "sanguo-yanyi:0009:p0013:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 46,
+   "question": "蔡邕死在哪一回",
+   "answer": "第9回",
+   "evidence": "第9回：“当下王允不听马日磾之言，命将蔡邕下狱中缢死”",
+   "name": "蔡邕",
+   "chunk_id": "sanguo-yanyi:0009:p0014:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 47,
+   "question": "李肃在哪一回身亡",
+   "answer": "第9回",
+   "evidence": "第9回：“遂斩李肃，悬头军门”",
+   "name": "李肃",
+   "chunk_id": "sanguo-yanyi:0009:p0017:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 48,
+   "question": "牛辅之死见于哪一回",
+   "answer": "第9回",
+   "evidence": "第9回：“肃当先迎战，正与牛辅相遇”",
+   "name": "牛辅",
+   "chunk_id": "sanguo-yanyi:0009:p0017:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 49,
+   "question": "胡赤儿死在哪一回",
+   "answer": "第9回",
+   "evidence": "第9回：“从人出首：胡赤儿谋杀牛辅”",
+   "name": "胡赤儿",
+   "chunk_id": "sanguo-yanyi:0009:p0017:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 50,
+   "question": "王允在哪一回身亡",
+   "answer": "第9回",
+   "evidence": "第9回：“董太师乃陛下社稷之臣，无端被王允谋杀，臣等特来报仇”",
+   "name": "王允",
+   "chunk_id": "sanguo-yanyi:0009:p0020:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 51,
+   "question": "王方之死见于哪一回",
+   "answer": "第10回",
+   "evidence": "第10回：“李蒙见王方刺死，一骑马从马超背后赶来”",
+   "name": "王方",
+   "chunk_id": "sanguo-yanyi:0010:p0003:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 52,
+   "question": "李蒙死在哪一回",
+   "answer": "第10回",
+   "evidence": "第10回：“李傕、郭汜听知李蒙、王方皆被马超杀了，方信贾诩有先见之明，重用其计”",
+   "name": "李蒙",
+   "chunk_id": "sanguo-yanyi:0010:p0004:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 53,
+   "question": "樊稠在哪一回身亡",
+   "answer": "第10回",
+   "evidence": "第10回：“请张济、樊稠庆功，就席间擒稠斩之”",
+   "name": "樊稠",
+   "chunk_id": "sanguo-yanyi:0010:p0005:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 54,
+   "question": "曹嵩之死见于哪一回",
+   "answer": "第10回",
+   "evidence": "第10回：“只就今夜三更，大家砍将入去，把曹嵩一家杀了，取了财物”",
+   "name": "曹嵩",
+   "chunk_id": "sanguo-yanyi:0010:p0009:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 55,
+   "question": "曹德死在哪一回",
+   "answer": "第10回",
+   "evidence": "第10回：“曹德提剑出看，就被搠死”",
+   "name": "曹德",
+   "chunk_id": "sanguo-yanyi:0010:p0009:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 56,
+   "question": "边让在哪一回身亡",
+   "answer": "第10回",
+   "evidence": "第10回：“当有九江太守边让，与陶谦交厚，闻知徐州有难”",
+   "name": "边让",
+   "chunk_id": "sanguo-yanyi:0010:p0011:c01",
+   "how": "人名"
+  },
+  {
+   "num": 57,
+   "question": "管亥之死见于哪一回",
+   "answer": "第11回",
+   "evidence": "第11回：“今管亥暴乱，北海被围，孤穷无告”",
+   "name": "管亥",
+   "chunk_id": "sanguo-yanyi:0011:p0005:c01",
+   "how": "人名"
+  },
+  {
+   "num": 58,
+   "question": "陶谦死在哪一回",
+   "answer": "第12回",
+   "evidence": "第12回：“却说陶谦在徐州，时年已六十三岁，忽然染病，看看沉重”",
+   "name": "陶谦",
+   "chunk_id": "sanguo-yanyi:0012:p0006:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 59,
+   "question": "成廉在哪一回身亡",
+   "answer": "第12回",
+   "evidence": "第12回：“从将成廉，被乐进一箭射死”",
+   "name": "成廉",
+   "chunk_id": "sanguo-yanyi:0012:p0012:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 60,
+   "question": "宋果之死见于哪一回",
+   "answer": "第13回",
+   "evidence": "第13回：“谓宋果曰：吾等出生入死，身冒矢石”",
+   "name": "宋果",
+   "chunk_id": "sanguo-yanyi:0013:p0011:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 61,
+   "question": "崔勇死在哪一回",
+   "answer": "第13回",
+   "evidence": "第13回：“两马相交，只一合，斩崔勇于马下”",
+   "name": "崔勇",
+   "chunk_id": "sanguo-yanyi:0013:p0012:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 62,
+   "question": "李乐在哪一回身亡",
+   "answer": "第14回",
+   "evidence": "第14回：“却说李乐引军诈称李傕、郭汜，来追车驾”",
+   "name": "李乐",
+   "chunk_id": "sanguo-yanyi:0014:p0001:c01",
+   "how": "人名"
+  },
+  {
+   "num": 63,
+   "question": "曹豹之死见于哪一回",
+   "answer": "第14回",
+   "evidence": "第14回：“城上有曹豹军报知曹豹，豹上城看之”",
+   "name": "曹豹",
+   "chunk_id": "sanguo-yanyi:0014:p0019:c01",
+   "how": "人名"
+  },
+  {
+   "num": 64,
+   "question": "张英死在哪一回",
+   "answer": "第15回",
+   "evidence": "第15回：“连夜起城内之军，与骁将张英、陈横杀出城来追之”",
+   "name": "张英",
+   "chunk_id": "sanguo-yanyi:0015:p0012:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 65,
+   "question": "陈横在哪一回身亡",
+   "answer": "第15回",
+   "evidence": "第15回：“连夜起城内之军，与骁将张英、陈横杀出城来追之”",
+   "name": "陈横",
+   "chunk_id": "sanguo-yanyi:0015:p0012:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 66,
+   "question": "严舆之死见于哪一回",
+   "answer": "第15回",
+   "evidence": "第15回：“命斩严舆”",
+   "name": "严舆",
+   "chunk_id": "sanguo-yanyi:0015:p0015:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 67,
+   "question": "周听死在哪一回",
+   "answer": "第15回",
+   "evidence": "第15回：“周昕舞刀来迎，被策一枪刺死”",
+   "name": "周听",
+   "chunk_id": "sanguo-yanyi:0015:p0018:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 68,
+   "question": "典韦在哪一回身亡",
+   "answer": "第16回",
+   "evidence": "第16回：“因畏典韦勇猛，急切难近，乃与偏将胡车儿商议”",
+   "name": "典韦",
+   "chunk_id": "sanguo-yanyi:0016:p0015:c01",
+   "how": "人名"
+  },
+  {
+   "num": 69,
+   "question": "曹安民之死见于哪一回",
+   "answer": "第16回",
+   "evidence": "第16回：“乃得从寨后上马逃奔，只有曹安民步随”",
+   "name": "曹安民",
+   "chunk_id": "sanguo-yanyi:0016:p0016:c01",
+   "how": "人名"
+  },
+  {
+   "num": 70,
+   "question": "曹昂死在哪一回",
+   "answer": "第16回",
+   "evidence": "第16回：“操上马急奔，曹昂却被乱箭射死”",
+   "name": "曹昂",
+   "chunk_id": "sanguo-yanyi:0016:p0016:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 71,
+   "question": "杨奉在哪一回身亡",
+   "answer": "第17回",
+   "evidence": "第17回：“玄德曰：此韩暹、杨奉之首级也”",
+   "name": "杨奉",
+   "chunk_id": "sanguo-yanyi:0017:p0006:c01",
+   "how": "人名"
+  },
+  {
+   "num": 72,
+   "question": "韩暹之死见于哪一回",
+   "answer": "第17回",
+   "evidence": "第17回：“玄德曰：此韩暹、杨奉之首级也”",
+   "name": "韩暹",
+   "chunk_id": "sanguo-yanyi:0017:p0006:c01",
+   "how": "人名"
+  },
+  {
+   "num": 73,
+   "question": "曹性死在哪一回",
+   "answer": "第18回",
+   "evidence": "第18回：“夏侯惇既杀曹性，纵马便回”",
+   "name": "曹性",
+   "chunk_id": "sanguo-yanyi:0018:p0012:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 74,
+   "question": "张杨在哪一回身亡",
+   "answer": "第19回",
+   "evidence": "第19回：“河内太守张杨出兵东市，欲救吕布，部将杨丑杀之，欲将头献丞相”",
+   "name": "张杨",
+   "chunk_id": "sanguo-yanyi:0019:p0011:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 75,
+   "question": "陈宫之死见于哪一回",
+   "answer": "第19回",
+   "evidence": "第19回：“徐晃解陈宫至”",
+   "name": "陈宫",
+   "chunk_id": "sanguo-yanyi:0019:p0015:c01",
+   "how": "人名"
+  },
+  {
+   "num": 76,
+   "question": "高顺死在哪一回",
+   "answer": "第19回",
+   "evidence": "第19回：“须臾，众拥高顺至”",
+   "name": "高顺",
+   "chunk_id": "sanguo-yanyi:0019:p0015:c01",
+   "how": "人名"
+  },
+  {
+   "num": 77,
+   "question": "吕布在哪一回身亡",
+   "answer": "第19回",
+   "evidence": "第19回：“操令将吕布缢死，然后枭首”",
+   "name": "吕布",
+   "chunk_id": "sanguo-yanyi:0019:p0017:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 78,
+   "question": "公孙瓒之死见于哪一回",
+   "answer": "第21回",
+   "evidence": "第21回：“玄德闻公孙瓒已死，追念昔日荐己之恩，不胜伤感”",
+   "name": "公孙瓒",
+   "chunk_id": "sanguo-yanyi:0021:p0007:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 79,
+   "question": "纪灵死在哪一回",
+   "answer": "第21回",
+   "evidence": "第21回：“乃引关、张、朱灵、路昭五万军出，正迎着先锋纪灵至”",
+   "name": "纪灵",
+   "chunk_id": "sanguo-yanyi:0021:p0012:c01",
+   "how": "人名"
+  },
+  {
+   "num": 80,
+   "question": "袁术在哪一回身亡",
+   "answer": "第21回",
+   "evidence": "第21回：“汉末刀兵起四方，无端袁术太猖狂”",
+   "name": "袁术",
+   "chunk_id": "sanguo-yanyi:0021:p0013:c01",
+   "how": "人名"
+  },
+  {
+   "num": 81,
+   "question": "车胄之死见于哪一回",
+   "answer": "第21回",
+   "evidence": "第21回：“可杀车胄：乘夜扮作曹军到徐州，引车胄出迎”",
+   "name": "车胄",
+   "chunk_id": "sanguo-yanyi:0021:p0016:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 82,
+   "question": "祢衡死在哪一回",
+   "answer": "第23回",
+   "evidence": "第23回：“祢衡辱吾太甚，故借刘表手杀之”",
+   "name": "祢衡",
+   "chunk_id": "sanguo-yanyi:0023:p0009:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 83,
+   "question": "吉平在哪一回身亡",
+   "answer": "第23回",
+   "evidence": "第23回：“须臾，二十狱卒推吉平至阶下”",
+   "name": "吉平",
+   "chunk_id": "sanguo-yanyi:0023:p0019:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 84,
+   "question": "董承之死见于哪一回",
+   "answer": "第24回",
+   "evidence": "第24回：“只将董承等五人，并其全家老小，押送各门处斩”",
+   "name": "董承",
+   "chunk_id": "sanguo-yanyi:0024:p0001:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 85,
+   "question": "董贵妃死在哪一回",
+   "answer": "第24回",
+   "evidence": "第24回：“且说曹操既杀了董承等众人，怒气未消，遂带剑入宫，来弑董贵妃”",
+   "name": "董贵妃",
+   "chunk_id": "sanguo-yanyi:0024:p0005:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 86,
+   "question": "文丑在哪一回身亡",
+   "answer": "第26回",
+   "evidence": "第26回：“报与玄德云：今番又是红面长髯的斩了文丑”",
+   "name": "文丑",
+   "chunk_id": "sanguo-yanyi:0026:p0003:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 87,
+   "question": "孔秀之死见于哪一回",
+   "answer": "第27回",
+   "evidence": "第27回：“关公大怒，举刀就杀孔秀”",
+   "name": "孔秀",
+   "chunk_id": "sanguo-yanyi:0027:p0005:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 88,
+   "question": "孟坦死在哪一回",
+   "answer": "第27回",
+   "evidence": "第27回：“牙将孟坦曰：既无丞相文凭，即系私行，若不阻挡”",
+   "name": "孟坦",
+   "chunk_id": "sanguo-yanyi:0027:p0006:c01",
+   "how": "人名"
+  },
+  {
+   "num": 89,
+   "question": "韩福在哪一回身亡",
+   "answer": "第27回",
+   "evidence": "第27回：“韩福曰：关公勇猛，颜良、文丑俱为所杀”",
+   "name": "韩福",
+   "chunk_id": "sanguo-yanyi:0027:p0006:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 90,
+   "question": "卞喜之死见于哪一回",
+   "answer": "第27回",
+   "evidence": "第27回：“关公诉说斩孔秀、韩福之事，卞喜曰”",
+   "name": "卞喜",
+   "chunk_id": "sanguo-yanyi:0027:p0007:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 91,
+   "question": "王植死在哪一回",
+   "answer": "第27回",
+   "evidence": "第27回：“却说王植密唤从事胡班听令曰：关某背丞相而逃”",
+   "name": "王植",
+   "chunk_id": "sanguo-yanyi:0027:p0009:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 92,
+   "question": "秦琪在哪一回身亡",
+   "answer": "第27回",
+   "evidence": "第27回：“今黄河渡口关隘，夏侯惇部将秦琪据守”",
+   "name": "秦琪",
+   "chunk_id": "sanguo-yanyi:0027:p0010:c01",
+   "how": "人名"
+  },
+  {
+   "num": 93,
+   "question": "蔡阳之死见于哪一回",
+   "answer": "第28回",
+   "evidence": "第28回：“为首一将，乃是蔡阳，挺刀纵马大喝曰：你杀吾外甥秦琪”",
+   "name": "蔡阳",
+   "chunk_id": "sanguo-yanyi:0028:p0007:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 94,
+   "question": "于吉死在哪一回",
+   "answer": "第29回",
+   "evidence": "第29回：“于吉谓众人曰：吾求三尺甘霖，以救万民”",
+   "name": "于吉",
+   "chunk_id": "sanguo-yanyi:0029:p0009:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 95,
+   "question": "孙策在哪一回身亡",
+   "answer": "第29回",
+   "evidence": "第29回：“是夜孙策宿于寨内，又见于吉披发而来”",
+   "name": "孙策",
+   "chunk_id": "sanguo-yanyi:0029:p0012:c01",
+   "how": "人名"
+  },
+  {
+   "num": 96,
+   "question": "沮授之死见于哪一回",
+   "answer": "第30回",
+   "evidence": "第30回：“沮授因被囚禁，急走不脱，为曹军所获”",
+   "name": "沮授",
+   "chunk_id": "sanguo-yanyi:0030:p0019:c01",
+   "how": "人名"
+  },
+  {
+   "num": 97,
+   "question": "田丰死在哪一回",
+   "answer": "第31回",
+   "evidence": "第31回：“却说田丰在狱中，一日，狱吏来见丰曰”",
+   "name": "田丰",
+   "chunk_id": "sanguo-yanyi:0031:p0002:c01",
+   "how": "人名"
+  },
+  {
+   "num": 98,
+   "question": "袁绍在哪一回身亡",
+   "answer": "第32回",
+   "evidence": "第32回：“袁绍闻袁尚败回，又受了一惊，旧病复发，吐血数斗”",
+   "name": "袁绍",
+   "chunk_id": "sanguo-yanyi:0032:p0001:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 99,
+   "question": "审配之死见于哪一回",
+   "answer": "第32回",
+   "evidence": "第32回：“徐晃生擒审配，绑出城来”",
+   "name": "审配",
+   "chunk_id": "sanguo-yanyi:0032:p0012:c02",
+   "how": "人名"
+  },
+  {
+   "num": 100,
+   "question": "许攸死在哪一回",
+   "answer": "第33回",
+   "evidence": "第33回：“拔剑杀攸，提头来见曹操，说许攸如此无礼”",
+   "name": "许攸",
+   "chunk_id": "sanguo-yanyi:0033:p0004:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 101,
+   "question": "袁谭在哪一回身亡",
+   "answer": "第33回",
+   "evidence": "第33回：“下令将袁谭首级号令，敢有哭者斩”",
+   "name": "袁谭",
+   "chunk_id": "sanguo-yanyi:0033:p0011:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 102,
+   "question": "郭嘉之死见于哪一回",
+   "answer": "第33回",
+   "evidence": "第33回：“郭嘉已死数日，停柩在公廨”",
+   "name": "郭嘉",
+   "chunk_id": "sanguo-yanyi:0033:p0016:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 103,
+   "question": "袁尚死在哪一回",
+   "answer": "第33回",
+   "evidence": "第33回：“却说袁熙、袁尚至辽东，二人密议曰：辽东军兵数万”",
+   "name": "袁尚",
+   "chunk_id": "sanguo-yanyi:0033:p0018:c01",
+   "how": "人名"
+  },
+  {
+   "num": 104,
+   "question": "袁熙在哪一回身亡",
+   "answer": "第33回",
+   "evidence": "第33回：“却说袁熙、袁尚至辽东，二人密议曰：辽东军兵数万”",
+   "name": "袁熙",
+   "chunk_id": "sanguo-yanyi:0033:p0018:c01",
+   "how": "人名"
+  },
+  {
+   "num": 105,
+   "question": "吕旷之死见于哪一回",
+   "answer": "第35回",
+   "evidence": "第35回：“特差曹仁、李典并降将吕旷、吕翔等领兵三万屯樊城，虎视荆襄”",
+   "name": "吕旷",
+   "chunk_id": "sanguo-yanyi:0035:p0010:c01",
+   "how": "人名"
+  },
+  {
+   "num": 106,
+   "question": "吕翔死在哪一回",
+   "answer": "第35回",
+   "evidence": "第35回：“玄德麾军掩杀，吕翔抵敌不住”",
+   "name": "吕翔",
+   "chunk_id": "sanguo-yanyi:0035:p0010:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 107,
+   "question": "徐母在哪一回身亡",
+   "answer": "第37回",
+   "evidence": "第37回：“徐母勃然大怒，拍案骂曰：辱子飘荡江湖数年，吾以为汝学业有进”",
+   "name": "徐母",
+   "chunk_id": "sanguo-yanyi:0037:p0001:c01",
+   "how": "人名"
+  },
+  {
+   "num": 108,
+   "question": "孙翊之死见于哪一回",
+   "answer": "第38回",
+   "evidence": "第38回：“边洪带刀跟出门外，即抽刀砍死孙翊”",
+   "name": "孙翊",
+   "chunk_id": "sanguo-yanyi:0038:p0014:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 109,
+   "question": "妫览死在哪一回",
+   "answer": "第38回",
+   "evidence": "第38回：“妫览措手不及，被傅婴一刀砍倒在地，孙高再复一刀”",
+   "name": "妫览",
+   "chunk_id": "sanguo-yanyi:0038:p0014:c02",
+   "how": "人名+死词"
+  },
+  {
+   "num": 110,
+   "question": "戴员在哪一回身亡",
+   "answer": "第38回",
+   "evidence": "第38回：“徐氏复传请戴员赴宴”",
+   "name": "戴员",
+   "chunk_id": "sanguo-yanyi:0038:p0014:c02",
+   "how": "人名"
+  },
+  {
+   "num": 111,
+   "question": "吴太夫人之死见于哪一回",
+   "answer": "第38回",
+   "evidence": "第38回：“权母吴太夫人病危，召周瑜、张昭二人至，谓曰：我本吴人”",
+   "name": "吴太夫人",
+   "chunk_id": "sanguo-yanyi:0038:p0016:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 112,
+   "question": "黄祖死在哪一回",
+   "answer": "第39回",
+   "evidence": "第39回：“黄祖兵败将亡，情知守把不住，遂弃江夏”",
+   "name": "黄祖",
+   "chunk_id": "sanguo-yanyi:0039:p0001:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 113,
+   "question": "夏侯兰在哪一回身亡",
+   "answer": "第39回",
+   "evidence": "第39回：“夏侯兰、韩浩来救粮车，正遇张飞”",
+   "name": "夏侯兰",
+   "chunk_id": "sanguo-yanyi:0039:p0011:c01",
+   "how": "人名"
+  },
+  {
+   "num": 114,
+   "question": "孔融之死见于哪一回",
+   "answer": "第40回",
+   "evidence": "第40回：“遂叱退孔融，下令：如有再谏者”",
+   "name": "孔融",
+   "chunk_id": "sanguo-yanyi:0040:p0003:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 115,
+   "question": "刘表死在哪一回",
+   "answer": "第40回",
+   "evidence": "第40回：“却说荆州刘表病重，使人请玄德来托孤”",
+   "name": "刘表",
+   "chunk_id": "sanguo-yanyi:0040:p0006:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 116,
+   "question": "李珪在哪一回身亡",
+   "answer": "第40回",
+   "evidence": "第40回：“李珪至死，大骂不绝”",
+   "name": "李珪",
+   "chunk_id": "sanguo-yanyi:0040:p0008:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 117,
+   "question": "刘琮之死见于哪一回",
+   "answer": "第41回",
+   "evidence": "第41回：“你可引轻骑追刘琮母子杀之”",
+   "name": "刘琮",
+   "chunk_id": "sanguo-yanyi:0041:p0009:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 118,
+   "question": "王威死在哪一回",
+   "answer": "第41回",
+   "evidence": "第41回：“琮只得与母蔡夫人同赴青州，只有故将王威相随”",
+   "name": "王威",
+   "chunk_id": "sanguo-yanyi:0041:p0009:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 119,
+   "question": "蔡夫人在哪一回身亡",
+   "answer": "第41回",
+   "evidence": "第41回：“琮只得与母蔡夫人同赴青州，只有故将王威相随”",
+   "name": "蔡夫人",
+   "chunk_id": "sanguo-yanyi:0041:p0009:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 120,
+   "question": "淳于导之死见于哪一回",
+   "answer": "第41回",
+   "evidence": "第41回：“手提大刀，引着千馀军，乃曹仁部将淳于导，拿住糜竺”",
+   "name": "淳于导",
+   "chunk_id": "sanguo-yanyi:0041:p0014:c01",
+   "how": "人名"
+  },
+  {
+   "num": 121,
+   "question": "夏侯恩死在哪一回",
+   "answer": "第41回",
+   "evidence": "第41回：“原来那将乃曹操随身背剑之将夏侯恩也”",
+   "name": "夏侯恩",
+   "chunk_id": "sanguo-yanyi:0041:p0015:c01",
+   "how": "人名"
+  },
+  {
+   "num": 122,
+   "question": "晏明在哪一回身亡",
+   "answer": "第41回",
+   "evidence": "第41回：“引一队步军至，乃曹洪部将晏明也”",
+   "name": "晏明",
+   "chunk_id": "sanguo-yanyi:0041:p0018:c01",
+   "how": "人名"
+  },
+  {
+   "num": 123,
+   "question": "钟绅之死见于哪一回",
+   "answer": "第42回",
+   "evidence": "第42回：“却说钟缙、钟绅二人拦住赵云厮杀”",
+   "name": "钟绅",
+   "chunk_id": "sanguo-yanyi:0042:p0001:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 124,
+   "question": "钟缙死在哪一回",
+   "answer": "第42回",
+   "evidence": "第42回：“却说钟缙、钟绅二人拦住赵云厮杀”",
+   "name": "钟缙",
+   "chunk_id": "sanguo-yanyi:0042:p0001:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 125,
+   "question": "糜夫人在哪一回身亡",
+   "answer": "第42回",
+   "evidence": "第42回：“糜夫人身带重伤，不肯上马，投井而死”",
+   "name": "糜夫人",
+   "chunk_id": "sanguo-yanyi:0042:p0002:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 126,
+   "question": "夏侯杰之死见于哪一回",
+   "answer": "第42回",
+   "evidence": "第42回：“曹操身边夏侯杰惊得肝胆碎裂”",
+   "name": "夏侯杰",
+   "chunk_id": "sanguo-yanyi:0042:p0004:c01",
+   "how": "人名"
+  },
+  {
+   "num": 127,
+   "question": "张允死在哪一回",
+   "answer": "第45回",
+   "evidence": "第45回：“即便唤蔡瑁、张允到帐下”",
+   "name": "张允",
+   "chunk_id": "sanguo-yanyi:0045:p0018:c01",
+   "how": "人名"
+  },
+  {
+   "num": 128,
+   "question": "蔡瑁在哪一回身亡",
+   "answer": "第45回",
+   "evidence": "第45回：“即便唤蔡瑁、张允到帐下”",
+   "name": "蔡瑁",
+   "chunk_id": "sanguo-yanyi:0045:p0018:c01",
+   "how": "人名"
+  },
+  {
+   "num": 129,
+   "question": "刘馥之死见于哪一回",
+   "answer": "第48回",
+   "evidence": "第48回：“手起一槊，刺死刘馥”",
+   "name": "刘馥",
+   "chunk_id": "sanguo-yanyi:0048:p0008:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 130,
+   "question": "张南死在哪一回",
+   "answer": "第48回",
+   "evidence": "第48回：“直跃过张南船上，手起刀落，砍张南于水中，乱杀驾舟军士”",
+   "name": "张南",
+   "chunk_id": "sanguo-yanyi:0048:p0012:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 131,
+   "question": "焦触在哪一回身亡",
+   "answer": "第48回",
+   "evidence": "第48回：“焦触捻长枪与韩当交锋，当手起一枪”",
+   "name": "焦触",
+   "chunk_id": "sanguo-yanyi:0048:p0012:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 132,
+   "question": "蔡和之死见于哪一回",
+   "answer": "第49回",
+   "evidence": "第49回：“奠酒烧纸，一刀斩了蔡和，用血祭旗毕”",
+   "name": "蔡和",
+   "chunk_id": "sanguo-yanyi:0049:p0015:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 133,
+   "question": "张顗死在哪一回",
+   "answer": "第50回",
+   "evidence": "第50回：“绍手下降将马延、张顗，有三千北地军马，列寨在彼，当夜见满天火起”",
+   "name": "张顗",
+   "chunk_id": "sanguo-yanyi:0050:p0006:c01",
+   "how": "人名"
+  },
+  {
+   "num": 134,
+   "question": "蔡中在哪一回身亡",
+   "answer": "第50回",
+   "evidence": "第50回：“且说甘宁令蔡中引入曹寨深处，宁将蔡中一刀砍于马下”",
+   "name": "蔡中",
+   "chunk_id": "sanguo-yanyi:0050:p0006:c01",
+   "how": "人名"
+  },
+  {
+   "num": 135,
+   "question": "马延之死见于哪一回",
+   "answer": "第50回",
+   "evidence": "第50回：“马延正欲交锋，早被甘宁一刀斩于马下”",
+   "name": "马延",
+   "chunk_id": "sanguo-yanyi:0050:p0006:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 136,
+   "question": "邢道荣死在哪一回",
+   "answer": "第52回",
+   "evidence": "第52回：“邢道荣教某如此，实非本心也”",
+   "name": "邢道荣",
+   "chunk_id": "sanguo-yanyi:0052:p0006:c01",
+   "how": "人名"
+  },
+  {
+   "num": 137,
+   "question": "陈应在哪一回身亡",
+   "answer": "第52回",
+   "evidence": "第52回：“范急唤陈应、鲍隆商议”",
+   "name": "陈应",
+   "chunk_id": "sanguo-yanyi:0052:p0011:c01",
+   "how": "人名"
+  },
+  {
+   "num": 138,
+   "question": "鲍隆之死见于哪一回",
+   "answer": "第52回",
+   "evidence": "第52回：“范急唤陈应、鲍隆商议”",
+   "name": "鲍隆",
+   "chunk_id": "sanguo-yanyi:0052:p0011:c01",
+   "how": "人名"
+  },
+  {
+   "num": 139,
+   "question": "金旋死在哪一回",
+   "answer": "第53回",
+   "evidence": "第53回：“金旋听得张飞引兵到，乃集将校，整点精兵器械”",
+   "name": "金旋",
+   "chunk_id": "sanguo-yanyi:0053:p0001:c01",
+   "how": "人名"
+  },
+  {
+   "num": 140,
+   "question": "杨龄在哪一回身亡",
+   "answer": "第53回",
+   "evidence": "第53回：“云长手起刀落，砍杨龄于马下，追杀败兵”",
+   "name": "杨龄",
+   "chunk_id": "sanguo-yanyi:0053:p0003:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 141,
+   "question": "韩玄之死见于哪一回",
+   "answer": "第53回",
+   "evidence": "第53回：“教百姓同杀韩玄，袒臂一呼”",
+   "name": "韩玄",
+   "chunk_id": "sanguo-yanyi:0053:p0005:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 142,
+   "question": "宋谦死在哪一回",
+   "answer": "第53回",
+   "evidence": "第53回：“披挂出马，左宋谦，右贾华，二将使方天画戟”",
+   "name": "宋谦",
+   "chunk_id": "sanguo-yanyi:0053:p0010:c01",
+   "how": "人名"
+  },
+  {
+   "num": 143,
+   "question": "戈定在哪一回身亡",
+   "answer": "第53回",
+   "evidence": "第53回：“却说戈定乃太史慈乡人，当日杂在军中，随入合淝城，寻见养马后槽”",
+   "name": "戈定",
+   "chunk_id": "sanguo-yanyi:0053:p0012:c01",
+   "how": "人名"
+  },
+  {
+   "num": 144,
+   "question": "太史慈之死见于哪一回",
+   "answer": "第53回",
+   "evidence": "第53回：“陆逊、董袭杀出，救了太史慈”",
+   "name": "太史慈",
+   "chunk_id": "sanguo-yanyi:0053:p0012:c02",
+   "how": "人名+死词"
+  },
+  {
+   "num": 145,
+   "question": "刘琦死在哪一回",
+   "answer": "第53回",
+   "evidence": "第53回：“正言间，忽报公子刘琦病亡”",
+   "name": "刘琦",
+   "chunk_id": "sanguo-yanyi:0053:p0015:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 146,
+   "question": "周瑜在哪一回身亡",
+   "answer": "第57回",
+   "evidence": "第57回：“周瑜览毕，长叹一声，唤左右取纸笔作书上吴侯”",
+   "name": "周瑜",
+   "chunk_id": "sanguo-yanyi:0057:p0003:c01",
+   "how": "人名"
+  },
+  {
+   "num": 147,
+   "question": "马休之死见于哪一回",
+   "answer": "第57回",
+   "evidence": "第57回：“与其子马休及黄奎，一同遇害”",
+   "name": "马休",
+   "chunk_id": "sanguo-yanyi:0057:p0024:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 148,
+   "question": "马腾死在哪一回",
+   "answer": "第57回",
+   "evidence": "第57回：“马腾急拨马回时，两下喊声又起：左边许褚杀来，右边夏侯渊杀来”",
+   "name": "马腾",
+   "chunk_id": "sanguo-yanyi:0057:p0024:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 149,
+   "question": "黄奎在哪一回身亡",
+   "answer": "第57回",
+   "evidence": "第57回：“与其子马休及黄奎，一同遇害”",
+   "name": "黄奎",
+   "chunk_id": "sanguo-yanyi:0057:p0024:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 150,
+   "question": "李春香之死见于哪一回",
+   "answer": "第57回",
+   "evidence": "第57回：“便教将苗泽、李春香与黄奎一家老小并斩于市”",
+   "name": "李春香",
+   "chunk_id": "sanguo-yanyi:0057:p0026:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 151,
+   "question": "苗泽死在哪一回",
+   "answer": "第57回",
+   "evidence": "第57回：“便教将苗泽、李春香与黄奎一家老小并斩于市”",
+   "name": "苗泽",
+   "chunk_id": "sanguo-yanyi:0057:p0026:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 152,
+   "question": "钟进在哪一回身亡",
+   "answer": "第58回",
+   "evidence": "第58回：“钟进措手不及，被庞德一刀斩于马下，杀散军校，斩关断锁”",
+   "name": "钟进",
+   "chunk_id": "sanguo-yanyi:0058:p0006:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 153,
+   "question": "李通之死见于哪一回",
+   "answer": "第58回",
+   "evidence": "第58回：“超奋威交战，数合之中，一枪刺李通于马下”",
+   "name": "李通",
+   "chunk_id": "sanguo-yanyi:0058:p0008:c01",
+   "how": "人名"
+  },
+  {
+   "num": 154,
+   "question": "张横死在哪一回",
+   "answer": "第58回",
+   "evidence": "第58回：“计点人马，折了将佐程银、张横”",
+   "name": "张横",
+   "chunk_id": "sanguo-yanyi:0058:p0014:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 155,
+   "question": "程银在哪一回身亡",
+   "answer": "第58回",
+   "evidence": "第58回：“计点人马，折了将佐程银、张横”",
+   "name": "程银",
+   "chunk_id": "sanguo-yanyi:0058:p0014:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 156,
+   "question": "成宜之死见于哪一回",
+   "answer": "第58回",
+   "evidence": "第58回：“只围得三十骑，成宜被夏侯渊所杀”",
+   "name": "成宜",
+   "chunk_id": "sanguo-yanyi:0058:p0015:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 157,
+   "question": "李堪死在哪一回",
+   "answer": "第59回",
+   "evidence": "第59回：“只见李堪领一军从桥下过，超挺枪纵马逐之”",
+   "name": "李堪",
+   "chunk_id": "sanguo-yanyi:0059:p0009:c01",
+   "how": "人名"
+  },
+  {
+   "num": 158,
+   "question": "梁兴在哪一回身亡",
+   "answer": "第59回",
+   "evidence": "第59回：“鲜血溅飞，砍翻马玩，剁倒梁兴”",
+   "name": "梁兴",
+   "chunk_id": "sanguo-yanyi:0059:p0009:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 159,
+   "question": "马玩之死见于哪一回",
+   "answer": "第59回",
+   "evidence": "第59回：“鲜血溅飞，砍翻马玩，剁倒梁兴”",
+   "name": "马玩",
+   "chunk_id": "sanguo-yanyi:0059:p0009:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 160,
+   "question": "王累死在哪一回",
+   "answer": "第60回",
+   "evidence": "第60回：“从事王累，自用绳索倒吊于城门之上，一手执谏章，一手仗剑”",
+   "name": "王累",
+   "chunk_id": "sanguo-yanyi:0060:p0018:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 161,
+   "question": "周善在哪一回身亡",
+   "answer": "第61回",
+   "evidence": "第61回：“周善见张飞上船，提刀来迎，被张飞手起一剑砍倒”",
+   "name": "周善",
+   "chunk_id": "sanguo-yanyi:0061:p0006:c01",
+   "how": "人名"
+  },
+  {
+   "num": 162,
+   "question": "张纮之死见于哪一回",
+   "answer": "第61回",
+   "evidence": "第61回：“人报长史张纮辞疾回家，今已病故”",
+   "name": "张纮",
+   "chunk_id": "sanguo-yanyi:0061:p0012:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 163,
+   "question": "荀彧死在哪一回",
+   "answer": "第61回",
+   "evidence": "第61回：“侍中荀彧曰：不可”",
+   "name": "荀彧",
+   "chunk_id": "sanguo-yanyi:0061:p0014:c01",
+   "how": "人名"
+  },
+  {
+   "num": 164,
+   "question": "张松在哪一回身亡",
+   "answer": "第62回",
+   "evidence": "第62回：“遂下令捉张松全家，尽斩于市”",
+   "name": "张松",
+   "chunk_id": "sanguo-yanyi:0062:p0007:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 165,
+   "question": "杨怀之死见于哪一回",
+   "answer": "第62回",
+   "evidence": "第62回：“遂叱刀斧手斩杨怀、高沛于帐前”",
+   "name": "杨怀",
+   "chunk_id": "sanguo-yanyi:0062:p0011:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 166,
+   "question": "高沛死在哪一回",
+   "answer": "第62回",
+   "evidence": "第62回：“遂叱刀斧手斩杨怀、高沛于帐前”",
+   "name": "高沛",
+   "chunk_id": "sanguo-yanyi:0062:p0011:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 167,
+   "question": "邓贤在哪一回身亡",
+   "answer": "第62回",
+   "evidence": "第62回：“黄忠一枝军救了魏延，杀了邓贤”",
+   "name": "邓贤",
+   "chunk_id": "sanguo-yanyi:0062:p0020:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 168,
+   "question": "泠苞之死见于哪一回",
+   "answer": "第63回",
+   "evidence": "第63回：“将泠苞推出斩之，重赏魏延”",
+   "name": "泠苞",
+   "chunk_id": "sanguo-yanyi:0063:p0002:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 169,
+   "question": "庞统死在哪一回",
+   "answer": "第63回",
+   "evidence": "第63回：“可怜庞统竟死于乱箭之下”",
+   "name": "庞统",
+   "chunk_id": "sanguo-yanyi:0063:p0007:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 170,
+   "question": "张任在哪一回身亡",
+   "answer": "第64回",
+   "evidence": "第64回：“张任教张翼与刘璝守城，自与卓膺为前后二队——任为前队”",
+   "name": "张任",
+   "chunk_id": "sanguo-yanyi:0064:p0007:c01",
+   "how": "人名"
+  },
+  {
+   "num": 171,
+   "question": "刘璝之死见于哪一回",
+   "answer": "第64回",
+   "evidence": "第64回：“杀刘璝者，乃武阳人张翼也”",
+   "name": "刘璝",
+   "chunk_id": "sanguo-yanyi:0064:p0010:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 172,
+   "question": "韦康死在哪一回",
+   "answer": "第64回",
+   "evidence": "第64回：“将韦康四十馀口尽斩之，不留一人”",
+   "name": "韦康",
+   "chunk_id": "sanguo-yanyi:0064:p0014:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 173,
+   "question": "姜叙母在哪一回身亡",
+   "answer": "第64回",
+   "evidence": "第64回：“叙母闻言，唤姜叙入，责之曰：韦使君遇害”",
+   "name": "姜叙母",
+   "chunk_id": "sanguo-yanyi:0064:p0015:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 174,
+   "question": "赵月之死见于哪一回",
+   "answer": "第64回",
+   "evidence": "第64回：“吾想子赵月现随马超，今若兴兵，超必先杀吾子”",
+   "name": "赵月",
+   "chunk_id": "sanguo-yanyi:0064:p0016:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 175,
+   "question": "荀攸死在哪一回",
+   "answer": "第66回",
+   "evidence": "第66回：“荀攸知之，忧愤成疾，卧病十数日而卒”",
+   "name": "荀攸",
+   "chunk_id": "sanguo-yanyi:0066:p0012:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 176,
+   "question": "伏皇后在哪一回身亡",
+   "answer": "第66回",
+   "evidence": "第66回：“后归曹操，至此乃有收捕伏皇后一事”",
+   "name": "伏皇后",
+   "chunk_id": "sanguo-yanyi:0066:p0015:c01",
+   "how": "人名"
+  },
+  {
+   "num": 177,
+   "question": "伏完之死见于哪一回",
+   "answer": "第66回",
+   "evidence": "第66回：“当晚将伏完、穆顺等宗族二百馀口”",
+   "name": "伏完",
+   "chunk_id": "sanguo-yanyi:0066:p0019:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 178,
+   "question": "杨昂死在哪一回",
+   "answer": "第67回",
+   "evidence": "第67回：“杨昂欲突阵而出，正撞着张郃，两个交手”",
+   "name": "杨昂",
+   "chunk_id": "sanguo-yanyi:0067:p0003:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 179,
+   "question": "杨任在哪一回身亡",
+   "answer": "第67回",
+   "evidence": "第67回：“曹操知夏侯渊斩了杨任，即时进兵”",
+   "name": "杨任",
+   "chunk_id": "sanguo-yanyi:0067:p0004:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 180,
+   "question": "张卫之死见于哪一回",
+   "answer": "第67回",
+   "evidence": "第67回：“与弟张卫商议，卫曰：放火尽烧仓廪府库，出奔南山”",
+   "name": "张卫",
+   "chunk_id": "sanguo-yanyi:0067:p0007:c01",
+   "how": "人名"
+  },
+  {
+   "num": 181,
+   "question": "杨松死在哪一回",
+   "answer": "第67回",
+   "evidence": "第67回：“惟有杨松卖主求荣，即命斩之于市曹示众”",
+   "name": "杨松",
+   "chunk_id": "sanguo-yanyi:0067:p0007:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 182,
+   "question": "朱光在哪一回身亡",
+   "answer": "第67回",
+   "evidence": "第67回：“士卒皆一拥而上，乱刀砍死朱光”",
+   "name": "朱光",
+   "chunk_id": "sanguo-yanyi:0067:p0012:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 183,
+   "question": "董袭之死见于哪一回",
+   "answer": "第68回",
+   "evidence": "第68回：“风急船覆，董袭竟死于江口水中”",
+   "name": "董袭",
+   "chunk_id": "sanguo-yanyi:0068:p0006:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 184,
+   "question": "陈武死在哪一回",
+   "answer": "第68回",
+   "evidence": "第68回：“后面又无应兵，被庞德赶到峪口，树林丛密，陈武再欲”",
+   "name": "陈武",
+   "chunk_id": "sanguo-yanyi:0068:p0009:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 185,
+   "question": "崔琰在哪一回身亡",
+   "answer": "第68回",
+   "evidence": "第68回：“廷尉白操，操令杖杀崔琰在狱中”",
+   "name": "崔琰",
+   "chunk_id": "sanguo-yanyi:0068:p0012:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 186,
+   "question": "鲁肃之死见于哪一回",
+   "answer": "第69回",
+   "evidence": "第69回：“忽合淝报来：东吴陆口守将鲁肃身故”",
+   "name": "鲁肃",
+   "chunk_id": "sanguo-yanyi:0069:p0006:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 187,
+   "question": "吉穆死在哪一回",
+   "answer": "第69回",
+   "evidence": "第69回：“次名吉穆，字思然”",
+   "name": "吉穆",
+   "chunk_id": "sanguo-yanyi:0069:p0008:c01",
+   "how": "人名"
+  },
+  {
+   "num": 188,
+   "question": "吉邈在哪一回身亡",
+   "answer": "第69回",
+   "evidence": "第69回：“吉邈兄弟，亦聚三百人口，只推围猎”",
+   "name": "吉邈",
+   "chunk_id": "sanguo-yanyi:0069:p0009:c01",
+   "how": "人名"
+  },
+  {
+   "num": 189,
+   "question": "耿纪之死见于哪一回",
+   "answer": "第69回",
+   "evidence": "第69回：“直混杀至天明，耿纪、韦晃等无人相助”",
+   "name": "耿纪",
+   "chunk_id": "sanguo-yanyi:0069:p0010:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 190,
+   "question": "金祎死在哪一回",
+   "answer": "第69回",
+   "evidence": "第69回：“人报金袆、二吉皆被杀死，耿纪、韦晃夺路杀出城门，正遇夏侯惇大军围住”",
+   "name": "金祎",
+   "chunk_id": "sanguo-yanyi:0069:p0010:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 191,
+   "question": "韦晃在哪一回身亡",
+   "answer": "第69回",
+   "evidence": "第69回：“直混杀至天明，耿纪、韦晃等无人相助”",
+   "name": "韦晃",
+   "chunk_id": "sanguo-yanyi:0069:p0010:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 192,
+   "question": "任夔之死见于哪一回",
+   "answer": "第69回",
+   "evidence": "第69回：“任夔不听吾言，故有此败”",
+   "name": "任夔",
+   "chunk_id": "sanguo-yanyi:0069:p0013:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 193,
+   "question": "雷铜死在哪一回",
+   "answer": "第70回",
+   "evidence": "第70回：“与魏延商议曰：张郃用埋伏计，杀了雷铜，又要赚吾”",
+   "name": "雷铜",
+   "chunk_id": "sanguo-yanyi:0070:p0003:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 194,
+   "question": "夏侯德在哪一回身亡",
+   "answer": "第70回",
+   "evidence": "第70回：“正遇老将严颜，手起刀落，斩夏侯德于马下”",
+   "name": "夏侯德",
+   "chunk_id": "sanguo-yanyi:0070:p0010:c02",
+   "how": "人名+死词"
+  },
+  {
+   "num": 195,
+   "question": "韩浩之死见于哪一回",
+   "answer": "第70回",
+   "evidence": "第70回：“韩浩引兵来战，黄忠挥刀直取浩，只一合”",
+   "name": "韩浩",
+   "chunk_id": "sanguo-yanyi:0070:p0010:c02",
+   "how": "人名+死词"
+  },
+  {
+   "num": 196,
+   "question": "夏侯渊死在哪一回",
+   "answer": "第71回",
+   "evidence": "第71回：“见夏侯渊，说黄忠夺了对山”",
+   "name": "夏侯渊",
+   "chunk_id": "sanguo-yanyi:0071:p0009:c01",
+   "how": "人名"
+  },
+  {
+   "num": 197,
+   "question": "杨修在哪一回身亡",
+   "answer": "第72回",
+   "evidence": "第72回：“原来杨修为人恃才放旷，数犯曹操之忌”",
+   "name": "杨修",
+   "chunk_id": "sanguo-yanyi:0072:p0008:c01",
+   "how": "人名"
+  },
+  {
+   "num": 198,
+   "question": "夏侯存之死见于哪一回",
+   "answer": "第73回",
+   "evidence": "第73回：“又来搦战，夏侯存、翟元一齐出迎，荆州兵又败”",
+   "name": "夏侯存",
+   "chunk_id": "sanguo-yanyi:0073:p0016:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 199,
+   "question": "翟元死在哪一回",
+   "answer": "第73回",
+   "evidence": "第73回：“副将翟元曰：今魏王令将军约会东吴取荆州，今彼自来”",
+   "name": "翟元",
+   "chunk_id": "sanguo-yanyi:0073:p0016:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 200,
+   "question": "董衡在哪一回身亡",
+   "answer": "第74回",
+   "evidence": "第74回：“遂亲斩董衡、董超于前，厉声曰：再说降者”",
+   "name": "董衡",
+   "chunk_id": "sanguo-yanyi:0074:p0010:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 201,
+   "question": "董超之死见于哪一回",
+   "answer": "第74回",
+   "evidence": "第74回：“遂亲斩董衡、董超于前，厉声曰：再说降者”",
+   "name": "董超",
+   "chunk_id": "sanguo-yanyi:0074:p0010:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 202,
+   "question": "成何死在哪一回",
+   "answer": "第74回",
+   "evidence": "第74回：“德回顾成何曰：吾闻勇将不怯死以苟免”",
+   "name": "成何",
+   "chunk_id": "sanguo-yanyi:0074:p0010:c02",
+   "how": "人名+死词"
+  },
+  {
+   "num": 203,
+   "question": "庞德在哪一回身亡",
+   "answer": "第74回",
+   "evidence": "第74回：“关公又令押过庞德”",
+   "name": "庞德",
+   "chunk_id": "sanguo-yanyi:0074:p0012:c01",
+   "how": "人名"
+  },
+  {
+   "num": 204,
+   "question": "关平之死见于哪一回",
+   "answer": "第77回",
+   "evidence": "第77回：“关公自与关平、赵累引残卒二百馀人”",
+   "name": "关平",
+   "chunk_id": "sanguo-yanyi:0077:p0003:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 205,
+   "question": "赵累死在哪一回",
+   "answer": "第77回",
+   "evidence": "第77回：“关公自与关平、赵累引残卒二百馀人”",
+   "name": "赵累",
+   "chunk_id": "sanguo-yanyi:0077:p0003:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 206,
+   "question": "关羽在哪一回身亡",
+   "answer": "第77回",
+   "evidence": "第77回：“于是关公父子皆遇害”",
+   "name": "关羽",
+   "chunk_id": "sanguo-yanyi:0077:p0004:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 207,
+   "question": "周仓之死见于哪一回",
+   "answer": "第77回",
+   "evidence": "第77回：“王甫大叫一声，堕城而死，周仓自刎而亡”",
+   "name": "周仓",
+   "chunk_id": "sanguo-yanyi:0077:p0009:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 208,
+   "question": "王甫死在哪一回",
+   "answer": "第77回",
+   "evidence": "第77回：“王甫大叫一声，堕城而死，周仓自刎而亡”",
+   "name": "王甫",
+   "chunk_id": "sanguo-yanyi:0077:p0009:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 209,
+   "question": "吕蒙在哪一回身亡",
+   "answer": "第77回",
+   "evidence": "第77回：“只见吕蒙倒于地上，七窍流血而死”",
+   "name": "吕蒙",
+   "chunk_id": "sanguo-yanyi:0077:p0013:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 210,
+   "question": "华佗之死见于哪一回",
+   "answer": "第78回",
+   "evidence": "第78回：“华佗在狱，有一狱卒姓吴，人皆称为吴押狱”",
+   "name": "华佗",
+   "chunk_id": "sanguo-yanyi:0078:p0006:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 211,
+   "question": "曹操死在哪一回",
+   "answer": "第78回",
+   "evidence": "第78回：“后人有《邺中歌》一篇，叹曹操云”",
+   "name": "曹操",
+   "chunk_id": "sanguo-yanyi:0078:p0015:c01",
+   "how": "人名"
+  },
+  {
+   "num": 212,
+   "question": "于禁在哪一回身亡",
+   "answer": "第79回",
+   "evidence": "第79回：“原来曹丕以于禁兵败被擒，不能死节，既降敌而复归，心鄙其为人”",
+   "name": "于禁",
+   "chunk_id": "sanguo-yanyi:0079:p0002:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 213,
+   "question": "丁仪之死见于哪一回",
+   "answer": "第79回",
+   "evidence": "第79回：“临淄使者回报，说：临淄侯日与丁仪、丁廙兄弟二人酣饮”",
+   "name": "丁仪",
+   "chunk_id": "sanguo-yanyi:0079:p0004:c01",
+   "how": "人名"
+  },
+  {
+   "num": 214,
+   "question": "丁廙死在哪一回",
+   "answer": "第79回",
+   "evidence": "第79回：“临淄使者回报，说：临淄侯日与丁仪、丁廙兄弟二人酣饮”",
+   "name": "丁廙",
+   "chunk_id": "sanguo-yanyi:0079:p0004:c01",
+   "how": "人名"
+  },
+  {
+   "num": 215,
+   "question": "曹熊在哪一回身亡",
+   "answer": "第79回",
+   "evidence": "第79回：“萧怀使者回报：萧怀侯曹熊惧罪”",
+   "name": "曹熊",
+   "chunk_id": "sanguo-yanyi:0079:p0004:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 216,
+   "question": "彭羕之死见于哪一回",
+   "answer": "第79回",
+   "evidence": "第79回：“于是玄德赐彭羕死于狱”",
+   "name": "彭羕",
+   "chunk_id": "sanguo-yanyi:0079:p0013:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 217,
+   "question": "刘封死在哪一回",
+   "answer": "第79回",
+   "evidence": "第79回：“孟达知刘封扯书斩使，勃然大怒”",
+   "name": "刘封",
+   "chunk_id": "sanguo-yanyi:0079:p0020:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 218,
+   "question": "祖弼在哪一回身亡",
+   "answer": "第80回",
+   "evidence": "第80回：“洪喝令武士推出斩之，祖弼大骂不绝口而死”",
+   "name": "祖弼",
+   "chunk_id": "sanguo-yanyi:0080:p0004:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 219,
+   "question": "张飞之死见于哪一回",
+   "answer": "第81回",
+   "evidence": "第81回：“却说张飞在帐中，神思昏乱，动止恍惚，乃问部将曰：吾今心惊肉颤”",
+   "name": "张飞",
+   "chunk_id": "sanguo-yanyi:0081:p0008:c01",
+   "how": "人名"
+  },
+  {
+   "num": 220,
+   "question": "李异死在哪一回",
+   "answer": "第82回",
+   "evidence": "第82回：“桓领李异、谢旌立马于门旗之下，见蜀营中，拥出二员大将”",
+   "name": "李异",
+   "chunk_id": "sanguo-yanyi:0082:p0008:c01",
+   "how": "人名"
+  },
+  {
+   "num": 221,
+   "question": "谢旌在哪一回身亡",
+   "answer": "第82回",
+   "evidence": "第82回：“桓领李异、谢旌立马于门旗之下，见蜀营中，拥出二员大将”",
+   "name": "谢旌",
+   "chunk_id": "sanguo-yanyi:0082:p0008:c01",
+   "how": "人名"
+  },
+  {
+   "num": 222,
+   "question": "谭雄之死见于哪一回",
+   "answer": "第82回",
+   "evidence": "第82回：“桓折了李异、谢旌、谭雄等许多将士，力穷势孤，不能抵敌”",
+   "name": "谭雄",
+   "chunk_id": "sanguo-yanyi:0082:p0010:c01",
+   "how": "人名"
+  },
+  {
+   "num": 223,
+   "question": "崔禹死在哪一回",
+   "answer": "第82回",
+   "evidence": "第82回：“传旨将崔禹斩却，大赏三军”",
+   "name": "崔禹",
+   "chunk_id": "sanguo-yanyi:0082:p0012:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 224,
+   "question": "黄忠在哪一回身亡",
+   "answer": "第83回",
+   "evidence": "第83回：“两路军杀来，吴兵溃散，救出黄忠”",
+   "name": "黄忠",
+   "chunk_id": "sanguo-yanyi:0083:p0003:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 225,
+   "question": "周平之死见于哪一回",
+   "answer": "第83回",
+   "evidence": "第83回：“周平大惊，措手不及，被关兴一刀斩了”",
+   "name": "周平",
+   "chunk_id": "sanguo-yanyi:0083:p0006:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 226,
+   "question": "夏恂死在哪一回",
+   "answer": "第83回",
+   "evidence": "第83回：“部将夏恂，挺枪出马”",
+   "name": "夏恂",
+   "chunk_id": "sanguo-yanyi:0083:p0006:c01",
+   "how": "人名"
+  },
+  {
+   "num": 227,
+   "question": "甘宁在哪一回身亡",
+   "answer": "第83回",
+   "evidence": "第83回：“却说甘宁正在船中养病，听知蜀兵大至，火急上马，正遇一彪蛮兵”",
+   "name": "甘宁",
+   "chunk_id": "sanguo-yanyi:0083:p0007:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 228,
+   "question": "潘璋之死见于哪一回",
+   "answer": "第83回",
+   "evidence": "第83回：“老人出而问之，乃吴将潘璋亦来投宿”",
+   "name": "潘璋",
+   "chunk_id": "sanguo-yanyi:0083:p0010:c01",
+   "how": "人名"
+  },
+  {
+   "num": 229,
+   "question": "傅士仁死在哪一回",
+   "answer": "第83回",
+   "evidence": "第83回：“大惊，遂与傅士仁商议曰：军心变动”",
+   "name": "傅士仁",
+   "chunk_id": "sanguo-yanyi:0083:p0013:c01",
+   "how": "人名"
+  },
+  {
+   "num": 230,
+   "question": "糜芳在哪一回身亡",
+   "answer": "第83回",
+   "evidence": "第83回：“糜芳听毕，大惊，遂与傅士仁商议曰：军心变动”",
+   "name": "糜芳",
+   "chunk_id": "sanguo-yanyi:0083:p0013:c01",
+   "how": "人名"
+  },
+  {
+   "num": 231,
+   "question": "马忠之死见于哪一回",
+   "answer": "第83回",
+   "evidence": "第83回：“今蜀主所恨者马忠耳，何不杀了他，将首级去献蜀主，告称”",
+   "name": "马忠",
+   "chunk_id": "sanguo-yanyi:0083:p0013:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 232,
+   "question": "张达死在哪一回",
+   "answer": "第83回",
+   "evidence": "第83回：“独有范疆、张达二人，现在东吴”",
+   "name": "张达",
+   "chunk_id": "sanguo-yanyi:0083:p0014:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 233,
+   "question": "范疆在哪一回身亡",
+   "answer": "第83回",
+   "evidence": "第83回：“独有范疆、张达二人，现在东吴”",
+   "name": "范疆",
+   "chunk_id": "sanguo-yanyi:0083:p0014:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 234,
+   "question": "朱然之死见于哪一回",
+   "answer": "第84回",
+   "evidence": "第84回：“只见前面喊声震天，朱然军纷纷落涧，滚滚投岩，一彪军杀入”",
+   "name": "朱然",
+   "chunk_id": "sanguo-yanyi:0084:p0014:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 235,
+   "question": "傅彤死在哪一回",
+   "answer": "第84回",
+   "evidence": "第84回：“却说傅彤断后，被吴军八面围住”",
+   "name": "傅彤",
+   "chunk_id": "sanguo-yanyi:0084:p0016:c01",
+   "how": "人名"
+  },
+  {
+   "num": 236,
+   "question": "程畿在哪一回身亡",
+   "answer": "第84回",
+   "evidence": "第84回：“蜀祭酒程畿，匹马奔至江边，招呼水军赴敌，吴兵随后追来”",
+   "name": "程畿",
+   "chunk_id": "sanguo-yanyi:0084:p0018:c01",
+   "how": "人名"
+  },
+  {
+   "num": 237,
+   "question": "冯习之死见于哪一回",
+   "answer": "第84回",
+   "evidence": "第84回：“张南、冯习奋力冲突，不能得脱”",
+   "name": "冯习",
+   "chunk_id": "sanguo-yanyi:0084:p0020:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 238,
+   "question": "孙夫人死在哪一回",
+   "answer": "第84回",
+   "evidence": "第84回：“时孙夫人在吴，闻猇亭兵败，讹传先主死于军中，遂驱车至江边，望西遥哭”",
+   "name": "孙夫人",
+   "chunk_id": "sanguo-yanyi:0084:p0022:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 239,
+   "question": "沙摩柯在哪一回身亡",
+   "answer": "第84回",
+   "evidence": "第84回：“时有蛮王沙摩柯，匹马奔走，正逢周泰，战二十馀合”",
+   "name": "沙摩柯",
+   "chunk_id": "sanguo-yanyi:0084:p0022:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 240,
+   "question": "刘备之死见于哪一回",
+   "answer": "第85回",
+   "evidence": "第85回：“先主谓众官曰：朕已托孤于丞相”",
+   "name": "刘备",
+   "chunk_id": "sanguo-yanyi:0085:p0009:c01",
+   "how": "人名"
+  },
+  {
+   "num": 241,
+   "question": "张辽死在哪一回",
+   "answer": "第86回",
+   "evidence": "第86回：“张辽回到许昌，箭疮迸裂而亡，曹丕厚葬之”",
+   "name": "张辽",
+   "chunk_id": "sanguo-yanyi:0086:p0017:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 242,
+   "question": "雍闿在哪一回身亡",
+   "answer": "第87回",
+   "evidence": "第87回：“是夜高定引兵杀投雍闿寨中”",
+   "name": "雍闿",
+   "chunk_id": "sanguo-yanyi:0087:p0007:c02",
+   "how": "人名+死词"
+  },
+  {
+   "num": 243,
+   "question": "朱褒之死见于哪一回",
+   "answer": "第87回",
+   "evidence": "第87回：“高定即引部将鄂焕并本部兵，杀奔朱褒营来”",
+   "name": "朱褒",
+   "chunk_id": "sanguo-yanyi:0087:p0008:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 244,
+   "question": "金环三结死在哪一回",
+   "answer": "第87回",
+   "evidence": "第87回：“故教深入重地，先破金环三结，随即分兵左右寨后抄出”",
+   "name": "金环三结",
+   "chunk_id": "sanguo-yanyi:0087:p0016:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 245,
+   "question": "忙牙长在哪一回身亡",
+   "answer": "第88回",
+   "evidence": "第88回：“忙牙长出马，与马岱交锋，只一合”",
+   "name": "忙牙长",
+   "chunk_id": "sanguo-yanyi:0088:p0007:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 246,
+   "question": "董荼那之死见于哪一回",
+   "answer": "第88回",
+   "evidence": "第88回：“差心腹人到董荼那、阿会喃寨中，只推孔明有使命至”",
+   "name": "董荼那",
+   "chunk_id": "sanguo-yanyi:0088:p0011:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 247,
+   "question": "阿会喃死在哪一回",
+   "answer": "第88回",
+   "evidence": "第88回：“心腹人到董荼那、阿会喃寨中，只推孔明有使命至，将二人赚到大寨帐下”",
+   "name": "阿会喃",
+   "chunk_id": "sanguo-yanyi:0088:p0011:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 248,
+   "question": "朵思大王在哪一回身亡",
+   "answer": "第90回",
+   "evidence": "第90回：“朵思大王死于乱军之中，蜀将督军分路剿杀”",
+   "name": "朵思大王",
+   "chunk_id": "sanguo-yanyi:0090:p0004:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 249,
+   "question": "木鹿大王之死见于哪一回",
+   "answer": "第90回",
+   "evidence": "第90回：“木鹿大王死于乱军之中”",
+   "name": "木鹿大王",
+   "chunk_id": "sanguo-yanyi:0090:p0008:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 250,
+   "question": "兀突骨死在哪一回",
+   "answer": "第90回",
+   "evidence": "第90回：“无有不着，将兀突骨并三万藤甲军，烧得互相拥抱”",
+   "name": "兀突骨",
+   "chunk_id": "sanguo-yanyi:0090:p0015:c02",
+   "how": "人名+死词"
+  },
+  {
+   "num": 251,
+   "question": "甄夫人在哪一回身亡",
+   "answer": "第91回",
+   "evidence": "第91回：“遂将甄夫人赐死，立郭贵妃为后”",
+   "name": "甄夫人",
+   "chunk_id": "sanguo-yanyi:0091:p0006:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 252,
+   "question": "曹丕之死见于哪一回",
+   "answer": "第91回",
+   "evidence": "第91回：“谥父丕为文皇帝，谥母甄氏为文昭皇后”",
+   "name": "曹丕",
+   "chunk_id": "sanguo-yanyi:0091:p0007:c01",
+   "how": "人名"
+  },
+  {
+   "num": 253,
+   "question": "马超死在哪一回",
+   "answer": "第91回",
+   "evidence": "第91回：“吾自平南回都，马孟起病故，吾甚惜之”",
+   "name": "马超",
+   "chunk_id": "sanguo-yanyi:0091:p0017:c02",
+   "how": "人名+死词"
+  },
+  {
+   "num": 254,
+   "question": "韩瑛在哪一回身亡",
+   "answer": "第92回",
+   "evidence": "第92回：“长子韩瑛，跃马来迎，战不三合”",
+   "name": "韩瑛",
+   "chunk_id": "sanguo-yanyi:0092:p0002:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 255,
+   "question": "韩德之死见于哪一回",
+   "answer": "第92回",
+   "evidence": "第92回：“韩德曰：杀吾四子之仇，如何不报”",
+   "name": "韩德",
+   "chunk_id": "sanguo-yanyi:0092:p0005:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 256,
+   "question": "王朗死在哪一回",
+   "answer": "第93回",
+   "evidence": "第93回：“王朗听罢，气满胸膛，大叫一声”",
+   "name": "王朗",
+   "chunk_id": "sanguo-yanyi:0093:p0013:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 257,
+   "question": "越吉在哪一回身亡",
+   "answer": "第94回",
+   "evidence": "第94回：“越吉元帅望后面山谷中而逃，正逢关兴，交马只一合，被兴举刀大喝一声”",
+   "name": "越吉",
+   "chunk_id": "sanguo-yanyi:0094:p0006:c02",
+   "how": "人名+死词"
+  },
+  {
+   "num": 258,
+   "question": "曹遵之死见于哪一回",
+   "answer": "第94回",
+   "evidence": "第94回：“曹遵大惊，拍马交锋，不三合”",
+   "name": "曹遵",
+   "chunk_id": "sanguo-yanyi:0094:p0007:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 259,
+   "question": "朱赞死在哪一回",
+   "answer": "第94回",
+   "evidence": "第94回：“朱赞措手不及，被云一枪刺死”",
+   "name": "朱赞",
+   "chunk_id": "sanguo-yanyi:0094:p0007:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 260,
+   "question": "孟达在哪一回身亡",
+   "answer": "第94回",
+   "evidence": "第94回：“却说徐晃被孟达射中头额，众军救到寨中，取了箭头，令医调治，当晚身死”",
+   "name": "孟达",
+   "chunk_id": "sanguo-yanyi:0094:p0017:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 261,
+   "question": "徐晃之死见于哪一回",
+   "answer": "第94回",
+   "evidence": "第94回：“却说徐晃被孟达射中头额，众军救到寨中，取了箭头，令医调治，当晚身死”",
+   "name": "徐晃",
+   "chunk_id": "sanguo-yanyi:0094:p0017:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 262,
+   "question": "苏顒死在哪一回",
+   "answer": "第95回",
+   "evidence": "第95回：“唤先锋苏颙分付曰：蜀将赵云，英勇无敌”",
+   "name": "苏顒",
+   "chunk_id": "sanguo-yanyi:0095:p0016:c01",
+   "how": "人名"
+  },
+  {
+   "num": 263,
+   "question": "马谡在哪一回身亡",
+   "answer": "第96回",
+   "evidence": "第96回：“忽报马谡、王平、魏延、高翔至”",
+   "name": "马谡",
+   "chunk_id": "sanguo-yanyi:0096:p0003:c01",
+   "how": "人名"
+  },
+  {
+   "num": 264,
+   "question": "曹休之死见于哪一回",
+   "answer": "第97回",
+   "evidence": "第97回：“魏都督曹休被东吴陆逊大破于石亭，车仗马匹，军资器械”",
+   "name": "曹休",
+   "chunk_id": "sanguo-yanyi:0097:p0001:c01",
+   "how": "人名"
+  },
+  {
+   "num": 265,
+   "question": "赵云死在哪一回",
+   "answer": "第97回",
+   "evidence": "第97回：“子龙身故，国家损一栋梁”",
+   "name": "赵云",
+   "chunk_id": "sanguo-yanyi:0097:p0002:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 266,
+   "question": "谢雄在哪一回身亡",
+   "answer": "第97回",
+   "evidence": "第97回：“却说谢雄引军前行，正遇王双，战不三合”",
+   "name": "谢雄",
+   "chunk_id": "sanguo-yanyi:0097:p0012:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 267,
+   "question": "龚起之死见于哪一回",
+   "answer": "第97回",
+   "evidence": "第97回：“龚起接着，交马只三合，亦被双所斩”",
+   "name": "龚起",
+   "chunk_id": "sanguo-yanyi:0097:p0012:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 268,
+   "question": "费耀死在哪一回",
+   "answer": "第97回",
+   "evidence": "第97回：“费耀只道号火，便回身杀来”",
+   "name": "费耀",
+   "chunk_id": "sanguo-yanyi:0097:p0015:c02",
+   "how": "人名+死词"
+  },
+  {
+   "num": 269,
+   "question": "王双在哪一回身亡",
+   "answer": "第98回",
+   "evidence": "第98回：“早有细作报知王双”",
+   "name": "王双",
+   "chunk_id": "sanguo-yanyi:0098:p0008:c01",
+   "how": "人名"
+  },
+  {
+   "num": 270,
+   "question": "郝昭之死见于哪一回",
+   "answer": "第98回",
+   "evidence": "第98回：“乃与张郃商议曰：郝昭病重”",
+   "name": "郝昭",
+   "chunk_id": "sanguo-yanyi:0098:p0016:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 271,
+   "question": "张苞死在哪一回",
+   "answer": "第99回",
+   "evidence": "第99回：“忽报有人自成都来，说张苞身死”",
+   "name": "张苞",
+   "chunk_id": "sanguo-yanyi:0099:p0012:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 272,
+   "question": "秦良在哪一回身亡",
+   "answer": "第100回",
+   "evidence": "第100回：“秦良死战，被廖化一刀斩于马下”",
+   "name": "秦良",
+   "chunk_id": "sanguo-yanyi:0100:p0006:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 273,
+   "question": "陈式之死见于哪一回",
+   "answer": "第100回",
+   "evidence": "第100回：“即叱武士推出陈式斩之”",
+   "name": "陈式",
+   "chunk_id": "sanguo-yanyi:0100:p0007:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 274,
+   "question": "曹真死在哪一回",
+   "answer": "第100回",
+   "evidence": "第100回：“孔明谓诸将曰：曹真必死矣”",
+   "name": "曹真",
+   "chunk_id": "sanguo-yanyi:0100:p0010:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 275,
+   "question": "张郃在哪一回身亡",
+   "answer": "第101回",
+   "evidence": "第101回：“张郃杀得性起，又见魏延大败而逃”",
+   "name": "张郃",
+   "chunk_id": "sanguo-yanyi:0101:p0014:c02",
+   "how": "人名+死词"
+  },
+  {
+   "num": 276,
+   "question": "关兴之死见于哪一回",
+   "answer": "第102回",
+   "evidence": "第102回：“忽报关兴病亡，孔明放声大哭，昏倒于地”",
+   "name": "关兴",
+   "chunk_id": "sanguo-yanyi:0102:p0001:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 277,
+   "question": "吴班死在哪一回",
+   "answer": "第102回",
+   "evidence": "第102回：“吴班中箭，落水而死”",
+   "name": "吴班",
+   "chunk_id": "sanguo-yanyi:0102:p0008:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 278,
+   "question": "秦朗在哪一回身亡",
+   "answer": "第102回",
+   "evidence": "第102回：“秦朗当先，引一万兵直杀入蜀寨中”",
+   "name": "秦朗",
+   "chunk_id": "sanguo-yanyi:0102:p0014:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 279,
+   "question": "岑威之死见于哪一回",
+   "answer": "第102回",
+   "evidence": "第102回：“岑威引败兵抵敌，被王平一刀斩了”",
+   "name": "岑威",
+   "chunk_id": "sanguo-yanyi:0102:p0026:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 280,
+   "question": "诸葛亮死在哪一回",
+   "answer": "第104回",
+   "evidence": "第104回：“孔明写毕，又嘱杨仪曰：吾死之后”",
+   "name": "诸葛亮",
+   "chunk_id": "sanguo-yanyi:0104:p0006:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 281,
+   "question": "李严在哪一回身亡",
+   "answer": "第104回",
+   "evidence": "第104回：“李严闻之，亦大哭病死”",
+   "name": "李严",
+   "chunk_id": "sanguo-yanyi:0104:p0010:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 282,
+   "question": "魏延之死见于哪一回",
+   "answer": "第105回",
+   "evidence": "第105回：“手起刀落，斩魏延于马下”",
+   "name": "魏延",
+   "chunk_id": "sanguo-yanyi:0105:p0009:c02",
+   "how": "人名+死词"
+  },
+  {
+   "num": 283,
+   "question": "杨仪死在哪一回",
+   "answer": "第105回",
+   "evidence": "第105回：“杨仪自以为年宦先于蒋琬，而位出琬下，且自恃功高，未有重赏，口出怨言”",
+   "name": "杨仪",
+   "chunk_id": "sanguo-yanyi:0105:p0019:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 284,
+   "question": "毛皇后在哪一回身亡",
+   "answer": "第105回",
+   "evidence": "第105回：“睿即降诏赐毛皇后死，立郭夫人为皇后”",
+   "name": "毛皇后",
+   "chunk_id": "sanguo-yanyi:0105:p0027:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 285,
+   "question": "卑衍之死见于哪一回",
+   "answer": "第106回",
+   "evidence": "第106回：“被夏侯霸一刀斩卑衍于马下”",
+   "name": "卑衍",
+   "chunk_id": "sanguo-yanyi:0106:p0003:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 286,
+   "question": "公孙渊死在哪一回",
+   "answer": "第106回",
+   "evidence": "第106回：“懿传令斩之，公孙渊父子对面受戮”",
+   "name": "公孙渊",
+   "chunk_id": "sanguo-yanyi:0106:p0007:c02",
+   "how": "人名+死词"
+  },
+  {
+   "num": 287,
+   "question": "曹睿在哪一回身亡",
+   "answer": "第106回",
+   "evidence": "第106回：“睿执司马懿之手曰：昔刘玄德在白帝城病危，以幼子刘禅托孤于诸葛孔明，孔明因此竭尽忠诚，至死方休”",
+   "name": "曹睿",
+   "chunk_id": "sanguo-yanyi:0106:p0008:c02",
+   "how": "死词"
+  },
+  {
+   "num": 288,
+   "question": "曹爽之死见于哪一回",
+   "answer": "第107回",
+   "evidence": "第107回：“然后押曹爽兄弟三人并一干人犯，皆斩于市曹，灭其三族”",
+   "name": "曹爽",
+   "chunk_id": "sanguo-yanyi:0107:p0008:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 289,
+   "question": "司马懿死在哪一回",
+   "answer": "第108回",
+   "evidence": "第108回：“司马懿染病，渐渐沉重，乃唤二子至榻前嘱曰”",
+   "name": "司马懿",
+   "chunk_id": "sanguo-yanyi:0108:p0002:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 290,
+   "question": "孙权在哪一回身亡",
+   "answer": "第108回",
+   "evidence": "第108回：“却说吴主孙权，先有太子孙登，乃徐夫人所生，于吴赤乌四年身亡”",
+   "name": "孙权",
+   "chunk_id": "sanguo-yanyi:0108:p0003:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 291,
+   "question": "诸葛恪之死见于哪一回",
+   "answer": "第108回",
+   "evidence": "第108回：“诸葛恪大惊，掷杯于地，欲拔剑迎之”",
+   "name": "诸葛恪",
+   "chunk_id": "sanguo-yanyi:0108:p0012:c02",
+   "how": "人名"
+  },
+  {
+   "num": 292,
+   "question": "徐质死在哪一回",
+   "answer": "第109回",
+   "evidence": "第109回：“被维一枪刺倒坐下马，徐质跌下马来”",
+   "name": "徐质",
+   "chunk_id": "sanguo-yanyi:0109:p0005:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 293,
+   "question": "郭淮在哪一回身亡",
+   "answer": "第109回",
+   "evidence": "第109回：“维勒回马来杀郭淮，魏军骤至”",
+   "name": "郭淮",
+   "chunk_id": "sanguo-yanyi:0109:p0010:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 294,
+   "question": "李丰之死见于哪一回",
+   "answer": "第109回",
+   "evidence": "第109回：“李丰曰：圣上在内廷观书”",
+   "name": "李丰",
+   "chunk_id": "sanguo-yanyi:0109:p0011:c02",
+   "how": "人名+死词"
+  },
+  {
+   "num": 295,
+   "question": "夏侯玄死在哪一回",
+   "answer": "第109回",
+   "evidence": "第109回：“夏侯玄知事已泄，乃厉声大骂曰：吾等所哭者，为汝威震其主”",
+   "name": "夏侯玄",
+   "chunk_id": "sanguo-yanyi:0109:p0011:c03",
+   "how": "人名"
+  },
+  {
+   "num": 296,
+   "question": "张皇后在哪一回身亡",
+   "answer": "第109回",
+   "evidence": "第109回：“乃指张皇后曰：此是张缉之女”",
+   "name": "张皇后",
+   "chunk_id": "sanguo-yanyi:0109:p0014:c01",
+   "how": "人名"
+  },
+  {
+   "num": 297,
+   "question": "张缉之死见于哪一回",
+   "answer": "第109回",
+   "evidence": "第109回：“此是张缉之女，理当除之”",
+   "name": "张缉",
+   "chunk_id": "sanguo-yanyi:0109:p0014:c01",
+   "how": "人名"
+  },
+  {
+   "num": 298,
+   "question": "毋丘俭死在哪一回",
+   "answer": "第110回",
+   "evidence": "第110回：“毌丘俭死战相拒，江淮兵大乱”",
+   "name": "毋丘俭",
+   "chunk_id": "sanguo-yanyi:0110:p0010:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 299,
+   "question": "司马师在哪一回身亡",
+   "answer": "第110回",
+   "evidence": "第110回：“司马师卧病不起，唤诸葛诞入帐，赐以印绶，加为镇东大将军”",
+   "name": "司马师",
+   "chunk_id": "sanguo-yanyi:0110:p0011:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 300,
+   "question": "张嶷之死见于哪一回",
+   "answer": "第111回",
+   "evidence": "第111回：“荡寇将军张嶷，闻姜维受困”",
+   "name": "张嶷",
+   "chunk_id": "sanguo-yanyi:0111:p0004:c03",
+   "how": "人名+死词"
+  },
+  {
+   "num": 301,
+   "question": "乐綝死在哪一回",
+   "answer": "第111回",
+   "evidence": "第111回：“昭遂暗发密书与扬州刺史乐綝”",
+   "name": "乐綝",
+   "chunk_id": "sanguo-yanyi:0111:p0007:c01",
+   "how": "人名"
+  },
+  {
+   "num": 302,
+   "question": "孙峻在哪一回身亡",
+   "answer": "第111回",
+   "evidence": "第111回：“此时东吴丞相孙峻病亡，从弟孙綝辅政”",
+   "name": "孙峻",
+   "chunk_id": "sanguo-yanyi:0111:p0008:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 303,
+   "question": "朱异之死见于哪一回",
+   "answer": "第112回",
+   "evidence": "第112回：“朱异正引兵来，忽背后喊声大震，左有王基，右有陈骞，两路军杀来”",
+   "name": "朱异",
+   "chunk_id": "sanguo-yanyi:0112:p0004:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 304,
+   "question": "文钦死在哪一回",
+   "answer": "第112回",
+   "evidence": "第112回：“罪在文钦，今文钦已亡，二子势穷来归，若杀降将”",
+   "name": "文钦",
+   "chunk_id": "sanguo-yanyi:0112:p0006:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 305,
+   "question": "诸葛诞在哪一回身亡",
+   "answer": "第112回",
+   "evidence": "第112回：“诸葛诞闻之大怒，日夜自来巡城”",
+   "name": "诸葛诞",
+   "chunk_id": "sanguo-yanyi:0112:p0006:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 306,
+   "question": "于诠之死见于哪一回",
+   "answer": "第112回",
+   "evidence": "第112回：“王基引兵杀到西门，正遇吴将于诠”",
+   "name": "于诠",
+   "chunk_id": "sanguo-yanyi:0112:p0007:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 307,
+   "question": "王真死在哪一回",
+   "answer": "第112回",
+   "evidence": "第112回：“王真被蜀军乱枪刺死”",
+   "name": "王真",
+   "chunk_id": "sanguo-yanyi:0112:p0016:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 308,
+   "question": "孙綝在哪一回身亡",
+   "answer": "第113回",
+   "evidence": "第113回：“于是张布牵孙綝下殿东斩讫”",
+   "name": "孙綝",
+   "chunk_id": "sanguo-yanyi:0113:p0007:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 309,
+   "question": "曹髦之死见于哪一回",
+   "answer": "第114回",
+   "evidence": "第114回：“禁兵见了曹髦，皆不敢动”",
+   "name": "曹髦",
+   "chunk_id": "sanguo-yanyi:0114:p0008:c01",
+   "how": "人名"
+  },
+  {
+   "num": 310,
+   "question": "成济死在哪一回",
+   "answer": "第114回",
+   "evidence": "第114回：“成济大逆不道，可剐之，灭其三族”",
+   "name": "成济",
+   "chunk_id": "sanguo-yanyi:0114:p0009:c01",
+   "how": "人名"
+  },
+  {
+   "num": 311,
+   "question": "王经在哪一回身亡",
+   "answer": "第114回",
+   "evidence": "第114回：“昭又使人收王经全家下狱”",
+   "name": "王经",
+   "chunk_id": "sanguo-yanyi:0114:p0011:c01",
+   "how": "人名"
+  },
+  {
+   "num": 312,
+   "question": "王瓘之死见于哪一回",
+   "answer": "第114回",
+   "evidence": "第114回：“维只道王瓘舍命撞回魏国，不想反杀入汉中而去”",
+   "name": "王瓘",
+   "chunk_id": "sanguo-yanyi:0114:p0018:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 313,
+   "question": "夏侯霸死在哪一回",
+   "answer": "第115回",
+   "evidence": "第115回：“可怜夏侯霸同五百军，皆死于城下”",
+   "name": "夏侯霸",
+   "chunk_id": "sanguo-yanyi:0115:p0003:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 314,
+   "question": "许仪在哪一回身亡",
+   "answer": "第116回",
+   "evidence": "第116回：“前军先锋许仪，要立头功，先领兵至南郑关”",
+   "name": "许仪",
+   "chunk_id": "sanguo-yanyi:0116:p0006:c01",
+   "how": "人名"
+  },
+  {
+   "num": 315,
+   "question": "傅佥之死见于哪一回",
+   "answer": "第116回",
+   "evidence": "第116回：“傅佥大怒，令蒋舒把关，自引三千兵杀下关来”",
+   "name": "傅佥",
+   "chunk_id": "sanguo-yanyi:0116:p0007:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 316,
+   "question": "李氏死在哪一回",
+   "answer": "第117回",
+   "evidence": "第117回：“当日操练人马回家，与妻李氏拥炉饮酒”",
+   "name": "李氏",
+   "chunk_id": "sanguo-yanyi:0117:p0007:c01",
+   "how": "人名"
+  },
+  {
+   "num": 317,
+   "question": "诸葛尚在哪一回身亡",
+   "answer": "第117回",
+   "evidence": "第117回：“其子诸葛尚在城上，见父死于军中，勃然大怒”",
+   "name": "诸葛尚",
+   "chunk_id": "sanguo-yanyi:0117:p0018:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 318,
+   "question": "诸葛瞻之死见于哪一回",
+   "answer": "第117回",
+   "evidence": "第117回：“却说诸葛瞻见救兵不至，谓众将曰”",
+   "name": "诸葛瞻",
+   "chunk_id": "sanguo-yanyi:0117:p0018:c01",
+   "how": "人名"
+  },
+  {
+   "num": 319,
+   "question": "张遵死在哪一回",
+   "answer": "第117回",
+   "evidence": "第117回：“张遵、黄崇、李球三人，各引一军杀出”",
+   "name": "张遵",
+   "chunk_id": "sanguo-yanyi:0117:p0020:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 320,
+   "question": "李球在哪一回身亡",
+   "answer": "第117回",
+   "evidence": "第117回：“张遵、黄崇、李球三人，各引一军杀出”",
+   "name": "李球",
+   "chunk_id": "sanguo-yanyi:0117:p0020:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 321,
+   "question": "黄崇之死见于哪一回",
+   "answer": "第117回",
+   "evidence": "第117回：“张遵、黄崇、李球三人，各引一军杀出”",
+   "name": "黄崇",
+   "chunk_id": "sanguo-yanyi:0117:p0020:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 322,
+   "question": "刘谌死在哪一回",
+   "answer": "第118回",
+   "evidence": "第118回：“北地王刘谌闻知，怒气冲天”",
+   "name": "刘谌",
+   "chunk_id": "sanguo-yanyi:0118:p0004:c01",
+   "how": "人名"
+  },
+  {
+   "num": 323,
+   "question": "姜维在哪一回身亡",
+   "answer": "第119回",
+   "evidence": "第119回：“即命姜维领武士往杀众魏将”",
+   "name": "姜维",
+   "chunk_id": "sanguo-yanyi:0119:p0005:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 324,
+   "question": "邓艾之死见于哪一回",
+   "answer": "第119回",
+   "evidence": "第119回：“见钟会、姜维已死，遂连夜去追劫邓艾”",
+   "name": "邓艾",
+   "chunk_id": "sanguo-yanyi:0119:p0005:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 325,
+   "question": "钟会死在哪一回",
+   "answer": "第119回",
+   "evidence": "第119回：“见钟会、姜维已死，遂连夜去追劫邓艾”",
+   "name": "钟会",
+   "chunk_id": "sanguo-yanyi:0119:p0005:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 326,
+   "question": "司马昭在哪一回身亡",
+   "answer": "第119回",
+   "evidence": "第119回：“何曾曰：天下大事，皆在晋王”",
+   "name": "司马昭",
+   "chunk_id": "sanguo-yanyi:0119:p0017:c01",
+   "how": "人名"
+  },
+  {
+   "num": 327,
+   "question": "孙休之死见于哪一回",
+   "answer": "第120回",
+   "evidence": "第120回：“却说吴主孙休，闻司马炎已篡魏，知其必将伐吴，忧虑成疾，卧床不起”",
+   "name": "孙休",
+   "chunk_id": "sanguo-yanyi:0120:p0001:c01",
+   "how": "人名"
+  },
+  {
+   "num": 328,
+   "question": "羊祜死在哪一回",
+   "answer": "第120回",
+   "evidence": "第120回：“至咸宁四年，羊祜入朝，奏辞归乡养病”",
+   "name": "羊祜",
+   "chunk_id": "sanguo-yanyi:0120:p0011:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 329,
+   "question": "伍延在哪一回身亡",
+   "answer": "第120回",
+   "evidence": "第120回：“吴主遣伍延出陆路，陆景出水路，孙歆为先锋”",
+   "name": "伍延",
+   "chunk_id": "sanguo-yanyi:0120:p0020:c01",
+   "how": "人名"
+  },
+  {
+   "num": 330,
+   "question": "张悌之死见于哪一回",
+   "answer": "第120回",
+   "evidence": "第120回：“张悌与沈莹挥兵抵敌，晋兵一齐围之”",
+   "name": "张悌",
+   "chunk_id": "sanguo-yanyi:0120:p0022:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 331,
+   "question": "沈莹死在哪一回",
+   "answer": "第120回",
+   "evidence": "第120回：“张悌与沈莹挥兵抵敌，晋兵一齐围之”",
+   "name": "沈莹",
+   "chunk_id": "sanguo-yanyi:0120:p0022:c01",
+   "how": "人名+死词"
+  },
+  {
+   "num": 332,
+   "question": "岑昏在哪一回身亡",
+   "answer": "第120回",
+   "evidence": "第120回：“今日之祸，皆岑昏之罪，请陛下诛之”",
+   "name": "岑昏",
+   "chunk_id": "sanguo-yanyi:0120:p0024:c01",
+   "how": "人名+死词"
+  }
+ ]
+}

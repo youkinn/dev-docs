@@ -1,11 +1,13 @@
 # 会话交接文档：仅本机使用，不入库
 docs/handoff-*.md
+/handoff/
 /docs/sango-rag-regression-benchmark_v0.1_remark.md
 /test/*
 !/test/standard-set/
 !/test/standard-set/**
 # 回归结果快照：仅本机留存，不入库
 /test/standard-set/results/
+/test/standard-set/events/
 # 本地运行产物（在 dev-docs 目录下跑总台代码会生成 data/logs.db 副本）：不入库
 /data/
 
@@ -14,3 +16,12 @@ docs/handoff-*.md
 !/test/term-diff/**
 # A016 统计数据大文件：仅本机留存，不入库
 /test/term-diff/report/feat-A016-entity-diff-data.json
+
+# AI 初审任务包：入库跟踪
+!/test/events/
+
+# 底本抓取工具链的辅文产物（文前辅文，不入语料、不入库；重建见 scripts/douban-sanguo/）
+docs/front-matter.txt
+
+# Python 工具字节码缓存：不入库
+__pycache__/

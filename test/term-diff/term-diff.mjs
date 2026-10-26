@@ -39,7 +39,7 @@ const CFG = {
 // ---------- 1. 解析类 ----------
 
 /** A015 标准集：11 类小节 + | # | 问题 | 标准答案 | 证据 | 表格行（与 mcp-server benchmark parser 同口径）。 */
-const STD_CATEGORIES = ['人物', '地名', '战役', '典故', '器物', '身体部位', '官职', '数字称谓', '事件关系', '死亡', '拒答'];
+const STD_CATEGORIES = ['人物', '地名', '战役', '典故', '器物', '身体部位', '问法归一', '官职', '数字称谓', '事件关系', '出场', '死亡', '拒答'];
 export function parseStdSet(md) {
   const qs = [];
   let category = '';

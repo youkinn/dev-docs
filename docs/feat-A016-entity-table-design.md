@@ -32,7 +32,7 @@
 | `id` | string | 人物行必填 | 人名沿用 PID（P001..P148 保持不动）；重复 / 空 id 修复规则见 §2.3；非人物行填 null |
 | `canonical` | string | 是 | 规范形（表指定，取消 df 选名）；type 内唯一、**不得出现在任何行的 rewriteKeys / fragmentOnly 中** |
 | `aliases` | string[] | 是 | 素材别名全量（含被禁入项，供审计 / 追溯）；继承起草行覆盖范围后合并 newAliases 去重 |
-| `rewriteKeys` | string[] | 是（可为空）| 可作 query 改写键的安全别名；⊆ aliases，与 fragmentOnly 互斥 |
+| `rewriteKeys` | string[] | 是（可为空）| 可安全双写的别名（09-29 口径：索引侧双写扩展，不作 query 改写）；⊆ aliases，与 fragmentOnly 互斥 |
 | `fragmentOnly` | string[] | 是（可为空）| 禁入改写键、仅片段侧同义素材；⊆ aliases |
 | `organGuard` | object \| null | 否 | 身体行歧义防护审计（引用 policy.ambiguityGuard 条目，如 嘴 行引用 口）；非身体行 null |
 | `note` | string | 否 | 裁决备注（如「终审：跨主条目（多主条目候选）禁入改写键」；R2 / R5 / R6 命中处必记） |
@@ -143,7 +143,7 @@ type 枚举（12 值，= 表起草实际取值）：`人物` / `地名` / `战�
 
 ## 6. 两路分流（改写键 vs 片段侧同义素材）
 
-- 语义：改写键 = 可安全替换（query 侧无语境可消歧：白名单 + 非单字 + 唯一指称 / 低风险候选）；片段侧素材 = 禁入改写键、但片段侧有语境价值（跨主条目 / 泛官职裸词 / 死亡短语 / 过泛缩略）。
+- 语义：改写键 = 可安全双写的别名（白名单 + 非单字 + 唯一指称 / 低风险候选；09-29 起用于索引侧双写，不再替换 query）；片段侧素材 = 禁入改写键、但片段侧有语境价值（跨主条目 / 泛官职裸词 / 死亡短语 / 过泛缩略）。
 - 决策理由：歧义判定依赖片段语境，query 侧无语境 → 歧义词禁入改写；片段侧用上下文可消歧且扩展不覆盖原文（双写）→ 保 recall 不引入误伤。
 - 表内表达：`rewriteKeys` / `fragmentOnly` 两列（互斥，并集 ⊆ aliases），自上而下可追溯。
 
@@ -151,18 +151,18 @@ type 枚举（12 值，= 表起草实际取值）：`人物` / `地名` / `战�
 
 | 消费方 | rewriteKeys | fragmentOnly |
 |---|---|---|
-| query 改写（检索与缓存工具 embed 前） | 替换 | 不参与（原文保留）|
-| 索引侧（postings 构建）| 替换（双侧同表）| 双写扩展（原文 token + 规范形 token）|
-| 标签侧（tagPostings 构建）| 替换归一化 | 共享实体标签多挂（第三路召回）|
-| 缓存 embed（编排侧经工具）| 替换后编码 | 不参与 |
+| 检索 query | **不替换：原文入检索（09-29 定）** | 不参与（原文保留）|
+| 索引侧（postings 构建）| **双写扩展（原文 token + 规范形 token，与 fragmentOnly 同口径）** | 双写扩展 |
+| 标签侧（tagPostings 构建）| **双写扩展** | 共享实体标签多挂（第三路召回）|
+| 缓存 embed（编排侧经工具）| 替换后编码（不变）| 不参与 |
 
 ## 7. 加载后内存结构（对照现行 alias.json 用法）
 
 | 现行（alias.json） | 新（entity-table.json） |
 |---|---|
-| `pidOf`：别名 → PID | `keyToCanon`：改写键 → 规范形（替换映射，含人物与非人物；现行正则构造输入）|
+| `pidOf`：别名 → PID | `keyToCanon`：键 → 规范形映射（供索引侧双写与诊断；不再用于 query 替换）|
 | `canonOf`：PID → 规范名（df 选名）| 取消；`canonToRow`：规范形 → `{ type, id, aliases, fragmentOnly, organGuard, note }`（人物行 id 承载 PID）|
-| `aliasPattern`（长度降序 alternation，全局替换）| 沿用（构造自 keyToCanon 键集）|
+| `aliasPattern`（长度降序 alternation）| 沿用（构造自 keyToCanon 键集；仅供缓存侧与诊断，检索侧不使用）|
 | — | `fragmentKeys`：fragmentOnly 全表并集（索引构建期双写扩展）|
 | — | `keyExtensions`：改写键 → 表内已知词（任意行 canonical / aliases / rewriteKeys）中「更长含该键」词及偏移；邻接延伸检查用（bug-00036，替换前防 canonical 二次扩张）|
 | — | `bannedRewriteKeys`：Set（policy，加载校验）|
@@ -201,3 +201,4 @@ type 枚举（12 值，= 表起草实际取值）：`人物` / `地名` / `战�
 
 - 2026-09-26：bug-00036 修订——§7 内存结构增 `keyExtensions`（邻接延伸检查索引）；§8 校验清单增检查 9（跨行 canonical 真子串键 K4 剔键）；§8 行为断言增 bug-00036 样例。逐键裁决记录见 `bugs/bug-00036-entity-table-key-substring-collision.md`（Coco 定案，老陈实施）。
 - 2026-09-26：bug-00041 修订——§3 合并示例关羽行 `关公` 由 fragmentOnly 纠偏为 rewriteKey（终审 share=1 误判，证据见 bug 票）；§4 裁定说明补例外与同批疑点清单（Coco 定案，老陈实施数据）。
+- 2026-09-29：消费矩阵跟随 bug-00046 定案修订——检索 query 不替换、rewriteKeys 与 fragmentOnly 同为索引侧双写；字段语义与内存结构用途同步。Coco。

@@ -120,7 +120,8 @@
    "aliases": [
     "元仲",
     "魏明帝",
-    "明帝"
+    "明帝",
+    "曹叡"
    ],
    "newAliases": [],
    "inAliasJson": true
@@ -5795,7 +5796,7 @@
   },
   {
    "type": "登场",
-   "canonical": "人物首次登场",
+   "canonical": "首次登场",
    "aliases": [
     "首次登场",
     "初次登场",
@@ -5807,10 +5808,7 @@
     "初现身",
     "始现",
     "始出",
-    "始登场",
-    "登场",
-    "出场",
-    "出世"
+    "始登场"
    ],
    "rewriteKeys": [
     "首次登场",
@@ -5823,8 +5821,22 @@
     "初现身",
     "始现",
     "始出",
-    "始登场",
-    "登场",
+    "始登场"
+   ],
+   "fragmentOnly": [],
+   "organGuard": null,
+   "queryHit": true,
+   "corpusHit": true,
+   "numLike": true
+  },
+  {
+   "type": "登场",
+   "canonical": "登场",
+   "aliases": [
+    "出场",
+    "出世"
+   ],
+   "rewriteKeys": [
     "出场",
     "出世"
    ],

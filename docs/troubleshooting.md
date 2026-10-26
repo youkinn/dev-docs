@@ -4,7 +4,7 @@
 > **维护责任人：Coco** —— 本手册的准确性由 Coco 负责；它不是一次性文档，随架构与日志契约演进而持续完善。
 > 依据：已定稿需求文档（`requirements/`）+ 代码实现；**只写已实测 / 已确认的口径**，不确定的内容一律放 `docs/troubleshooting-notes.md`。
 > 更新触发（出现即改，不等提醒，见 `AGENTS.md` 第 8 条）：日志字段 / `log_type` / 工具 / 入口埋点 / 路由层 / 诊断结构 / 链路阶段有增删改；新增或退役服务与端口。
-> 更新纪律：**改前先用真实数据实测取证**（不凭代码推理）；每次改动记入文末「维护记录」。
+> 更新纪律：**改前先用真实数据实测取证**（不凭代码推理）；文档只描述当前状态，变更以排查笔记 / git 历史留痕。
 
 ---
 
@@ -59,7 +59,7 @@ Invoke-WebRequest http://localhost:3000/health -UseBasicParsing
 | 总台进程 stdout | 埋点旁路失败、MCP 连接告警、未捕获异常（`Failed to process request:`）、启动 / 退出 | 运行总台的终端窗口 —— **不落盘，重启即丢** |
 | 浏览器 DevTools | 前端异常、请求 / 响应原文、真实 UI 表现 | Network / Console（UI 类问题必用，第 11 条） |
 | 直连 DB | 接口未暴露的字段、原始行、跨表 join | 「命令速查」的「D. 直连日志库」 |
-| `llmCalls.requestSummary / responseSummary` | 生成轮完整入参（**含注入片段全文**）与模型**原始输出**（含 `[Qn]` / `[片段N]` 指针） | 步骤 1 命令取 `llmCalls`；值为 JSON 字符串（`[{type,text}]`）。判「自律拒答 vs 护栏误裁」必须看这里（2026-09-26 实录） |
+| `llmCalls.requestSummary / responseSummary` | 生成轮完整入参（**含注入片段全文**）与模型**原始输出**（含 `[片段N]` 指针） | 步骤 1 命令取 `llmCalls`；值为 JSON 字符串（`[{type,text}]`）。判「自律拒答 vs 护栏误裁」必须看这里（2026-09-26 实录） |
 
 日志系统**看不到**的：前端异常、思考文本、错误栈、代码 / 语料版本、`sessionId`（注入片段全文与模型原始输出可经 `requestSummary` / `responseSummary` 查——旧口径「注入文本不可见」作废）。缺证据时的登记与补数建议见 `docs/troubleshooting-notes.md`。
 
@@ -163,6 +163,7 @@ tool#1 sango/sango_novel_search caller=server stage=fastpath success ms=63 diag=
 - **`queueWait` 显著** → 串行队列被前一请求占住（`/api/chat` 与 `/api/sango/random` **共用同一队列**）；并发下第二条必然等待
 - **`llm` 占大头** → 模型侧；配合 `cachedTokens` 判断是否缓存未命中
 - **`tool` 占大头** → MCP 子进程（演义检索 / 题库状态机）
+- **`tool` 大且检索诊断 `rerank.applied=true`** → 含 cross-encoder 重排段，看 `timing.rerank`（步骤 6）
 - **`frontend` 大而 `server` 小** → 网络或前端渲染
 - **余量 `server − queueWait − llm − tool`** → 总台自身（拼接 / 组装 / 序列化），明显偏大才可疑
 
@@ -212,6 +213,8 @@ $g=$d.toolCalls[0].diagnostics
 "query: raw=$($g.query.raw) | normalized=$($g.query.normalized)"
 $g.candidates|%{"  #$($_.rank) $($_.chunkId) ch$($_.chapter) final=$($_.finalScore) bm25n=$($_.bm25Norm) cos=$($_.cosine) label=$($_.labelHit) src=$($_.sources -join '+') inj=$($_.injected) cited=$($_.cited)"}
 "nextRank: $(if($g.nextRank){"#$($g.nextRank.rank) $($g.nextRank.chunkId) final=$($g.nextRank.finalScore) gap=$($g.nextRank.gapToTopN)"}else{'null'})"
+"timing: bm25=$($g.timing.bm25) vector=$($g.timing.vector) label=$($g.timing.label) merge=$($g.timing.merge) rerank=$($g.timing.rerank)"
+"rerank: enabled=$($g.rerank.enabled) window=$($g.rerank.window) considered=$($g.rerank.considered) skippedPinned=$($g.rerank.skippedPinned) applied=$($g.rerank.applied) reason=$($g.rerank.reason)"
 ```
 
 判读：
@@ -229,8 +232,19 @@ $g.candidates|%{"  #$($_.rank) $($_.chunkId) ch$($_.chapter) final=$($_.finalSco
 | `deathIntent.detected` / `pinned` | 死亡意图是否生效 / 是否置顶 |
 | `truncated=true` + `truncatedCount` | 诊断超 64 KB 预算被截断 |
 | `diagnostics=null` | 非检索工具（正常）/ 诊断落库旁路丢失 |
+| `timing.merge` | 多路召回合并 + 事件路并池增强查询重排 + 规则排序（**不含** cross-encoder 重排） |
+| `timing.rerank` | cross-encoder 池内重排段耗时；`null` = 该段未执行（未接入打分器 / 窗口内无参与候选，看 `rerank.reason` 区分） |
+| `rerank.enabled=false` | 本请求未接入重排打分器（装配层未注入 / 权重缺失）：`reason=未接入重排打分器` |
+| `rerank.applied=false` | 池序未按重排分改写：`reason` = `未接入重排打分器` / `窗口内无参与候选` / `重排打分异常` / `重排分数非法` |
+| `rerank.considered` / `rerank.skippedPinned` | 实际参与重排条数 / 因保证区置顶（死亡意图 ∪ L3 锚点）跳过条数 |
+| `rerank.window` | 重排窗口（规则序后前 N 名进重排；`SANGO_RERANKER_WINDOW` 覆盖，默认 50） |
+| `rerank` 字段缺失 | 老版本 sango（本期可观测之前）产出的诊断 |
 
 分数复算：`finalScore = 0.3 × bm25Norm + 0.6 × (cosine+1)/2 + 0.1 × labelHit`，三项均在 `[0,1]`，`null` 项按 0 计。
+
+重排阶段口径：重排发生在规则序并池之后、取窗之前；保证区（死亡意图 ∪ L3 锚点）按承诺不参与池重排；事件路的增强查询重排计入 `timing.merge`，不在 `timing.rerank` 内。
+
+**重排怎么开 / 怎么关**：改 `mcp-server/sango/.env`（本地文件、不入库）里的 `SANGO_RERANKER=on|off`（默认 `off`，行为与无重排基线逐字节一致）。改完**必须重启 mcp-server** 才生效——提测链路由 orchestrator spawn 子进程（`node <sango>/dist/index.js`），只重启 web 或刷新页面无效。启用态要连带写 A030 锁定档位（`SANGO_RERANKER_WINDOW=20` / `_MAX_TOKENS=128` / `_BATCH=16` / `_INTRA_THREADS=8`），否则默认档位实测 P50 ≈ 4.6s / P95 ≈ 5.0s（远超 P95 ≤ 1000ms 预算）；权重目录默认 `sango/data/models/bge-reranker-base`，缺失时自动退回规则序并在 `rerank.reason` 写明。重排本期不接（负责人 2026-10-14：窗口 50 / 30 / 20 / 10 对照，窗口越大召回质量越差）；`on` 仅供本地对照实验。
 
 ### 步骤 7 · 核对路由
 
@@ -385,19 +399,3 @@ node scripts/probe/trace-export.mjs --list <chunkId>                # 反查 chu
 - **汇报格式**（第 7 条）：现象 + 根因层 + 证据读数 + 后续动作；文档变更只报路径，不复述内容
 
 ---
-
-## 10. 维护记录
-
-| 日期 | 变更 | 触发来源 | 验证方式 |
-|------|------|----------|----------|
-| 2026-09-22 | 初版：链路与埋点覆盖面、排查流程（步骤 0–9）、怎么判、现象 → 先看哪个读数、命令速查、读数陷阱、闭环口径 | 负责人要求：用现有日志系统规范化排查流程 | 总台 :3000 + 日志页 :8001 在线，全部命令以真实 trace 实测（样本 `f21dd6be-27c1-45dc-aa84-7da74e33d78a`） |
-| 2026-09-22 | 会过期的内容（bug 号结论、已知问题对照、经验阈值）移出到 `docs/troubleshooting-notes.md`；`§N` 引用改为节名 | 负责人：本手册必须准确、不误导；唯一可信是需求文档 | 逐节复核引用与节名 |
-| 2026-09-24 | LLM 明细新增 `stage=novel_support_check`（演义域生成轮后的引用支撑复核轮，bug-00028 长期机制）；拒答口径：复核判不支撑 / `uncertain` / 解析失败重试后仍失败 → 答案「演义中未涉及」+ 空引用、`funnel.cited=0` | bug-00028 定稿设计 `docs/novel-answer-support-check.md` | 全量测试 349 绿 + 真实 trace 实测 |
-| 2026-09-24 | 撤销 `novel_support_check` 复核轮 stage（负责人否决二次 LLM 调用，成本 / 延迟翻倍）；演义域改为单轮生成 + 结构保险丝（生成轮通用语义指令 + 句-片段文本重叠结构门），拒答口径不变，见 `docs/novel-answer-support-check.md` 新版 | bug-00028 设计改版 | 全量测试绿 + 三例 trace 复测 |
-| 2026-09-25 | §7 增补 F「整链路快照导出」：`scripts/probe/trace-export.mjs <chunkId|traceId>`（mcp-orchestrator）只读导出全字段 JSON 快照；排查改直接分析快照文件，不再逐条走同流程；日志页「一键导出」交付后与脚本同构 | 负责人拍板双轨机制（自查轨即刻可用 / 页面轨供团队成员） | 脚本实测：`sanguo-yanyi:0050:c0011` 命中 65 条链路导出成功 |
-| 2026-09-25 | §7 F 执行人修正：导出由负责人执行、Coco 不自跑（token 控制）；体量：1 条 trace ≈ 500 行；Coco 收到文件按需取字段、不整读 | 负责人拍板 | 负责人实测体量后确认 |
-| 2026-09-25 | §7 F 补护栏：默认只导前 10 条命中链路（`--limit N` / `--all` 覆盖）；相对输出路径固定落 `data/trace-exports/`；终端报行数/KB 与扫描行数 | 负责人（防 3W 行大文件）+ Coco（实现） | `node --check` + `--limit 1` 冒烟：65 命中→1 条、465 行/35 KB |
-| 2026-09-25 | §7 F 精简：剔除 chunkId 批量导出（负责人试跑后拍板：5000 行不可取）；只留 traceId 单条导出 + `--list <chunkId>` 反查列 traceId；chunkId 批量勾选下载归页面轨 | 负责人 + Coco | 冒烟：traceId 465 行/35 KB；`--list` 65 命中列前 10 条 |
-| 2026-09-25 | §7 F 明确取数优先级：快照文件 → `--list` 反查 → 只读直连查表（小结果集 + 输出护栏） | 负责人（确认够用）+ Coco（落口径） | — |
-| 2026-09-26 | §2.1 证据源地图补 `llmCalls.requestSummary / responseSummary`（生成轮入参含注入片段全文 + 模型原始输出含指针）；「日志系统看不到」清单删除注入文本、改为可经 summary 查 | A016 验收三票排查（bug-00032/33/34）实测发现旧口径不符 | 四 trace（c549084b / ca7d9c6a / 67119582 / 275551c3）实取 responseSummary 与 final 对照，护栏误裁定案 |
-| 2026-09-26 | 步骤 4 判 LLM 明细补 `stage=novel_boundary_check`：演义域重叠门边界语义复核，仅低重叠待裁叙述句触发、responseSummary 即判定、正常样本不出现 | bug-00032/33/34 修复（护栏重叠门改边界复核）随 hu/feat-A016_term-normalization a121557 合入需求分支 | 小胡全量测试 348/348 绿（mock 两路，零真实 LLM 调用） |
